@@ -14,10 +14,6 @@ const helloSdk = window.Hello.create({
 
 class Hello extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     let that = this;
     this.renderLogin(that)
