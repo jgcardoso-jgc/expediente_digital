@@ -12,31 +12,20 @@ const helloSdk = window.Hello.create({
   apiURL: apiURL,
 });
 
+helloSdk.renderLogin(document.getElementById('incode'), {
+
+  onSuccess: r => {
+    console.log('onSuccess', r)
+    document.getElementById('root').innerHTML = `Welcome Back, your token is ${r.token}`
+  },
+  onError: r => {
+    console.log('on error', r)
+    console.log('that:'+that)
+    that.props.history.push('/onboard')
+  },
+})
+
 class Hello extends React.Component {
-
-  componentDidMount() {
-    let that = this;
-    this.renderLogin(that)
-  }
-
-  renderLogin(that) {
-      navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(mediaStream) {
-        helloSdk.renderLogin(document.getElementById('incode'), {
-
-          onSuccess: r => {
-            console.log('onSuccess', r)
-            document.getElementById('root').innerHTML = `Welcome Back, your token is ${r.token}`
-          },
-          onError: r => {
-            console.log('on error', r)
-            console.log('that:'+that)
-            that.props.history.push('/onboard')
-          },
-        })
-      }).catch(function(err) {
-        console.log(err)
-      });
-}
 
   render (){
     return <div id="incode" className="App">
