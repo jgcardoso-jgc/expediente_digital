@@ -20,8 +20,6 @@ class Hello extends React.Component {
   }
 
   renderLogin(that) {
-    helloSdk.createSession('MX').then(token => {
-      console.log(token)
       navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(mediaStream) {
         helloSdk.renderLogin(document.getElementById('incode'), {
 
@@ -34,11 +32,10 @@ class Hello extends React.Component {
             console.log('that:'+that)
             that.props.history.push('/onboard')
           },
-        },token)
+        })
       }).catch(function(err) {
         console.log(err)
       });
-    })
 }
 
   render (){
