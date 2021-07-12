@@ -1,45 +1,60 @@
-
-import './App.css';
-import React from 'react';
-import { withRouter } from "react-router";
-
+import "./App.css";
+import React, { useRef, useEffect } from "react";
 
 var apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 
-const helloSdk = window.Hello.create({
-  apiKey: apiKey,
-  apiURL: apiURL,
-});
-
-class Hello extends React.Component {
-
-  componentDidMount() {
-    let that = this;
-    this.renderLogin(that)
-  }
-
-  renderLogin(that) {
-        helloSdk.renderLogin(document.getElementById('incode'), {
-
-          onSuccess: r => {
-            console.log('onSuccess', r)
-            document.getElementById('root').innerHTML = `Welcome Back, your token is ${r.token}`
-          },
-          onError: r => {
-            console.log('on error', r)
-            console.log('that:'+that)
-            that.props.history.push('/onboard')
-          },
-        })
-      }
-
-  render (){
-    return <div id="incode" className="App">
-      <header className="App-header">
-      </header>
+function Hello() {
+  const containerRef = useRef();
+  const helloRef = useRef();
+  useEffect(() => {
+    const { Hello } = window;
+    const instance = (helloRef.current = Hello.create({
+      apiKey,
+      apiURL,
+    }));
+    instance.renderLogin(containerRef.current, {
+      onSuccess: (r) => {
+        console.log("onSuccess", r);
+      },
+      onError: (r) => {
+        console.log("on error", r);
+      },
+    });
+  }, []);
+  return (
+    <div className="App">
+      <div ref={containerRef}></div>
     </div>
-  }
+  );
 }
 
-export default withRouter(Hello);
+export default Hello;
+
+/*
+function App() {
+  const containerRef = useRef();
+  const helloRef = useRef();
+  useEffect(() => {
+    const { Hello } = window;
+    const instance = (helloRef.current = Hello.create({
+      apiKey,
+      apiURL
+    }));
+    instance.renderLogin(containerRef.current, {
+      onSuccess: (r) => {
+        console.log(“onSuccess”, r);
+      },
+      onError: (r) => {
+        console.log(“on error”, r);
+      }
+    });
+  }, []);
+  return (
+    <div className=“App”>
+      <div ref={containerRef}></div>
+    </div>
+  );
+}
+
+*/
