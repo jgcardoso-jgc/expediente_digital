@@ -1,5 +1,5 @@
-import './App.css';
-import React from 'react';
+import "./App.css";
+import React from "react";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -7,11 +7,10 @@ import {
   Switch,
 } from "react-router-dom";
 import Login from "./components/mainPage/Login";
-import Hello from "./components/hello/hello"
-import Onboarding from './components/onboarding/onboarding';
+import Hello from "./components/hello/hello";
+//import Onboarding from './components/onboarding/onboarding';
 
 class App extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -19,33 +18,32 @@ class App extends React.Component {
     };
   }
 
-  render (){
+  render() {
     const { isUserAuthenticated } = this.state;
-    return <Router>
-    <Switch>
-      <Route
-        exact
-        path="/"
-        render={() =>
-          isUserAuthenticated ? (
-            <Redirect to="/login" />
-          ) : (
-            <Redirect to="/login" />
-          )
-        }
-      />
-      {/* Registro & Login */}
-      <Route path="/login">
-        <Login />
-      </Route>
-      <Route path="/hello">
-        <Hello />
-      </Route>
-      <Route path="/onboard">
-        <Onboarding />
-      </Route>
-    </Switch>
-  </Router>
+    return (
+      <Router>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() =>
+              isUserAuthenticated ? (
+                <Redirect to="/login" />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+          {/* Registro & Login */}
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/hello">
+            <Hello />
+          </Route>
+        </Switch>
+      </Router>
+    );
   }
 }
 
