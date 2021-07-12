@@ -33,7 +33,7 @@ function Hello() {
         },
         onError: (r) => {
           console.log("on error", r);
-          history.push("/incode");
+          history.push("/onboard");
         },
       });
     };
