@@ -2,7 +2,40 @@
 import { useEffect, useRef, useState } from "react";
 import Steps from "./Steps";
 import "./styles.css";
-import incode from "./incode";
+
+const apiURL = "https://demo-api.incodesmile.com/";
+const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
+var incode = null;
+//    <script src="https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js"></script>
+function start() {
+  incode = window.OnBoarding.create({
+    apiKey: apiKey,
+    apiURL: apiURL,
+    lang: "es",
+    theme: {
+      main: "red",
+      mainButton: {
+        borderRadius: "20px",
+        color: "white",
+        border: "2px solid black",
+      },
+    },
+    translations: {
+      tutorial: {
+        front1: "Seguridata Onboarding",
+        front2: "Scan ID",
+        back1: "Now scan the ",
+        back2: "back side ",
+        back3: "of your ID",
+        selfie1: "Let's take a selfie",
+        selfie2: "Keep a neutral expression, find balanced",
+        selfie3: "light and remove any glasses and hats",
+        passport1: "Align your passport to the frame and take a photo",
+        passport2: "Position just the page with the photo",
+      },
+    },
+  });
+}
 
 function TutorialFrontId({ token, onSuccess }) {
   const containerRef = useRef();
@@ -10,7 +43,7 @@ function TutorialFrontId({ token, onSuccess }) {
   useEffect(() => {
     incode.renderFrontTutorial(containerRef.current, {
       onSuccess,
-      noWait: true
+      noWait: true,
     });
   }, [onSuccess]);
 
@@ -25,7 +58,7 @@ function FrontId({ session, onSuccess, showError }) {
       onSuccess,
       onError: showError,
       token: session,
-      numberOfTries: -1
+      numberOfTries: -1,
     });
   }, [onSuccess, showError, session]);
 
@@ -40,7 +73,7 @@ function BackId({ session, onSuccess, showError }) {
       onSuccess,
       onError: showError,
       token: session,
-      numberOfTries: -1
+      numberOfTries: -1,
     });
   }, [onSuccess, showError, session]);
 
@@ -65,7 +98,7 @@ function Selfie({ session, onSuccess, showError }) {
       onSuccess,
       onError: showError,
       token: session,
-      numberOfTries: 3
+      numberOfTries: 3,
     });
   }, [onSuccess, showError, session]);
 
@@ -102,16 +135,22 @@ function Selfie({ session, onSuccess, showError }) {
   return <div ref={containerRef}></div>;
 }*/
 
-
-export default function Onboarding() {
+function Onboarding() {
   const [session, setSession] = useState();
   const [step, setStep] = useState(0);
   const [error, setError] = useState(false);
   useEffect(() => {
-    incode.createSession("ALL").then(async (session) => {
-      await incode.warmup();
-      setSession(session);
-    });
+    console.log("incode...");
+    const script = document.createElement("script");
+    script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js";
+    document.body.appendChild(script);
+    script.onload = () => {
+      start();
+      incode.createSession("ALL").then(async (session) => {
+        await incode.warmup();
+        setSession(session);
+      });
+    };
   }, []);
 
   function goNext() {
@@ -134,3 +173,4 @@ export default function Onboarding() {
     </Steps>
   );
 }
+export default Onboarding;

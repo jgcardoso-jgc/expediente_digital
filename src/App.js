@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Login from "./components/mainPage/Login";
 import Hello from "./components/hello/hello";
-//import Onboarding from './components/onboarding/onboarding';
+import Onboarding from "./components/onboarding/onboarding";
 
 class App extends React.Component {
   constructor() {
@@ -40,6 +40,9 @@ class App extends React.Component {
           </Route>
           <Route path="/hello">
             <Hello />
+          </Route>
+          <Route path="/onboard">
+            <Onboarding />
           </Route>
         </Switch>
       </Router>
