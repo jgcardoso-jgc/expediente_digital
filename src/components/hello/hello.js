@@ -30,6 +30,9 @@ function Hello() {
       instance.renderLogin(containerRef.current, {
         onSuccess: (r) => {
           console.log("onSuccess", r);
+          document.getElementById(
+            "root"
+          ).innerHTML = `Welcome Back, your token is ${r.token}`;
         },
         onError: (r) => {
           console.log("on error", r);
