@@ -1,19 +1,39 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+import logo from "../../assets/logo.jpg";
 import { Link } from "react-router-dom";
-import "./App.css";
+import "./login.css";
 
 class Login extends Component {
   render() {
     return (
-      <div id="incode" className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+      <div className="mainDiv">
+        <img src={logo} alt="logo" className="logo" />
+        <h1 className="segTitle">Seguridata</h1>
+        <div className="first">
+          <h2 className="title">Regístrate</h2>
+          <p className="text">
+            Si ya te has registrado previamente, puedes acceder con tu rostro.
+          </p>
           <Link to="/hello">
             {" "}
-            <button type="button">Log in</button>
+            <button className="logBt" type="button">
+              Registrarse
+            </button>
           </Link>
-        </header>
+        </div>
+        <div className="second">
+          <h2 className="title">Accede ahora</h2>
+          <p className="text">
+            Se te solicitará un medio de identificación y se almacenará tu
+            rostro.
+          </p>
+          <Link to="/hello">
+            {" "}
+            <button className="logBt" type="button">
+              Acceder
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }

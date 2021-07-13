@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.logo {
+  margin-top: 17%;
+  width: 150px;
+}
+
+.first {
+  margin-bottom: 24px;
+}
+
+.second {
+  margin-bottom: 20px;
+}
+
+.mainDiv {
+  text-align: center;
+}
+
+.logBt {
+  background-color: rgb(0, 0, 0);
+  color: white;
+  border: 1px solid black;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 240px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 17px;
+  border-radius: 10px;
+}
+
+.title {
+  text-align: left;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.text {
+  text-align: left;
+  padding-left: 20px;
+  margin-top: 10px;
+  line-height: 22px;
+}
+
+.App-link {
+  color: #61dafb;
+}
