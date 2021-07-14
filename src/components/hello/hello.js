@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import loading from "../../assets/loading.gif";
 
 var apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -26,6 +27,7 @@ function Hello() {
       const instance = (helloRef.current = Hello.create({
         apiKey,
         apiURL,
+        language: "es",
       }));
       instance.renderLogin(containerRef.current, {
         onSuccess: (r) => {
@@ -43,7 +45,9 @@ function Hello() {
   });
   return (
     <div className="App">
-      <div ref={containerRef}></div>
+      <div ref={containerRef}>
+        <img src={loading} className="loadgif" alt="loading..." />
+      </div>
     </div>
   );
 }

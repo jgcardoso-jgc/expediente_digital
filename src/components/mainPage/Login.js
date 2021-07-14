@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "../../assets/logo.jpg";
+import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import "./login.css";
 
@@ -14,7 +14,7 @@ class Login extends Component {
           <p className="text">
             Si ya te has registrado previamente, puedes acceder con tu rostro.
           </p>
-          <Link to="/hello">
+          <Link to="/onboard">
             {" "}
             <button className="logBt" type="button">
               Registrarse
@@ -34,6 +34,12 @@ class Login extends Component {
             </button>
           </Link>
         </div>
+        <section>
+          <div className="wave wave1"></div>
+          <div className="wave wave2"></div>
+          <div className="wave wave3"></div>
+          <div className="wave wave4"></div>
+        </section>
       </div>
     );
   }

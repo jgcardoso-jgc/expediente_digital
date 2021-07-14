@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Steps from "./Steps";
 import "./styles.css";
+import loading from "../../assets/loading.gif";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -47,7 +48,7 @@ function TutorialFrontId({ token, onSuccess }) {
     });
   }, [onSuccess]);
 
-  return <div ref={containerRef}></div>;
+  return <div className="fit" ref={containerRef}></div>;
 }
 
 function FrontId({ session, onSuccess, showError }) {
@@ -161,7 +162,12 @@ function Onboarding() {
     setError(true);
   }
 
-  if (!session) return "loading";
+  if (!session)
+    return (
+      <div className="loading">
+        <img src={loading} className="loadgif" alt="loading..." />
+      </div>
+    );
   if (error) return "Error!";
   return (
     <Steps currentStep={step}>

@@ -3,16 +3,27 @@
   text-align: center;
 }
 
-.main{
-	  borderRadius: "20px";
-	  color: '#fff';
-	  border: "4px solid gray";
+.loadgif {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
-.mainButton{
-	  borderRadius: "20px";
-	  color: '#fff';
-	  border: "4px solid gray";
+.fit {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+.main {
+  border-radius: "20px";
+  color: "#fff";
+  border: "4px solid gray";
+}
+
+.mainButton {
+  border-radius: "20px";
+  color: "#fff";
+  border: "4px solid gray";
 }
 .IncodeTutorialVideoFront {
   border: 1px solid green;
@@ -57,5 +68,4 @@
 }
 /* Continue Button */
 .IncodeTutorialButtonFront {
-
 }
