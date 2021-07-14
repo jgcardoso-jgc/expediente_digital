@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import Steps from "./Steps";
 import "./styles.css";
 import loading from "../../assets/loading.gif";
+import useScreenOrientation from "react-hook-screen-orientation";
+import { render } from "@testing-library/react";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -40,13 +42,21 @@ function start() {
 
 function TutorialFrontId({ token, onSuccess }) {
   const containerRef = useRef();
+  const screenOrientation = useScreenOrientation();
 
   useEffect(() => {
-    incode.renderFrontTutorial(containerRef.current, {
-      onSuccess,
-      noWait: true,
-    });
-  }, [onSuccess]);
+    console.log(screenOrientation);
+    if (screenOrientation === "landscape-primary") {
+      var div = document.createElement("div"); // is a node
+      div.innerHTML = "<h1>Landscape</h1>";
+      containerRef.current.appendChild(div);
+    } else {
+      incode.renderFrontTutorial(containerRef.current, {
+        onSuccess,
+        noWait: true,
+      });
+    }
+  }, [onSuccess, screenOrientation]);
 
   return <div className="fit" ref={containerRef}></div>;
 }
