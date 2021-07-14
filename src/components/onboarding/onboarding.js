@@ -4,7 +4,9 @@ import Steps from "./Steps";
 import "./styles.css";
 import loading from "../../assets/loading.gif";
 import useScreenOrientation from "react-hook-screen-orientation";
-import { render } from "@testing-library/react";
+import ContinuePhone from "../continuePhone/continuePhone";
+import { useHistory } from "react-router-dom";
+import { saveUser } from "./api";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -43,13 +45,12 @@ function start() {
 function TutorialFrontId({ token, onSuccess }) {
   const containerRef = useRef();
   const screenOrientation = useScreenOrientation();
+  const [horizontal, setOrientation] = useState(false);
 
   useEffect(() => {
     console.log(screenOrientation);
     if (screenOrientation === "landscape-primary") {
-      var div = document.createElement("div"); // is a node
-      div.innerHTML = "<h1>Landscape</h1>";
-      containerRef.current.appendChild(div);
+      setOrientation(true);
     } else {
       incode.renderFrontTutorial(containerRef.current, {
         onSuccess,
@@ -58,7 +59,11 @@ function TutorialFrontId({ token, onSuccess }) {
     }
   }, [onSuccess, screenOrientation]);
 
-  return <div className="fit" ref={containerRef}></div>;
+  return (
+    <div className="fit" ref={containerRef}>
+      {horizontal ? <ContinuePhone /> : ""}
+    </div>
+  );
 }
 
 function FrontId({ session, onSuccess, showError }) {
@@ -147,6 +152,7 @@ function Selfie({ session, onSuccess, showError }) {
 }*/
 
 function Onboarding() {
+  const history = useHistory();
   const [session, setSession] = useState();
   const [step, setStep] = useState(0);
   const [error, setError] = useState(false);
@@ -185,7 +191,17 @@ function Onboarding() {
       <FrontId session={session} onSuccess={goNext} showError={showError} />
       <BackId session={session} onSuccess={goNext} showError={showError} />
       <ProcessId session={session} onSuccess={goNext} />
-      <Selfie session={session} onSuccess={goNext} showError={showError} />
+      <Selfie
+        session={session}
+        onSuccess={async () => {
+          const response = await saveUser(session);
+          if (response) {
+            console.log("response:" + response);
+            history.push("/dashboard");
+          }
+        }}
+        showError={showError}
+      />
     </Steps>
   );
 }

@@ -14,7 +14,7 @@ class Login extends Component {
             <div className="first">
               <h2 className="title">Regístrate</h2>
               <p className="text">
-                Si ya te has registrado previamente, puedes acceder con tu
+                Se te solicitará un medio de identificación y se almacenará tu
                 rostro.
               </p>
               <Link to="/onboard">
@@ -29,7 +29,7 @@ class Login extends Component {
             <div className="second">
               <h2 className="title">Accede ahora</h2>
               <p className="text">
-                Se te solicitará un medio de identificación y se almacenará tu
+                Si ya te has registrado previamente, puedes acceder con tu
                 rostro.
               </p>
               <Link to="/hello">

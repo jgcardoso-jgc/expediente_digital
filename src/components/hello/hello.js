@@ -32,9 +32,11 @@ function Hello() {
       instance.renderLogin(containerRef.current, {
         onSuccess: (r) => {
           console.log("onSuccess", r);
-          document.getElementById(
+          /*document.getElementById(
             "root"
-          ).innerHTML = `Welcome Back, your token is ${r.token}`;
+          ).innerHTML = `Welcome Back, your token is ${r.token}`;*/
+          localStorage.setItem("user", JSON.stringify(r));
+          history.push("/dashboard");
         },
         onError: (r) => {
           console.log("on error", r);

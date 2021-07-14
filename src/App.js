@@ -8,6 +8,7 @@ import {
 import Login from "./components/mainPage/Login";
 import Hello from "./components/hello/hello";
 import Onboarding from "./components/onboarding/onboarding";
+import Dashboard from "./components/dashboard/dashboard";
 
 class App extends React.Component {
   constructor() {
@@ -42,6 +43,9 @@ class App extends React.Component {
           </Route>
           <Route path="/onboard">
             <Onboarding />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
         </Switch>
       </Router>
