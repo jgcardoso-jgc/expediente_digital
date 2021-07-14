@@ -192,6 +192,10 @@ function Onboarding() {
   if (error) return "Error!";
   return (
     <Steps currentStep={step}>
+      <TutorialFrontId onSuccess={goNext} />
+      <FrontId session={session} onSuccess={goNext} showError={showError} />
+      <BackId session={session} onSuccess={goNext} showError={showError} />
+      <ProcessId session={session} onSuccess={goNext} />
       <Selfie
         session={session}
         onSuccess={async () => {
@@ -203,10 +207,6 @@ function Onboarding() {
         }}
         showError={showError}
       />
-      <TutorialFrontId onSuccess={goNext} />
-      <FrontId session={session} onSuccess={goNext} showError={showError} />
-      <BackId session={session} onSuccess={goNext} showError={showError} />
-      <ProcessId session={session} onSuccess={goNext} />
     </Steps>
   );
 }
