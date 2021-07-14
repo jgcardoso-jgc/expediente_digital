@@ -14,7 +14,7 @@ export const saveUser = async (data) => {
   try {
     console.log("pushed:" + data);
     const response = await axios.post(
-      "https://private-anon-e91344c8cb-incodeomni.apiary-mock.com/omni/process/approve?interviewId=" +
+      "https://demo-api.incodesmile.com/omni/process/approve?interviewId=" +
         data,
       body,
       {

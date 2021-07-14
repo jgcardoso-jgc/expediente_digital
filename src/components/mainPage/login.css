@@ -41,7 +41,6 @@ body {
 
 .mainDiv {
   text-align: center;
-  background-color: #fbfbfb;
 }
 
 .logBt {
@@ -60,6 +59,7 @@ body {
 
 .segTitle {
   margin-top: 10px;
+  margin-bottom: 14px;
 }
 
 .title {
@@ -85,8 +85,7 @@ section {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 100px;
-  background: #fbfbfb;
+  height: 90px;
   overflow: hidden;
 }
 section .wave {
@@ -94,7 +93,7 @@ section .wave {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 70px;
   background: url(../../assets/wave.png);
   background-size: 1000px 100px;
 }
@@ -147,5 +146,11 @@ section .wave.wave4 {
 @media only screen and (max-width: 330px) {
   .logo {
     width: 50px;
+  }
+  .title {
+    margin-top: 10px;
+  }
+  .segTitle {
+    margin-bottom: 10px;
   }
 }

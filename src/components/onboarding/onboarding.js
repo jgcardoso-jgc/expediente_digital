@@ -5,7 +5,6 @@ import "./styles.css";
 import loading from "../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
 import { useHistory } from "react-router-dom";
-//import { isMobile } from "react-device-detect";
 import { saveUser } from "./api";
 
 const apiURL = "https://demo-api.incodesmile.com/";
@@ -202,7 +201,7 @@ function Onboarding() {
           const response = await saveUser(session.token);
           if (response) {
             console.log("response:" + response);
-            history.push("/dashboard");
+            history.push("/finalStep");
           }
         }}
         showError={showError}

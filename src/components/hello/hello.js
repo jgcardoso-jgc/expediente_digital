@@ -40,7 +40,7 @@ function Hello() {
         },
         onError: (r) => {
           console.log("on error", r);
-          history.push("/onboard");
+          history.push("/toOnboarding");
         },
       });
     };

@@ -9,6 +9,8 @@ import Login from "./components/mainPage/Login";
 import Hello from "./components/hello/hello";
 import Onboarding from "./components/onboarding/onboarding";
 import Dashboard from "./components/dashboard/dashboard";
+import FinalStep from "./components/finalSteps/finalStep";
+import ToOnBoarding from "./components/toOnboarding/toOnboarding";
 
 class App extends React.Component {
   constructor() {
@@ -41,11 +43,17 @@ class App extends React.Component {
           <Route path="/hello">
             <Hello />
           </Route>
+          <Route path="/toOnboarding">
+            <ToOnBoarding />
+          </Route>
           <Route path="/onboard">
             <Onboarding />
           </Route>
           <Route path="/dashboard">
             <Dashboard />
+          </Route>
+          <Route path="/finalStep">
+            <FinalStep />
           </Route>
         </Switch>
       </Router>
