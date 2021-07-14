@@ -41,6 +41,7 @@ body {
 .mainDiv {
   text-align: center;
   background-color: #fbfbfb;
+  min-height: 100vh;
 }
 
 .logBt {
@@ -57,15 +58,21 @@ body {
   border-radius: 10px;
 }
 
+.segTitle {
+  margin-top: 10px;
+}
+
 .title {
   text-align: left;
   padding-left: 20px;
+  padding-right: 20px;
   margin-bottom: 10px;
 }
 
 .text {
   text-align: left;
   padding-left: 20px;
+  padding-right: 20px;
   margin-top: 10px;
   line-height: 22px;
 }
@@ -78,7 +85,7 @@ section {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 200px;
+  height: 130px;
   background: #fbfbfb;
   overflow: hidden;
 }
