@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import Steps from "./Steps";
 import "./styles.css";
 import loading from "../../assets/loading.gif";
-import useScreenOrientation from "react-hook-screen-orientation";
 import ContinuePhone from "../continuePhone/continuePhone";
 import { useHistory } from "react-router-dom";
+//import { isMobile } from "react-device-detect";
 import { saveUser } from "./api";
 
 const apiURL = "https://demo-api.incodesmile.com/";
@@ -44,12 +44,17 @@ function start() {
 
 function TutorialFrontId({ token, onSuccess }) {
   const containerRef = useRef();
-  const screenOrientation = useScreenOrientation();
+  const screenOrientation = window.matchMedia("(orientation: landscape)");
   const [horizontal, setOrientation] = useState(false);
 
   useEffect(() => {
+    if (screenOrientation.matches) {
+      console.log("isLandscape");
+    } else {
+      console.log("isPortrait");
+    }
     console.log(screenOrientation);
-    if (screenOrientation === "landscape-primary") {
+    if (screenOrientation.matches) {
       setOrientation(true);
     } else {
       incode.renderFrontTutorial(containerRef.current, {
@@ -187,14 +192,10 @@ function Onboarding() {
   if (error) return "Error!";
   return (
     <Steps currentStep={step}>
-      <TutorialFrontId onSuccess={goNext} />
-      <FrontId session={session} onSuccess={goNext} showError={showError} />
-      <BackId session={session} onSuccess={goNext} showError={showError} />
-      <ProcessId session={session} onSuccess={goNext} />
       <Selfie
         session={session}
         onSuccess={async () => {
-          const response = await saveUser(session);
+          const response = await saveUser(session.token);
           if (response) {
             console.log("response:" + response);
             history.push("/dashboard");
@@ -202,6 +203,10 @@ function Onboarding() {
         }}
         showError={showError}
       />
+      <TutorialFrontId onSuccess={goNext} />
+      <FrontId session={session} onSuccess={goNext} showError={showError} />
+      <BackId session={session} onSuccess={goNext} showError={showError} />
+      <ProcessId session={session} onSuccess={goNext} />
     </Steps>
   );
 }
