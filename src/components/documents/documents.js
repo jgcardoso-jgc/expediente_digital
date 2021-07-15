@@ -4,12 +4,11 @@ import { useEffect } from "react";
 
 function Documents() {
   const user = JSON.parse(localStorage.getItem("user"));
-  function getImg() {
-    return async () =>
-      await getImage(user.token).then((res) => {
-        console.log("response:" + res);
-        return res;
-      });
+
+  async function getImg() {
+    console.log("getting...");
+    const response = await getImage(user.token);
+    console.log(response);
   }
 
   useEffect(() => {
