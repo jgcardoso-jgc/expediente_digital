@@ -5,3 +5,7 @@
 .text {
   text-align: center;
 }
+
+.mb {
+  margin-bottom: 20px;
+}

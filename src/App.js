@@ -11,6 +11,7 @@ import Onboarding from "./components/onboarding/onboarding";
 import Dashboard from "./components/dashboard/dashboard";
 import FinalStep from "./components/finalSteps/finalStep";
 import ToOnBoarding from "./components/toOnboarding/toOnboarding";
+import Documents from "./components/documents/documents";
 
 class App extends React.Component {
   constructor() {
@@ -54,6 +55,9 @@ class App extends React.Component {
           </Route>
           <Route path="/finalStep">
             <FinalStep />
+          </Route>
+          <Route path="/documents">
+            <Documents />
           </Route>
         </Switch>
       </Router>

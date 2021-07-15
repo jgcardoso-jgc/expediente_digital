@@ -1,0 +1,9 @@
+.wtext {
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.noText {
+  margin-bottom: 0px;
+}
