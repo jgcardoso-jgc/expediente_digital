@@ -5,7 +5,7 @@ import "./styles.css";
 import loading from "../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
 import { useHistory } from "react-router-dom";
-import { saveUser } from "./api";
+//import { saveUser } from "./api";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -79,6 +79,7 @@ function FrontId({ session, onSuccess, showError }) {
       onError: showError,
       token: session,
       numberOfTries: -1,
+      nativeCamera: true,
     });
   }, [onSuccess, showError, session]);
 
@@ -94,6 +95,7 @@ function BackId({ session, onSuccess, showError }) {
       onError: showError,
       token: session,
       numberOfTries: -1,
+      nativeCamera: true,
     });
   }, [onSuccess, showError, session]);
 
@@ -167,15 +169,23 @@ function Onboarding() {
     document.body.appendChild(script);
     script.onload = () => {
       start();
-      incode.createSession("ALL").then(async (session) => {
-        await incode.warmup();
-        setSession(session);
-      });
+      incode
+        .createSession("ALL", null, {
+          configurationId: "60f0969272a9270015196d70",
+        })
+        .then(async (session) => {
+          await incode.warmup();
+          setSession(session);
+        });
     };
   }, []);
 
   function goNext() {
     setStep(step + 1);
+  }
+
+  function toFinal() {
+    history.push("/finalStep");
   }
 
   function showError() {
@@ -197,14 +207,11 @@ function Onboarding() {
       <ProcessId session={session} onSuccess={goNext} />
       <Selfie
         session={session}
-        onSuccess={async () => {
-          const response = await saveUser(session.token);
-          if (response) {
-            console.log("response:" + response);
-            history.push("/finalStep");
-          }
-        }}
+        onSuccess={toFinal}
         showError={showError}
+        /*const response = await saveUser(session.token);
+          if (response) {
+            console.log("response:" + response);*/
       />
     </Steps>
   );
