@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -63,7 +63,7 @@ function Documents() {
           await getImg();
         });
     };
-  }, []);
+  });
 
   return (
     <div>
