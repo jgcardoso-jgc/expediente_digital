@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -37,6 +37,7 @@ function start() {
 
 function Documents() {
   const user = JSON.parse(localStorage.getItem("user"));
+  const containerRef = useRef();
 
   async function getImg() {
     console.log(user.token);
@@ -44,7 +45,7 @@ function Documents() {
       token: user.token,
       body: { images: ["fullFrameFrontID"] },
     });
-    console.log(imgs);
+    console.log(imgs.fullFrameFrontID);
   }
 
   useEffect(() => {
