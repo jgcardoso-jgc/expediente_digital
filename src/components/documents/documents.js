@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
+import "./documents.css";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -45,6 +46,10 @@ function Documents() {
       body: { images: ["fullFrameFrontID"] },
     });
     console.log(imgs.fullFrameFrontID);
+    var image = new Image();
+    image.src = "data:image/png;base64," + imgs.fullFrameFrontID;
+    image.style.width = "100%";
+    document.getElementById("ineFront").appendChild(image);
   }
 
   useEffect(() => {
@@ -68,6 +73,7 @@ function Documents() {
   return (
     <div>
       <h1 className="center">Mis documentos</h1>
+      <div id="ineFront" className="idFront"></div>
     </div>
   );
 }

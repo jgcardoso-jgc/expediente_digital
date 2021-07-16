@@ -17,11 +17,16 @@ function start() {
     apiURL: apiURL,
     lang: "es",
     theme: {
-      main: "red",
+      main: "black",
       mainButton: {
-        borderRadius: "20px",
+        borderRadius: "10px",
         color: "white",
         border: "2px solid black",
+        maxWidth: "100px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        display: "block",
+        marginTop: "20px",
       },
     },
     translations: {
@@ -185,6 +190,8 @@ function Onboarding() {
   }
 
   function toFinal() {
+    const user = { token: session.token, fullName: "" };
+    localStorage.setItem("user", JSON.stringify(user));
     history.push("/finalStep");
   }
 

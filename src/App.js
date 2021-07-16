@@ -16,9 +16,23 @@ import Documents from "./components/documents/documents";
 class App extends React.Component {
   constructor() {
     super();
-    this.state = {
-      isUserAuthenticated: false,
-    };
+    if (localStorage.getItem("user") === null) {
+      this.state = {
+        isUserAuthenticated: false,
+      };
+    } else {
+      this.state = {
+        isUserAuthenticated: true,
+      };
+    }
+  }
+
+  auth() {
+    if (localStorage.getItem("user") === null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   render() {
@@ -33,14 +47,15 @@ class App extends React.Component {
               isUserAuthenticated ? (
                 <Redirect to="/login" />
               ) : (
-                <Redirect to="/login" />
+                <Redirect to="/dashboard" />
               )
             }
           />
           {/* Registro & Login */}
-          <Route path="/login">
-            <Login />
-          </Route>
+          <Route
+            path="/login"
+            render={() => (isUserAuthenticated ? <Dashboard /> : <Login />)}
+          ></Route>
           <Route path="/hello">
             <Hello />
           </Route>
@@ -50,9 +65,10 @@ class App extends React.Component {
           <Route path="/onboard">
             <Onboarding />
           </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
+          <Route
+            path="/dashboard"
+            render={() => (this.auth() ? <Dashboard /> : <Login />)}
+          ></Route>
           <Route path="/finalStep">
             <FinalStep />
           </Route>

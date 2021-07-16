@@ -2,7 +2,6 @@ import "./dashboard.css";
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { deleteSession } from "./api";
 import { useHistory } from "react-router-dom";
 
 function Dashboard() {
@@ -12,16 +11,8 @@ function Dashboard() {
 
   function exit() {
     console.log("closing...");
-    const user = JSON.parse(localStorage.getItem("user"));
-    const response = async () =>
-      await deleteSession(user.token).then((res) => {
-        return res;
-      });
-    if (response) {
-      history.push("/login");
-    } else {
-      alert("Error");
-    }
+    localStorage.removeItem("user");
+    history.push("/login");
   }
 
   return (

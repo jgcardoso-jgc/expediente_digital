@@ -7,8 +7,8 @@ function FinalStep() {
     <div className="center">
       <h1>Felicidades</h1>
       <p>Enrolamiento concluido</p>
-      <Link to="/login">
-        <button className="inicioBt">Regresar al Inicio</button>
+      <Link to="/dashboard">
+        <button className="inicioBt">Ingresar</button>
       </Link>
     </div>
   );
