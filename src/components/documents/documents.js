@@ -37,7 +37,6 @@ function start() {
 
 function Documents() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const containerRef = useRef();
 
   async function getImg() {
     console.log(user.token);
