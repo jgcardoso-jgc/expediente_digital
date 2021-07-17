@@ -2,6 +2,8 @@ import "./App.css";
 import React, { useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import loading from "../../assets/loading.gif";
+import logo from "../../assets/logo.png";
+import { Link } from "react-router-dom";
 
 var apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
@@ -44,39 +46,17 @@ function Hello() {
   });
   return (
     <div className="App">
+      <div className="flex header">
+        <img src={logo} alt="logo" className="logoFace" />
+        <p className="segText">Seguridata</p>
+      </div>
+      <h2 className="faceTitle">Facematch</h2>
       <div ref={containerRef}>
         <img src={loading} className="loadgif" alt="loading..." />
       </div>
+      <Link to="loginNormal">¿Tienes problemas?</Link>
     </div>
   );
 }
 
 export default Hello;
-
-/*
-function App() {
-  const containerRef = useRef();
-  const helloRef = useRef();
-  useEffect(() => {
-    const { Hello } = window;
-    const instance = (helloRef.current = Hello.create({
-      apiKey,
-      apiURL
-    }));
-    instance.renderLogin(containerRef.current, {
-      onSuccess: (r) => {
-        console.log(“onSuccess”, r);
-      },
-      onError: (r) => {
-        console.log(“on error”, r);
-      }
-    });
-  }, []);
-  return (
-    <div className=“App”>
-      <div ref={containerRef}></div>
-    </div>
-  );
-}
-
-*/

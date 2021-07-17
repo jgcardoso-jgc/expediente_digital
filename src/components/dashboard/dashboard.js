@@ -3,10 +3,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useHistory } from "react-router-dom";
+import NavBar from "../navBar/navBar";
+import { IoPersonCircle } from "react-icons/io5";
 
 function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const name = user.fullName;
+  var name = user.fullName;
+  if (name === "RODRIGO SALVADOR LOZADA TENORIO") {
+    name = "Sofia Lozada Tenorio";
+  }
   const history = useHistory();
 
   function exit() {
@@ -17,8 +22,9 @@ function Dashboard() {
 
   return (
     <div className="center">
-      <img src={logo} alt="logo" className="logo" />
+      <NavBar />
       <h1 className="welcomeTitle">Bienvenido nuevamente</h1>
+      <IoPersonCircle className="iconPerson" />
       <p>
         <b>{name}</b>
       </p>

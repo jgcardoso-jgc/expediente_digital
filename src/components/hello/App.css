@@ -17,6 +17,28 @@
   }
 }
 
+.segText {
+  margin-right: auto;
+  padding-left: 10px;
+}
+
+.header {
+  padding-top: 14px;
+}
+
+.faceTitle {
+  margin-bottom: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.logoFace {
+  max-width: 40px;
+  margin-left: auto;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
