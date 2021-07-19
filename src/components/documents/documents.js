@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { useFirebaseApp } from "reactfire";
+//import { useFirebaseApp } from "reactfire";
 import "./documents.css";
 import onBoardingConfig from "./onBoardingConfig";
 
@@ -10,7 +10,7 @@ function start() {
 }
 
 function Documents() {
-  const firebase = useFirebaseApp();
+  //const firebase = useFirebaseApp();
   const user = JSON.parse(localStorage.getItem("user"));
 
   async function getImg() {
