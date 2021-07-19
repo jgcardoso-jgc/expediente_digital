@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -28,6 +29,11 @@
 
 .faceTitle {
   margin-bottom: 0;
+}
+
+.problemas {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .flex {

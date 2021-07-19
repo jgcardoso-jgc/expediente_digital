@@ -1,4 +1,4 @@
-import "./App.css";
+import "./hello.css";
 import React, { useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import loading from "../../assets/loading.gif";
@@ -54,7 +54,9 @@ function Hello() {
       <div ref={containerRef}>
         <img src={loading} className="loadgif" alt="loading..." />
       </div>
-      <Link to="loginNormal">¿Tienes problemas?</Link>
+      <Link to="/loginNormal">
+        <button className="problemas logBt">¿Tienes problemas?</button>
+      </Link>
     </div>
   );
 }

@@ -1,42 +1,16 @@
 import React from "react";
 import { useEffect } from "react";
+import { useFirebaseApp } from "reactfire";
 import "./documents.css";
+import onBoardingConfig from "./onBoardingConfig";
 
-const apiURL = "https://demo-api.incodesmile.com/";
-const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 var incode = null;
-
 function start() {
-  incode = window.OnBoarding.create({
-    apiKey: apiKey,
-    apiURL: apiURL,
-    lang: "es",
-    theme: {
-      main: "red",
-      mainButton: {
-        borderRadius: "20px",
-        color: "white",
-        border: "2px solid black",
-      },
-    },
-    translations: {
-      tutorial: {
-        front1: "Seguridata Onboarding",
-        front2: "Scan ID",
-        back1: "Now scan the ",
-        back2: "back side ",
-        back3: "of your ID",
-        selfie1: "Let's take a selfie",
-        selfie2: "Keep a neutral expression, find balanced",
-        selfie3: "light and remove any glasses and hats",
-        passport1: "Align your passport to the frame and take a photo",
-        passport2: "Position just the page with the photo",
-      },
-    },
-  });
+  incode = window.OnBoarding.create(onBoardingConfig);
 }
 
 function Documents() {
+  const firebase = useFirebaseApp();
   const user = JSON.parse(localStorage.getItem("user"));
 
   async function getImg() {

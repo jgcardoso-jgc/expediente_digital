@@ -12,22 +12,13 @@ import Dashboard from "./components/dashboard/dashboard";
 import FinalStep from "./components/finalSteps/finalStep";
 import ToOnBoarding from "./components/toOnboarding/toOnboarding";
 import Documents from "./components/documents/documents";
+import LoginNormal from "./components/loginNormal/loginNormal";
+//import { useFirebaseApp } from "reactfire";
 
-class App extends React.Component {
-  constructor() {
-    super();
-    if (localStorage.getItem("user") === null) {
-      this.state = {
-        isUserAuthenticated: false,
-      };
-    } else {
-      this.state = {
-        isUserAuthenticated: true,
-      };
-    }
-  }
+function App() {
+  //const firebase = useFirebaseApp();
 
-  auth() {
+  function auth() {
     if (localStorage.getItem("user") === null) {
       return false;
     } else {
@@ -35,50 +26,46 @@ class App extends React.Component {
     }
   }
 
-  render() {
-    const { isUserAuthenticated } = this.state;
-    return (
-      <Router>
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() =>
-              isUserAuthenticated ? (
-                <Redirect to="/login" />
-              ) : (
-                <Redirect to="/dashboard" />
-              )
-            }
-          />
-          {/* Registro & Login */}
-          <Route
-            path="/login"
-            render={() => (isUserAuthenticated ? <Dashboard /> : <Login />)}
-          ></Route>
-          <Route path="/hello">
-            <Hello />
-          </Route>
-          <Route path="/toOnboarding">
-            <ToOnBoarding />
-          </Route>
-          <Route path="/onboard">
-            <Onboarding />
-          </Route>
-          <Route
-            path="/dashboard"
-            render={() => (this.auth() ? <Dashboard /> : <Login />)}
-          ></Route>
-          <Route path="/finalStep">
-            <FinalStep />
-          </Route>
-          <Route path="/documents">
-            <Documents />
-          </Route>
-        </Switch>
-      </Router>
-    );
-  }
+  return (
+    <Router>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() =>
+            auth() ? <Redirect to="/login" /> : <Redirect to="/dashboard" />
+          }
+        />
+        {/* Registro & Login */}
+        <Route
+          path="/login"
+          render={() => (auth() ? <Dashboard /> : <Login />)}
+        ></Route>
+        <Route path="/hello">
+          <Hello />
+        </Route>
+        <Route path="/toOnboarding">
+          <ToOnBoarding />
+        </Route>
+        <Route path="/onboard">
+          <Onboarding />
+        </Route>
+        <Route
+          path="/dashboard"
+          render={() => (auth() ? <Dashboard /> : <Login />)}
+        ></Route>
+        <Route path="/finalStep">
+          <FinalStep />
+        </Route>
+        <Route path="/documents">
+          <Documents />
+        </Route>
+        <Route path="/loginNormal">
+          <LoginNormal />
+        </Route>
+      </Switch>
+    </Router>
+  );
 }
 
 export default App;
