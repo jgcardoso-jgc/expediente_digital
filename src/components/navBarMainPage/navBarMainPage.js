@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { ReactComponent as CloseMenu } from "../../assets/x.svg";
 import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
 import logo from "../../assets/logo.png";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 import "./navBarMainPage.css";
 
 function NavBarMainPage() {
-  const history = useHistory();
+  //const history = useHistory();
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
