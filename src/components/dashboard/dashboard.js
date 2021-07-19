@@ -1,7 +1,6 @@
 import "./dashboard.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 import NavBar from "../navBar/navBar";
 import { IoPersonCircle } from "react-icons/io5";
 
@@ -12,13 +11,6 @@ function Dashboard() {
     setUser("Sofia Lozada Tenorio");
   } else {
     name = user;
-  }
-  const history = useHistory();
-
-  function exit() {
-    console.log("closing...");
-    localStorage.removeItem("user");
-    history.push("/login");
   }
 
   return (
