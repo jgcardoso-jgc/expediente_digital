@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import logo from "../../assets/logo.png";
 import { useHistory } from "react-router-dom";
 import Div100vh from "react-div-100vh";
+import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "./login.css";
 
 function Login() {
@@ -28,8 +28,8 @@ function Login() {
   useEffect(() => {});
   return (
     <Div100vh>
+      <NavBarMainPage />
       <div className="mainDiv">
-        <img src={logo} alt="logo" className="logo" />
         <h1 className="segTitle">Seguridata</h1>
         <div className="row">
           <div className="col w50">

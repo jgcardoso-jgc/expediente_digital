@@ -19,6 +19,10 @@ function Hello() {
   const containerRef = useRef();
   const helloRef = useRef();
   const history = useHistory();
+
+  function toLoginNormal() {
+    history.push({ pathname: "/loginNormal", state: { reload: true } });
+  }
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://sdk-js.s3.amazonaws.com/sdk/hello-1.1.0.js";
@@ -54,9 +58,9 @@ function Hello() {
       <div ref={containerRef}>
         <img src={loading} className="loadgif" alt="loading..." />
       </div>
-      <Link to="/loginNormal">
-        <button className="problemas logBt">¿Tienes problemas?</button>
-      </Link>
+      <button onClick={() => toLoginNormal()} className="problemas logBt">
+        ¿Tienes problemas?
+      </button>
     </div>
   );
 }
