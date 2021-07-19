@@ -10,7 +10,7 @@ function Dashboard() {
   if (name === "RODRIGO SALVADOR LOZADA TENORIO") {
     setUser("Sofia Lozada Tenorio");
   } else {
-    name = user;
+    setUser(name);
   }
 
   return (
