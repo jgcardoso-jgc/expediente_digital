@@ -1,17 +1,13 @@
 import "./dashboard.css";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../navBar/navBar";
 import { IoPersonCircle } from "react-icons/io5";
 
 function Dashboard() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user.fullName);
   var name = user.fullName;
-  if (name === "RODRIGO SALVADOR LOZADA TENORIO") {
-    setUser("Sofia Lozada Tenorio");
-  } else {
-    setUser(name);
-  }
 
   return (
     <div className="center">
