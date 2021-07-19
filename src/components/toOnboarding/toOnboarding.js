@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./toOnboarding.css";
 import { useHistory } from "react-router-dom";
 
-function ToOnBoarding() {
+const ToOnBoarding = (props) => {
   const history = useHistory();
-  function goBack() {
-    history.goBack();
-  }
+  const location = useLocation();
+
+  useEffect(() => {
+    const state = location.state;
+    if (state.reload === true) {
+      console.log("toReload");
+      history.replace({ pathname: "/toOnboarding", state: {} });
+      window.location.reload();
+    } else {
+      console.log("not reload");
+    }
+  }, [history, location]);
+
   return (
     <div className="center">
       <img src={logo} alt="logo" className="logo" />
@@ -23,11 +34,11 @@ function ToOnBoarding() {
         </button>
       </Link>
       <p>también puedes intentarlo de nuevo</p>
-      <button onClick={() => goBack()} className="logBt" type="button">
+      <button onClick={() => history.goBack()} className="logBt" type="button">
         Intentar de nuevo
       </button>
     </div>
   );
-}
+};
 
 export default ToOnBoarding;

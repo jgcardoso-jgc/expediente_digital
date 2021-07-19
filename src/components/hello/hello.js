@@ -39,7 +39,7 @@ function Hello() {
         },
         onError: (r) => {
           console.log("on error", r);
-          history.push("/toOnboarding");
+          history.push({ pathname: "/toOnboarding", state: { reload: true } });
         },
       });
     };
