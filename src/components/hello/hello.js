@@ -3,7 +3,6 @@ import React, { useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import loading from "../../assets/loading.gif";
 import logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
 
 var apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";

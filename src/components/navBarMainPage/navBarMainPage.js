@@ -3,7 +3,6 @@ import { ReactComponent as CloseMenu } from "../../assets/x.svg";
 import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
 import logo from "../../assets/logo.png";
 import { useHistory } from "react-router-dom";
-import { IoExit } from "react-icons/io5";
 import "./navBarMainPage.css";
 
 function NavBarMainPage() {
@@ -12,11 +11,11 @@ function NavBarMainPage() {
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
-  function exit() {
+  /*function exit() {
     console.log("closing...");
     localStorage.removeItem("user");
     history.push("/login");
-  }
+  }*/
 
   return (
     <div className="headerMain">
