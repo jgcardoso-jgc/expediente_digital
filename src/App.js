@@ -13,6 +13,7 @@ import FinalStep from "./components/finalSteps/finalStep";
 import ToOnBoarding from "./components/toOnboarding/toOnboarding";
 import Documents from "./components/documents/documents";
 import LoginNormal from "./components/loginNormal/loginNormal";
+import RegisterNormal from "./components/registerNormal/registerNormal";
 //import { useFirebaseApp } from "reactfire";
 
 function App() {
@@ -62,6 +63,9 @@ function App() {
         </Route>
         <Route path="/loginNormal">
           <LoginNormal />
+        </Route>
+        <Route path="/registerNormal">
+          <RegisterNormal />
         </Route>
       </Switch>
     </Router>

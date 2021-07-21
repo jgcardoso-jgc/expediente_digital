@@ -1,25 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import "firebase/auth";
+import { Link } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import "./loginNormal.css";
+import Waves from "../waves/waves";
 
 const LoginNormal = (props) => {
   const history = useHistory();
-  const location = useLocation();
-
-  useEffect(() => {
-    const state = location.state;
-    if (state.reload === true) {
-      console.log("toReload");
-      history.replace({ pathname: "/loginNormal", state: {} });
-      window.location.reload();
-    } else {
-      console.log("not reload");
-    }
-  }, [history, location]);
 
   const firebase = useFirebaseApp();
   //const user = useUser();
@@ -35,13 +24,16 @@ const LoginNormal = (props) => {
   return (
     <div className="center">
       <header>
-        <img src={logo} alt="logo" className="logoNav" />
+        <Link to="./login">
+          <img src={logo} alt="logo" className="logoNav" />
+        </Link>
       </header>
       <div className="container">
         <div>
-          <h1>
+          <h1 className="mb4">
             <b>Login</b>
           </h1>
+          <p className="expText">Accede a tu expediente</p>
         </div>
         <div className="formGroup">
           <label htmlFor="email" className="block pb10">
@@ -55,7 +47,7 @@ const LoginNormal = (props) => {
           />
         </div>
         <div className="formGroup">
-          <label htmlFor="password" className="block pb10">
+          <label htmlFor="password" className="block pb10 pt20">
             Contraseña
           </label>
           <input
@@ -68,7 +60,11 @@ const LoginNormal = (props) => {
         <button className="initBt" onClick={submit}>
           Iniciar Sesión
         </button>
+        <Link className="right d-block pt10" to="./registerNormal">
+          ¿Aun no tienes una cuenta?
+        </Link>
       </div>
+      <Waves />
     </div>
   );
 };

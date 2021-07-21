@@ -1,33 +1,40 @@
 /*Desktop View*/
 .headerMain {
   display: flex;
+  position: fixed;
   background: white;
+  top: 0%;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 14px;
-  height: 60px;
 }
 .logo-navMain {
+  padding-left: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-width: 100%;
 }
 .logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .logo {
   width: 45px;
   height: 45px;
 }
 .nav-options {
-  padding-left: 25px;
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-gap: 50px;
+  display: flex;
+  min-width: 100%;
+  position: absolute;
+  top: -110vh;
+  bottom: 100%;
+  padding-left: 0;
+  transition: all 0.8s ease-in-out;
+  flex-direction: column;
   list-style-type: none;
+  grid-gap: 0px;
 }
 .mobile-option {
   display: none;
@@ -87,28 +94,30 @@ a {
     width: 45px;
     height: 45px;
   }
-  .nav-options {
+  .nav-optionsMain {
     display: flex;
     min-width: 100%;
     height: 100vh;
     position: absolute;
-    top: 40px;
+    top: -110vh;
     left: 0;
     bottom: 100%;
     padding-left: 0;
-    opacity: 0;
-    transition: all 0.5s ease;
+    opacity: 1;
+    transition: all 0.7s ease-in-out;
     flex-direction: column;
     list-style-type: none;
     grid-gap: 0px;
+    background: rgb(233, 233, 233);
   }
-  .nav-options.active {
+  .nav-optionsMain.active {
     background: rgb(233, 233, 233);
     bottom: 0;
     right: 0;
+    top: 40px;
     opacity: 1;
-    transition: all 0.5s ease;
-    z-index: 1;
+    transition: all 0.7s ease-in-out;
+    z-index: 0;
     align-content: center;
     padding-left: 0px;
     margin-top: 20px;
@@ -141,4 +150,10 @@ a {
 }
 .mobile-menu {
   display: block;
+}
+
+@media (min-width: 768px) {
+  .logo-navMain {
+    min-width: 100%;
+  }
 }

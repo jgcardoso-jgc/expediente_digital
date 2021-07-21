@@ -1,13 +1,39 @@
 import "./dashboard.css";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../navBar/navBar";
+import firebase from "firebase";
 import { IoPersonCircle } from "react-icons/io5";
 
 function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user.fullName);
   var name = user.fullName;
+
+  const [image, setImage] = useState("");
+  const upload = () => {
+    if (image == null) return;
+    firebase
+      .storage()
+      .ref(`users/${image.name}`)
+      .put(image)
+      .on(
+        "state_changed",
+        (snapshot) => {
+          // Se lanza durante el progreso de subida
+          console.log("uploading...");
+        },
+        (error) => {
+          // Si ha ocurrido un error aquí lo tratamos
+          console.log("error:" + error);
+        },
+        () => {
+          // Una vez se haya subido el archivo,
+          // se invoca ésta función
+          console.log("done");
+        }
+      );
+  };
 
   return (
     <div className="center">
@@ -23,6 +49,13 @@ function Dashboard() {
           Ver mis documentos
         </button>
       </Link>
+      <input
+        type="file"
+        onChange={(e) => {
+          setImage(e.target.files[0]);
+        }}
+      />
+      <button onClick={upload}>Upload</button>
     </div>
   );
 }

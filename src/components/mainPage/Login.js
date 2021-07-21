@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Div100vh from "react-div-100vh";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "./login.css";
+import Waves from "../waves/waves";
 
 function Login() {
   const history = useHistory();
@@ -12,7 +13,7 @@ function Login() {
     if (user) {
       history.push("/dashboard");
     } else {
-      history.push("/hello");
+      history.push("/loginNormal");
     }
   }
 
@@ -21,14 +22,14 @@ function Login() {
     if (user) {
       history.push("/dashboard");
     } else {
-      history.push("/onboard");
+      history.push("/registerNormal");
     }
   }
 
   useEffect(() => {});
   return (
     <Div100vh>
-      <NavBarMainPage />
+      <NavBarMainPage className="navmain" />
       <div className="mainDiv">
         <h1 className="segTitle">Seguridata</h1>
         <div className="row">
@@ -65,12 +66,7 @@ function Login() {
             </div>
           </div>
         </div>
-        <section>
-          <div className="wave wave1"></div>
-          <div className="wave wave2"></div>
-          <div className="wave wave3"></div>
-          <div className="wave wave4"></div>
-        </section>
+        <Waves />
       </div>
     </Div100vh>
   );

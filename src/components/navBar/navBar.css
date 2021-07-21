@@ -76,6 +76,7 @@ a {
 }
 .mobile-menu {
   display: none;
+  padding-right: 10px;
 }
 @media (max-width: 648px) {
   /*Mobile View */

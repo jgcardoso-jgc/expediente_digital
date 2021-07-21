@@ -25,7 +25,7 @@ function NavBarMainPage() {
             <img className="logo" alt="logo" src={logo} />
           </a>
         </div>
-        <ul className={click ? "nav-options active" : "nav-options"}>
+        <ul className={click ? "nav-optionsMain active" : "nav-optionsMain"}>
           <li className="option" onClick={closeMobileMenu}>
             <a href="/documents">Terminos y Condiciones</a>
           </li>
