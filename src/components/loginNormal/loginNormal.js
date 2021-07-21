@@ -16,7 +16,12 @@ const LoginNormal = (props) => {
   const [password, setPassword] = useState("");
   const submit = async () => {
     try {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          history.push("/dashboard");
+        });
     } catch (e) {
       alert(e);
     }

@@ -12,6 +12,7 @@ const RegisterNormal = (props) => {
   const firebase = useFirebaseApp();
   const history = useHistory();
   const db = firebase.firestore();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rfc, setRfc] = useState("");
@@ -19,15 +20,24 @@ const RegisterNormal = (props) => {
     try {
       await firebase
         .auth()
-        .signInWithEmailAndPassword(email, password)
+        .createUserWithEmailAndPassword(email, password)
         .then((res) => {
-          db.settings({
-            timestampsInSnapshots: true,
-          });
-          const userRef = db.collection("users").add({
-            fullname: this.state.fullname,
-            email: this.state.email,
-          });
+          const id = res.user.uid;
+          console.log(id);
+          try {
+            db.collection("users")
+              .add({
+                uid: id,
+                fullname: name,
+                email: email,
+                rfc: rfc,
+              })
+              .then(() => {
+                history.push("/dashboard");
+              });
+          } catch (e) {
+            alert(e);
+          }
         });
     } catch (e) {
       alert(e);
@@ -52,10 +62,10 @@ const RegisterNormal = (props) => {
             Nombre Completo
           </label>
           <input
-            type="email"
-            id="email"
+            type="text"
+            id="name"
             className="inputStyle"
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => setName(event.target.value)}
           />
         </div>
         <div className="formGroup pt10">
