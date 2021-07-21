@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -14,17 +14,39 @@ import ToOnBoarding from "./components/toOnboarding/toOnboarding";
 import Documents from "./components/documents/documents";
 import LoginNormal from "./components/loginNormal/loginNormal";
 import RegisterNormal from "./components/registerNormal/registerNormal";
-//import { useFirebaseApp } from "reactfire";
+import { useFirebaseApp } from "reactfire";
 
 function App() {
-  //const firebase = useFirebaseApp();
+  const firebase = useFirebaseApp();
+  const [isLoading, setLoading] = useState(true);
+  const [user, setUser] = useState(false);
 
-  function auth() {
-    if (localStorage.getItem("user") === null) {
-      return false;
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        console.log("logged");
+        console.log(user.uid);
+        setUser(true);
+        setLoading(false);
+        return;
+      } else {
+        console.log(" not logged");
+        setUser(false);
+        setLoading(false);
+        return;
+      }
+    });
+    /* después del estado inicial */
+    const user = firebase.auth().currentUser;
+    if (user) {
+      setUser(true);
     } else {
-      return true;
+      setUser(false);
     }
+  }, [firebase]);
+
+  if (isLoading) {
+    return <div className="App">Loading...</div>;
   }
 
   return (
@@ -34,13 +56,13 @@ function App() {
           exact
           path="/"
           render={() =>
-            auth() ? <Redirect to="/login" /> : <Redirect to="/dashboard" />
+            user ? <Redirect to="/login" /> : <Redirect to="/dashboard" />
           }
         />
         {/* Registro & Login */}
         <Route
           path="/login"
-          render={() => (auth() ? <Dashboard /> : <Login />)}
+          render={() => (user ? <Dashboard /> : <Login />)}
         ></Route>
         <Route path="/hello">
           <Hello />
@@ -53,7 +75,7 @@ function App() {
         </Route>
         <Route
           path="/dashboard"
-          render={() => (auth() ? <Dashboard /> : <Login />)}
+          render={() => (user ? <Dashboard /> : <Login />)}
         ></Route>
         <Route path="/finalStep">
           <FinalStep />

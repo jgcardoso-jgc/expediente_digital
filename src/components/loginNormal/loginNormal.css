@@ -38,6 +38,16 @@
   margin-bottom: 4px;
 }
 
+.pt14 {
+  padding-top: 14px;
+}
+
+.qa {
+  margin-top: 0;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
 .right {
   text-align: right;
 }

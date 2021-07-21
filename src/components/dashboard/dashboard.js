@@ -7,8 +7,20 @@ import { IoPersonCircle } from "react-icons/io5";
 
 function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user.fullName);
-  var name = user.fullName;
+  const name = user.fullName;
+
+  function logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("logged out");
+        localStorage.removeItem("user");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
 
   const [image, setImage] = useState("");
   const upload = () => {
@@ -55,7 +67,8 @@ function Dashboard() {
           setImage(e.target.files[0]);
         }}
       />
-      <button onClick={upload}>Upload</button>
+      <button onClick={() => upload()}>Upload</button>
+      <button onClick={() => logOut()}>Exit</button>
     </div>
   );
 }

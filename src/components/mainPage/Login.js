@@ -1,13 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import Div100vh from "react-div-100vh";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
-import { useFirebaseApp } from "reactfire";
 import "./login.css";
 import Waves from "../waves/waves";
 
 function Login() {
-  const firebase = useFirebaseApp();
   const history = useHistory();
 
   function toFaceMatch() {
@@ -19,32 +17,6 @@ function Login() {
     }
   }
 
-  function checkUser() {
-    /* para el estado inicial */
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        console.log("logged in");
-      } else {
-        console.log("NOT logged in");
-      }
-    });
-    /* después del estado inicial */
-    const user = firebase.auth().currentUser;
-    console.log(user);
-  }
-
-  function logOut() {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        alert("logged out");
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  }
-
   function toOnboarding() {
     const user = localStorage.getItem("user");
     if (user) {
@@ -53,17 +25,11 @@ function Login() {
       history.push("/registerNormal");
     }
   }
-
-  useEffect(() => {
-    console.log("reload");
-    checkUser();
-  });
   return (
     <Div100vh>
       <NavBarMainPage className="navmain" />
       <div className="mainDiv">
         <h1 className="segTitle">Seguridata</h1>
-        <button onClick={() => logOut()}>Exit</button>
         <div className="row">
           <div className="col w50">
             <div className="first">

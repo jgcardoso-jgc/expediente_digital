@@ -92,23 +92,34 @@ a {
     min-width: 100%;
     height: 100vh;
     position: absolute;
-    top: 40px;
+    top: -110vh;
     left: 0;
     bottom: 100%;
     padding-left: 0;
-    opacity: 0;
-    transition: all 0.5s ease;
+    opacity: 1;
+    transition: all 0.7s ease-in-out;
     flex-direction: column;
     list-style-type: none;
     grid-gap: 0px;
+    background: rgb(233, 233, 233);
+  }
+
+  .alert-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .bell {
+    margin-left: auto;
   }
   .nav-options.active {
     background: rgb(233, 233, 233);
     bottom: 0;
     right: 0;
+    top: 40px;
     opacity: 1;
-    transition: all 0.5s ease;
-    z-index: 1;
+    transition: all 0.7s ease-in-out;
+    z-index: 0;
     align-content: center;
     padding-left: 0px;
     margin-top: 20px;

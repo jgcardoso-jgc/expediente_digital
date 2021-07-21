@@ -11,19 +11,38 @@ const LoginNormal = (props) => {
   const history = useHistory();
 
   const firebase = useFirebaseApp();
+  const db = firebase.firestore();
   //const user = useUser();
+  const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const submit = async () => {
     try {
+      setDisable(true);
       await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          history.push("/dashboard");
+        .then((user) => {
+          console.log("uid:" + user.user.uid);
+          const uid = user.user.uid;
+          let query = db.collection("users").where("uid", "==", uid);
+
+          query.get().then((querySnapshot) => {
+            querySnapshot.forEach((documentSnapshot) => {
+              const data = documentSnapshot.data();
+              const user = {
+                fullName: data.fullname,
+                rfc: data.rfc,
+                email: data.email,
+              };
+              localStorage.setItem("user", JSON.stringify(user));
+              history.push("/dashboard");
+            });
+          });
         });
     } catch (e) {
       alert(e);
+      setDisable(false);
     }
   };
   return (
@@ -62,11 +81,14 @@ const LoginNormal = (props) => {
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button className="initBt" onClick={submit}>
+        <button className="initBt" disabled={disable} onClick={submit}>
           Iniciar Sesión
         </button>
-        <Link className="right d-block pt10" to="./registerNormal">
-          ¿Aun no tienes una cuenta?
+        <Link className="right d-block pt14" to="./registerNormal">
+          <p className="qa">¿Aun no tienes una cuenta?</p>
+        </Link>
+        <Link className="right d-block " to="./registerNormal">
+          <p className="qa">¿Olvidaste tu contraseña?</p>
         </Link>
       </div>
       <Waves />
