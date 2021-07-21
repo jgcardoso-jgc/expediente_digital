@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import { ReactComponent as CloseMenu } from "../../assets/x.svg";
 import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
 import logo from "../../assets/logo.png";
-import { useHistory } from "react-router-dom";
 import { IoExit } from "react-icons/io5";
+import firebase from "firebase";
 import "./navBar.css";
 import { FaRegBell } from "react-icons/fa";
+import { FaBell } from "react-icons/fa";
 
 function NavBar() {
-  const history = useHistory();
   const [click, setClick] = useState(false);
   const [alert, openAlert] = useState(false);
   const handleClick = () => setClick(!click);
   const handleBell = () => fetchAlerts();
   const closeMobileMenu = () => setClick(false);
 
-  function exit() {
-    console.log("closing...");
-    localStorage.removeItem("user");
-    history.push("/login");
+  function logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("logged out");
+        localStorage.removeItem("user");
+      })
+      .catch((error) => {
+        alert(error);
+      });
   }
 
   function fetchAlerts() {
@@ -45,13 +52,14 @@ function NavBar() {
             <a href="/documents">Alertas</a>
           </li>
           <li className="sign-in" onClick={closeMobileMenu}>
-            <button onClick={() => exit()} className="salirbt">
+            <button onClick={() => logOut()} className="salirbt">
               <IoExit className="exitIcon" />
               <span>Salir</span>
             </button>
           </li>
         </ul>
         <ul className={alert ? "nav-options active" : "nav-options"}>
+          <h2 className="nav-optionsExtra">Notificaciones</h2>
           <li className="option" onClick={closeMobileMenu}>
             <a href="/documents">Mi Perfil</a>
           </li>
@@ -62,7 +70,7 @@ function NavBar() {
             <a href="/documents">Alertas</a>
           </li>
           <li className="sign-in" onClick={closeMobileMenu}>
-            <button onClick={() => exit()} className="salirbt">
+            <button onClick={() => logOut()} className="salirbt">
               <IoExit className="exitIcon" />
               <span>Salir</span>
             </button>
@@ -71,7 +79,7 @@ function NavBar() {
       </div>
       <div className="mobile-menu bell" onClick={handleBell}>
         {alert ? (
-          <FaRegBell className="alert-icon" />
+          <FaBell className="alert-icon" />
         ) : (
           <FaRegBell className="alert-icon" />
         )}

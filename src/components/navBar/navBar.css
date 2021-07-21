@@ -92,9 +92,8 @@ a {
     min-width: 100%;
     height: 100vh;
     position: absolute;
-    top: -110vh;
-    left: 0;
-    bottom: 100%;
+    top: 40px;
+    left: -100%;
     padding-left: 0;
     opacity: 1;
     transition: all 0.7s ease-in-out;
@@ -115,14 +114,14 @@ a {
   .nav-options.active {
     background: rgb(233, 233, 233);
     bottom: 0;
-    right: 0;
+    height: 100vh;
     top: 40px;
+    left: 0;
     opacity: 1;
     transition: all 0.7s ease-in-out;
     z-index: 0;
     align-content: center;
     padding-left: 0px;
-    margin-top: 20px;
   }
 
   .menu-icon {
@@ -152,4 +151,10 @@ a {
 }
 .mobile-menu {
   display: block;
+}
+
+@media (min-width: 713px) {
+  .nav-optionsExtra {
+    display: none;
+  }
 }

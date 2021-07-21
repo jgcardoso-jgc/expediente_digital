@@ -9,19 +9,6 @@ function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
 
-  function logOut() {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        console.log("logged out");
-        localStorage.removeItem("user");
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  }
-
   const [image, setImage] = useState("");
   const upload = () => {
     if (image == null) return;
@@ -68,7 +55,6 @@ function Dashboard() {
         }}
       />
       <button onClick={() => upload()}>Upload</button>
-      <button onClick={() => logOut()}>Exit</button>
     </div>
   );
 }
