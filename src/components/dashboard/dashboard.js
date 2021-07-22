@@ -7,6 +7,7 @@ import { IoPersonCircle } from "react-icons/io5";
 function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
+  const email = user.email;
 
   return (
     <div className="center">
@@ -15,7 +16,7 @@ function Dashboard() {
       <div className="container max500">
         <div className="cardDashboard pt10">
           <div className="row">
-            <div className="col min50">
+            <div className="col max40">
               <IoPersonCircle className="iconPerson d-block mx-auto" />
             </div>
             <div className="col min50">
@@ -23,14 +24,14 @@ function Dashboard() {
                 <b>{name}</b>
               </p>
               <p className="mt4 mb0">Frontend Developer</p>
-              <p className="mt4">sophie@Seguridata.com</p>
+              <p className="mt4">{email}</p>
             </div>
           </div>
         </div>
       </div>
       <div className="container max500 mt14">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-6 mb10">
             <div className="cardDashboard p10">
               <Link to="/documents" style={{ display: "block" }}>
                 <h2>0</h2>

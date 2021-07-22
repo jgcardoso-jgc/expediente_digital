@@ -8,6 +8,10 @@ body {
   max-width: 400px !important;
 }
 
+.max40 {
+  max-width: 40% !important;
+}
+
 .pt40 {
   padding-top: 40px;
 }
@@ -33,6 +37,10 @@ body {
 
 .mt14 {
   margin-top: 14px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
 }
 
 .p10 {

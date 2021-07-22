@@ -33,6 +33,11 @@ const RegisterNormal = (props) => {
                 rfc: rfc,
               })
               .then(() => {
+                console.log("pushing...");
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({ fullName: name, email: email, rfc: rfc })
+                );
                 history.push("/dashboard");
               });
           } catch (e) {
@@ -102,7 +107,7 @@ const RegisterNormal = (props) => {
           />
         </div>
         <button className="initBt" onClick={submit}>
-          Iniciar Sesión
+          Registrarse
         </button>
         <Link className="right d-block pt10" to="./loginNormal">
           ¿Ya tienes una cuenta?

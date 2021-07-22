@@ -87,7 +87,7 @@ const LoginNormal = (props) => {
         <Link className="right d-block pt14" to="./registerNormal">
           <p className="qa">¿Aun no tienes una cuenta?</p>
         </Link>
-        <Link className="right d-block " to="./registerNormal">
+        <Link className="right d-block " to="./recoverPassword">
           <p className="qa">¿Olvidaste tu contraseña?</p>
         </Link>
       </div>

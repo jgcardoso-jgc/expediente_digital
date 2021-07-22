@@ -14,6 +14,7 @@ import ToOnBoarding from "./components/toOnboarding/toOnboarding";
 import Documents from "./components/documents/documents";
 import LoginNormal from "./components/loginNormal/loginNormal";
 import RegisterNormal from "./components/registerNormal/registerNormal";
+import RecoverPassword from "./components/recoverPassword/recoverPassword";
 import { useFirebaseApp } from "reactfire";
 import "./App.css";
 
@@ -89,6 +90,9 @@ function App() {
         </Route>
         <Route path="/registerNormal">
           <RegisterNormal />
+        </Route>
+        <Route path="/recoverPassword">
+          <RecoverPassword />
         </Route>
       </Switch>
     </Router>
