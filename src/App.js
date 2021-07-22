@@ -82,9 +82,10 @@ function App() {
         <Route path="/finalStep">
           <FinalStep />
         </Route>
-        <Route path="/documents">
-          <Documents />
-        </Route>
+        <Route
+          path="/documents"
+          render={() => (user ? <Documents /> : <Login />)}
+        ></Route>
         <Route path="/loginNormal">
           <LoginNormal />
         </Route>

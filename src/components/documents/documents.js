@@ -12,19 +12,25 @@ function start() {
 
 function Documents() {
   const firebase = useFirebaseApp();
+  const [isToken, setToken] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
 
   async function getImg() {
     console.log(user.token);
-    const imgs = await incode.getImages({
-      token: user.token,
-      body: { images: ["fullFrameFrontID"] },
-    });
-    console.log(imgs.fullFrameFrontID);
-    var image = new Image();
-    image.src = "data:image/png;base64," + imgs.fullFrameFrontID;
-    image.style.width = "100%";
-    document.getElementById("ineFront").appendChild(image);
+    if (user.token !== "") {
+      setToken(true);
+      const imgs = await incode.getImages({
+        token: user.token,
+        body: { images: ["fullFrameFrontID"] },
+      });
+      console.log(imgs.fullFrameFrontID);
+      var image = new Image();
+      image.src = "data:image/png;base64," + imgs.fullFrameFrontID;
+      image.style.width = "100%";
+      document.getElementById("ineFront").appendChild(image);
+    } else {
+      setToken(false);
+    }
   }
 
   const [image, setImage] = useState("");
@@ -73,8 +79,12 @@ function Documents() {
   return (
     <div>
       <NavBar />
-      <h1 className="center">Mis documentos</h1>
-      <div id="ineFront" className="idFront"></div>
+      <h1 className="center pt40 mb20">Mis documentos</h1>
+      {isToken ? (
+        <div id="ineFront" className="idFront"></div>
+      ) : (
+        <div className="center">No hay token</div>
+      )}
       <input
         type="file"
         onChange={(e) => {

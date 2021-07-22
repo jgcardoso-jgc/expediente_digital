@@ -34,6 +34,9 @@ const LoginNormal = (props) => {
                 fullName: data.fullname,
                 rfc: data.rfc,
                 email: data.email,
+                token: data.token,
+                onboarding: data.onboarding,
+                documents: data.documents,
               };
               localStorage.setItem("user", JSON.stringify(user));
               history.push("/dashboard");

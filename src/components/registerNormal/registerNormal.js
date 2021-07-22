@@ -31,12 +31,22 @@ const RegisterNormal = (props) => {
                 fullname: name,
                 email: email,
                 rfc: rfc,
+                token: "",
+                onboarding: false,
+                documents: [],
               })
               .then(() => {
                 console.log("pushing...");
                 localStorage.setItem(
                   "user",
-                  JSON.stringify({ fullName: name, email: email, rfc: rfc })
+                  JSON.stringify({
+                    fullName: name,
+                    email: email,
+                    rfc: rfc,
+                    token: "",
+                    onboarding: false,
+                    documents: [],
+                  })
                 );
                 history.push("/dashboard");
               });

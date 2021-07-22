@@ -8,6 +8,7 @@ function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
   const email = user.email;
+  const rfc = user.rfc;
 
   return (
     <div className="center">
@@ -24,7 +25,8 @@ function Dashboard() {
                 <b>{name}</b>
               </p>
               <p className="mt4 mb0">Frontend Developer</p>
-              <p className="mt4">{email}</p>
+              <p className="mt4 mb0">{email}</p>
+              <p className="mt4">{rfc}</p>
             </div>
           </div>
         </div>

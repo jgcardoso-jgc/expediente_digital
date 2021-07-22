@@ -55,19 +55,13 @@ function NavBar() {
           </li>
         </ul>
         <ul className={alert ? "nav-optionsAlert active" : "nav-optionsAlert"}>
-          <h2 className="option">Notificaciones</h2>
-          <li className="option" onClick={closeMobileMenu}>
-            <a href="/documents">Mi Perfil</a>
-          </li>
-          <li className="option" onClick={closeMobileMenu}>
-            <a href="/documents">Documentos</a>
-          </li>
-          <li className="option" onClick={closeMobileMenu}>
-            <a href="/documents">Alertas</a>
+          <h4 className="option">Notificaciones</h4>
+          <li className="option left" onClick={closeMobileMenu}>
+            <a href="/documents">Alerta 1</a>
           </li>
           <li className="sign-in" onClick={closeMobileMenu}>
             <button onClick={() => logOut()} className="salirbt">
-              <span>Salir</span>
+              <span>Ver todas</span>
             </button>
           </li>
         </ul>

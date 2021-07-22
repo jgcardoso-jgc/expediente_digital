@@ -8,6 +8,10 @@ body {
   max-width: 400px !important;
 }
 
+.left {
+  text-align: left;
+}
+
 .max40 {
   max-width: 40% !important;
 }
