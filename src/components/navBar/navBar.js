@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ReactComponent as CloseMenu } from "../../assets/x.svg";
 import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
 import logo from "../../assets/logo.png";
-import { IoExit } from "react-icons/io5";
+//import { IoExit } from "react-icons/io5";
 import firebase from "firebase";
 import "./navBar.css";
 import { FaRegBell } from "react-icons/fa";
