@@ -50,11 +50,11 @@ const RegisterNormal = (props) => {
           <img src={logo} alt="logo" className="logoNav" />
         </Link>
       </header>
-      <div className="container">
+      <div className="container max400 pt40">
         <div>
-          <h1 className="regText">
+          <h2 className="regText">
             <b>Regístrate</b>
-          </h1>
+          </h2>
           <p className="expText">Ingresa tus datos</p>
         </div>
         <div className="formGroup">

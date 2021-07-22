@@ -34,7 +34,7 @@ function NavBar() {
   }
 
   return (
-    <div className="header">
+    <div className="header shadow">
       <div className="logo-nav">
         <div className="logo-container">
           <a href="/dashboard">
@@ -48,18 +48,14 @@ function NavBar() {
           <li className="option" onClick={closeMobileMenu}>
             <a href="/documents">Documentos</a>
           </li>
-          <li className="option" onClick={closeMobileMenu}>
-            <a href="/documents">Alertas</a>
-          </li>
           <li className="sign-in" onClick={closeMobileMenu}>
             <button onClick={() => logOut()} className="salirbt">
-              <IoExit className="exitIcon" />
               <span>Salir</span>
             </button>
           </li>
         </ul>
-        <ul className={alert ? "nav-options active" : "nav-options"}>
-          <h2 className="nav-optionsExtra">Notificaciones</h2>
+        <ul className={alert ? "nav-optionsAlert active" : "nav-optionsAlert"}>
+          <h2 className="option">Notificaciones</h2>
           <li className="option" onClick={closeMobileMenu}>
             <a href="/documents">Mi Perfil</a>
           </li>
@@ -71,13 +67,12 @@ function NavBar() {
           </li>
           <li className="sign-in" onClick={closeMobileMenu}>
             <button onClick={() => logOut()} className="salirbt">
-              <IoExit className="exitIcon" />
               <span>Salir</span>
             </button>
           </li>
         </ul>
       </div>
-      <div className="mobile-menu bell" onClick={handleBell}>
+      <div className="mobile-menu bell ml-auto" onClick={handleBell}>
         {alert ? (
           <FaBell className="alert-icon" />
         ) : (

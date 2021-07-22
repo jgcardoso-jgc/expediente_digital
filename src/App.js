@@ -15,6 +15,7 @@ import Documents from "./components/documents/documents";
 import LoginNormal from "./components/loginNormal/loginNormal";
 import RegisterNormal from "./components/registerNormal/registerNormal";
 import { useFirebaseApp } from "reactfire";
+import "./App.css";
 
 function App() {
   const firebase = useFirebaseApp();

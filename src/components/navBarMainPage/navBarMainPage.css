@@ -25,16 +25,11 @@
   height: 45px;
 }
 .nav-optionsMain {
-  display: flex;
-  min-width: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 100%;
-  padding-left: 0;
-  transition: all 0.8s ease-in-out;
-  flex-direction: column;
+  padding-left: 25px;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-gap: 50px;
   list-style-type: none;
-  grid-gap: 0px;
 }
 .mobile-option {
   display: none;

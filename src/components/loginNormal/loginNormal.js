@@ -52,11 +52,11 @@ const LoginNormal = (props) => {
           <img src={logo} alt="logo" className="logoNav" />
         </Link>
       </header>
-      <div className="container">
+      <div className="container max400 pt60">
         <div>
-          <h1 className="mb4">
+          <h2 className="mb4">
             <b>Login</b>
-          </h1>
+          </h2>
           <p className="expText">Accede a tu expediente</p>
         </div>
         <div className="formGroup">

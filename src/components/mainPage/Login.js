@@ -29,11 +29,13 @@ function Login() {
     <Div100vh>
       <NavBarMainPage className="navmain" />
       <div className="mainDiv">
-        <h1 className="segTitle">Seguridata</h1>
+        <h1 className="segTitle">
+          <b>Seguridata</b> | Expediente
+        </h1>
         <div className="row">
           <div className="col w50">
             <div className="first">
-              <h2 className="title">Regístrate</h2>
+              <h3 className="title">Regístrate</h3>
               <p className="text">
                 Se te solicitará un medio de identificación y se almacenará tu
                 rostro.
@@ -49,7 +51,7 @@ function Login() {
           </div>
           <div className="col w50">
             <div className="second">
-              <h2 className="title">Accede ahora</h2>
+              <h3 className="title">Accede ahora</h3>
               <p className="text">
                 Si ya te has registrado previamente, puedes acceder con tu
                 rostro.
