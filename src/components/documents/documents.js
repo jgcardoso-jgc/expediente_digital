@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useFirebaseApp } from "reactfire";
+//import { useFirebaseApp } from "reactfire";
 import toOnboarding from "../../assets/toOnboarding.png";
 import "./documents.css";
 import onBoardingConfig from "./onBoardingConfig";
@@ -13,7 +13,7 @@ function start() {
 }
 
 function Documents() {
-  const firebase = useFirebaseApp();
+  //const firebase = useFirebaseApp();
   const [onBoarding, setOnboarding] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -39,7 +39,7 @@ function Documents() {
     }
   }
 
-  const [image, setImage] = useState("");
+  /*const [image, setImage] = useState("");
   const upload = () => {
     if (image == null) return;
     firebase
@@ -62,7 +62,7 @@ function Documents() {
           console.log("done");
         }
       );
-  };
+  };*/
 
   useEffect(() => {
     console.log("incode...");
