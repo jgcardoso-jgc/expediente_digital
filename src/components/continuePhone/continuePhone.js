@@ -2,7 +2,13 @@ import "./continuePhone.css";
 import qr from "../../assets/qr-code.png";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+
 function ContinuePhone() {
+  const history = useHistory();
+  function goBack() {
+    history.goBack();
+  }
   return (
     <div>
       <h2 className="title">Continua en tu teléfono</h2>
@@ -16,9 +22,9 @@ function ContinuePhone() {
       <div className="card">
         <img className="qr" src={qr} alt="qr" />
       </div>
-      <Link to="/login">
-        <button className="inicioBt">Regresar al Inicio</button>
-      </Link>
+      <button onClick={() => goBack()} className="inicioBt">
+        Regresar al Inicio
+      </button>
     </div>
   );
 }

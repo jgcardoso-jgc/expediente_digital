@@ -5,6 +5,7 @@ import "./styles.css";
 import loading from "../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
 import { useHistory } from "react-router-dom";
+import { useFirebaseApp } from "reactfire";
 //import { saveUser } from "./api";
 
 const apiURL = "https://demo-api.incodesmile.com/";
@@ -31,7 +32,7 @@ function start() {
     },
     translations: {
       tutorial: {
-        front1: "Seguridata Onboarding",
+        front1: "Seguridata | Onboarding",
         front2: "Scan ID",
         back1: "Now scan the ",
         back2: "back side ",
@@ -164,6 +165,8 @@ function Selfie({ session, onSuccess, showError }) {
 
 function Onboarding() {
   const history = useHistory();
+  const firebase = useFirebaseApp();
+  const db = firebase.firestore();
   const [session, setSession] = useState();
   const [step, setStep] = useState(0);
   const [error, setError] = useState(false);
@@ -181,6 +184,8 @@ function Onboarding() {
         .then(async (session) => {
           await incode.warmup();
           setSession(session);
+          console.log("session:" + Object.keys(session));
+          //toFinal(); <- for testing
         });
     };
   }, []);
@@ -190,9 +195,33 @@ function Onboarding() {
   }
 
   function toFinal() {
-    const user = { token: session.token, fullName: "" };
-    localStorage.setItem("user", JSON.stringify(user));
-    history.push("/finalStep");
+    var uid = "";
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        uid = user.uid;
+      }
+    });
+    /* después del estado inicial */
+    const user = firebase.auth().currentUser;
+    if (user) {
+      uid = user.uid;
+    }
+    db.collection("users")
+      .where("uid", "==", uid)
+      .get()
+      .then((snapshot) => {
+        snapshot.docs.forEach((document) => {
+          db.collection("users")
+            .doc(document.id)
+            .update({ onboarding: true })
+            .then(() => {
+              const saved = JSON.parse(localStorage.getItem("user"));
+              saved.onboarding = true;
+              localStorage.setItem("user", JSON.stringify(saved));
+              history.push("/finalStep");
+            });
+        });
+      });
   }
 
   function showError() {

@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+h1 {
+  color: black;
+}
+
 .loadgif {
   margin-left: auto;
   margin-right: auto;
@@ -25,10 +29,12 @@
   color: "#fff";
   border: "4px solid gray";
 }
-.IncodeTutorialVideoFront {
+
+/*.IncodeTutorialVideoFront {
   border: 1px solid green;
-  /*transform: rotate(90deg);*/
-}
+  background-color: black;
+  /*transform: rotate(90deg);
+}*/
 
 .IncodeTutorialButtonContainerFront {
   margin-bottom: 300px;
@@ -45,8 +51,8 @@
 /* Tutorial Front */
 /* Header Container*/
 .IncodeTutorialHeaderContainerFront {
-  color: white;
-  background-color: #ade345;
+  color: black;
+  width: 100%;
 }
 /* Header */
 .IncodeTutorialHeaderFront {

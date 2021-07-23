@@ -4,12 +4,26 @@ body {
   font-family: "Source Sans Pro", sans-serif !important;
 }
 
+#root {
+  overflow-x: hidden !important;
+}
+
 .max400 {
   max-width: 400px !important;
 }
 
+@media (max-width: 320px) {
+  .pt0-sm {
+    padding-top: 0 !important;
+  }
+}
+
 .left {
   text-align: left;
+}
+
+.pb10 {
+  padding-bottom: 10px;
 }
 
 .max40 {

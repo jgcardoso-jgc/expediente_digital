@@ -1,9 +1,11 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
+import toOnboarding from "../../assets/toOnboarding.png";
 import "./documents.css";
 import onBoardingConfig from "./onBoardingConfig";
 import NavBar from "../navBar/navBar";
+import { Link } from "react-router-dom";
 
 var incode = null;
 function start() {
@@ -12,24 +14,28 @@ function start() {
 
 function Documents() {
   const firebase = useFirebaseApp();
-  const [isToken, setToken] = useState(false);
+  const [onBoarding, setOnboarding] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
 
-  async function getImg() {
+  async function getState() {
     console.log(user.token);
-    if (user.token !== "") {
-      setToken(true);
-      const imgs = await incode.getImages({
-        token: user.token,
-        body: { images: ["fullFrameFrontID"] },
-      });
-      console.log(imgs.fullFrameFrontID);
-      var image = new Image();
-      image.src = "data:image/png;base64," + imgs.fullFrameFrontID;
-      image.style.width = "100%";
-      document.getElementById("ineFront").appendChild(image);
+    if (user.onboarding) {
+      try {
+        const imgs = await incode.getImages({
+          token: user.token,
+          body: { images: ["fullFrameFrontID"] },
+        });
+        console.log(imgs.fullFrameFrontID);
+        var image = new Image();
+        image.src = "data:image/png;base64," + imgs.fullFrameFrontID;
+        image.style.width = "100%";
+        document.getElementById("ineFront").appendChild(image);
+        setOnboarding(true);
+      } catch (e) {
+        alert("Por favor, realizar tu proceso de OnBoarding de nuevo.");
+      }
     } else {
-      setToken(false);
+      setOnboarding(false);
     }
   }
 
@@ -71,7 +77,7 @@ function Documents() {
           configurationId: "60f0969272a9270015196d70",
         })
         .then(async () => {
-          await getImg();
+          await getState();
         });
     };
   });
@@ -80,11 +86,28 @@ function Documents() {
     <div>
       <NavBar />
       <h1 className="center pt40 mb20">Mis documentos</h1>
-      {isToken ? (
+      {onBoarding ? (
         <div id="ineFront" className="idFront"></div>
       ) : (
-        <div className="center">No hay token</div>
+        <div>
+          <div className="center pb10">
+            No has registrado tu Identificación Oficial
+          </div>
+          <Link to="/onboard">
+            <button className="logBt">Ir al OnBoarding</button>
+          </Link>
+          <div className="container">
+            <img alt="" className="scan" src={toOnboarding} />
+          </div>
+        </div>
       )}
+    </div>
+  );
+}
+
+export default Documents;
+
+/*
       <input
         type="file"
         onChange={(e) => {
@@ -92,8 +115,5 @@ function Documents() {
         }}
       />
       <button onClick={() => upload()}>Upload</button>
-    </div>
-  );
-}
 
-export default Documents;
+*/

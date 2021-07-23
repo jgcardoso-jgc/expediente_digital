@@ -65,7 +65,7 @@ const RegisterNormal = (props) => {
           <img src={logo} alt="logo" className="logoNav" />
         </Link>
       </header>
-      <div className="container max400 pt40">
+      <div className="container max400 pt40 pt0-sm">
         <div>
           <h2 className="regText">
             <b>Regístrate</b>
