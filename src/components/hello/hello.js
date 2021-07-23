@@ -37,7 +37,9 @@ function Hello() {
       instance.renderLogin(containerRef.current, {
         onSuccess: (r) => {
           console.log("onSuccess", r);
-          localStorage.setItem("user", JSON.stringify(r));
+          var saved = JSON.parse(localStorage.getItem("user"));
+          saved.token = r.token;
+          localStorage.setItem("user", JSON.stringify(saved));
           history.push("/dashboard");
         },
         onError: (r) => {
