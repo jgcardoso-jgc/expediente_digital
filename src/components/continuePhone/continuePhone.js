@@ -1,7 +1,6 @@
 import "./continuePhone.css";
 import qr from "../../assets/qr-code.png";
 import React from "react";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
 function ContinuePhone() {
