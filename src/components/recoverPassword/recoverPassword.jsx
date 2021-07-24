@@ -1,18 +1,20 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable quotes */
 import React from "react";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "firebase/auth";
 import "firebase/firestore";
-//import { useFirebaseApp } from "reactfire";
-//import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
+// import { useFirebaseApp } from "reactfire";
+// import { useHistory } from "react-router-dom";
 import "./recoverPassword.css";
 import Waves from "../waves/waves";
 
-const RecoverPassword = (props) => {
-  //const firebase = useFirebaseApp();
-  //const history = useHistory();
-  //const db = firebase.firestore();
-  //const [email, setEmail] = useState("");
+const RecoverPassword = () => {
+  // const firebase = useFirebaseApp();
+  // const history = useHistory();
+  // const db = firebase.firestore();
+  // const [email, setEmail] = useState("");
   const submit = async () => {
     try {
     } catch (e) {
@@ -40,7 +42,7 @@ const RecoverPassword = (props) => {
           <input type="email" id="email" className="inputStyle" />
         </div>
 
-        <button className="initBt" onClick={submit}>
+        <button type="button" className="initBt" onClick={submit}>
           Recuperar
         </button>
         <Link className="right d-block pt10" to="./loginNormal">

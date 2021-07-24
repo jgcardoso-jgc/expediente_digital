@@ -1,50 +1,20 @@
+/* eslint-disable no-console */
+/* eslint-disable quotes */
 // check public/index.html
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useFirebaseApp } from "reactfire";
+import PropTypes from "prop-types";
 import Steps from "./Steps";
 import "./styles.css";
 import loading from "../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
-import { useHistory } from "react-router-dom";
-import { useFirebaseApp } from "reactfire";
-//import { saveUser } from "./api";
+import settings from "./settings";
+// import { saveUser } from "./api";
 
-const apiURL = "https://demo-api.incodesmile.com/";
-const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
-var incode = null;
-//    <script src="https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js"></script>
+let incode = null;
 function start() {
-  incode = window.OnBoarding.create({
-    apiKey: apiKey,
-    apiURL: apiURL,
-    lang: "es",
-    theme: {
-      main: "black",
-      mainButton: {
-        borderRadius: "10px",
-        color: "white",
-        border: "2px solid black",
-        maxWidth: "100px",
-        marginLeft: "auto",
-        marginRight: "auto",
-        display: "block",
-        marginTop: "20px",
-      },
-    },
-    translations: {
-      tutorial: {
-        front1: "Seguridata | Onboarding",
-        front2: "Scan ID",
-        back1: "Now scan the ",
-        back2: "back side ",
-        back3: "of your ID",
-        selfie1: "Let's take a selfie",
-        selfie2: "Keep a neutral expression, find balanced",
-        selfie3: "light and remove any glasses and hats",
-        passport1: "Align your passport to the frame and take a photo",
-        passport2: "Position just the page with the photo",
-      },
-    },
-  });
+  incode = window.OnBoarding.create(settings);
 }
 
 function TutorialFrontId({ token, onSuccess }) {
@@ -76,7 +46,7 @@ function TutorialFrontId({ token, onSuccess }) {
   );
 }
 
-function FrontId({ session, onSuccess, showError }) {
+const FrontId = ({ session, onSuccess, showError }) => {
   const containerRef = useRef();
 
   useEffect(() => {
@@ -89,10 +59,16 @@ function FrontId({ session, onSuccess, showError }) {
     });
   }, [onSuccess, showError, session]);
 
-  return <div ref={containerRef}></div>;
-}
+  return <div ref={containerRef} />;
+};
 
-function BackId({ session, onSuccess, showError }) {
+FrontId.propTypes = {
+  session: PropTypes.string.isRequired,
+  onSuccess: PropTypes.string.isRequired,
+  showError: PropTypes.string.isRequired,
+};
+
+const BackId = ({ session, onSuccess, showError }) => {
   const containerRef = useRef();
 
   useEffect(() => {
@@ -105,8 +81,14 @@ function BackId({ session, onSuccess, showError }) {
     });
   }, [onSuccess, showError, session]);
 
-  return <div ref={containerRef}></div>;
-}
+  return <div ref={containerRef} />;
+};
+
+BackId.propTypes = {
+  session: PropTypes.string.isRequired,
+  onSuccess: PropTypes.string.isRequired,
+  showError: PropTypes.string.isRequired,
+};
 
 function ProcessId({ session, onSuccess }) {
   useEffect(() => {
@@ -117,6 +99,11 @@ function ProcessId({ session, onSuccess }) {
 
   return <p>Processing...</p>;
 }
+
+ProcessId.propTypes = {
+  session: PropTypes.string.isRequired,
+  onSuccess: PropTypes.string.isRequired,
+};
 
 function Selfie({ session, onSuccess, showError }) {
   const containerRef = useRef();
@@ -130,10 +117,16 @@ function Selfie({ session, onSuccess, showError }) {
     });
   }, [onSuccess, showError, session]);
 
-  return <div ref={containerRef}></div>;
+  return <div ref={containerRef} />;
 }
 
-/*function Conference({ session, onSuccess, showError }) {
+Selfie.propTypes = {
+  session: PropTypes.string.isRequired,
+  onSuccess: PropTypes.string.isRequired,
+  showError: PropTypes.string.isRequired,
+};
+
+/* function Conference({ session, onSuccess, showError }) {
   const [status, setStatus] = useState();
   const containerRef = useRef();
 
@@ -161,7 +154,7 @@ function Selfie({ session, onSuccess, showError }) {
   }
 
   return <div ref={containerRef}></div>;
-}*/
+} */
 
 function Onboarding() {
   const history = useHistory();
@@ -184,8 +177,8 @@ function Onboarding() {
         .then(async (session) => {
           await incode.warmup();
           setSession(session);
-          console.log("session:" + Object.keys(session));
-          //toFinal(); <- for testing
+          console.log(`session:${Object.keys(session)}`);
+          // toFinal(); <- for testing
         });
     };
   }, []);
@@ -195,8 +188,8 @@ function Onboarding() {
   }
 
   function toFinal() {
-    var uid = "";
-    firebase.auth().onAuthStateChanged(function (user) {
+    let uid = "";
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         uid = user.uid;
       }
@@ -228,12 +221,13 @@ function Onboarding() {
     setError(true);
   }
 
-  if (!session)
+  if (!session) {
     return (
       <div className="loading">
         <img src={loading} className="loadgif" alt="loading..." />
       </div>
     );
+  }
   if (error) return "Error!";
   return (
     <Steps currentStep={step}>
@@ -245,9 +239,9 @@ function Onboarding() {
         session={session}
         onSuccess={toFinal}
         showError={showError}
-        /*const response = await saveUser(session.token);
+        /* const response = await saveUser(session.token);
           if (response) {
-            console.log("response:" + response);*/
+            console.log("response:" + response); */
       />
     </Steps>
   );

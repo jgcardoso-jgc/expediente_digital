@@ -1,14 +1,15 @@
+/* eslint-disable quotes */
 import "./dashboard.css";
 import React from "react";
 import { Link } from "react-router-dom";
-import NavBar from "../navBar/navBar";
 import { IoPersonCircle } from "react-icons/io5";
+import NavBar from "../navBar/navBar";
 
 function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
-  const email = user.email;
-  const rfc = user.rfc;
+  const { email } = user;
+  const { rfc } = user;
 
   return (
     <div className="center">

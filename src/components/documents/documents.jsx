@@ -1,21 +1,23 @@
-import React from "react";
-import { useEffect, useState } from "react";
-//import { useFirebaseApp } from "reactfire";
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
+/* eslint-disable quotes */
+import React, { useEffect, useState } from "react";
+// import { useFirebaseApp } from "reactfire";
+import { Link } from "react-router-dom";
 import toOnboarding from "../../assets/toOnboarding.png";
 import facematch from "../../assets/facematch.png";
 import "./documents.css";
 import onBoardingConfig from "./onBoardingConfig";
 import NavBar from "../navBar/navBar";
-import { Link } from "react-router-dom";
 
-var incode = null;
+let incode = null;
 
 function start() {
   incode = window.OnBoarding.create(onBoardingConfig);
 }
 
 function Documents() {
-  //const firebase = useFirebaseApp();
+  // const firebase = useFirebaseApp();
   const [onBoarding, setOnboarding] = useState(false);
   const [grantAccess, setAccess] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -43,8 +45,8 @@ function Documents() {
                   body: { images: ["fullFrameFrontID"] },
                 });
                 console.log(imgs.fullFrameFrontID);
-                var image = new Image();
-                image.src = "data:image/png;base64," + imgs.fullFrameFrontID;
+                const image = new Image();
+                image.src = `data:image/png;base64,${imgs.fullFrameFrontID}`;
                 image.style.width = "100%";
                 document.getElementById("ineFront").appendChild(image);
               } catch (e) {
@@ -60,7 +62,7 @@ function Documents() {
     }
   }
 
-  /*const [image, setImage] = useState("");
+  /* const [image, setImage] = useState("");
   const upload = () => {
     if (image == null) return;
     firebase
@@ -83,7 +85,7 @@ function Documents() {
           console.log("done");
         }
       );
-  };*/
+  }; */
 
   useEffect(() => {
     console.log("incode...");
@@ -96,7 +98,7 @@ function Documents() {
       <h1 className="center pt40 mb20">Mis documentos</h1>
       {onBoarding ? (
         <div>
-          <div id="ineFront" className="idFront"></div>
+          <div id="ineFront" className="idFront" />
           <div>
             {grantAccess ? (
               <div>
@@ -120,7 +122,9 @@ function Documents() {
                     Deberás hacer Facematch para comprobar tu identidad
                   </div>
                   <Link to="/hello">
-                    <button className="logBt">Ir al Facematch</button>
+                    <button type="button" className="logBt">
+                      Ir al Facematch
+                    </button>
                   </Link>
                 </div>
                 <div className="container">
@@ -136,7 +140,9 @@ function Documents() {
             No has registrado tu Identificación Oficial
           </div>
           <Link to="/onboard">
-            <button className="logBt">Ir al OnBoarding</button>
+            <button type="button" className="logBt">
+              Ir al OnBoarding
+            </button>
           </Link>
           <div className="container">
             <img alt="" className="scan" src={toOnboarding} />

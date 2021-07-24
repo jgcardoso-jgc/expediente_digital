@@ -1,14 +1,21 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable no-console */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable quotes */
 import React, { useState } from "react";
-import logo from "../../assets/logo.png";
 import "firebase/auth";
 import "firebase/firestore";
 import { useFirebaseApp } from "reactfire";
-import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import logo from "../../assets/logo.png";
+
 import "./registerNormal.css";
 import Waves from "../waves/waves";
 
-const RegisterNormal = (props) => {
+const RegisterNormal = () => {
   const firebase = useFirebaseApp();
   const history = useHistory();
   const db = firebase.firestore();
@@ -29,20 +36,19 @@ const RegisterNormal = (props) => {
               .add({
                 uid: id,
                 fullname: name,
-                email: email,
-                rfc: rfc,
+                email,
+                rfc,
                 token: "",
                 onboarding: false,
                 documents: [],
               })
               .then(() => {
-                console.log("pushing...");
                 localStorage.setItem(
                   "user",
                   JSON.stringify({
                     fullName: name,
-                    email: email,
-                    rfc: rfc,
+                    email,
+                    rfc,
                     token: "",
                     onboarding: false,
                     documents: [],
@@ -51,11 +57,11 @@ const RegisterNormal = (props) => {
                 history.push("/dashboard");
               });
           } catch (e) {
-            alert(e);
+            toast(e);
           }
         });
     } catch (e) {
-      alert(e);
+      toast(e);
     }
   };
   return (
@@ -65,6 +71,7 @@ const RegisterNormal = (props) => {
           <img src={logo} alt="logo" className="logoNav" />
         </Link>
       </header>
+      <ToastContainer />
       <div className="container max400 pt40 pt0-sm">
         <div>
           <h2 className="regText">
@@ -116,7 +123,7 @@ const RegisterNormal = (props) => {
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button className="initBt" onClick={submit}>
+        <button type="button" className="initBt" onClick={submit}>
           Registrarse
         </button>
         <Link className="right d-block pt10" to="./loginNormal">

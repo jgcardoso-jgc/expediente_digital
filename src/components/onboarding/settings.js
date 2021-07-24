@@ -2,21 +2,26 @@
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 
-const onBoardingConfig = {
+const settings = {
   apiKey,
   apiURL,
   lang: "es",
   theme: {
-    main: "red",
+    main: "black",
     mainButton: {
-      borderRadius: "20px",
+      borderRadius: "10px",
       color: "white",
       border: "2px solid black",
+      maxWidth: "100px",
+      marginLeft: "auto",
+      marginRight: "auto",
+      display: "block",
+      marginTop: "20px",
     },
   },
   translations: {
     tutorial: {
-      front1: "Seguridata Onboarding",
+      front1: "Seguridata | Onboarding",
       front2: "Scan ID",
       back1: "Now scan the ",
       back2: "back side ",
@@ -30,4 +35,4 @@ const onBoardingConfig = {
   },
 };
 
-export default onBoardingConfig;
+export default settings;

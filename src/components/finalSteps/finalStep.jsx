@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React from "react";
 import "./finalStep.css";
 import { Link } from "react-router-dom";
@@ -8,7 +9,9 @@ function FinalStep() {
       <h1>Felicidades</h1>
       <p>Enrolamiento concluido</p>
       <Link to="/documents">
-        <button className="inicioBt">Ir a mis documentos</button>
+        <button type="button" className="inicioBt">
+          Ir a mis documentos
+        </button>
       </Link>
     </div>
   );

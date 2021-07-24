@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable quotes */
 import React from "react";
 import { useHistory } from "react-router-dom";
 import Div100vh from "react-div-100vh";

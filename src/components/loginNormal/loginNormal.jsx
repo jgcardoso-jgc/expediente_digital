@@ -1,18 +1,22 @@
+/* eslint-disable no-console */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-alert */
+/* eslint-disable quotes */
 import React, { useState } from "react";
-import logo from "../../assets/logo.png";
 import "firebase/auth";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
-import { useHistory } from "react-router-dom";
+import logo from "../../assets/logo.png";
+
 import "./loginNormal.css";
 import Waves from "../waves/waves";
 
-const LoginNormal = (props) => {
+const LoginNormal = () => {
   const history = useHistory();
 
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  //const user = useUser();
+  // const user = useUser();
   const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,14 +27,14 @@ const LoginNormal = (props) => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((user) => {
-          console.log("uid:" + user.user.uid);
-          const uid = user.user.uid;
-          let query = db.collection("users").where("uid", "==", uid);
+          console.log(`uid:${user.user.uid}`);
+          const { uid } = user.user;
+          const query = db.collection("users").where("uid", "==", uid);
 
           query.get().then((querySnapshot) => {
             querySnapshot.forEach((documentSnapshot) => {
               const data = documentSnapshot.data();
-              const user = {
+              const userSave = {
                 fullName: data.fullname,
                 rfc: data.rfc,
                 email: data.email,
@@ -38,7 +42,7 @@ const LoginNormal = (props) => {
                 onboarding: data.onboarding,
                 documents: data.documents,
               };
-              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("user", JSON.stringify(userSave));
               history.push("/dashboard");
             });
           });
@@ -84,7 +88,12 @@ const LoginNormal = (props) => {
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button className="initBt" disabled={disable} onClick={submit}>
+        <button
+          type="button"
+          className="initBt"
+          disabled={disable}
+          onClick={submit}
+        >
           Iniciar Sesión
         </button>
         <Link className="right d-block pt14" to="./registerNormal">

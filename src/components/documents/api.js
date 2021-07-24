@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import axios from "axios";
 
 export const getImage = async (token) => {
@@ -21,6 +22,6 @@ export const getImage = async (token) => {
     );
     return response.data;
   } catch (error) {
-    console.log("error:" + error);
+    console.log(`error:${error}`);
   }
 };

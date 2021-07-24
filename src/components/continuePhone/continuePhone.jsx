@@ -1,7 +1,8 @@
+/* eslint-disable quotes */
 import "./continuePhone.css";
-import qr from "../../assets/qr-code.png";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import qr from "../../assets/qr-code.png";
 
 function ContinuePhone() {
   const history = useHistory();
@@ -21,7 +22,7 @@ function ContinuePhone() {
       <div className="card">
         <img className="qr" src={qr} alt="qr" />
       </div>
-      <button onClick={() => goBack()} className="inicioBt">
+      <button type="button" onClick={() => goBack()} className="inicioBt">
         Regresar al Inicio
       </button>
     </div>

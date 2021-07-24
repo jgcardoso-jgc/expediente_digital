@@ -1,16 +1,17 @@
+/* eslint-disable no-console */
+/* eslint-disable quotes */
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useLocation, Link, useHistory } from "react-router-dom";
+
 import logo from "../../assets/logo.png";
 import "./toOnboarding.css";
-import { useHistory } from "react-router-dom";
 
-const ToOnBoarding = (props) => {
+const ToOnBoarding = () => {
   const history = useHistory();
   const location = useLocation();
 
   useEffect(() => {
-    const state = location.state;
+    const { state } = location;
     if (state.reload === true) {
       console.log("toReload");
       history.replace({ pathname: "/toOnboarding", state: {} });
@@ -25,8 +26,10 @@ const ToOnBoarding = (props) => {
       <img src={logo} alt="logo" className="logo" />
       <h1 className="noText">No estás registrado</h1>
       <p className="wtext">
-        Tu rostro aun <b>no se encuentra</b> en la base de datos, o tu
-        fotografía <b>es muy borrosa</b>.
+        Tu rostro aun
+        <b>no se encuentra</b>
+        en la base de datos, o tu fotografía
+        <b>es muy borrosa.</b>
       </p>
       <Link to="/onboard">
         <button className="logBt" type="button">
