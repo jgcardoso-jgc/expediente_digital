@@ -4,12 +4,7 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import Login from "./components/mainPage/Login";
 import HelloInit from "./components/hello/hello";
@@ -61,9 +56,7 @@ function App() {
         <Route
           exact
           path="/"
-          render={() =>
-            user ? <Redirect to="/login" /> : <Redirect to="/dashboard" />
-          }
+          render={() => (user ? <Dashboard /> : <Login />)}
         />
         {/* Registro & Login */}
         <Route
