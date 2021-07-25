@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
@@ -164,7 +165,7 @@ function Onboarding() {
   const history = useHistory();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  const [session, setSession] = useState();
+  const [session, setSession] = useState("");
   const [step, setStep] = useState(0);
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -182,7 +183,7 @@ function Onboarding() {
           await incode.warmup();
           setSession(sessionRes);
           console.log(`session:${Object.keys(sessionRes)}`);
-          // toFinal(); <- for testing
+          toFinal();
         });
     };
   }, []);

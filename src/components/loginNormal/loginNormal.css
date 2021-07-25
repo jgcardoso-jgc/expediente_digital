@@ -73,3 +73,15 @@
   font-size: 15px;
   border-radius: 10px;
 }
+
+@media (max-width: 420px) {
+  .w50 {
+    min-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .segTitle {
+    padding-top: 30vh;
+  }
+}
