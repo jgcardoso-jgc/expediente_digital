@@ -15,12 +15,7 @@ const RecoverPassword = () => {
   // const history = useHistory();
   // const db = firebase.firestore();
   // const [email, setEmail] = useState("");
-  const submit = async () => {
-    try {
-    } catch (e) {
-      alert(e);
-    }
-  };
+  const submit = async () => {};
   return (
     <div className="center">
       <header>

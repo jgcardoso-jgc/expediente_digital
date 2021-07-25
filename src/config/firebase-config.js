@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 export const firebaseConfig = {
   apiKey: "AIzaSyCU9lLnTHjQl0_t67BUfaGvhvnqf4hsF5g",
   authDomain: "seguridata-in-a-box.firebaseapp.com",
@@ -8,3 +9,5 @@ export const firebaseConfig = {
   appId: "1:1038660139301:web:b9d817e672a526e31dc2cc",
   measurementId: "G-B0WBRV1VZF",
 };
+
+export default firebaseConfig;

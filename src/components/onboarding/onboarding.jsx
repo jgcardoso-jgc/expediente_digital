@@ -17,7 +17,10 @@ function start() {
   incode = window.OnBoarding.create(settings);
 }
 
-function TutorialFrontId({ token, onSuccess }) {
+// eslint-disable-next-line spaced-comment
+//function TutorialFrontId({ token, onSuccess })
+
+function TutorialFrontId({ onSuccess }) {
   const containerRef = useRef();
   const screenOrientation = window.matchMedia("(orientation: landscape)");
   const [horizontal, setOrientation] = useState(false);
@@ -45,6 +48,10 @@ function TutorialFrontId({ token, onSuccess }) {
     </div>
   );
 }
+
+TutorialFrontId.propTypes = {
+  onSuccess: PropTypes.string.isRequired,
+};
 
 const FrontId = ({ session, onSuccess, showError }) => {
   const containerRef = useRef();
@@ -174,10 +181,10 @@ function Onboarding() {
         .createSession("ALL", null, {
           configurationId: "60f0969272a9270015196d70",
         })
-        .then(async (session) => {
+        .then(async (sessionRes) => {
           await incode.warmup();
-          setSession(session);
-          console.log(`session:${Object.keys(session)}`);
+          setSession(sessionRes);
+          console.log(`session:${Object.keys(sessionRes)}`);
           // toFinal(); <- for testing
         });
     };

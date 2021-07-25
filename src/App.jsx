@@ -1,3 +1,8 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-console */
+/* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
@@ -5,6 +10,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import { useFirebaseApp } from "reactfire";
 import Login from "./components/mainPage/Login";
 import Hello from "./components/hello/hello";
 import Onboarding from "./components/onboarding/onboarding";
@@ -15,7 +21,6 @@ import Documents from "./components/documents/documents";
 import LoginNormal from "./components/loginNormal/loginNormal";
 import RegisterNormal from "./components/registerNormal/registerNormal";
 import RecoverPassword from "./components/recoverPassword/recoverPassword";
-import { useFirebaseApp } from "reactfire";
 import "./App.css";
 
 function App() {
@@ -24,23 +29,21 @@ function App() {
   const [user, setUser] = useState(false);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
+    firebase.auth().onAuthStateChanged((res) => {
+      if (res) {
         console.log("logged");
         console.log(user.uid);
         setUser(true);
         setLoading(false);
-        return;
       } else {
         console.log(" not logged");
         setUser(false);
         setLoading(false);
-        return;
       }
     });
     /* después del estado inicial */
-    const user = firebase.auth().currentUser;
-    if (user) {
+    const userAuth = firebase.auth().currentUser;
+    if (userAuth) {
       setUser(true);
     } else {
       setUser(false);
@@ -65,7 +68,7 @@ function App() {
         <Route
           path="/login"
           render={() => (user ? <Dashboard /> : <Login />)}
-        ></Route>
+        />
         <Route path="/hello">
           <Hello />
         </Route>
@@ -78,14 +81,14 @@ function App() {
         <Route
           path="/dashboard"
           render={() => (user ? <Dashboard /> : <Login />)}
-        ></Route>
+        />
         <Route path="/finalStep">
           <FinalStep />
         </Route>
         <Route
           path="/documents"
           render={() => (user ? <Documents /> : <Login />)}
-        ></Route>
+        />
         <Route path="/loginNormal">
           <LoginNormal />
         </Route>

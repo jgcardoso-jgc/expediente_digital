@@ -1,12 +1,16 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-console */
+/* eslint-disable quotes */
 import React, { useState } from "react";
+import firebase from "firebase";
+import { FaRegBell, FaBell } from "react-icons/fa";
 import { ReactComponent as CloseMenu } from "../../assets/x.svg";
 import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
 import logo from "../../assets/logo.png";
-//import { IoExit } from "react-icons/io5";
-import firebase from "firebase";
+// import { IoExit } from "react-icons/io5";
 import "./navBar.css";
-import { FaRegBell } from "react-icons/fa";
-import { FaBell } from "react-icons/fa";
 
 function NavBar() {
   const [click, setClick] = useState(false);
@@ -49,7 +53,7 @@ function NavBar() {
             <a href="/documents">Documentos</a>
           </li>
           <li className="sign-in" onClick={closeMobileMenu}>
-            <button onClick={() => logOut()} className="salirbt">
+            <button type="button" onClick={() => logOut()} className="salirbt">
               <span>Salir</span>
             </button>
           </li>
@@ -60,20 +64,32 @@ function NavBar() {
             <a href="/documents">Alerta 1</a>
           </li>
           <li className="sign-in" onClick={closeMobileMenu}>
-            <button onClick={() => logOut()} className="salirbt">
+            <button type="button" onClick={() => logOut()} className="salirbt">
               <span>Ver todas</span>
             </button>
           </li>
         </ul>
       </div>
-      <div className="mobile-menu bell ml-auto" onClick={handleBell}>
+      <div
+        role="button"
+        tabIndex={0}
+        className="mobile-menu bell ml-auto"
+        onKeyDown={handleBell}
+        onClick={handleBell}
+      >
         {alert ? (
           <FaBell className="alert-icon" />
         ) : (
           <FaRegBell className="alert-icon" />
         )}
       </div>
-      <div className="mobile-menu" onClick={handleClick}>
+      <div
+        role="button"
+        className="mobile-menu"
+        tabIndex={0}
+        onKeyDown={handleClick}
+        onClick={handleClick}
+      >
         {click ? (
           <CloseMenu className="menu-icon" />
         ) : (
