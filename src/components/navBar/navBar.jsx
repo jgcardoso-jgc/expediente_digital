@@ -47,7 +47,7 @@ function NavBar() {
         </div>
         <ul className={click ? "nav-options active" : "nav-options"}>
           <li className="option" onClick={closeMobileMenu}>
-            <a href="/dashboard">Mi Perfil</a>
+            <a href="/perfil">Mi Perfil</a>
           </li>
           <li className="option" onClick={closeMobileMenu}>
             <a href="/documents">Documentos</a>

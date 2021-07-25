@@ -96,7 +96,7 @@ const LoginNormal = () => {
         >
           Iniciar Sesión
         </button>
-        <Link className="right d-block pt14" to="./registerNormal">
+        <Link className="right d-block mt14" to="./registerNormal">
           <p className="qa">¿Aun no tienes una cuenta?</p>
         </Link>
         <Link className="right d-block " to="./recoverPassword">

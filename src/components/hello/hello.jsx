@@ -16,7 +16,7 @@ const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
     ></script>
 */
 
-function Hello() {
+function HelloInit() {
   const containerRef = useRef();
   const helloRef = useRef();
   const history = useHistory();
@@ -30,8 +30,8 @@ function Hello() {
     document.body.appendChild(script);
     script.onload = () => {
       console.log("loaded");
-      const { HelloWin } = window;
-      helloRef.current = HelloWin.create({
+      const { Hello } = window;
+      helloRef.current = Hello.create({
         apiKey,
         apiURL,
         language: "es",
@@ -43,7 +43,7 @@ function Hello() {
           const saved = JSON.parse(localStorage.getItem("user"));
           saved.token = r.token;
           localStorage.setItem("user", JSON.stringify(saved));
-          history.push("/dashboard");
+          history.push("/documents");
         },
         onError: (r) => {
           console.log("on error", r);
@@ -73,4 +73,4 @@ function Hello() {
   );
 }
 
-export default Hello;
+export default HelloInit;

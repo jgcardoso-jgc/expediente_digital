@@ -196,31 +196,34 @@ function Onboarding() {
 
   function toFinal() {
     let uid = "";
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        uid = user.uid;
-      }
-    });
-    /* después del estado inicial */
-    const user = firebase.auth().currentUser;
-    if (user) {
-      uid = user.uid;
-    }
-    db.collection("users")
-      .where("uid", "==", uid)
-      .get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((document) => {
-          db.collection("users")
-            .doc(document.id)
-            .update({ onboarding: true })
-            .then(() => {
-              const saved = JSON.parse(localStorage.getItem("user"));
-              saved.onboarding = true;
-              localStorage.setItem("user", JSON.stringify(saved));
-              history.push("/finalStep");
-            });
+    incode
+      .getFinishStatus(session.interviewId, { token: session.token })
+      .then(() => {
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            uid = user.uid;
+          }
         });
+        const user = firebase.auth().currentUser;
+        if (user) {
+          uid = user.uid;
+        }
+        db.collection("users")
+          .where("uid", "==", uid)
+          .get()
+          .then((snapshot) => {
+            snapshot.docs.forEach((document) => {
+              db.collection("users")
+                .doc(document.id)
+                .update({ onboarding: true })
+                .then(() => {
+                  const saved = JSON.parse(localStorage.getItem("user"));
+                  saved.onboarding = true;
+                  localStorage.setItem("user", JSON.stringify(saved));
+                  history.push("/finalStep");
+                });
+            });
+          });
       });
   }
 

@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import Login from "./components/mainPage/Login";
-import Hello from "./components/hello/hello";
+import HelloInit from "./components/hello/hello";
 import Onboarding from "./components/onboarding/onboarding";
 import Dashboard from "./components/dashboard/dashboard";
 import FinalStep from "./components/finalSteps/finalStep";
@@ -21,6 +21,7 @@ import Documents from "./components/documents/documents";
 import LoginNormal from "./components/loginNormal/loginNormal";
 import RegisterNormal from "./components/registerNormal/registerNormal";
 import RecoverPassword from "./components/recoverPassword/recoverPassword";
+import MyProfile from "./components/perfil/perfil";
 import "./App.css";
 
 function App() {
@@ -70,7 +71,7 @@ function App() {
           render={() => (user ? <Dashboard /> : <Login />)}
         />
         <Route path="/hello">
-          <Hello />
+          <HelloInit />
         </Route>
         <Route path="/toOnboarding">
           <ToOnBoarding />
@@ -88,6 +89,10 @@ function App() {
         <Route
           path="/documents"
           render={() => (user ? <Documents /> : <Login />)}
+        />
+        <Route
+          path="/perfil"
+          render={() => (user ? <MyProfile /> : <Login />)}
         />
         <Route path="/loginNormal">
           <LoginNormal />

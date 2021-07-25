@@ -1,9 +1,12 @@
-/* eslint-disable no-alert */
+/* eslint-disable no-unused-vars */
+/* eslint-disable spaced-comment */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 // import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import toOnboarding from "../../assets/toOnboarding.png";
 import facematch from "../../assets/facematch.png";
 import "./documents.css";
@@ -23,6 +26,7 @@ function Documents() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   async function getState() {
+    console.log("first");
     console.log(user.token);
     if (user.onboarding) {
       setOnboarding(true);
@@ -39,7 +43,8 @@ function Documents() {
               configurationId: "60f0969272a9270015196d70",
             })
             .then(async () => {
-              try {
+              console.log("here");
+              /*try {
                 const imgs = await incode.getImages({
                   token: user.token,
                   body: { images: ["fullFrameFrontID"] },
@@ -50,8 +55,8 @@ function Documents() {
                 image.style.width = "100%";
                 document.getElementById("ineFront").appendChild(image);
               } catch (e) {
-                alert("Por favor, realizar tu proceso de OnBoarding de nuevo.");
-              }
+                toast("Por favor, realizar tu proceso de OnBoarding de nuevo.");
+              }*/
             });
         };
       } else {
@@ -95,10 +100,10 @@ function Documents() {
   return (
     <div>
       <NavBar />
+      <ToastContainer />
       <h1 className="center pt40 mb20">Mis documentos</h1>
       {onBoarding ? (
         <div>
-          <div id="ineFront" className="idFront" />
           <div>
             {grantAccess ? (
               <div>
@@ -109,9 +114,7 @@ function Documents() {
                     Se mostrarán tus documentos
                   </div>
                 </div>
-                <div className="container">
-                  <img alt="" className="scan" src={facematch} />
-                </div>
+                <div id="ineFront" className="idFront" />
               </div>
             ) : (
               <div>

@@ -16,21 +16,23 @@ function Dashboard() {
       <NavBar />
       <h1 className="welcomeTitle pt40 mb20">Expediente Digital</h1>
       <div className="container max500">
-        <div className="cardDashboard pt10">
-          <div className="row">
-            <div className="col max40">
-              <IoPersonCircle className="iconPerson d-block mx-auto" />
-            </div>
-            <div className="col min50">
-              <p className="mb0">
-                <b>{name}</b>
-              </p>
-              <p className="mt4 mb0">Frontend Developer</p>
-              <p className="mt4 mb0">{email}</p>
-              <p className="mt4">{rfc}</p>
+        <Link to="/perfil">
+          <div className="cardDashboard pt10">
+            <div className="row">
+              <div className="col max40">
+                <IoPersonCircle className="iconPerson d-block mx-auto" />
+              </div>
+              <div className="col min50">
+                <p className="mb0">
+                  <b>{name}</b>
+                </p>
+                <p className="mt4 mb0">Frontend Developer</p>
+                <p className="mt4 mb0">{email}</p>
+                <p className="mt4">{rfc}</p>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
       <div className="container max500 mt14">
         <div className="row">
