@@ -17,6 +17,7 @@ import LoginNormal from "./components/loginNormal/loginNormal";
 import RegisterNormal from "./components/registerNormal/registerNormal";
 import RecoverPassword from "./components/recoverPassword/recoverPassword";
 import MyProfile from "./components/perfil/perfil";
+import AlertasPagina from "./components/alertasPagina/alertasPagina";
 import "./App.css";
 
 function App() {
@@ -86,6 +87,10 @@ function App() {
         <Route
           path="/perfil"
           render={() => (user ? <MyProfile /> : <Login />)}
+        />
+        <Route
+          path="/alertas"
+          render={() => (user ? <AlertasPagina /> : <Login />)}
         />
         <Route path="/loginNormal">
           <LoginNormal />

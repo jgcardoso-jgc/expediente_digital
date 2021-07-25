@@ -1,9 +1,11 @@
+/* eslint-disable prefer-template */
+/* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
 /* eslint-disable spaced-comment */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
-// import { useFirebaseApp } from "reactfire";
+import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,10 +22,11 @@ function start() {
 }
 
 function Documents() {
-  // const firebase = useFirebaseApp();
+  const firebase = useFirebaseApp();
   const [onBoarding, setOnboarding] = useState(false);
   const [grantAccess, setAccess] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
+  const [image, setImage] = useState("");
 
   function getState() {
     console.log("first");
@@ -48,12 +51,21 @@ function Documents() {
                   body: { images: ["fullFrameFrontID"] },
                 });
                 console.log(imgs.fullFrameFrontID);
-                const image = new Image();
-                image.src = `data:image/png;base64,${imgs.fullFrameFrontID}`;
-                image.style.width = "100%";
-                document.getElementById("ineFront").appendChild(image);
+                const frontId = new Image();
+                frontId.src = `data:image/png;base64,${imgs.fullFrameFrontID}`;
+                frontId.style.width = "100%";
+                document.getElementById("ineFront").appendChild(frontId);
+                console.log("image:" + image);
+                firebase
+                  .storage()
+                  .ref("users")
+                  .child("frontId")
+                  .putString(imgs.fullFrameFrontID, "base64")
+                  .then((res) => {
+                    console.log("uploaded");
+                  });
               } catch (e) {
-                toast("Por favor, realizar tu proceso de OnBoarding de nuevo.");
+                toast("Ocurrió un error.");
               }
             });
         };
@@ -62,31 +74,6 @@ function Documents() {
       setOnboarding(true);
     }
   }
-
-  /* const [image, setImage] = useState("");
-  const upload = () => {
-    if (image == null) return;
-    firebase
-      .storage()
-      .ref(`users/${image.name}`)
-      .put(image)
-      .on(
-        "state_changed",
-        (snapshot) => {
-          // Se lanza durante el progreso de subida
-          console.log("uploading...");
-        },
-        (error) => {
-          // Si ha ocurrido un error aquí lo tratamos
-          console.log("error:" + error);
-        },
-        () => {
-          // Una vez se haya subido el archivo,
-          // se invoca ésta función
-          console.log("done");
-        }
-      );
-  }; */
 
   useEffect(() => {
     getState();
