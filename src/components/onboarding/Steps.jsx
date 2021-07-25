@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 import React, { Children, cloneElement } from "react";
@@ -13,8 +14,7 @@ const Steps = ({ children, currentStep }) => (
 );
 
 Steps.propTypes = {
-  children: PropTypes.string.isRequired,
-  currentStep: PropTypes.string.isRequired,
+  currentStep: PropTypes.number.isRequired,
 };
 
 export default Steps;

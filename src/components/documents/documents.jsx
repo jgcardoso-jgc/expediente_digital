@@ -25,11 +25,10 @@ function Documents() {
   const [grantAccess, setAccess] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
 
-  async function getState() {
+  function getState() {
     console.log("first");
     console.log(user.token);
     if (user.onboarding) {
-      setOnboarding(true);
       if (user.token !== "") {
         setAccess(true);
         const script = document.createElement("script");
@@ -43,8 +42,7 @@ function Documents() {
               configurationId: "60f0969272a9270015196d70",
             })
             .then(async () => {
-              console.log("here");
-              /*try {
+              try {
                 const imgs = await incode.getImages({
                   token: user.token,
                   body: { images: ["fullFrameFrontID"] },
@@ -56,14 +54,12 @@ function Documents() {
                 document.getElementById("ineFront").appendChild(image);
               } catch (e) {
                 toast("Por favor, realizar tu proceso de OnBoarding de nuevo.");
-              }*/
+              }
             });
         };
-      } else {
-        setOnboarding(true);
+        return;
       }
-    } else {
-      setOnboarding(false);
+      setOnboarding(true);
     }
   }
 
@@ -93,65 +89,73 @@ function Documents() {
   }; */
 
   useEffect(() => {
-    console.log("incode...");
     getState();
-  });
+  }, []);
+
+  if (onBoarding) {
+    return (
+      <div>
+        <NavBar />
+        <ToastContainer />
+        <h1 className="center pt40 mb20">Mis documentos</h1>
+        <div>
+          <div>
+            <div>
+              {" "}
+              <div className="container">
+                <div className="center pb10">
+                  {" "}
+                  Deberás hacer Facematch para comprobar tu identidad
+                </div>
+                <Link to="/hello">
+                  <button type="button" className="logBt">
+                    Ir al Facematch
+                  </button>
+                </Link>
+              </div>
+              <div className="container">
+                <img alt="" className="scan" src={facematch} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (grantAccess) {
+    return (
+      <div>
+        <NavBar />
+        <ToastContainer />
+        <h1 className="center pt40 mb20">Mis documentos</h1>
+        <div>
+          {" "}
+          <div className="container">
+            <div className="center pb10"> Se mostrarán tus documentos</div>
+          </div>
+          <div id="ineFront" className="idFront" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
       <NavBar />
       <ToastContainer />
       <h1 className="center pt40 mb20">Mis documentos</h1>
-      {onBoarding ? (
-        <div>
-          <div>
-            {grantAccess ? (
-              <div>
-                {" "}
-                <div className="container">
-                  <div className="center pb10">
-                    {" "}
-                    Se mostrarán tus documentos
-                  </div>
-                </div>
-                <div id="ineFront" className="idFront" />
-              </div>
-            ) : (
-              <div>
-                {" "}
-                <div className="container">
-                  <div className="center pb10">
-                    {" "}
-                    Deberás hacer Facematch para comprobar tu identidad
-                  </div>
-                  <Link to="/hello">
-                    <button type="button" className="logBt">
-                      Ir al Facematch
-                    </button>
-                  </Link>
-                </div>
-                <div className="container">
-                  <img alt="" className="scan" src={facematch} />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div className="center pb10">
-            No has registrado tu Identificación Oficial
-          </div>
-          <Link to="/onboard">
-            <button type="button" className="logBt">
-              Ir al OnBoarding
-            </button>
-          </Link>
-          <div className="container">
-            <img alt="" className="scan" src={toOnboarding} />
-          </div>
-        </div>
-      )}
+      <div className="center pb10">
+        No has registrado tu Identificación Oficial
+      </div>
+      <Link to="/onboard">
+        <button type="button" className="logBt">
+          Ir al OnBoarding
+        </button>
+      </Link>
+      <div className="container">
+        <img alt="" className="scan" src={toOnboarding} />
+      </div>
     </div>
   );
 }

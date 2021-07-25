@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 // check public/index.html
@@ -50,7 +51,7 @@ function TutorialFrontId({ onSuccess }) {
 }
 
 TutorialFrontId.propTypes = {
-  onSuccess: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
 };
 
 const FrontId = ({ session, onSuccess, showError }) => {
@@ -70,9 +71,8 @@ const FrontId = ({ session, onSuccess, showError }) => {
 };
 
 FrontId.propTypes = {
-  session: PropTypes.string.isRequired,
-  onSuccess: PropTypes.string.isRequired,
-  showError: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
 };
 
 const BackId = ({ session, onSuccess, showError }) => {
@@ -92,9 +92,8 @@ const BackId = ({ session, onSuccess, showError }) => {
 };
 
 BackId.propTypes = {
-  session: PropTypes.string.isRequired,
-  onSuccess: PropTypes.string.isRequired,
-  showError: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
 };
 
 function ProcessId({ session, onSuccess }) {
@@ -108,8 +107,7 @@ function ProcessId({ session, onSuccess }) {
 }
 
 ProcessId.propTypes = {
-  session: PropTypes.string.isRequired,
-  onSuccess: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
 };
 
 function Selfie({ session, onSuccess, showError }) {
@@ -128,9 +126,8 @@ function Selfie({ session, onSuccess, showError }) {
 }
 
 Selfie.propTypes = {
-  session: PropTypes.string.isRequired,
-  onSuccess: PropTypes.string.isRequired,
-  showError: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
 };
 
 /* function Conference({ session, onSuccess, showError }) {
