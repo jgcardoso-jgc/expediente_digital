@@ -2,6 +2,33 @@
   max-width: 200px;
 }
 
+.imgCard {
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
 .scan {
   width: 100%;
+}
+
+.cardFit {
+  max-width: 200px;
+  -webkit-box-shadow: 0px 8px 22px 9px #c7c7c7;
+  box-shadow: 0px 8px 22px 9px #c7c7c7;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 14px;
+}
+
+.cardTitle {
+  padding-top: 4px;
+  padding-left: 10px;
+  padding-bottom: 0px;
+  margin-bottom: 0;
+}
+
+.cardText {
+  padding-top: 4px;
+  padding-left: 10px;
+  padding-bottom: 20px;
 }
