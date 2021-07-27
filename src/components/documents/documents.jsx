@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable prefer-template */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
@@ -23,52 +24,76 @@ function start() {
 
 function Documents() {
   const firebase = useFirebaseApp();
+  const db = firebase.storage();
   const [onBoarding, setOnboarding] = useState(false);
   const [grantAccess, setAccess] = useState(false);
+  const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("user"));
   const [image, setImage] = useState("");
+  const metadata = {
+    contentType: "image/jpeg",
+  };
 
   function getState() {
-    console.log("first");
     console.log(user.token);
     if (user.onboarding) {
       if (user.token !== "") {
         setAccess(true);
-        const script = document.createElement("script");
-        script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js";
-        document.body.appendChild(script);
-        script.onload = () => {
-          console.log("loaded...");
-          start();
-          incode
-            .createSession("ALL", null, {
-              configurationId: "60f0969272a9270015196d70",
+        const route = "users/" + user.token + "/frontId";
+        if (
+          db
+            .ref(route)
+            .getDownloadURL()
+            .then((response) => {
+              console.log("exists");
+              console.log(response);
+              const frontId = new Image();
+              frontId.src = response;
+              frontId.style.width = "100%";
+              setLoading(false);
+              document.getElementById("ineFront").appendChild(frontId);
             })
-            .then(async () => {
-              try {
-                const imgs = await incode.getImages({
-                  token: user.token,
-                  body: { images: ["fullFrameFrontID"] },
-                });
-                console.log(imgs.fullFrameFrontID);
-                const frontId = new Image();
-                frontId.src = `data:image/png;base64,${imgs.fullFrameFrontID}`;
-                frontId.style.width = "100%";
-                document.getElementById("ineFront").appendChild(frontId);
-                console.log("image:" + image);
-                firebase
-                  .storage()
-                  .ref("users")
-                  .child("frontId")
-                  .putString(imgs.fullFrameFrontID, "base64")
-                  .then((res) => {
-                    console.log("uploaded");
+            .catch((err) => {
+              console.log("nothing...");
+              const script = document.createElement("script");
+              script.src =
+                "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js";
+              document.body.appendChild(script);
+              script.onload = () => {
+                console.log("loaded...");
+                start();
+                incode
+                  .createSession("ALL", null, {
+                    configurationId: "60f0969272a9270015196d70",
+                  })
+                  .then(async () => {
+                    try {
+                      const imgs = await incode.getImages({
+                        token: user.token,
+                        body: { images: ["fullFrameFrontID"] },
+                      });
+                      //console.log(imgs.fullFrameFrontID);
+                      const frontId = new Image();
+                      frontId.src = `data:image/png;base64,${imgs.fullFrameFrontID}`;
+                      frontId.style.width = "100%";
+                      //console.log("image:" + image);
+                      db.ref("users")
+                        .child("/" + user.token + "/frontId")
+                        .putString(imgs.fullFrameFrontID, "base64", metadata)
+                        .then((res) => {
+                          console.log("uploaded");
+                          setLoading(false);
+                          document
+                            .getElementById("ineFront")
+                            .appendChild(frontId);
+                        });
+                    } catch (e) {
+                      toast("Ocurrió un error.");
+                    }
                   });
-              } catch (e) {
-                toast("Ocurrió un error.");
-              }
-            });
-        };
+              };
+            })
+        );
         return;
       }
       setOnboarding(true);
@@ -119,9 +144,12 @@ function Documents() {
         <div>
           {" "}
           <div className="container">
-            <div className="center pb10"> Se mostrarán tus documentos</div>
+            {loading ? (
+              <div className="center pb10"> Cargando tus documentos...</div>
+            ) : (
+              <div id="ineFront" className="idFront" />
+            )}
           </div>
-          <div id="ineFront" className="idFront" />
         </div>
       </div>
     );
