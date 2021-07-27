@@ -7,11 +7,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import Steps from "./Steps";
 import "./styles.css";
 import loading from "../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
 import settings from "./settings";
+import "react-toastify/dist/ReactToastify.css";
 // import { saveUser } from "./api";
 
 let incode = null;
@@ -171,7 +173,7 @@ function Onboarding() {
   useEffect(() => {
     console.log("incode...");
     const script = document.createElement("script");
-    script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js";
+    script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.33.0.js";
     document.body.appendChild(script);
     script.onload = () => {
       start();
@@ -183,7 +185,6 @@ function Onboarding() {
           await incode.warmup();
           setSession(sessionRes);
           console.log(`session:${Object.keys(sessionRes)}`);
-          toFinal();
         });
     };
   }, []);
@@ -194,6 +195,8 @@ function Onboarding() {
 
   function toFinal() {
     let uid = "";
+    console.log(`interviewId:${session.interviewId}`);
+    console.log(`token:${session.token}`);
     incode
       .getFinishStatus(session.interviewId, { token: session.token })
       .then(() => {
@@ -222,6 +225,9 @@ function Onboarding() {
                 });
             });
           });
+      })
+      .catch((e) => {
+        toast(e);
       });
   }
 
