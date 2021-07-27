@@ -6,6 +6,8 @@ import React, { useState } from "react";
 import "firebase/auth";
 import { Link, useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import logo from "../../assets/logo.png";
 
 import "./loginNormal.css";
@@ -48,7 +50,7 @@ const LoginNormal = () => {
           });
         });
     } catch (e) {
-      alert(e);
+      toast(e.message);
       setDisable(false);
     }
   };
@@ -59,6 +61,7 @@ const LoginNormal = () => {
           <img src={logo} alt="logo" className="logoNav" />
         </Link>
       </header>
+      <ToastContainer />
       <div className="container max400 pt60">
         <div>
           <h2 className="mb4">
