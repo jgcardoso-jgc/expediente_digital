@@ -38,12 +38,18 @@ function Documents() {
   };
 
   function exists(response) {
-    if (response.includes("404", 0)) {
+    let notFound = false;
+    response.forEach((obj) => {
+      if (obj.url === "404") {
+        notFound = true;
+      }
+    });
+    if (notFound) {
       notExists();
     } else {
       const docArray = [];
-      response.forEach((url) => {
-        docArray.push(url);
+      response.forEach((objImg) => {
+        docArray.push(objImg);
         /*const frontId = new Image();
         frontId.src = url;
         frontId.style.width = "100%";
@@ -115,11 +121,12 @@ function Documents() {
               .ref(route)
               .getDownloadURL()
               .then((response) => {
-                urls.push(response);
+                urls.push({ url: response, title: doc });
                 console.log("founded");
               })
               .catch((err) => {
-                urls.push("404");
+                console.log("not founded");
+                urls.push({ url: "404", title: "404" });
               })
           );
         });
@@ -192,11 +199,12 @@ function Documents() {
                             key={uuid()}
                             className="imgDoc"
                             alt="doc"
-                            src={doc}
+                            src={doc.url}
                           />
-                          <h2 className="cardTitle">INE</h2>
-                          <p className="cardText">Frontal</p>
-                          <p key={uuid()}>{doc}</p>
+                          <h4 className="cardTitle">{doc.title}</h4>
+                          <a href={doc.url} target="blank" key={uuid()}>
+                            Ver
+                          </a>
                         </div>
                       ))}
                   </div>

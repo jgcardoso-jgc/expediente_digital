@@ -98,6 +98,13 @@ a {
 .bell {
   margin-left: auto !important;
 }
+
+.alertsCount {
+  display: flex;
+  margin-left: auto;
+  padding-top: 14px;
+}
+
 @media (max-width: 648px) {
   /*Mobile View */
   .header {
@@ -171,12 +178,6 @@ a {
     z-index: 0;
     align-content: center;
     padding-left: 0px;
-  }
-
-  .alertsCount {
-    display: flex;
-    margin-left: auto;
-    padding-top: 14px;
   }
 
   .count {

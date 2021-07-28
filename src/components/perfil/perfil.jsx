@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useHistory } from "react-router-dom";
 import onBoardingConfig from "../documents/onBoardingConfig";
 import NavBar from "../navBar/navBar";
 
@@ -25,6 +26,7 @@ const MyProfile = () => {
   const metadata = {
     contentType: "image/jpeg",
   };
+  const history = useHistory();
 
   function exists(response) {
     if (response.includes("404", 0)) {
@@ -41,6 +43,10 @@ const MyProfile = () => {
   }
 
   function notExists() {
+    if (user.token === "") {
+      history.push("/hello");
+      return;
+    }
     const script = document.createElement("script");
     script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js";
     document.body.appendChild(script);
@@ -86,6 +92,7 @@ const MyProfile = () => {
         exists(response);
       })
       .catch(() => {
+        console.log("not founded");
         notExists();
       });
   }

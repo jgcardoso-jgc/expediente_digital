@@ -34,8 +34,8 @@ function Dashboard() {
         console.log("founded");
         exists(response);
       })
-      .catch(() => {
-        //
+      .catch((e) => {
+        console.log(e);
       });
   }
 
