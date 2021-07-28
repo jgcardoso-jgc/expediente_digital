@@ -16,6 +16,10 @@ body {
   max-width: 400px !important;
 }
 
+.pl30 {
+  padding-left: 30px !important;
+}
+
 @media (max-width: 320px) {
   .pt0-sm {
     padding-top: 0 !important;

@@ -1,15 +1,47 @@
+/* eslint-disable no-console */
 /* eslint-disable quotes */
 import "./dashboard.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
 import { IoPersonCircle } from "react-icons/io5";
 import NavBar from "../navBar/navBar";
 
 function Dashboard() {
+  const firebase = useFirebaseApp();
+  const db = firebase.storage();
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
   const { email } = user;
   const { rfc } = user;
+  const [loading, setLoading] = useState(true);
+
+  function exists(response) {
+    setLoading(false);
+    const frontId = new Image();
+    frontId.src = response;
+    frontId.style.width = "100%";
+    frontId.style.borderRadius = "14px";
+    document.getElementById("picProfile").appendChild(frontId);
+  }
+
+  function getState() {
+    console.log(user.token);
+    const route = `users/${user.email}/croppedFace`;
+    db.ref(route)
+      .getDownloadURL()
+      .then((response) => {
+        console.log("founded");
+        exists(response);
+      })
+      .catch(() => {
+        //
+      });
+  }
+
+  useEffect(() => {
+    getState();
+  }, []);
 
   return (
     <div className="center">
@@ -19,8 +51,12 @@ function Dashboard() {
         <Link to="/perfil">
           <div className="cardDashboard pt10">
             <div className="row">
-              <div className="col max40">
-                <IoPersonCircle className="iconPerson d-block mx-auto" />
+              <div className="col pl30 max40">
+                {loading ? (
+                  <IoPersonCircle className="iconPerson d-block mx-auto" />
+                ) : (
+                  <div id="picProfile" />
+                )}
               </div>
               <div className="col min50">
                 <p className="mb0">
