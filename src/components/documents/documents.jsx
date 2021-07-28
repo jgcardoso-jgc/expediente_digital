@@ -11,6 +11,7 @@ import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import uuid from "react-uuid";
 import toOnboarding from "../../assets/toOnboarding.png";
 import facematch from "../../assets/facematch.png";
 import "./documents.css";
@@ -31,6 +32,7 @@ function Documents() {
   const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("user"));
   const [image, setImage] = useState("");
+  const [docs, setDocs] = useState([]);
   const metadata = {
     contentType: "image/jpeg",
   };
@@ -39,15 +41,18 @@ function Documents() {
     if (response.includes("404", 0)) {
       notExists();
     } else {
+      const docArray = [];
       response.forEach((url) => {
-        const frontId = new Image();
+        docArray.push(url);
+        /*const frontId = new Image();
         frontId.src = url;
         frontId.style.width = "100%";
         frontId.style.borderTopLeftRadius = "14px";
         frontId.style.borderTopRightRadius = "14px";
-        setLoading(false);
-        document.getElementById("ineFront").appendChild(frontId);
+        document.getElementById("ineFront").appendChild(frontId);*/
       });
+      setDocs(docArray);
+      setLoading(false);
     }
   }
 
@@ -179,11 +184,21 @@ function Documents() {
               <div>
                 <div className="row">
                   <div className="col">
-                    <div className="cardFit">
-                      <div id="ineFront" className="idFront" />
-                      <h2 className="cardTitle">INE</h2>
-                      <p className="cardText">Frontal</p>
-                    </div>
+                    {docs.length &&
+                      docs.map((doc) => (
+                        <div className="cardFit">
+                          <div id="ineFront" className="idFront" />
+                          <img
+                            key={uuid()}
+                            className="imgDoc"
+                            alt="doc"
+                            src={doc}
+                          />
+                          <h2 className="cardTitle">INE</h2>
+                          <p className="cardText">Frontal</p>
+                          <p key={uuid()}>{doc}</p>
+                        </div>
+                      ))}
                   </div>
                 </div>
               </div>

@@ -75,7 +75,7 @@ function Dashboard() {
           <div className="col-md-6 mb10">
             <div className="cardDashboard p10">
               <Link to="/documents" style={{ display: "block" }}>
-                <h2>0</h2>
+                <h2>2</h2>
                 <h5>Documentos</h5>
               </Link>
             </div>

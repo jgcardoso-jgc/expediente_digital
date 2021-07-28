@@ -12,6 +12,14 @@ body {
   padding-bottom: 40px;
 }
 
+.pl20 {
+  padding-left: 20px !important;
+}
+
+.pr20 {
+  padding-right: 20px !important;
+}
+
 .max400 {
   max-width: 400px !important;
 }

@@ -6,9 +6,11 @@
 import React, { useState } from "react";
 import firebase from "firebase";
 import { FaRegBell, FaBell } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { ReactComponent as CloseMenu } from "../../assets/x.svg";
 import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
 import logo from "../../assets/logo.png";
+import Alerts from "../alerts/alerts";
 // import { IoExit } from "react-icons/io5";
 import "./navBar.css";
 
@@ -46,10 +48,13 @@ function NavBar() {
           </a>
         </div>
         <ul className={click ? "nav-options active" : "nav-options"}>
-          <li className="option" onClick={closeMobileMenu}>
+          <li className="option">
+            <a href="/dashboard">Dashboard</a>
+          </li>
+          <li className="option">
             <a href="/perfil">Mi Perfil</a>
           </li>
-          <li className="option" onClick={closeMobileMenu}>
+          <li className="option">
             <a href="/documents">Documentos</a>
           </li>
           <li className="sign-in" onClick={closeMobileMenu}>
@@ -59,29 +64,30 @@ function NavBar() {
           </li>
         </ul>
         <ul className={alert ? "nav-optionsAlert active" : "nav-optionsAlert"}>
-          <h4 className="option">Notificaciones</h4>
-          <li className="option left" onClick={closeMobileMenu}>
-            <a href="/documents">Alerta 1</a>
-          </li>
+          <Alerts />
           <li className="sign-in" onClick={closeMobileMenu}>
-            <button type="button" onClick={() => logOut()} className="salirbt">
+            <Link to="/alertas" className="salirbt">
               <span>Ver todas</span>
-            </button>
+            </Link>
           </li>
         </ul>
       </div>
-      <div
-        role="button"
-        tabIndex={0}
-        className="mobile-menu bell ml-auto"
-        onKeyDown={handleBell}
-        onClick={handleBell}
-      >
-        {alert ? (
-          <FaBell className="alert-icon" />
-        ) : (
-          <FaRegBell className="alert-icon" />
-        )}
+      <div className="alertsCount">
+        {" "}
+        <p id="count" className="count" />
+        <div
+          role="button"
+          tabIndex={0}
+          className="mobile-menu bell ml-auto"
+          onKeyDown={handleBell}
+          onClick={handleBell}
+        >
+          {alert ? (
+            <FaBell className="alert-icon" />
+          ) : (
+            <FaRegBell className="alert-icon" />
+          )}
+        </div>
       </div>
       <div
         role="button"
