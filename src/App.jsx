@@ -18,6 +18,7 @@ import RegisterNormal from "./components/registerNormal/registerNormal";
 import RecoverPassword from "./components/recoverPassword/recoverPassword";
 import MyProfile from "./components/perfil/perfil";
 import AlertasPagina from "./components/alertasPagina/alertasPagina";
+import AdminInit from "./components/admin/admin_init";
 import "./App.css";
 
 function App() {
@@ -100,6 +101,9 @@ function App() {
         </Route>
         <Route path="/recoverPassword">
           <RecoverPassword />
+        </Route>
+        <Route path="/admin">
+          <AdminInit />
         </Route>
       </Switch>
     </Router>
