@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
+/* eslint-disable react/destructuring-assignment */
 import React, { useState } from "react";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
@@ -142,6 +143,8 @@ function TaskComponent({
     <Row horizontal="space-between" vertical="center">
       <Row>
         <div
+          role="button"
+          tabIndex={0}
           className={classes.checkboxWrapper}
           onClick={() => onCheckboxClick(index)}
           onKeyPress={() => onCheckboxClick(index)}

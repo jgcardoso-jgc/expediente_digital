@@ -1,3 +1,7 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/require-default-props */
 /* eslint-disable quotes */
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";

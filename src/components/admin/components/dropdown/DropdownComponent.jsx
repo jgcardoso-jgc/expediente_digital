@@ -1,3 +1,7 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable comma-dangle */
+/* eslint-disable react/require-default-props */
 /* eslint-disable quotes */
 import React, { useState } from "react";
 import {

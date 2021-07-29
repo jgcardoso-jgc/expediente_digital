@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable import/no-named-as-default */
 /* eslint-disable quotes */
 import IconCheckboxOff from "./checkbox-off";
 import IconCheckboxOn from "./checkbox-on";

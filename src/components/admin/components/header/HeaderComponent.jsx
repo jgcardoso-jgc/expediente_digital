@@ -1,3 +1,7 @@
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable react/require-default-props */
+/* eslint-disable comma-dangle */
+/* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useContext } from "react";

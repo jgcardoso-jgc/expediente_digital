@@ -1,5 +1,11 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/require-default-props */
 /* eslint-disable quotes */
 import React from "react";
+// eslint-disable-next-line object-curly-newline
 import { any, arrayOf, func, string } from "prop-types";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";

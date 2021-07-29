@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable object-curly-newline */
 /* eslint-disable quotes */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext, createContext } from "react";
