@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable quotes */
 import React, { useState } from "react";
 import { Row } from "simple-flexbox";
@@ -143,6 +144,7 @@ function TaskComponent({
         <div
           className={classes.checkboxWrapper}
           onClick={() => onCheckboxClick(index)}
+          onKeyPress={() => onCheckboxClick(index)}
         >
           {item.checked ? <IconCheckboxOn /> : <IconCheckboxOff />}
         </div>

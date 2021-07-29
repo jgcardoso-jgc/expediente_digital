@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useContext } from "react";
 import { string } from "prop-types";

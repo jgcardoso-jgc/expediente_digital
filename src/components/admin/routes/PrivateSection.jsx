@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { Column, Row } from "simple-flexbox";

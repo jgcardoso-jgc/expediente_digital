@@ -89,7 +89,11 @@ function DropdownComponent({ label, options, position }) {
 
   return (
     <Column className={classes.dropdownContainer}>
-      <button className={classes.dropdownButton} onClick={onDropdownClick}>
+      <button
+        type="button"
+        className={classes.dropdownButton}
+        onClick={onDropdownClick}
+      >
         {label}
       </button>
       {userMenuOpen && (
@@ -97,6 +101,7 @@ function DropdownComponent({ label, options, position }) {
           {options.map((option, index) => (
             <button
               key={`option-${index}`}
+              type="button"
               className={classes.dropdownItem}
               onClick={() => onItemClick(option.onClick)}
             >

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable quotes */
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";

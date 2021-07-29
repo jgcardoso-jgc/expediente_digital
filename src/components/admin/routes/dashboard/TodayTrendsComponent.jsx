@@ -6,7 +6,7 @@ import LineChart from "react-svg-line-chart";
 
 const data = [];
 
-for (let x = 1; x <= 24; x++) {
+for (let x = 1; x <= 24; x += 1) {
   data.push({ x, y: Math.floor(Math.random() * 100) });
 }
 

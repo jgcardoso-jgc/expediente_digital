@@ -1,3 +1,5 @@
+/* eslint-disable quotes */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext, createContext } from "react";
 
 export const SidebarContext = createContext();
@@ -28,7 +30,6 @@ export const useSidebar = ({ isCollapsible, item, items = [] } = {}) => {
     if (isActive && !isExpanded) {
       return setIsExpanded(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentItem]);
 
   const onItemClick = () => {

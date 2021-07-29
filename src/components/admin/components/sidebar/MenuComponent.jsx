@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable quotes */
 import React, { useState } from "react";
 import { useTheme } from "react-jss";
 import { slide as Menu } from "react-burger-menu";

@@ -2,7 +2,7 @@
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
-import { convertSlugToUrl } from "../../resources/utilities";
+import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
   IconAgents,

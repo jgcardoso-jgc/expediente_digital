@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import { useLayoutEffect, useState } from "react";
 
 export default function useWindowSize() {
