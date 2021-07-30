@@ -25,14 +25,21 @@ function App() {
   const firebase = useFirebaseApp();
   const [isLoading, setLoading] = useState(true);
   const [user, setUser] = useState(false);
+  const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((res) => {
       if (res) {
         console.log("logged");
         console.log(user.uid);
-        setUser(true);
-        setLoading(false);
+        if (localStorage.getItem("admin")) {
+          console.log("toAdmin");
+          setAdmin(true);
+          setLoading(false);
+        } else {
+          setUser(true);
+          setLoading(false);
+        }
       } else {
         console.log(" not logged");
         setUser(false);
@@ -42,7 +49,11 @@ function App() {
     /* después del estado inicial */
     const userAuth = firebase.auth().currentUser;
     if (userAuth) {
-      setUser(true);
+      if (localStorage.getItem("admin")) {
+        setAdmin(true);
+      } else {
+        setUser(true);
+      }
     } else {
       setUser(false);
     }
@@ -58,7 +69,15 @@ function App() {
         <Route
           exact
           path="/"
-          render={() => (user ? <Dashboard /> : <Login />)}
+          render={() => {
+            if (user) {
+              return <Dashboard />;
+            }
+            if (admin) {
+              return <AdminInit />;
+            }
+            return <Login />;
+          }}
         />
         {/* Registro & Login */}
         <Route
@@ -76,7 +95,15 @@ function App() {
         </Route>
         <Route
           path="/dashboard"
-          render={() => (user ? <Dashboard /> : <Login />)}
+          render={() => {
+            if (user) {
+              return <Dashboard />;
+            }
+            if (admin) {
+              return <AdminInit />;
+            }
+            return <Login />;
+          }}
         />
         <Route path="/finalStep">
           <FinalStep />
@@ -102,9 +129,10 @@ function App() {
         <Route path="/recoverPassword">
           <RecoverPassword />
         </Route>
-        <Route path="/admin">
-          <AdminInit />
-        </Route>
+        <Route
+          path="/admin"
+          render={() => (admin ? <AdminInit /> : <Login />)}
+        />
       </Switch>
     </Router>
   );

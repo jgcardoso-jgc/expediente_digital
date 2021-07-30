@@ -152,9 +152,9 @@ function HeaderComponent() {
         <DropdownComponent
           label={
             <>
-              <span className={classes.name}>Germán Llorente</span>
+              <span className={classes.name}>Admin</span>
               <img
-                src="https://avatars3.githubusercontent.com/u/21162888?s=460&v=4"
+                src="https://avatars.githubusercontent.com/sofseguridata"
                 alt="avatar"
                 className={classes.avatar}
               />

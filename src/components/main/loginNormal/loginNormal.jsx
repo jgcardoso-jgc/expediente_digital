@@ -36,16 +36,22 @@ const LoginNormal = () => {
           query.get().then((querySnapshot) => {
             querySnapshot.forEach((documentSnapshot) => {
               const data = documentSnapshot.data();
-              const userSave = {
-                fullName: data.fullname,
-                rfc: data.rfc,
-                email: data.email,
-                token: data.token,
-                onboarding: data.onboarding,
-                documents: data.documents,
-              };
-              localStorage.setItem("user", JSON.stringify(userSave));
-              history.push("/dashboard");
+              if (data.admin) {
+                console.log("isAdmin");
+                localStorage.setItem("admin", true);
+                history.push("/admin");
+              } else {
+                const userSave = {
+                  fullName: data.fullname,
+                  rfc: data.rfc,
+                  email: data.email,
+                  token: data.token,
+                  onboarding: data.onboarding,
+                  documents: data.documents,
+                };
+                localStorage.setItem("user", JSON.stringify(userSave));
+                history.push("/dashboard");
+              }
             });
           });
         });

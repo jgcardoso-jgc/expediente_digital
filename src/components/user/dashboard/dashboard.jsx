@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import "./dashboard.css";
@@ -11,10 +12,26 @@ function Dashboard() {
   const firebase = useFirebaseApp();
   const db = firebase.storage();
   const user = JSON.parse(localStorage.getItem("user"));
+  if (user === null) {
+    logOut();
+  }
   const name = user.fullName;
   const { email } = user;
   const { rfc } = user;
   const [loading, setLoading] = useState(true);
+
+  function logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("logged out");
+        localStorage.removeItem("user");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
 
   function exists(response) {
     setLoading(false);
