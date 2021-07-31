@@ -23,29 +23,65 @@ import "./App.css";
 
 function App() {
   const firebase = useFirebaseApp();
+  const db = firebase.firestore();
   const [isLoading, setLoading] = useState(true);
   const [user, setUser] = useState(false);
   const [admin, setAdmin] = useState(false);
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((res) => {
+  async function checkAdmin(uid) {
+    return new Promise((resolve) => {
+      const query = db.collection("users").where("uid", "==", uid);
+      query.get().then((querySnapshot) => {
+        querySnapshot.forEach((documentSnapshot) => {
+          const data = documentSnapshot.data();
+          if (data.admin) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      });
+    });
+  }
+
+  function exit() {
+    setUser(false);
+    setAdmin(false);
+    setLoading(false);
+  }
+
+  async function authState() {
+    firebase.auth().onAuthStateChanged(async (res) => {
       if (res) {
-        console.log("logged");
         console.log(res.uid);
-        if (localStorage.getItem("admin")) {
+        const { uid } = res;
+        const isAdmin = localStorage.getItem("admin");
+        if (isAdmin === null) {
+          await checkAdmin(uid).then((adminRes) => {
+            if (adminRes) {
+              localStorage.setItem("admin", true);
+              setAdmin(true);
+              setLoading(false);
+            } else {
+              setUser(true);
+              setLoading(false);
+            }
+          });
+        } else if (isAdmin) {
           setAdmin(true);
           setLoading(false);
         } else {
-          setAdmin(false);
           setUser(true);
           setLoading(false);
         }
       } else {
-        console.log(" not logged");
-        setUser(false);
-        setLoading(false);
+        exit();
       }
     });
+  }
+
+  useEffect(() => {
+    authState();
     /* después del estado inicial */
     const userAuth = firebase.auth().currentUser;
     if (userAuth) {

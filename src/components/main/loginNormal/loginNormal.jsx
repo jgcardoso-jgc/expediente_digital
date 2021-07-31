@@ -4,7 +4,7 @@
 /* eslint-disable quotes */
 import React, { useState } from "react";
 import "firebase/auth";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,10 +14,7 @@ import "./loginNormal.css";
 import Waves from "../waves/waves";
 
 const LoginNormal = () => {
-  const history = useHistory();
-
   const firebase = useFirebaseApp();
-  const db = firebase.firestore();
   // const user = useUser();
   const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
@@ -25,25 +22,7 @@ const LoginNormal = () => {
   const submit = async () => {
     try {
       setDisable(true);
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((user) => {
-          console.log(`uid:${user.user.uid}`);
-          const { uid } = user.user;
-          const query = db.collection("users").where("uid", "==", uid);
-          query.get().then((querySnapshot) => {
-            querySnapshot.forEach((documentSnapshot) => {
-              const data = documentSnapshot.data();
-              if (data.admin) {
-                localStorage.setItem("admin", true);
-                history.push("/admin");
-              } else {
-                history.push("/dashboard");
-              }
-            });
-          });
-        });
+      await firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (e) {
       toast(e.message);
       setDisable(false);
