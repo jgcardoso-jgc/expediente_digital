@@ -7,11 +7,10 @@ import React, { useState } from "react";
 import firebase from "firebase";
 import { FaRegBell, FaBell } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { ReactComponent as CloseMenu } from "../../assets/x.svg";
-import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
-import logo from "../../assets/logo.png";
+import { ReactComponent as CloseMenu } from "../../../assets/x.svg";
+import { ReactComponent as MenuIcon } from "../../../assets/menu.svg";
+import logo from "../../../assets/logo.png";
 import Alerts from "../alerts/alerts";
-// import { IoExit } from "react-icons/io5";
 import "./navBar.css";
 
 function NavBar() {

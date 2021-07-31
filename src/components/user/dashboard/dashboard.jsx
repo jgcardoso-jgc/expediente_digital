@@ -3,6 +3,7 @@
 /* eslint-disable quotes */
 import "./dashboard.css";
 import React, { useEffect, useState } from "react";
+import "firebase/auth";
 import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
 import { IoPersonCircle } from "react-icons/io5";
@@ -10,27 +11,33 @@ import NavBar from "../navBar/navBar";
 
 function Dashboard() {
   const firebase = useFirebaseApp();
-  const db = firebase.storage();
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user === null) {
-    logOut();
-  }
-  const name = user.fullName;
-  const { email } = user;
-  const { rfc } = user;
+  const userAuth = firebase.auth().currentUser;
+  const firestore = firebase.firestore();
+  const storage = firebase.storage();
+  const [user, setData] = useState("");
   const [loading, setLoading] = useState(true);
 
-  function logOut() {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        console.log("logged out");
-        localStorage.removeItem("user");
-      })
-      .catch((error) => {
-        alert(error);
+  function getData() {
+    return new Promise((resolve) => {
+      let userGet = "";
+      const { uid } = userAuth;
+      const query = firestore.collection("users").where("uid", "==", uid);
+      query.get().then((querySnapshot) => {
+        querySnapshot.forEach((documentSnapshot) => {
+          const data = documentSnapshot.data();
+          userGet = {
+            fullName: data.fullname,
+            rfc: data.rfc,
+            email: data.email,
+            token: data.token,
+            onboarding: data.onboarding,
+            documents: data.documents,
+          };
+        });
+        localStorage.setItem("user", JSON.stringify(userGet));
+        resolve(userGet);
       });
+    });
   }
 
   function exists(response) {
@@ -42,10 +49,19 @@ function Dashboard() {
     document.getElementById("picProfile").appendChild(frontId);
   }
 
-  function getState() {
+  async function getState() {
+    const userSaved = localStorage.getItem("user");
+    if (userSaved === null) {
+      await getData().then((res) => {
+        setData(res);
+      });
+    } else {
+      setData(JSON.parse(userSaved));
+    }
     console.log(user.token);
     const route = `users/${user.email}/croppedFace`;
-    db.ref(route)
+    storage
+      .ref(route)
       .getDownloadURL()
       .then((response) => {
         console.log("founded");
@@ -77,11 +93,11 @@ function Dashboard() {
               </div>
               <div className="col min50">
                 <p className="mb0">
-                  <b>{name}</b>
+                  <b>{user.name}</b>
                 </p>
                 <p className="mt4 mb0">Frontend Developer</p>
-                <p className="mt4 mb0">{email}</p>
-                <p className="mt4">{rfc}</p>
+                <p className="mt4 mb0">{user.email}</p>
+                <p className="mt4">{user.rfc}</p>
               </div>
             </div>
           </div>

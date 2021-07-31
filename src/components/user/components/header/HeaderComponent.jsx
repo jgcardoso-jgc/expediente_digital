@@ -9,7 +9,6 @@ import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import firebase from "firebase";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../dropdown";
@@ -65,19 +64,6 @@ const useStyles = createUseStyles((theme) => ({
     },
   },
 }));
-
-function logOut() {
-  firebase
-    .auth()
-    .signOut()
-    .then(() => {
-      console.log("logged out");
-      localStorage.removeItem("admin");
-    })
-    .catch((error) => {
-      alert(error);
-    });
-}
 
 function HeaderComponent() {
   const { push } = useHistory();
@@ -181,7 +167,7 @@ function HeaderComponent() {
             },
             {
               label: "Logout",
-              onClick: () => logOut(),
+              onClick: () => console.log("logout"),
             },
           ]}
           position={{

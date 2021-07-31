@@ -2,7 +2,7 @@
 /* eslint-disable quotes */
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 import "firebase/auth";
 import "firebase/firestore";
 // import { useFirebaseApp } from "reactfire";

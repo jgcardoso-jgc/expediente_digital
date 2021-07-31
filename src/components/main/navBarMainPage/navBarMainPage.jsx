@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable quotes */
 import React, { useState } from "react";
-import { ReactComponent as CloseMenu } from "../../assets/x.svg";
-import { ReactComponent as MenuIcon } from "../../assets/menu.svg";
-import logo from "../../assets/logo.png";
+import { ReactComponent as CloseMenu } from "../../../assets/x.svg";
+import { ReactComponent as MenuIcon } from "../../../assets/menu.svg";
+import logo from "../../../assets/logo.png";
 // import { useHistory } from "react-router-dom";
 import "./navBarMainPage.css";
 

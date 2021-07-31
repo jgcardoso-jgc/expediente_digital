@@ -6,18 +6,18 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
-import Login from "./components/mainPage/Login";
-import HelloInit from "./components/hello/hello";
-import Onboarding from "./components/onboarding/onboarding";
-import Dashboard from "./components/dashboard/dashboard";
-import FinalStep from "./components/finalSteps/finalStep";
-import ToOnBoarding from "./components/toOnboarding/toOnboarding";
-import Documents from "./components/documents/documents";
-import LoginNormal from "./components/loginNormal/loginNormal";
-import RegisterNormal from "./components/registerNormal/registerNormal";
-import RecoverPassword from "./components/recoverPassword/recoverPassword";
-import MyProfile from "./components/perfil/perfil";
-import AlertasPagina from "./components/alertasPagina/alertasPagina";
+import Login from "./components/main/mainPage/Login";
+import HelloInit from "./components/user/hello/hello";
+import Onboarding from "./components/user/onboarding/onboarding";
+import Dashboard from "./components/user/dashboard/dashboard";
+import FinalStep from "./components/user/finalSteps/finalStep";
+import ToOnBoarding from "./components/user/toOnboarding/toOnboarding";
+import Documents from "./components/user/documents/documents";
+import LoginNormal from "./components/main/loginNormal/loginNormal";
+import RegisterNormal from "./components/main/registerNormal/registerNormal";
+import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
+import MyProfile from "./components/user/perfil/perfil";
+import AlertasPagina from "./components/user/alertasPagina/alertasPagina";
 import AdminInit from "./components/admin/admin_init";
 import "./App.css";
 
@@ -31,12 +31,12 @@ function App() {
     firebase.auth().onAuthStateChanged((res) => {
       if (res) {
         console.log("logged");
-        console.log(user.uid);
+        console.log(res.uid);
         if (localStorage.getItem("admin")) {
-          console.log("toAdmin");
           setAdmin(true);
           setLoading(false);
         } else {
+          setAdmin(false);
           setUser(true);
           setLoading(false);
         }
@@ -120,9 +120,18 @@ function App() {
           path="/alertas"
           render={() => (user ? <AlertasPagina /> : <Login />)}
         />
-        <Route path="/loginNormal">
-          <LoginNormal />
-        </Route>
+        <Route
+          path="/loginNormal"
+          render={() => {
+            if (user) {
+              return <Dashboard />;
+            }
+            if (admin) {
+              return <AdminInit />;
+            }
+            return <LoginNormal />;
+          }}
+        />
         <Route path="/registerNormal">
           <RegisterNormal />
         </Route>

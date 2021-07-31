@@ -8,7 +8,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 
 import "./loginNormal.css";
 import Waves from "../waves/waves";
@@ -32,24 +32,13 @@ const LoginNormal = () => {
           console.log(`uid:${user.user.uid}`);
           const { uid } = user.user;
           const query = db.collection("users").where("uid", "==", uid);
-
           query.get().then((querySnapshot) => {
             querySnapshot.forEach((documentSnapshot) => {
               const data = documentSnapshot.data();
               if (data.admin) {
-                console.log("isAdmin");
                 localStorage.setItem("admin", true);
                 history.push("/admin");
               } else {
-                const userSave = {
-                  fullName: data.fullname,
-                  rfc: data.rfc,
-                  email: data.email,
-                  token: data.token,
-                  onboarding: data.onboarding,
-                  documents: data.documents,
-                };
-                localStorage.setItem("user", JSON.stringify(userSave));
                 history.push("/dashboard");
               }
             });
