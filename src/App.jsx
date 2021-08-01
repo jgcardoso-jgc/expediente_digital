@@ -9,7 +9,6 @@ import { useFirebaseApp } from "reactfire";
 import Login from "./components/main/mainPage/Login";
 import HelloInit from "./components/user/hello/hello";
 import Onboarding from "./components/user/onboarding/onboarding";
-import Dashboard from "./components/user/dashboard/dashboard";
 import FinalStep from "./components/user/finalSteps/finalStep";
 import ToOnBoarding from "./components/user/toOnboarding/toOnboarding";
 import Documents from "./components/user/documents/documents";
@@ -20,6 +19,7 @@ import MyProfile from "./components/user/perfil/perfil";
 import AlertasPagina from "./components/user/alertasPagina/alertasPagina";
 import AdminInit from "./components/admin/admin_init";
 import "./App.css";
+import UserInit from "./components/user/user_init";
 
 function App() {
   const firebase = useFirebaseApp();
@@ -107,7 +107,7 @@ function App() {
           path="/"
           render={() => {
             if (user) {
-              return <Dashboard />;
+              return <UserInit />;
             }
             if (admin) {
               return <AdminInit />;
@@ -116,10 +116,7 @@ function App() {
           }}
         />
         {/* Registro & Login */}
-        <Route
-          path="/login"
-          render={() => (user ? <Dashboard /> : <Login />)}
-        />
+        <Route path="/login" render={() => (user ? <UserInit /> : <Login />)} />
         <Route path="/hello">
           <HelloInit />
         </Route>
@@ -133,7 +130,7 @@ function App() {
           path="/dashboard"
           render={() => {
             if (user) {
-              return <Dashboard />;
+              return <UserInit />;
             }
             if (admin) {
               return <AdminInit />;
@@ -160,7 +157,7 @@ function App() {
           path="/loginNormal"
           render={() => {
             if (user) {
-              return <Dashboard />;
+              return <UserInit />;
             }
             if (admin) {
               return <AdminInit />;

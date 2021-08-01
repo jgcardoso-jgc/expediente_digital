@@ -6,7 +6,7 @@ import Theme from "./resources/theme";
 import Routes from "./routes";
 import "./index.css";
 
-const AdminInit = () => (
+const UserInit = () => (
   <ThemeProvider theme={Theme}>
     <Router>
       <Routes />
@@ -14,4 +14,4 @@ const AdminInit = () => (
   </ThemeProvider>
 );
 
-export default AdminInit;
+export default UserInit;

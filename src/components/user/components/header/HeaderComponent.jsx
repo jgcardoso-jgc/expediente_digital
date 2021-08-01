@@ -9,6 +9,7 @@ import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
+import firebase from "firebase";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../dropdown";
@@ -66,6 +67,18 @@ const useStyles = createUseStyles((theme) => ({
 }));
 
 function HeaderComponent() {
+  function logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("logged out");
+        localStorage.removeItem("admin");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
   const { push } = useHistory();
   const { currentItem } = useContext(SidebarContext);
   const theme = useTheme();
@@ -152,7 +165,7 @@ function HeaderComponent() {
         <DropdownComponent
           label={
             <>
-              <span className={classes.name}>Admin</span>
+              <span className={classes.name}>User</span>
               <img
                 src="https://avatars.githubusercontent.com/sofseguridata"
                 alt="avatar"
@@ -167,7 +180,7 @@ function HeaderComponent() {
             },
             {
               label: "Logout",
-              onClick: () => console.log("logout"),
+              onClick: () => logOut(),
             },
           ]}
           position={{
