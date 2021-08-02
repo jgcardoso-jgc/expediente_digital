@@ -73,9 +73,6 @@ function logOut() {
     .then(() => {
       console.log("logged out");
       localStorage.removeItem("admin");
-    })
-    .catch((error) => {
-      alert(error);
     });
 }
 
