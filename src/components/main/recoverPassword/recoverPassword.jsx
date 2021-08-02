@@ -7,7 +7,6 @@ import "firebase/auth";
 import "firebase/firestore";
 // import { useFirebaseApp } from "reactfire";
 // import { useHistory } from "react-router-dom";
-import "./recoverPassword.css";
 import Waves from "../waves/waves";
 
 const RecoverPassword = () => {

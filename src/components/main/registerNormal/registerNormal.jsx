@@ -16,9 +16,9 @@ import Waves from "../waves/waves";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
-  ".block": { display: "block" },
-  ".logoNav": { width: "45px", height: "45px", paddingTop: "10px" },
-  ".container": {
+  block: { display: "block" },
+  logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
+  container: {
     maxWidth: "400px",
     marginLeft: "auto",
     marginRight: "auto",
@@ -32,24 +32,11 @@ const useStyles = createUseStyles(() => ({
     borderBottom: "1px solid rgb(194, 194, 194)",
     fontSize: "16px",
   },
-  ".regText": { marginBottom: "4px" },
-  ".expText": { marginTop: "4px" },
-  ".pb4": { paddingBottom: "4px" },
-  ".pt20": { paddingTop: "20px" },
-  ".pb10": { paddingBottom: "10px" },
-  ".initBt": {
-    backgroundColor: "rgb(0, 0, 0)",
-    color: "white",
-    border: "1px solid black",
-    display: "block",
-    marginLeft: "auto",
-    minWidth: "150px",
-    paddingTop: "10px",
-    marginTop: "20px",
-    paddingBottom: "10px",
-    fontSize: "15px",
-    borderRadius: "10px",
-  },
+  regText: { marginBottom: "4px", paddingTop: "20px" },
+  expText: { marginTop: "4px" },
+  pb4: { paddingBottom: "4px" },
+  pt20: { paddingTop: "20px" },
+  pb10: { paddingBottom: "10px" },
 }));
 
 const RegisterNormal = () => {
@@ -110,7 +97,7 @@ const RegisterNormal = () => {
       <ToastContainer />
       <div className="container max400 pt40 pt0-sm">
         <div>
-          <h2 className="regText">
+          <h2 className={classes.regText}>
             <b>Regístrate</b>
           </h2>
           <p className="expText">Ingresa tus datos</p>

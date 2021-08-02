@@ -11,13 +11,16 @@ import { createUseStyles, useTheme } from "react-jss";
 import "react-toastify/dist/ReactToastify.css";
 import Container from "react-bootstrap/Container";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
+import styles from "../../../resources/theme";
 import Waves from "../waves/waves";
 
+const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
   containerLogin: {
     maxWidth: "400px",
     paddingTop: "60px",
+    textAlign: "left",
   },
   inputStyle: {
     width: "100%",
@@ -35,19 +38,6 @@ const useStyles = createUseStyles(() => ({
   pt10: { paddingTop: "10px" },
   dBlock: { display: "block" },
   center: { textAlign: "center" },
-  initBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
-    border: "1px solid black",
-    display: "block",
-    marginLeft: "auto",
-    minWidth: "150px",
-    paddingTop: "10px",
-    marginTop: "20px",
-    paddingBottom: "10px",
-    fontSize: "15px",
-    borderRadius: "10px",
-  },
   "@media (max-width: 420px)": { w50: { minWidth: "100%" } },
   "@media (min-width: 768px)": { segTitle: { paddingTop: "30vh" } },
 }));
@@ -56,6 +46,7 @@ const LoginNormal = () => {
   const firebase = useFirebaseApp();
   const theme = useTheme();
   const classes = useStyles({ theme });
+  const global = globalTheme({ theme });
   const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -103,7 +94,7 @@ const LoginNormal = () => {
         </div>
         <button
           type="button"
-          className="initBt"
+          className={global.initBt}
           disabled={disable}
           onClick={submit}
         >

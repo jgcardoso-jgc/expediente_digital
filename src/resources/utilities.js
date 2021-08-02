@@ -1,7 +1,8 @@
+/* eslint-disable import/prefer-default-export */
 export function convertSlugToUrl(slug, parameters) {
-    let url = slug;
-    Object.entries(parameters).forEach(([key, value]) => {
-        url = url.replace(`:${key}`, value);
-    });
-    return url;
+  let url = slug;
+  Object.entries(parameters).forEach(([key, value]) => {
+    url = url.replace(`:${key}`, value);
+  });
+  return url;
 }
