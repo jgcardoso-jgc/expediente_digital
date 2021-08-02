@@ -7,7 +7,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useHistory } from "react-router-dom";
 import onBoardingConfig from "../documents/onBoardingConfig";
-import NavBar from "../navBar/navBar";
 
 let incode = null;
 
@@ -103,7 +102,6 @@ const MyProfile = () => {
 
   return (
     <div>
-      <NavBar />
       <ToastContainer />
       <div>
         <h1 className="center pt40 mb20">Mi Perfil</h1>

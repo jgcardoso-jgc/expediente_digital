@@ -2,8 +2,7 @@
 import React from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
-import MiniCardComponent from "../../components/cards/MiniCardComponent";
-import TodayTrendsComponent from "./TodayTrendsComponent";
+import MiniCardComponent from "../cards/MiniCardComponent";
 import UnresolvedTicketsComponent from "./UnresolvedTicketsComponent";
 import TasksComponent from "./TasksComponent";
 
@@ -94,9 +93,6 @@ function DashboardComponent() {
           />
         </Row>
       </Row>
-      <div className={classes.todayTrends}>
-        <TodayTrendsComponent />
-      </div>
       <Row
         horizontal="space-between"
         className={classes.lastRow}

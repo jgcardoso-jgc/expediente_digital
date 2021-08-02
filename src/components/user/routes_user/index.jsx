@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import useWindowSize from "../hooks/useWindowSize";
 import PrivateSection from "./PrivateSection";
-import PublicRoutes from "./PublicRoutes";
 
 function Routes() {
   const { pathname } = useLocation();
@@ -14,8 +13,7 @@ function Routes() {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const isUserLoggedIn = true;
-  return isUserLoggedIn ? <PrivateSection /> : <PublicRoutes />;
+  return <PrivateSection />;
 }
 
 export default Routes;

@@ -7,17 +7,57 @@ import "firebase/auth";
 import "firebase/firestore";
 import { useFirebaseApp } from "reactfire";
 import { useHistory, Link } from "react-router-dom";
+import { createUseStyles, useTheme } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
+import NavBarMainPage from "../navBarMainPage/navBarMainPage";
+import styles from "../../../resources/theme";
 import "react-toastify/dist/ReactToastify.css";
-
-import logo from "../../../assets/logo.png";
-
-import "./registerNormal.css";
 import Waves from "../waves/waves";
+
+const globalTheme = createUseStyles(styles);
+const useStyles = createUseStyles(() => ({
+  ".block": { display: "block" },
+  ".logoNav": { width: "45px", height: "45px", paddingTop: "10px" },
+  ".container": {
+    maxWidth: "400px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "left",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+  },
+  inputStyle: {
+    width: "100%",
+    border: "0",
+    borderBottom: "1px solid rgb(194, 194, 194)",
+    fontSize: "16px",
+  },
+  ".regText": { marginBottom: "4px" },
+  ".expText": { marginTop: "4px" },
+  ".pb4": { paddingBottom: "4px" },
+  ".pt20": { paddingTop: "20px" },
+  ".pb10": { paddingBottom: "10px" },
+  ".initBt": {
+    backgroundColor: "rgb(0, 0, 0)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    minWidth: "150px",
+    paddingTop: "10px",
+    marginTop: "20px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+}));
 
 const RegisterNormal = () => {
   const firebase = useFirebaseApp();
   const history = useHistory();
+  const theme = useTheme();
+  const classes = useStyles({ theme });
+  const global = globalTheme({ theme });
   const db = firebase.firestore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -66,11 +106,7 @@ const RegisterNormal = () => {
   };
   return (
     <div className="center">
-      <header>
-        <Link to="./login">
-          <img src={logo} alt="logo" className="logoNav" />
-        </Link>
-      </header>
+      <NavBarMainPage />
       <ToastContainer />
       <div className="container max400 pt40 pt0-sm">
         <div>
@@ -86,7 +122,7 @@ const RegisterNormal = () => {
           <input
             type="text"
             id="name"
-            className="inputStyle"
+            className={classes.inputStyle}
             onChange={(event) => setName(event.target.value)}
           />
         </div>
@@ -97,7 +133,7 @@ const RegisterNormal = () => {
           <input
             type="email"
             id="email"
-            className="inputStyle"
+            className={classes.inputStyle}
             onChange={(event) => setEmail(event.target.value)}
           />
         </div>
@@ -108,7 +144,7 @@ const RegisterNormal = () => {
           <input
             type="text"
             id="rfc"
-            className="inputStyle"
+            className={classes.inputStyle}
             onChange={(event) => setRfc(event.target.value)}
           />
         </div>
@@ -119,11 +155,11 @@ const RegisterNormal = () => {
           <input
             type="password"
             id="password"
-            className="inputStyle"
+            className={classes.inputStyle}
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button type="button" className="initBt" onClick={submit}>
+        <button type="button" className={global.initBt} onClick={submit}>
           Registrarse
         </button>
         <Link className="right d-block pt10" to="./loginNormal">

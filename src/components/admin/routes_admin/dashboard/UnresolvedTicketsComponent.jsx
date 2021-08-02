@@ -3,7 +3,7 @@
 import React from "react";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import CardComponent from "../../components/cards/CardComponent";
+import CardComponent from "../../components_admin/cards/CardComponent";
 
 const useStyles = createUseStyles((theme) => ({
   itemTitle: {

@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import CardComponent from "../../components/cards/CardComponent";
+import CardComponent from "../cards/CardComponent";
 import { IconCheckboxOn, IconCheckboxOff } from "../../assets/icons";
 
 const useStyles = createUseStyles((theme) => ({

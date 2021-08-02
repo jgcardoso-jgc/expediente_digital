@@ -1,21 +1,25 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable quotes */
 import React, { Suspense, lazy } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import SLUGS from "../resources/slugs";
-import LoadingComponent from "../components/loading";
+import LoadingComponent from "../components_user/loading";
+/*import HelloInit from "../components_user/hello/hello";
+import Onboarding from "../components_user/onboarding/onboarding";
+import FinalStep from "../components_user/finalSteps/finalStep";
+import ToOnBoarding from "../components_user/toOnboarding/toOnboarding";
+import Documents from "../components_user/documents/documents";
+import AlertasPagina from "../components_user/alertasPagina/alertasPagina";*/
+import MyProfile from "../components_user/perfil/perfil";
 
-const DashboardComponent = lazy(() => import("./dashboard"));
+const DashboardComponent = lazy(() => import("../components_user/dashboard"));
 
 function PrivateRoutes() {
   return (
     <Suspense fallback={<LoadingComponent loading />}>
       <Switch>
         <Route exact path={SLUGS.dashboard} component={DashboardComponent} />
-        <Route
-          exact
-          path={SLUGS.overviewTwo}
-          render={() => <div>overviewTwo</div>}
-        />
+        <Route exact path={SLUGS.overviewTwo} render={() => <MyProfile />} />
         <Route
           exact
           path={SLUGS.overviewThree}

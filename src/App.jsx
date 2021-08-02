@@ -6,22 +6,35 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
-import Login from "./components/main/mainPage/Login";
-import HelloInit from "./components/user/hello/hello";
-import Onboarding from "./components/user/onboarding/onboarding";
-import FinalStep from "./components/user/finalSteps/finalStep";
-import ToOnBoarding from "./components/user/toOnboarding/toOnboarding";
-import Documents from "./components/user/documents/documents";
+import { createUseStyles } from "react-jss";
+import Login from "./components/main/mainPage/mainPage";
 import LoginNormal from "./components/main/loginNormal/loginNormal";
 import RegisterNormal from "./components/main/registerNormal/registerNormal";
 import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
-import MyProfile from "./components/user/perfil/perfil";
-import AlertasPagina from "./components/user/alertasPagina/alertasPagina";
 import AdminInit from "./components/admin/admin_init";
 import "./App.css";
 import UserInit from "./components/user/user_init";
 
+const useStyles = createUseStyles({
+  "@global": {
+    initBt: {
+      backgroundColor: "rgb(75, 75, 75)",
+      color: "white",
+      border: "1px solid black",
+      display: "block",
+      marginLeft: "auto",
+      minWidth: "150px",
+      paddingTop: "10px",
+      marginTop: "20px",
+      paddingBottom: "10px",
+      fontSize: "15px",
+      borderRadius: "10px",
+    },
+  },
+});
+
 function App() {
+  useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const [isLoading, setLoading] = useState(true);
@@ -116,43 +129,6 @@ function App() {
           }}
         />
         {/* Registro & Login */}
-        <Route path="/login" render={() => (user ? <UserInit /> : <Login />)} />
-        <Route path="/hello">
-          <HelloInit />
-        </Route>
-        <Route path="/toOnboarding">
-          <ToOnBoarding />
-        </Route>
-        <Route path="/onboard">
-          <Onboarding />
-        </Route>
-        <Route
-          path="/dashboard"
-          render={() => {
-            if (user) {
-              return <UserInit />;
-            }
-            if (admin) {
-              return <AdminInit />;
-            }
-            return <Login />;
-          }}
-        />
-        <Route path="/finalStep">
-          <FinalStep />
-        </Route>
-        <Route
-          path="/documents"
-          render={() => (user ? <Documents /> : <Login />)}
-        />
-        <Route
-          path="/perfil"
-          render={() => (user ? <MyProfile /> : <Login />)}
-        />
-        <Route
-          path="/alertas"
-          render={() => (user ? <AlertasPagina /> : <Login />)}
-        />
         <Route
           path="/loginNormal"
           render={() => {
@@ -171,10 +147,6 @@ function App() {
         <Route path="/recoverPassword">
           <RecoverPassword />
         </Route>
-        <Route
-          path="/admin"
-          render={() => (admin ? <AdminInit /> : <Login />)}
-        />
       </Switch>
     </Router>
   );

@@ -8,22 +8,15 @@ import logo from "../../../assets/logo.png";
 import "./navBarMainPage.css";
 
 function NavBarMainPage() {
-  // const history = useHistory();
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
-
-  /* function exit() {
-    console.log("closing...");
-    localStorage.removeItem("user");
-    history.push("/login");
-  } */
 
   return (
     <div className="headerMain">
       <div className="logo-navMain">
         <div className="logo-container">
-          <a href="/dashboard">
+          <a href="/">
             <img className="logo" alt="logo" src={logo} />
           </a>
         </div>

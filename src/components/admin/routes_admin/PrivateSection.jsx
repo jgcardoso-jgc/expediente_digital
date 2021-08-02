@@ -2,8 +2,8 @@
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { Column, Row } from "simple-flexbox";
-import { SidebarComponent, SidebarContext } from "../components/sidebar";
-import HeaderComponent from "../components/header/HeaderComponent";
+import { SidebarComponent, SidebarContext } from "../components_admin/sidebar";
+import HeaderComponent from "../components_admin/header/HeaderComponent";
 import PrivateRoutes from "./PrivateRoutes";
 
 const useStyles = createUseStyles({
