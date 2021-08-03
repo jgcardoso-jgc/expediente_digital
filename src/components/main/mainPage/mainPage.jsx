@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
 import React from "react";
-import { useHistory } from "react-router-dom";
 import Div100vh from "react-div-100vh";
+import { Link } from "react-router-dom";
 import { createUseStyles, useTheme } from "react-jss";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import Waves from "../waves/waves";
 
@@ -14,26 +13,39 @@ const useStyles = createUseStyles(() => ({
   AppLogo: { height: "40vmin", pointerEvents: "none" },
   "@media (min-width: 768px)": {
     row: { display: "flex" },
-    w50: { minWidth: "50%" },
     logo: { marginTop: "7% !important" },
   },
   logo: { marginTop: "10%", width: "100px" },
   first: { marginBottom: "24px" },
   second: { marginBottom: "20px" },
   mainDiv: { textAlign: "center" },
+  dBlock: { display: "block" },
   logBt: {
-    backgroundColor: "rgb(0, 0, 0)",
-    color: "white",
     border: "1px solid black",
     display: "block",
     marginLeft: "auto",
     marginRight: "auto",
-    minWidth: "180px",
-    paddingTop: "10px",
-    paddingBottom: "10px",
+    minWidth: "140px",
+    paddingTop: "3px",
+    paddingBottom: "3px",
     fontSize: "15px",
     borderRadius: "10px",
   },
+  bgWhite: {
+    backgroundColor: "#ffffff",
+    color: "black",
+  },
+  bgBlack: {
+    backgroundColor: "rgb(0, 0, 0)",
+    color: "white",
+  },
+  rowMax400: {
+    maxWidth: "440px",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+
   segTitle: { paddingTop: "100px", marginBottom: "14px", textAlign: "center" },
   title: {
     textAlign: "left",
@@ -60,25 +72,7 @@ const useStyles = createUseStyles(() => ({
 function Login() {
   const theme = useTheme();
   const classes = useStyles({ theme });
-  const history = useHistory();
 
-  function toFaceMatch() {
-    const user = localStorage.getItem("user");
-    if (user) {
-      history.push("/dashboard");
-    } else {
-      history.push("/loginNormal");
-    }
-  }
-
-  function toOnboarding() {
-    const user = localStorage.getItem("user");
-    if (user) {
-      history.push("/dashboard");
-    } else {
-      history.push("/registerNormal");
-    }
-  }
   return (
     <Div100vh>
       <NavBarMainPage className={classes.navmain} />
@@ -86,39 +80,38 @@ function Login() {
         <h1 className={classes.segTitle}>
           <b>Seguridata</b> | Expediente
         </h1>
-        <Row>
-          <Col>
-            <div className={classes.first}>
-              <h3 className={classes.title}>Regístrate</h3>
-              <p className={classes.text}>
-                Se te solicitará un medio de identificación y se almacenará tu
-                rostro.
-              </p>
+        <Row className={classes.rowMax400}>
+          <div className={classes.first}>
+            <h4 className={classes.title}>Regístrate</h4>
+            <p className={classes.text}>
+              Se te solicitará un medio de identificación y se almacenará tu
+              rostro.
+            </p>
+            <Link to="registerNormal" type="button" className={classes.dBlock}>
               <button
-                onClick={() => toOnboarding()}
-                className={classes.logBt}
                 type="button"
+                className={`${classes.logBt} ${classes.bgWhite}`}
               >
                 Registrarse
               </button>
-            </div>
-          </Col>
-          <Col>
-            <div className={classes.second}>
-              <h3 className={classes.title}>Accede ahora</h3>
-              <p className={classes.text}>
-                Si ya te has registrado previamente, puedes acceder con tu
-                rostro.
-              </p>
+            </Link>
+          </div>
+        </Row>
+        <Row className={classes.rowMax400}>
+          <div className={classes.second}>
+            <h4 className={classes.title}>Accede ahora</h4>
+            <p className={classes.text}>
+              Si ya te has registrado previamente, puedes acceder con tu rostro.
+            </p>
+            <Link to="/loginNormal" type="button" className={classes.dBlock}>
               <button
-                onClick={() => toFaceMatch()}
-                className={classes.logBt}
                 type="button"
+                className={`${classes.logBt} ${classes.bgBlack}`}
               >
                 Acceder
               </button>
-            </div>
-          </Col>
+            </Link>
+          </div>
         </Row>
         <Waves />
       </div>

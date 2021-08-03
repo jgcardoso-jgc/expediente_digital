@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable implicit-arrow-linebreak */
@@ -14,6 +15,7 @@ import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
 import AdminInit from "./components/admin/admin_init";
 import "./App.css";
 import UserInit from "./components/user/user_init";
+//import ProtectedRoute from "./ProtectedRoute";
 
 const useStyles = createUseStyles({
   "@global": {
@@ -147,6 +149,18 @@ function App() {
         <Route path="/recoverPassword">
           <RecoverPassword />
         </Route>
+        <Route
+          path="/"
+          render={() => {
+            if (user) {
+              return <UserInit />;
+            }
+            if (admin) {
+              return <AdminInit />;
+            }
+            return <LoginNormal />;
+          }}
+        />
       </Switch>
     </Router>
   );
