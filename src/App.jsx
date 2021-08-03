@@ -47,22 +47,27 @@ function App() {
     return new Promise((resolve) => {
       const query = db.collection("users").where("uid", "==", uid);
       query.get().then((querySnapshot) => {
-        querySnapshot.forEach((documentSnapshot) => {
-          const data = documentSnapshot.data();
-          if (data.admin) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        });
+        if (querySnapshot.size > 0) {
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.admin) {
+              localStorage.setItem("admin", true);
+              resolve("isAdmin");
+            } else {
+              const userData = {
+                fullName: data.fullname,
+                email: data.email,
+                rfc: data.rfc,
+              };
+              localStorage.setItem("user", JSON.stringify(userData));
+              resolve("isUser");
+            }
+          });
+        } else {
+          resolve("404");
+        }
       });
     });
-  }
-
-  function exit() {
-    setUser(false);
-    setAdmin(false);
-    setLoading(false);
   }
 
   async function authState() {
@@ -71,13 +76,14 @@ function App() {
         console.log(res.uid);
         const { uid } = res;
         const isAdmin = localStorage.getItem("admin");
-        if (isAdmin === null) {
+        const isUser = localStorage.getItem("user");
+        if (isAdmin === null && isUser === null) {
           await checkAdmin(uid).then((adminRes) => {
-            if (adminRes) {
-              localStorage.setItem("admin", true);
+            if (adminRes === "isAdmin") {
               setAdmin(true);
               setLoading(false);
-            } else {
+            }
+            if (adminRes === "isUser") {
               setUser(true);
               setLoading(false);
             }
@@ -90,7 +96,9 @@ function App() {
           setLoading(false);
         }
       } else {
-        exit();
+        setUser(false);
+        setAdmin(false);
+        setLoading(false);
       }
     });
   }

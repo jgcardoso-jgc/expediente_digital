@@ -74,6 +74,7 @@ function HeaderComponent() {
       .then(() => {
         console.log("logged out");
         localStorage.removeItem("admin");
+        localStorage.removeItem("user");
       });
   }
   const { push } = useHistory();
