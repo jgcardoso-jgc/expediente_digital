@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useHistory } from "react-router-dom";
 import onBoardingConfig from "../documents/onBoardingConfig";
 
 let incode = null;
@@ -25,7 +24,6 @@ const MyProfile = () => {
   const metadata = {
     contentType: "image/jpeg",
   };
-  const history = useHistory();
 
   function exists(response) {
     if (response.includes("404", 0)) {
@@ -43,7 +41,7 @@ const MyProfile = () => {
 
   function notExists() {
     if (user.token === "") {
-      history.push("/hello");
+      toast("Debes ir a hello");
       return;
     }
     const script = document.createElement("script");
@@ -103,9 +101,6 @@ const MyProfile = () => {
   return (
     <div>
       <ToastContainer />
-      <div>
-        <h1 className="center pt40 mb20">Mi Perfil</h1>
-      </div>
       <div className="container max500">
         {loading ? (
           <div className="center pb10"> Cargando tus documentos...</div>

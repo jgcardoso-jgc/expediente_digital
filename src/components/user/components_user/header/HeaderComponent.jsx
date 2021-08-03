@@ -86,31 +86,14 @@ function HeaderComponent() {
     case currentItem === SLUGS.dashboard:
       title = "Dashboard";
       break;
-    case [SLUGS.overview, SLUGS.overviewTwo, SLUGS.overviewThree].includes(
-      currentItem
-    ):
-      title = "Overview";
+    case currentItem === SLUGS.perfil:
+      title = "Perfil";
       break;
-    case currentItem === SLUGS.tickets:
-      title = "Tickets";
-      break;
-    case [SLUGS.ideas, SLUGS.ideasTwo, SLUGS.ideasThree].includes(currentItem):
-      title = "Ideas";
-      break;
-    case currentItem === SLUGS.contacts:
-      title = "Contacts";
-      break;
-    case currentItem === SLUGS.agents:
-      title = "Agents";
-      break;
-    case currentItem === SLUGS.articles:
-      title = "Articles";
-      break;
-    case currentItem === SLUGS.subscription:
-      title = "Subscription";
+    case currentItem === SLUGS.documentos:
+      title = "Documentos";
       break;
     case currentItem === SLUGS.settings:
-      title = "Settings";
+      title = "Ajustes";
       break;
     default:
       title = "";

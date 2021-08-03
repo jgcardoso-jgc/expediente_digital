@@ -50,21 +50,21 @@ function SidebarComponent() {
         onClick={() => onClick(SLUGS.dashboard)}
       />
       <MenuItem
-        id={SLUGS.tickets}
+        id={SLUGS.perfil}
         title="Perfil"
         icon={IconTickets}
-        onClick={() => onClick(SLUGS.tickets)}
+        onClick={() => onClick(SLUGS.perfil)}
       />
       <MenuItem
-        id={SLUGS.contacts}
+        id={SLUGS.documentos}
         title="Documentos"
         icon={IconContacts}
-        onClick={() => onClick(SLUGS.contacts)}
+        onClick={() => onClick(SLUGS.documentos)}
       />
       <div className={classes.separator} />
       <MenuItem
         id={SLUGS.settings}
-        title="Settings"
+        title="Ajustes"
         icon={IconSettings}
         onClick={() => onClick(SLUGS.settings)}
       />

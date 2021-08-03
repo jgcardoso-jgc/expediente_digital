@@ -12,11 +12,10 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import uuid from "react-uuid";
-import toOnboarding from "../../../assets/toOnboarding.png";
-import facematch from "../../../assets/facematch.png";
+import toOnboarding from "../../../../assets/toOnboarding.png";
+import facematch from "../../../../assets/facematch.png";
 import "./documents.css";
 import onBoardingConfig from "./onBoardingConfig";
-import NavBar from "../navBar/navBar";
 
 let incode = null;
 
@@ -148,7 +147,6 @@ function Documents() {
   if (onBoarding) {
     return (
       <div>
-        <NavBar />
         <ToastContainer />
         <h1 className="center pt40 mb20">Mis documentos</h1>
         <div>
@@ -179,7 +177,6 @@ function Documents() {
   if (grantAccess) {
     return (
       <div>
-        <NavBar />
         <ToastContainer />
         <h1 className="center pt40 mb20">Mis documentos</h1>
         <div>
@@ -219,9 +216,7 @@ function Documents() {
 
   return (
     <div>
-      <NavBar />
       <ToastContainer />
-      <h1 className="center pt40 mb20">Mis documentos</h1>
       <div className="center pb10">
         No has registrado tu Identificación Oficial
       </div>
