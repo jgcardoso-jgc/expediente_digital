@@ -2,6 +2,7 @@
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
+import { useFirebaseApp } from "reactfire";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
@@ -25,13 +26,20 @@ const useStyles = createUseStyles({
 });
 
 function SidebarComponent() {
+  const firebase = useFirebaseApp();
   const { push } = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
   const isMobile = window.innerWidth <= 1080;
 
-  async function logout() {
-    push(SLUGS.login);
+  function logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        localStorage.removeItem("admin");
+        localStorage.removeItem("user");
+      });
   }
 
   function onClick(slug, parameters = {}) {
@@ -69,7 +77,12 @@ function SidebarComponent() {
         onClick={() => onClick(SLUGS.settings)}
       />
 
-      <MenuItem id="logout" title="Logout" icon={IconLogout} onClick={logout} />
+      <MenuItem
+        id="logout"
+        title="Logout"
+        icon={IconLogout}
+        onClick={() => logOut()}
+      />
     </Menu>
   );
 }

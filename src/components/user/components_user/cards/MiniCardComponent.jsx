@@ -6,9 +6,11 @@ import { createUseStyles, useTheme } from "react-jss";
 
 const useStyles = createUseStyles((theme) => ({
   container: {
-    backgroundColor: "#FFFFFF",
-    border: `1px solid ${theme.color.lightGrayishBlue2}`,
+    backgroundColor: "#f5f5f5",
+    border: `1px solid #f5f5f5`,
     borderRadius: 4,
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
     cursor: "pointer",
     maxWidth: 350,
     padding: "16px 32px 16px 32px",

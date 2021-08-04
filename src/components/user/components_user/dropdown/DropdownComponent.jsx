@@ -3,7 +3,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable react/require-default-props */
 /* eslint-disable quotes */
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   arrayOf,
   element,
@@ -15,7 +15,6 @@ import {
 } from "prop-types";
 import { Column } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import { IconArrowUp } from "../../assets/icons";
 
 const useStyles = createUseStyles((theme) => ({
   arrowContainer: {
@@ -41,6 +40,8 @@ const useStyles = createUseStyles((theme) => ({
     borderRadius: 5,
     minWidth: 170,
     padding: 0,
+    WebkitBoxShadow: "0px 14px 28px 3px #CACACA",
+    boxShadow: "0px 14px 28px 3px #CACACA",
     position: "absolute",
     width: "100%",
     top: ({ position }) => position.top,
@@ -78,6 +79,7 @@ const useStyles = createUseStyles((theme) => ({
 }));
 
 function DropdownComponent({ label, options, position }) {
+  const ref = useRef();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const theme = useTheme();
   const classes = useStyles({ theme, position });
@@ -91,35 +93,49 @@ function DropdownComponent({ label, options, position }) {
     onClick && onClick();
   }
 
+  const handleClick = (e) => {
+    if (ref.current.contains(e.target)) {
+      // inside click
+      return;
+    }
+    // outside click
+    setUserMenuOpen(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, []);
+
   return (
-    <Column className={classes.dropdownContainer}>
-      <button
-        type="button"
-        className={classes.dropdownButton}
-        onClick={onDropdownClick}
-      >
-        {label}
-      </button>
-      {userMenuOpen && (
-        <Column className={classes.dropdownItemsContainer}>
-          {options.map((option, index) => (
-            <button
-              key={`option-${index}`}
-              type="button"
-              className={classes.dropdownItem}
-              onClick={() => onItemClick(option.onClick)}
-            >
-              {option.label}
-              {index === 0 && (
-                <div className={classes.arrowContainer}>
-                  <IconArrowUp />
-                </div>
-              )}
-            </button>
-          ))}
-        </Column>
-      )}
-    </Column>
+    <div ref={ref}>
+      <Column className={classes.dropdownContainer}>
+        <button
+          type="button"
+          className={classes.dropdownButton}
+          onClick={() => onDropdownClick()}
+        >
+          {label}
+        </button>
+        {userMenuOpen && (
+          <Column className={classes.dropdownItemsContainer}>
+            {options.map((option, index) => (
+              <button
+                key={`option-${index}`}
+                type="button"
+                className={classes.dropdownItem}
+                onClick={() => onItemClick(option.onClick)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </Column>
+        )}
+      </Column>
+    </div>
   );
 }
 

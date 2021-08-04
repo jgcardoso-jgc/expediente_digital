@@ -3,9 +3,23 @@
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createUseStyles, useTheme } from "react-jss";
 import onBoardingConfig from "../documents/onBoardingConfig";
+import styles from "../../../../resources/theme";
+
+const globalTheme = createUseStyles(styles);
+const useStyles = createUseStyles(() => ({
+  center: {
+    textAlign: "center",
+  },
+  toMatch: {
+    display: "block",
+    marginRight: "auto",
+  },
+}));
 
 let incode = null;
 
@@ -16,11 +30,15 @@ function start() {
 const MyProfile = () => {
   const firebase = useFirebaseApp();
   const db = firebase.storage();
+  const theme = useTheme();
+  const global = globalTheme({ theme });
+  const classes = useStyles({ theme });
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
   const { email } = user;
   const { rfc } = user;
   const [loading, setLoading] = useState(true);
+  const [toFaceMatch, setFaceMatch] = useState(false);
   const metadata = {
     contentType: "image/jpeg",
   };
@@ -41,7 +59,7 @@ const MyProfile = () => {
 
   function notExists() {
     if (user.token === "") {
-      toast("Debes ir a hello");
+      setFaceMatch(true);
       return;
     }
     const script = document.createElement("script");
@@ -103,7 +121,24 @@ const MyProfile = () => {
       <ToastContainer />
       <div className="container max500">
         {loading ? (
-          <div className="center pb10"> Cargando tus documentos...</div>
+          <div className={classes.center}>
+            {" "}
+            {toFaceMatch ? (
+              <div>
+                <p>Debes hacer Facematch</p>
+                <Link to="/hello">
+                  <button
+                    type="button"
+                    className={`${global.initBt} ${classes.toMatch}`}
+                  >
+                    Ir al Facematch
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              "Cargando tus documentos..."
+            )}
+          </div>
         ) : (
           <div className="cardDashboard pt10">
             <div className="row">
