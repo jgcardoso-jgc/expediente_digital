@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useTheme } from "react-jss";
 import { slide as Menu } from "react-burger-menu";
 
-const getMenuStyles = ({ theme }) => ({
+const getMenuStyles = () => ({
   bmBurgerButton: {
     position: "absolute",
     width: 26,
@@ -14,16 +14,16 @@ const getMenuStyles = ({ theme }) => ({
     zIndex: 19,
   },
   bmBurgerBars: {
-    background: theme.color.veryDarkGrayishBlue,
+    background: "#373a47",
   },
   bmBurgerBarsHover: {
-    background: theme.color.darkRed,
+    background: "#a90000",
   },
   bmCrossButton: {
     display: "none",
   },
   bmCross: {
-    background: theme.color.grayishBlue3,
+    background: "#bdc3c7",
   },
   bmMenuWrap: {
     position: "fixed",
@@ -32,7 +32,7 @@ const getMenuStyles = ({ theme }) => ({
     zIndex: 30,
   },
   bmMenu: {
-    background: theme.color.veryDarkGrayishBlue,
+    background: "#373a47",
   },
   bmItem: {
     outline: "none",
@@ -41,7 +41,7 @@ const getMenuStyles = ({ theme }) => ({
     },
   },
   bmMorphShape: {
-    fill: theme.color.veryDarkGrayishBlue,
+    fill: "#373a47",
   },
   bmOverlay: {
     background: "rgba(0, 0, 0, 0.3)",

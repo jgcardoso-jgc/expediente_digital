@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable quotes */
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
@@ -6,15 +5,10 @@ import { useHistory } from "react-router-dom";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
-  IconAgents,
-  IconArticles,
   IconContacts,
-  IconIdeas,
   IconLogout,
-  IconOverview,
   IconSettings,
   IconSubscription,
-  IconTickets,
 } from "../../assets/icons";
 import LogoComponent from "./LogoComponent";
 import Menu from "./MenuComponent";
@@ -22,7 +16,7 @@ import MenuItem from "./MenuItemComponent";
 
 const useStyles = createUseStyles({
   separator: {
-    borderTop: ({ theme }) => `1px solid ${theme.color.lightGrayishBlue}`,
+    borderTop: () => `1px solid black`,
     marginTop: 16,
     marginBottom: 16,
     opacity: 0.06,

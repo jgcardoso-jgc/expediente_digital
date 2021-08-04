@@ -4,25 +4,24 @@
 import React, { useState } from "react";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import CardComponent from "../cards/CardComponent";
+import CardComponent from "../../../shared/cards/CardComponent";
 import { IconCheckboxOn, IconCheckboxOff } from "../../assets/icons";
 
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   addButton: {
-    backgroundColor: theme.color.lightGrayishBlue,
-    color: theme.color.grayishBlue2,
+    backgroundColor: "#F7F8FC",
+    color: "#9fa2b4",
     fontSize: "20px !important",
     padding: "7px !important",
   },
   itemTitle: {
-    ...theme.typography.itemTitle,
-    color: theme.color.veryDarkGrayishBlue,
+    color: "#373a47",
   },
   itemValue: {
-    color: theme.color.grayishBlue2,
+    color: "#9fa2b4",
   },
   greyTitle: {
-    color: theme.color.grayishBlue3,
+    color: "#bdc3c7",
   },
   tagStyles: {
     borderRadius: 5,

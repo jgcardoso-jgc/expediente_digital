@@ -4,14 +4,13 @@ import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
 import { IconLogo } from "../../assets/icons";
 
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   container: {
     marginLeft: 32,
     marginRight: 32,
   },
   title: {
-    ...theme.typography.cardTitle,
-    color: theme.color.grayishBlue,
+    color: "#A4A6B3",
     opacity: 0.7,
     marginLeft: 12,
   },

@@ -5,7 +5,7 @@ import React from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
 
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   container: {
     backgroundColor: "#f5f5f5",
     border: `1px solid #f5f5f5`,
@@ -25,7 +25,7 @@ const useStyles = createUseStyles((theme) => ({
     paddingRight: 32,
     paddingBottom: 18,
     paddingTop: 18,
-    borderBottom: `1px solid ${theme.color.lightGrayishBlue2}`,
+    borderBottom: "1px solid #DFE0EB",
     "&:last-child": {
       borderBottom: "none",
     },
@@ -36,20 +36,16 @@ const useStyles = createUseStyles((theme) => ({
     paddingLeft: 16,
     paddingRight: 16,
   },
-  link: {
-    ...theme.typography.link,
-  },
+  link: {},
   subtitle: {
-    ...theme.typography.smallSubtitle,
-    color: theme.color.grayishBlue2,
+    color: "#9fa2b4",
   },
   subtitle2: {
-    color: theme.color.veryDarkGrayishBlue,
+    color: "#373a47",
     marginLeft: 2,
   },
   title: {
-    ...theme.typography.cardTitle,
-    color: theme.color.veryDarkGrayishBlue,
+    color: "#373a47",
   },
 }));
 

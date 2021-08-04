@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-alert */
 /* eslint-disable quotes */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "firebase/auth";
 import { Link } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
@@ -50,15 +50,32 @@ const LoginNormal = () => {
   const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const submit = async () => {
+
+  async function submit() {
     try {
-      setDisable(true);
-      await firebase.auth().signInWithEmailAndPassword(email, password);
+      console.log(`email:${email}`);
+      if (email !== "" && password !== "") {
+        setDisable(true);
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+      }
     } catch (e) {
       toast(e.message);
       setDisable(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    const listener = (event) => {
+      if (event.code === "Enter" || event.code === "NumpadEnter") {
+        event.preventDefault();
+        submit();
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, [email, password]);
   return (
     <div className={classes.center}>
       <NavBarMainPage />
@@ -96,7 +113,7 @@ const LoginNormal = () => {
           type="button"
           className={global.initBt}
           disabled={disable}
-          onClick={submit}
+          onClick={() => submit()}
         >
           Iniciar Sesión
         </button>

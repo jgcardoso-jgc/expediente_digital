@@ -10,13 +10,11 @@ const useStyles = createUseStyles({
     to: { transform: "rotate(360deg)" },
   },
   container: {
-    backgroundColor: ({ theme, noTransparency, backgroundColor }) => {
+    backgroundColor: ({ noTransparency, backgroundColor }) => {
       if (backgroundColor) {
         return noTransparency ? backgroundColor : `${backgroundColor}A0`;
       }
-      return noTransparency
-        ? theme.color.veryDarkGrayishBlue
-        : `${theme.color.veryDarkGrayishBlue}A0`;
+      return noTransparency ? "#373a47" : "#373a47";
     },
     height: "100%",
     minHeight: ({ fullScreen }) => (fullScreen ? "100vh" : "100%"),
@@ -27,9 +25,9 @@ const useStyles = createUseStyles({
     zIndex: ({ zIndex }) => zIndex,
   },
   loading: {
-    border: ({ theme }) => `16px solid ${theme.color.lightGrayishBlue}`,
+    border: "16px solid #F7F8FC",
     borderRadius: "50%",
-    borderTop: ({ theme }) => `16px solid ${theme.color.brightBlue}`,
+    borderTop: "16px solid #3498db",
     width: 120,
     height: 120,
     animationName: "$loadingSpin",

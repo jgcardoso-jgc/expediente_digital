@@ -3,15 +3,14 @@
 import React from "react";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import CardComponent from "../../components_admin/cards/CardComponent";
+import CardComponent from "../../../shared/cards/CardComponent";
 
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   itemTitle: {
-    ...theme.typography.itemTitle,
-    color: theme.color.veryDarkGrayishBlue,
+    color: "#373a47",
   },
   itemValue: {
-    color: theme.color.grayishBlue2,
+    color: "#9fa2b4",
   },
 }));
 

@@ -14,28 +14,26 @@ import CollapsibleContent from "../collapsible/CollapsibleContent";
 
 const useStyles = createUseStyles({
   activeContainer: {
-    backgroundColor: ({ theme }) => theme.color.paleBlueTransparent,
+    backgroundColor: "rgba(221, 226, 255, 0.08)",
   },
   container: {
     display: "flex",
     height: 56,
     cursor: "pointer",
     "&:hover": {
-      backgroundColor: ({ theme }) => theme.color.paleBlueTransparent,
+      backgroundColor: "rgba(221, 226, 255, 0.08)",
     },
     paddingLeft: ({ level }) => 32 * level,
     transition: "all 0.2s ease-in-out",
   },
   leftBar: {
-    borderLeft: ({ theme, level }) =>
-      level > 1 ? "none" : `3px solid ${theme.color.darkGrayishBlue}`,
+    borderLeft: (level) => (level > 1 ? "none" : "3px solid #8b8d94"),
   },
   title: {
     fontSize: 16,
     lineHeight: "20px",
     letterSpacing: "0.2px",
-    color: ({ theme, isActive }) =>
-      isActive ? theme.color.paleBlue : theme.color.grayishBlue,
+    color: ({ isActive }) => (isActive ? "#DDE2FF" : "#A4A6B3"),
     marginLeft: 24,
   },
 });
@@ -62,7 +60,7 @@ function MenuItemComponent({
     classes.container,
     isActive && classes.activeContainer,
   ].join(" ");
-  const iconColor = isActive ? theme.color.paleBlue : theme.color.grayishBlue2;
+  const iconColor = isActive ? "#DDE2FF" : "#9fa2b4";
 
   function onItemClicked(e) {
     if (onClick) {

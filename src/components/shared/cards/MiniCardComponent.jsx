@@ -4,30 +4,31 @@ import React from "react";
 import { Column } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
 
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   container: {
-    backgroundColor: "#FFFFFF",
-    border: `1px solid ${theme.color.lightGrayishBlue2}`,
+    backgroundColor: "#f5f5f5",
+    border: `1px solid #f5f5f5`,
     borderRadius: 4,
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
     cursor: "pointer",
     maxWidth: 350,
     padding: "16px 32px 16px 32px",
     "&:hover": {
-      borderColor: theme.color.lightBlue,
+      borderColor: "#3751FF",
       "&:nth-child(n) > span": {
-        color: theme.color.lightBlue,
+        color: "#3751FF",
       },
     },
   },
   title: {
-    ...theme.typography.cardTitle,
-    color: theme.color.grayishBlue2,
+    color: "#9fa2b4",
     marginBottom: 12,
     minWidth: 102,
     textAlign: "center",
   },
   value: {
-    color: theme.color.veryDarkGrayishBlue,
+    color: "#373a47",
     fontWeight: "bold",
     fontSize: 40,
     letterSpacing: "1px",

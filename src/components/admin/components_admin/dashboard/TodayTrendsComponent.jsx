@@ -10,10 +10,10 @@ for (let x = 1; x <= 24; x += 1) {
   data.push({ x, y: Math.floor(Math.random() * 100) });
 }
 
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   container: {
     backgroundColor: "#FFFFFF",
-    border: `1px solid ${theme.color.lightGrayishBlue2}`,
+    border: "1px solid #DFE0EB",
     borderRadius: 4,
     cursor: "pointer",
   },
@@ -27,28 +27,25 @@ const useStyles = createUseStyles((theme) => ({
     padding: 24,
   },
   graphSubtitle: {
-    ...theme.typography.smallSubtitle,
-    color: theme.color.grayishBlue2,
+    color: "#9fa2b4",
     marginTop: 4,
     marginRight: 8,
   },
   graphTitle: {
-    ...theme.typography.cardTitle,
-    color: theme.color.veryDarkGrayishBlue,
+    color: "#373a47",
   },
   legendTitle: {
-    ...theme.typography.smallSubtitle,
     fontWeight: "600",
-    color: theme.color.grayishBlue2,
+    color: "#9fa2b4",
     marginLeft: 8,
   },
   separator: {
-    backgroundColor: theme.color.lightGrayishBlue2,
+    backgroundColor: "#DFE0EB",
     width: 1,
     minWidth: 1,
   },
   statContainer: {
-    borderBottom: `1px solid ${theme.color.lightGrayishBlue2}`,
+    borderBottom: "1px solid #9fa2b4",
     padding: "24px 32px 24px 32px",
     height: "calc(114px - 48px)",
     "&:last-child": {
@@ -56,7 +53,7 @@ const useStyles = createUseStyles((theme) => ({
     },
   },
   stats: {
-    borderTop: `1px solid ${theme.color.lightGrayishBlue2}`,
+    borderTop: "1px solid #DFE0EB",
     width: "100%",
   },
   statTitle: {
@@ -65,14 +62,13 @@ const useStyles = createUseStyles((theme) => ({
     lineHeight: "22px",
     letterSpacing: "0.3px",
     textAlign: "center",
-    color: theme.color.grayishBlue2,
+    color: "#9fa2b4",
     whiteSpace: "nowrap",
     marginBottom: 6,
   },
   statValue: {
-    ...theme.typography.title,
     textAlign: "center",
-    color: theme.color.veryDarkGrayishBlue,
+    color: "#373a47",
   },
 }));
 
@@ -126,14 +122,14 @@ function TodayTrendsComponent() {
               as of 25 May 2019, 09:41 PM
             </span>
           </Column>
-          {renderLegend(theme.color.lightBlue, "Today")}
+          {renderLegend("#3751FF", "Today")}
         </Row>
         <div className={classes.graphContainer}>
           <LineChart
             data={data}
             viewBoxWidth={500}
-            pointsStrokeColor={theme.color.lightBlue}
-            areaColor={theme.color.lightBlue}
+            pointsStrokeColor="#3751FF"
+            areaColor="#3751FF"
             areaVisible
           />
         </div>

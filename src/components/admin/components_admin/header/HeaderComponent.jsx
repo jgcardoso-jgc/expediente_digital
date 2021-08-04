@@ -12,17 +12,17 @@ import { createUseStyles, useTheme } from "react-jss";
 import firebase from "firebase";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
-import DropdownComponent from "../dropdown";
+import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
 import { IconBell, IconSearch } from "../../assets/icons";
 
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   avatar: {
     height: 35,
     width: 35,
     minWidth: 35,
     borderRadius: 50,
     marginLeft: 14,
-    border: `1px solid ${theme.color.lightGrayishBlue2}`,
+    border: "1px solid #9fa2b4",
     "@media (max-width: 768px)": {
       marginLeft: 14,
     },
@@ -31,14 +31,13 @@ const useStyles = createUseStyles((theme) => ({
     height: 40,
   },
   name: {
-    ...theme.typography.itemTitle,
     textAlign: "right",
     "@media (max-width: 768px)": {
       display: "none",
     },
   },
   separator: {
-    borderLeft: `1px solid ${theme.color.lightGrayishBlue2}`,
+    borderLeft: "1px solid #DFE0EB",
     marginLeft: 32,
     marginRight: 32,
     height: 32,
@@ -49,7 +48,6 @@ const useStyles = createUseStyles((theme) => ({
     },
   },
   title: {
-    ...theme.typography.title,
     "@media (max-width: 1080px)": {
       marginLeft: 50,
     },
@@ -127,7 +125,11 @@ function HeaderComponent() {
       vertical="center"
       horizontal="space-between"
     >
-      <span className={classes.title}>{title}</span>
+      <span className={classes.title}>
+        <h4>
+          <b>{title}</b>
+        </h4>
+      </span>
       <Row vertical="center">
         <div className={classes.iconStyles}>
           <IconSearch />

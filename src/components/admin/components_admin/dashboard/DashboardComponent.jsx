@@ -2,7 +2,7 @@
 import React from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
-import MiniCardComponent from "../../components_admin/cards/MiniCardComponent";
+import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
 import TodayTrendsComponent from "./TodayTrendsComponent";
 import UnresolvedTicketsComponent from "./UnresolvedTicketsComponent";
 import TasksComponent from "./TasksComponent";

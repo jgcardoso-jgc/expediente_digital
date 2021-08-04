@@ -3,9 +3,8 @@
 import React, { Suspense, lazy } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import SLUGS from "../resources/slugs";
-import LoadingComponent from "../components_user/loading";
-/*
-import AlertasPagina from "../components_user/alertasPagina/alertasPagina";*/
+import LoadingComponent from "../../shared/loading/LoadingComponent";
+import AlertasPagina from "../components_user/alertasPagina/alertasPagina";
 import HelloInit from "../components_user/hello/hello";
 import MyProfile from "../components_user/perfil/perfil";
 import Documents from "../components_user/documents/documents";
@@ -26,6 +25,7 @@ function PrivateRoutes() {
         <Route exact path="/onboard" render={() => <Onboarding />} />
         <Route exact path="/toOnboarding" render={() => <ToOnBoarding />} />
         <Route exact path="/finalStep" render={() => <FinalStep />} />
+        <Route exact path="/alertas" render={() => <AlertasPagina />} />
         <Route exact path={SLUGS.settings} render={() => <div>Ajustes</div>} />
         <Redirect to={SLUGS.dashboard} />
       </Switch>

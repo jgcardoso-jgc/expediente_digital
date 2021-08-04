@@ -2,9 +2,9 @@
 import React, { Suspense, lazy } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import SLUGS from "../resources/slugs";
-import LoadingComponent from "../components_admin/loading";
+import LoadingComponent from "../../shared/loading/LoadingComponent";
 
-const DashboardComponent = lazy(() => import("./dashboard"));
+const DashboardComponent = lazy(() => import("../components_admin/dashboard"));
 
 function PrivateRoutes() {
   return (
