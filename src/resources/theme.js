@@ -13,6 +13,9 @@ const styles = {
     fontSize: "15px",
     borderRadius: "10px",
   },
+  center: {
+    textAlign: "center",
+  },
 };
 
 export default styles;

@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useLocation, Link, useHistory } from "react-router-dom";
 
-import logo from "../../../assets/logo.png";
+import logo from "../../../../assets/logo.png";
 import "./toOnboarding.css";
 
 const ToOnBoarding = () => {

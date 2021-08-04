@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import Steps from "./Steps";
 import "./styles.css";
-import loading from "../../../assets/loading.gif";
+import loading from "../../../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
 import settings from "./settings";
 import "react-toastify/dist/ReactToastify.css";

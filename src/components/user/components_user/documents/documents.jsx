@@ -12,12 +12,48 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import uuid from "react-uuid";
+import { createUseStyles, useTheme } from "react-jss";
 import toOnboarding from "../../../../assets/toOnboarding.png";
 import facematch from "../../../../assets/facematch.png";
-import "./documents.css";
 import onBoardingConfig from "./onBoardingConfig";
+import styles from "../../../../resources/theme";
 
 let incode = null;
+
+const globalTheme = createUseStyles(styles);
+const useStyles = createUseStyles((theme) => ({
+  ".idFront": { maxWidth: "200px" },
+  ".imgCard": { borderTopLeftRadius: "14px", borderTopRightRadius: "14px" },
+  ".scan": { width: "100%" },
+  ".imgDoc": {
+    width: "100%",
+    borderTopLeftRadius: "14px",
+    borderTopRightRadius: "14px",
+  },
+  ".cardFit": {
+    maxWidth: "200px",
+    WebkitBoxShadow: "0px 8px 22px 9px #c7c7c7",
+    boxShadow: "0px 8px 22px 9px #c7c7c7",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: "14px",
+  },
+  ".cardTitle": {
+    paddingTop: "4px",
+    paddingLeft: "10px",
+    paddingBottom: "0px",
+    marginBottom: "0",
+  },
+  toBoarding: {
+    display: "block",
+    marginRight: "auto",
+  },
+  ".cardText": {
+    paddingTop: "4px",
+    paddingLeft: "10px",
+    paddingBottom: "20px",
+  },
+}));
 
 function start() {
   incode = window.OnBoarding.create(onBoardingConfig);
@@ -26,6 +62,9 @@ function start() {
 function Documents() {
   const firebase = useFirebaseApp();
   const db = firebase.storage();
+  const theme = useTheme();
+  const global = globalTheme({ theme });
+  const classes = useStyles({ theme });
   const [onBoarding, setOnboarding] = useState(false);
   const [grantAccess, setAccess] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -148,7 +187,6 @@ function Documents() {
     return (
       <div>
         <ToastContainer />
-        <h1 className="center pt40 mb20">Mis documentos</h1>
         <div>
           <div>
             <div>
@@ -159,7 +197,10 @@ function Documents() {
                   Deberás hacer Facematch para comprobar tu identidad
                 </div>
                 <Link to="/hello">
-                  <button type="button" className="logBt">
+                  <button
+                    type="button"
+                    className={`${global.initBt} ${classes.toBoarding}`}
+                  >
                     Ir al Facematch
                   </button>
                 </Link>
@@ -178,7 +219,6 @@ function Documents() {
     return (
       <div>
         <ToastContainer />
-        <h1 className="center pt40 mb20">Mis documentos</h1>
         <div>
           {" "}
           <div className="container pb40 pt20">
@@ -217,11 +257,14 @@ function Documents() {
   return (
     <div>
       <ToastContainer />
-      <div className="center pb10">
+      <div className={global.center}>
         No has registrado tu Identificación Oficial
       </div>
-      <Link to="/onboard">
-        <button type="button" className="logBt">
+      <Link style={{ display: "block" }} to="/onboard">
+        <button
+          type="button"
+          className={`${global.initBt} ${classes.toBoarding}`}
+        >
           Ir al OnBoarding
         </button>
       </Link>

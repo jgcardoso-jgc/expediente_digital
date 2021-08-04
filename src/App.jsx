@@ -58,6 +58,7 @@ function App() {
                 fullName: data.fullname,
                 email: data.email,
                 rfc: data.rfc,
+                onboarding: data.onboarding,
                 token: "",
               };
               localStorage.setItem("user", JSON.stringify(userData));

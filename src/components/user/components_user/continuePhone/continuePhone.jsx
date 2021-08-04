@@ -2,7 +2,7 @@
 import "./continuePhone.css";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import qr from "../../../assets/qr-code.png";
+import qr from "../../../../assets/qr-code.png";
 
 function ContinuePhone() {
   const history = useHistory();

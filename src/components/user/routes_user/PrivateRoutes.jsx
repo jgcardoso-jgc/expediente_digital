@@ -5,13 +5,13 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import SLUGS from "../resources/slugs";
 import LoadingComponent from "../components_user/loading";
 /*
-import Onboarding from "../components_user/onboarding/onboarding";
-import FinalStep from "../components_user/finalSteps/finalStep";
-import ToOnBoarding from "../components_user/toOnboarding/toOnboarding";
 import AlertasPagina from "../components_user/alertasPagina/alertasPagina";*/
 import HelloInit from "../components_user/hello/hello";
 import MyProfile from "../components_user/perfil/perfil";
 import Documents from "../components_user/documents/documents";
+import Onboarding from "../components_user/onboarding/onboarding";
+import ToOnBoarding from "../components_user/toOnboarding/toOnboarding";
+import FinalStep from "../components_user/finalSteps/finalStep";
 
 const DashboardComponent = lazy(() => import("../components_user/dashboard"));
 
@@ -23,6 +23,9 @@ function PrivateRoutes() {
         <Route exact path={SLUGS.perfil} render={() => <MyProfile />} />
         <Route exact path={SLUGS.documentos} render={() => <Documents />} />
         <Route exact path="/hello" render={() => <HelloInit />} />
+        <Route exact path="/onboard" render={() => <Onboarding />} />
+        <Route exact path="/toOnboarding" render={() => <ToOnBoarding />} />
+        <Route exact path="/finalStep" render={() => <FinalStep />} />
         <Route exact path={SLUGS.settings} render={() => <div>Ajustes</div>} />
         <Redirect to={SLUGS.dashboard} />
       </Switch>
