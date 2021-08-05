@@ -12,10 +12,12 @@ for (let x = 1; x <= 24; x += 1) {
 
 const useStyles = createUseStyles(() => ({
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f5f5f5",
     border: "1px solid #DFE0EB",
     borderRadius: 4,
     cursor: "pointer",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   graphContainer: {
     marginTop: 24,
@@ -68,7 +70,7 @@ const useStyles = createUseStyles(() => ({
   },
   statValue: {
     textAlign: "center",
-    color: "#373a47",
+    color: "black",
   },
 }));
 
@@ -122,14 +124,14 @@ function TodayTrendsComponent() {
               as of 25 May 2019, 09:41 PM
             </span>
           </Column>
-          {renderLegend("#3751FF", "Today")}
+          {renderLegend("black", "Today")}
         </Row>
         <div className={classes.graphContainer}>
           <LineChart
             data={data}
             viewBoxWidth={500}
-            pointsStrokeColor="#3751FF"
-            areaColor="#3751FF"
+            pointsStrokeColor="black"
+            areaColor="green"
             areaVisible
           />
         </div>

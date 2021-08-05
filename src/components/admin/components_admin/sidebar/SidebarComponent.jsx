@@ -50,19 +50,19 @@ function SidebarComponent() {
       />
       <MenuItem
         id={SLUGS.contacts}
-        title="Contacts"
+        title="Usuarios"
         icon={IconContacts}
         onClick={() => onClick(SLUGS.contacts)}
       />
       <div className={classes.separator} />
       <MenuItem
         id={SLUGS.settings}
-        title="Settings"
+        title="Ajustes"
         icon={IconSettings}
         onClick={() => onClick(SLUGS.settings)}
       />
 
-      <MenuItem id="logout" title="Logout" icon={IconLogout} onClick={logout} />
+      <MenuItem id="logout" title="Salir" icon={IconLogout} onClick={logout} />
     </Menu>
   );
 }

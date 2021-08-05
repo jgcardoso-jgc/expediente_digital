@@ -2,7 +2,7 @@
 import React from "react";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import { IconLogo } from "../../assets/icons";
+import logo from "../../assets/logo.png";
 
 const useStyles = createUseStyles(() => ({
   container: {
@@ -14,6 +14,9 @@ const useStyles = createUseStyles(() => ({
     opacity: 0.7,
     marginLeft: 12,
   },
+  logo: {
+    width: "20px",
+  },
 }));
 
 function LogoComponent() {
@@ -21,7 +24,7 @@ function LogoComponent() {
   const classes = useStyles({ theme });
   return (
     <Row className={classes.container} horizontal="center" vertical="center">
-      <IconLogo />
+      <img alt="logo" className={classes.logo} src={logo} />
       <span className={classes.title}>Seguridata</span>
     </Row>
   );
