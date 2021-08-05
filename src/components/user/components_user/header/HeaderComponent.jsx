@@ -94,6 +94,9 @@ function HeaderComponent() {
     case currentItem === SLUGS.settings:
       title = "Ajustes";
       break;
+    case currentItem === SLUGS.alerts:
+      title = "Alertas";
+      break;
     default:
       title = "";
   }

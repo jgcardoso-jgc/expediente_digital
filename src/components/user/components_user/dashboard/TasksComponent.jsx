@@ -106,8 +106,8 @@ function TasksComponent(props) {
   return (
     <CardComponent
       containerStyles={props.containerStyles}
-      title="Tasks"
-      link="View all"
+      title="Alertas"
+      link="/alertas"
       subtitle="Today"
       items={[
         <Row horizontal="space-between" vertical="center">

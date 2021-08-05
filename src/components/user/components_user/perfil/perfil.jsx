@@ -19,6 +19,13 @@ const useStyles = createUseStyles(() => ({
     display: "block",
     marginRight: "auto",
   },
+  cardDashboard: {
+    background: "#f5f5f5",
+    borderRadius: "10px",
+    padding: "10px",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+  },
 }));
 
 let incode = null;
@@ -50,8 +57,7 @@ const MyProfile = () => {
       const frontId = new Image();
       frontId.src = response;
       frontId.style.width = "100%";
-      frontId.style.borderTopLeftRadius = "14px";
-      frontId.style.borderTopRightRadius = "14px";
+      frontId.style.borderRadius = "7px";
       setLoading(false);
       document.getElementById("pic").appendChild(frontId);
     }
@@ -140,7 +146,7 @@ const MyProfile = () => {
             )}
           </div>
         ) : (
-          <div className="cardDashboard pt10">
+          <div className={classes.cardDashboard}>
             <div className="row">
               <div className="col max40">
                 <div id="pic" />

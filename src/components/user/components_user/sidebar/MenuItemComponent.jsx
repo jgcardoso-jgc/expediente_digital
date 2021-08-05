@@ -76,7 +76,11 @@ function MenuItemComponent({
         onClick={onItemClicked}
         className={classNameContainer}
       >
-        <Icon fill={iconColor} opacity={!isActive && "0.4"} />
+        <Icon
+          fill={iconColor}
+          style={{ fontSize: "20px" }}
+          opacity={!isActive && "0.4"}
+        />
         <span className={classes.title}>{title}</span>
       </Row>
       {isCollapsible && (

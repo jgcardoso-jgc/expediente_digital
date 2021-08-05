@@ -2,8 +2,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
 import React from "react";
+import { Link } from "react-router-dom";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
+import { IoOpenOutline } from "react-icons/io5";
 
 const useStyles = createUseStyles(() => ({
   container: {
@@ -73,7 +75,11 @@ function CardComponent(props) {
     >
       <Row horizontal="space-between">
         <Column>
-          <span className={classes.title}>{title}</span>
+          <span className={classes.title}>
+            <h5>
+              <b>{title}</b>
+            </h5>
+          </span>
           <Row style={{ marginTop: 8, marginBottom: 16 }}>
             <span className={classes.subtitle}>{subtitle}</span>
             {subtitleTwo && (
@@ -83,7 +89,9 @@ function CardComponent(props) {
             )}
           </Row>
         </Column>
-        <span className={classes.link}>{link}</span>
+        <Link to={link}>
+          <IoOpenOutline />
+        </Link>
       </Row>
       {items.map(renderItem)}
     </Column>

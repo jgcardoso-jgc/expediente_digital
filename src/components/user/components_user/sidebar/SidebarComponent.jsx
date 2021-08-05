@@ -3,6 +3,8 @@ import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
+import { BiUserCircle } from "react-icons/bi";
+import { FaBell } from "react-icons/fa";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
@@ -10,7 +12,6 @@ import {
   IconLogout,
   IconSettings,
   IconSubscription,
-  IconTickets,
 } from "../../assets/icons";
 import LogoComponent from "./LogoComponent";
 import Menu from "./MenuComponent";
@@ -60,7 +61,7 @@ function SidebarComponent() {
       <MenuItem
         id={SLUGS.perfil}
         title="Perfil"
-        icon={IconTickets}
+        icon={BiUserCircle}
         onClick={() => onClick(SLUGS.perfil)}
       />
       <MenuItem
@@ -70,6 +71,12 @@ function SidebarComponent() {
         onClick={() => onClick(SLUGS.documentos)}
       />
       <div className={classes.separator} />
+      <MenuItem
+        id={SLUGS.alerts}
+        title="Alertas"
+        icon={FaBell}
+        onClick={() => onClick(SLUGS.alerts)}
+      />
       <MenuItem
         id={SLUGS.settings}
         title="Ajustes"

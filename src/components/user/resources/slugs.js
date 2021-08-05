@@ -5,4 +5,5 @@ export default {
   perfil: "/perfil",
   documentos: "/documentos",
   settings: "/ajustes",
+  alerts: "/alertas",
 };

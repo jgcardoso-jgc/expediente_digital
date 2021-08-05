@@ -32,8 +32,8 @@ function UnresolvedTicketsComponent({ containerStyles }) {
   return (
     <CardComponent
       containerStyles={containerStyles}
-      title="Unresolved tickets"
-      link="View details"
+      title="Documentos"
+      link="/documentos"
       subtitle="Group:"
       subtitleTwo="Support"
       items={[

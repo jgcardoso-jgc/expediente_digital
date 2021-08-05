@@ -2,7 +2,6 @@
 import React from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
-import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
 import UnresolvedTicketsComponent from "./UnresolvedTicketsComponent";
 import TasksComponent from "./TasksComponent";
 
@@ -15,14 +14,6 @@ const useStyles = createUseStyles({
     marginTop: 30,
     "@media (max-width: 768px)": {
       marginTop: 0,
-    },
-  },
-  miniCardContainer: {
-    flexGrow: 1,
-    marginRight: 30,
-    "@media (max-width: 768px)": {
-      marginTop: 30,
-      maxWidth: "none",
     },
   },
   todayTrends: {
@@ -49,50 +40,6 @@ function DashboardComponent() {
   const classes = useStyles();
   return (
     <Column>
-      <Row
-        className={classes.cardsContainer}
-        wrap
-        flexGrow={1}
-        horizontal="space-between"
-        breakpoints={{ 768: "column" }}
-      >
-        <Row
-          className={classes.cardRow}
-          wrap
-          flexGrow={1}
-          horizontal="space-between"
-          breakpoints={{ 384: "column" }}
-        >
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Unresolved"
-            value="60"
-          />
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Overdue"
-            value="16"
-          />
-        </Row>
-        <Row
-          className={classes.cardRow}
-          wrap
-          flexGrow={1}
-          horizontal="space-between"
-          breakpoints={{ 384: "column" }}
-        >
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Open"
-            value="43"
-          />
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="On hold"
-            value="64"
-          />
-        </Row>
-      </Row>
       <Row
         horizontal="space-between"
         className={classes.lastRow}

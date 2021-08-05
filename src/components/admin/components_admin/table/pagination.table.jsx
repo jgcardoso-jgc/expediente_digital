@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 /* eslint-disable no-console */
 /* eslint-disable comma-dangle */
@@ -9,12 +8,46 @@
 import React, { useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import { useTable, usePagination, useGlobalFilter } from "react-table";
+import { FaSearch, FaAngleRight, FaAngleLeft } from "react-icons/fa";
 
 const useStyles = createUseStyles({
   card: {
     background: "#f5f5f5",
     padding: "10px",
     borderRadius: "10px",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+  },
+  table: {
+    minWidth: "100%",
+  },
+  searchIcon: {
+    paddingLeft: "10px",
+    paddingRight: "10px",
+  },
+  containerSearch: {
+    marginTop: "-27px",
+    marginBottom: "14px",
+    display: "flex",
+    background: "#cccccc",
+    maxWidth: "50%",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    borderRadius: "10px",
+    padding: "4px",
+  },
+  inputPagination: {
+    minWidth: "40%",
+    background: "transparent",
+    border: "1px",
+  },
+  paginationContainer: {
+    marginTop: "10px",
+  },
+  paginationButtons: {
+    border: "1px solid transparent",
+    background: "#d0d0d0",
+    borderRadius: "4px",
   },
 });
 
@@ -57,14 +90,20 @@ function Table({ columns, data }) {
   }, [globalFilter]);
 
   return (
-    <>
+    <div className={classes.card}>
       {console.log(globalFilter)}
-      <input
-        type="text"
-        value={globalFilter || ""}
-        onChange={(e) => setGlobalFilter(e.target.value)}
-      />
-      <table {...getTableProps()}>
+      <div className={classes.containerSearch}>
+        <span className={classes.searchIcon}>
+          <FaSearch />
+        </span>
+        <input
+          type="text"
+          className={classes.inputPagination}
+          value={globalFilter || ""}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+        />
+      </div>
+      <table className={classes.table} {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -90,9 +129,10 @@ function Table({ columns, data }) {
           })}
         </tbody>
       </table>
-      <div className="pagination">
+      <div className={classes.paginationContainer}>
         <button
           type="button"
+          className={classes.paginationButtons}
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
         >
@@ -100,33 +140,36 @@ function Table({ columns, data }) {
         </button>{" "}
         <button
           type="button"
+          className={classes.paginationButtons}
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
         >
-          {"<"}
+          <FaAngleLeft />
         </button>{" "}
         <button
           type="button"
+          className={classes.paginationButtons}
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
-          {">"}
+          <FaAngleRight />
         </button>{" "}
         <button
           type="button"
+          className={classes.paginationButtons}
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
         >
           {">>"}
         </button>{" "}
         <span>
-          Page{" "}
+          Página{" "}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{" "}
         </span>
         <span>
-          | Go to page:{" "}
+          | Ir a la Página:{" "}
           <input
             type="number"
             defaultValue={pageIndex + 1}
@@ -160,7 +203,7 @@ function Table({ columns, data }) {
           <code>{JSON.stringify(state.filters, null, 2)}</code>
         </pre>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -168,41 +211,25 @@ function TableView() {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Name",
-        columns: [
-          {
-            Header: "First Name",
-            accessor: "firstName",
-          },
-          {
-            Header: "Last Name",
-            accessor: "lastName",
-            // Use our custom `fuzzyText` filter on this column
-          },
-        ],
+        Header: "Nombre",
+        accessor: "firstName",
       },
       {
-        Header: "Info",
-        columns: [
-          {
-            Header: "Age",
-            accessor: "age",
-            filter: "equals",
-          },
-          {
-            Header: "Visits",
-            accessor: "visits",
-          },
-          {
-            Header: "Status",
-            accessor: "status",
-            filter: "includes",
-          },
-          {
-            Header: "Profile Progress",
-            accessor: "progress",
-          },
-        ],
+        Header: "Apellidos",
+        accessor: "lastName",
+      },
+      {
+        Header: "Documentos",
+        accessor: "visits",
+      },
+      {
+        Header: "Estado",
+        accessor: "status",
+        filter: "includes",
+      },
+      {
+        Header: "Progreso",
+        accessor: "progress",
       },
     ],
     []
