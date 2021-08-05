@@ -1,10 +1,10 @@
 /* eslint-disable quotes */
 import React from "react";
-import PaginationTableComponent from "../table/pagination.table";
+import TableView from "../table/pagination.table";
 
 const UserView = () => (
   <div>
-    <PaginationTableComponent />
+    <TableView />
   </div>
 );
 

@@ -1,35 +1,45 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+/* eslint-disable no-console */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
 /* eslint-disable quotes */
-// src/components/pagination.table.js
-import React from "react";
-import { useTable, usePagination } from "react-table";
+import React, { useEffect } from "react";
 import { createUseStyles } from "react-jss";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useTable, usePagination, useGlobalFilter } from "react-table";
 
 const useStyles = createUseStyles({
   card: {
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
-    borderRadius: "10px",
+    background: "#f5f5f5",
     padding: "10px",
-    backgroundColor: "#f5f5f5",
+    borderRadius: "10px",
   },
 });
 
 function Table({ columns, data }) {
   const classes = useStyles();
-  // Use the state and functions returned from useTable to build your UI
+  const props = useTable(
+    {
+      columns,
+      data,
+    },
+    useGlobalFilter, // useGlobalFilter!
+    usePagination
+  );
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    rows,
     prepareRow,
-    page,
+    setGlobalFilter,
+    state,
+    page, // Instead of using 'rows', we'll use page,
+    // which has only the rows for the active page
+
+    // The rest of these things are super handy, too ;)
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -38,25 +48,31 @@ function Table({ columns, data }) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
-  } = useTable(
-    {
-      columns,
-      data,
-      initialState: { pageIndex: 1, pageSize: 5 },
-    },
-    usePagination
-  );
+    state: { pageIndex, pageSize, globalFilter },
+  } = props;
+  console.log(props);
 
-  // Render the UI for your table
+  useEffect(() => {
+    console.log(globalFilter);
+  }, [globalFilter]);
+
   return (
-    <div className={classes.card}>
-      <table className="table" {...getTableProps()}>
+    <>
+      {console.log(globalFilter)}
+      <input
+        type="text"
+        value={globalFilter || ""}
+        onChange={(e) => setGlobalFilter(e.target.value)}
+      />
+      <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps()}>
+                  {column.render("Header")}
+                  {/* Render the columns filter UI */}
+                </th>
               ))}
             </tr>
           ))}
@@ -74,80 +90,81 @@ function Table({ columns, data }) {
           })}
         </tbody>
       </table>
-      {/*
-        Pagination can be built however you'd like.
-        This is just a very basic UI implementation:
-      */}
-      <ul className="pagination">
-        <li
-          className="page-item"
+      <div className="pagination">
+        <button
+          type="button"
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
         >
-          <button type="button" className="page-link">
-            First
-          </button>
-        </li>
-        <li
-          className="page-item"
+          {"<<"}
+        </button>{" "}
+        <button
+          type="button"
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
         >
-          <button type="button" className="page-link">
-            {"<"}
-          </button>
-        </li>
-        <li
-          className="page-item"
+          {"<"}
+        </button>{" "}
+        <button
+          type="button"
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
-          <button type="button" className="page-link">
-            {">"}
-          </button>
-        </li>
-        <li
-          className="page-item"
+          {">"}
+        </button>{" "}
+        <button
+          type="button"
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
         >
-          <button type="button" className="page-link">
-            Last
-          </button>
-        </li>
-        <li>
-          <button className="page-link" type="button">
-            Page{" "}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{" "}
-          </button>
-        </li>
+          {">>"}
+        </button>{" "}
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{" "}
+        </span>
+        <span>
+          | Go to page:{" "}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              gotoPage(page);
+            }}
+            style={{ width: "100px" }}
+          />
+        </span>{" "}
         <select
-          className="form-control"
           value={pageSize}
           onChange={(e) => {
             setPageSize(Number(e.target.value));
           }}
-          style={{ width: "120px", height: "38px" }}
         >
-          {[5, 10, 20, 30, 40, 50].map((pgSize) => (
-            <option key={pgSize} value={pgSize}>
-              Show {pgSize}
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
             </option>
           ))}
         </select>
-      </ul>
-    </div>
+      </div>
+
+      <br />
+      <div>
+        Mostrando {pageSize} de {rows.length} resultados
+      </div>
+      <div>
+        <pre>
+          <code>{JSON.stringify(state.filters, null, 2)}</code>
+        </pre>
+      </div>
+    </>
   );
 }
 
-Table.defaultProps = {
-  columns: null,
-  data: null,
-};
-
-function PaginationTableComponent() {
+function TableView() {
   const columns = React.useMemo(
     () => [
       {
@@ -160,6 +177,7 @@ function PaginationTableComponent() {
           {
             Header: "Last Name",
             accessor: "lastName",
+            // Use our custom `fuzzyText` filter on this column
           },
         ],
       },
@@ -169,6 +187,7 @@ function PaginationTableComponent() {
           {
             Header: "Age",
             accessor: "age",
+            filter: "equals",
           },
           {
             Header: "Visits",
@@ -177,6 +196,7 @@ function PaginationTableComponent() {
           {
             Header: "Status",
             accessor: "status",
+            filter: "includes",
           },
           {
             Header: "Profile Progress",
@@ -187,75 +207,102 @@ function PaginationTableComponent() {
     ],
     []
   );
-
   const data = [
     {
-      firstName: "committee-c15dw",
-      lastName: "editor-ktsjo",
-      age: 3,
-      visits: 46,
-      progress: 75,
-      status: "relationship",
-    },
-    {
-      firstName: "midnight-wad0y",
-      lastName: "data-7h4xf",
-      age: 1,
-      visits: 56,
-      progress: 15,
-      status: "complicated",
-    },
-    {
-      firstName: "tree-sbdb0",
-      lastName: "friendship-w8535",
-      age: 1,
-      visits: 45,
-      progress: 66,
+      firstName: "horn-od926",
+      lastName: "selection-gsykp",
+      age: 22,
+      visits: 20,
+      progress: 39,
       status: "single",
     },
     {
-      firstName: "chin-borr8",
-      lastName: "shirt-zox8m",
-      age: 0,
-      visits: 25,
-      progress: 67,
+      firstName: "heart-nff6w",
+      lastName: "information-nyp92",
+      age: 16,
+      visits: 98,
+      progress: 40,
       status: "complicated",
     },
     {
-      firstName: "women-83ef0",
-      lastName: "chalk-e8xbk",
-      age: 9,
-      visits: 28,
-      progress: 23,
+      firstName: "minute-yri12",
+      lastName: "fairies-iutct",
+      age: 7,
+      visits: 77,
+      progress: 39,
+      status: "single",
+    },
+    {
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
       status: "relationship",
     },
     {
-      firstName: "women-83ef0",
-      lastName: "chalk-e8xbk",
-      age: 9,
-      visits: 28,
-      progress: 23,
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
       status: "relationship",
     },
     {
-      firstName: "women-83ef0",
-      lastName: "chalk-e8xbk",
-      age: 9,
-      visits: 28,
-      progress: 23,
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
       status: "relationship",
     },
     {
-      firstName: "women-83ef0",
-      lastName: "chalk-e8xbk",
-      age: 9,
-      visits: 28,
-      progress: 23,
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
+      status: "relationship",
+    },
+    {
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
+      status: "relationship",
+    },
+    {
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
+      status: "relationship",
+    },
+    {
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
+      status: "relationship",
+    },
+    {
+      firstName: "degree-jx4h0",
+      lastName: "man-u2y40",
+      age: 27,
+      visits: 54,
+      progress: 92,
       status: "relationship",
     },
   ];
 
-  return <Table columns={columns} data={data} />;
+  return (
+    <div>
+      <Table columns={columns} data={data} />
+    </div>
+  );
 }
 
-export default PaginationTableComponent;
+export default TableView;
