@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import React from "react";
-import TableView from "../table/pagination.table";
+import TableView from "../table/tableView";
 
 const UserView = () => (
   <div>

@@ -51,8 +51,9 @@ const useStyles = createUseStyles({
   },
 });
 
-function Table({ columns, data }) {
+const Table = ({ columns, data }) => {
   const classes = useStyles();
+  console.log(`heredata:${data}`);
   const props = useTable(
     {
       columns,
@@ -205,131 +206,6 @@ function Table({ columns, data }) {
       </div>
     </div>
   );
-}
+};
 
-function TableView() {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Nombre",
-        accessor: "firstName",
-      },
-      {
-        Header: "Apellidos",
-        accessor: "lastName",
-      },
-      {
-        Header: "Documentos",
-        accessor: "visits",
-      },
-      {
-        Header: "Estado",
-        accessor: "status",
-        filter: "includes",
-      },
-      {
-        Header: "Progreso",
-        accessor: "progress",
-      },
-    ],
-    []
-  );
-  const data = [
-    {
-      firstName: "horn-od926",
-      lastName: "selection-gsykp",
-      age: 22,
-      visits: 20,
-      progress: 39,
-      status: "single",
-    },
-    {
-      firstName: "heart-nff6w",
-      lastName: "information-nyp92",
-      age: 16,
-      visits: 98,
-      progress: 40,
-      status: "complicated",
-    },
-    {
-      firstName: "minute-yri12",
-      lastName: "fairies-iutct",
-      age: 7,
-      visits: 77,
-      progress: 39,
-      status: "single",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-    {
-      firstName: "degree-jx4h0",
-      lastName: "man-u2y40",
-      age: 27,
-      visits: 54,
-      progress: 92,
-      status: "relationship",
-    },
-  ];
-
-  return (
-    <div>
-      <Table columns={columns} data={data} />
-    </div>
-  );
-}
-
-export default TableView;
+export default Table;
