@@ -5,11 +5,22 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 import React, { useState, useEffect } from "react";
-import { ConsoleView } from "react-device-detect";
 import { useFirebaseApp } from "reactfire";
+import { useHistory } from "react-router-dom";
+import { createUseStyles } from "react-jss";
 import Table from "./paginationTable";
 
+const useStyles = createUseStyles({
+  editButton: {
+    border: "1px solid transparent",
+    background: "#d0d0d0",
+    borderRadius: "4px",
+  },
+});
+
 function TableView() {
+  const classes = useStyles();
+  const history = useHistory();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const [loading, setLoading] = useState(true);
@@ -52,18 +63,14 @@ function TableView() {
     }
   }, [data]);
 
-  /*
-      {
-        Header: "Nombre",
-        accessor: "firstName",
-      },
-
-  */
-
   function handleClickEditRow(obj) {
     console.log("clicked");
     console.log(Object.keys(obj));
     console.log(obj.row.original.uid);
+    history.push({
+      pathname: "/contacts/editUser",
+      state: { objUser: obj.row.original },
+    });
   }
 
   if (loading) {
@@ -75,30 +82,42 @@ function TableView() {
       <Table
         columns={[
           {
-            Header: "UID",
-            accessor: "uid",
+            Header: "Nombre",
+            accessor: "fullname",
           },
           {
-            Header: "Visits",
+            Header: "Email",
+            accessor: "email",
+            Cell: (cellObj) => (
+              <div>
+                <a href={`mailto:${cellObj.row.original.email}`} target="blank">
+                  {cellObj.row.original.email}
+                </a>
+              </div>
+            ),
+          },
+          {
+            Header: "Documentos",
+            accessor: "sizeDocuments",
+          },
+          {
+            Header: "RFC",
+            accessor: "rfc",
+          },
+          {
+            Header: "Editar",
             accessor: "fullName",
             Cell: (cellObj) => (
               <div>
                 <button
                   type="button"
+                  className={classes.editButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
                   Edit
                 </button>
               </div>
             ),
-          },
-          {
-            Header: "Status",
-            accessor: "status",
-          },
-          {
-            Header: "Profile Progress",
-            accessor: "progress",
           },
         ]}
         data={data}

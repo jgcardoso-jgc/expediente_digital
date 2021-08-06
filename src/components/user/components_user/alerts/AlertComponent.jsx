@@ -1,17 +1,14 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-console */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/require-default-props */
 /* eslint-disable quotes */
 import React, { useState, useEffect, useRef } from "react";
-import {
-  arrayOf,
-  element,
-  func,
-  number,
-  oneOfType,
-  shape,
-  string,
-} from "prop-types";
+import { useFirebaseApp } from "reactfire";
+import { number, shape } from "prop-types";
 import { Column } from "simple-flexbox";
 import uuid from "react-uuid";
 import { createUseStyles, useTheme } from "react-jss";
@@ -78,19 +75,41 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-function DropdownComponent({ label, options, position }) {
+function AlertComponent({ position, label }) {
   const ref = useRef();
+  const firebase = useFirebaseApp();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const theme = useTheme();
   const classes = useStyles({ theme, position });
+  const db = firebase.firestore();
+  const [alerts, setAlerts] = useState([]);
 
   function onDropdownClick() {
     setUserMenuOpen((prev) => !prev);
   }
 
-  function onItemClick(onClick) {
-    setUserMenuOpen(false);
-    onClick && onClick();
+  async function appendAlerts() {
+    const al = [];
+    if (firebase.auth().currentUser.emailVerified) {
+      console.log("verified");
+    } else {
+      console.log("not verified");
+      al.push("No has confirmado tu correo.");
+    }
+    const user = firebase.auth().currentUser;
+    let uid = "";
+    if (user) {
+      uid = user.uid;
+    }
+    const query = db.collection("users").where("uid", "==", uid);
+    await query.get().then((querySnapshot) => {
+      if (querySnapshot.size > 0) {
+        querySnapshot.forEach((doc) => {
+          al.push(doc.data().rfc);
+        });
+      }
+      setAlerts(al);
+    });
   }
 
   const handleClick = (e) => {
@@ -102,13 +121,22 @@ function DropdownComponent({ label, options, position }) {
     setUserMenuOpen(false);
   };
 
+  function onItemClick() {
+    console.log("clicked");
+  }
+
   useEffect(() => {
+    appendAlerts();
     document.addEventListener("mousedown", handleClick);
 
     return () => {
       document.removeEventListener("mousedown", handleClick);
     };
   }, []);
+
+  useEffect(() => {
+    console.log("reload");
+  }, [alerts]);
 
   return (
     <div ref={ref}>
@@ -121,32 +149,32 @@ function DropdownComponent({ label, options, position }) {
           {label}
         </button>
         {userMenuOpen && (
-          <Column className={classes.dropdownItemsContainer}>
-            {options.map((option) => (
-              <button
-                key={`option-${uuid}`}
-                type="button"
-                className={classes.dropdownItem}
-                onClick={() => onItemClick(option.onClick)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </Column>
+          <div style={{ listStyleType: "none" }}>
+            <div>
+              {alerts.length && (
+                <Column className={classes.dropdownItemsContainer}>
+                  {alerts.map((projName) => (
+                    <button
+                      type="button"
+                      key={uuid}
+                      className={classes.dropdownItem}
+                      onClick={() => onItemClick()}
+                    >
+                      {projName}
+                    </button>
+                  ))}
+                </Column>
+              )}
+            </div>
+            <li className="sign-in" />
+          </div>
         )}
       </Column>
     </div>
   );
 }
 
-DropdownComponent.propTypes = {
-  label: oneOfType([string, element]),
-  options: arrayOf(
-    shape({
-      label: oneOfType([string, arrayOf(element)]),
-      onClick: func,
-    })
-  ),
+AlertComponent.propTypes = {
   position: shape({
     top: number,
     right: number,
@@ -155,11 +183,11 @@ DropdownComponent.propTypes = {
   }),
 };
 
-DropdownComponent.defaultProps = {
+AlertComponent.defaultProps = {
   position: {
     top: 52,
     right: -6,
   },
 };
 
-export default DropdownComponent;
+export default AlertComponent;

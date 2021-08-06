@@ -68,6 +68,7 @@ const RegisterNormal = () => {
                 token: "",
                 onboarding: false,
                 documents: [],
+                sizeDocuments: 0,
               })
               .then(() => {
                 localStorage.setItem(
@@ -79,6 +80,7 @@ const RegisterNormal = () => {
                     token: "",
                     onboarding: false,
                     documents: [],
+                    sizeDocuments: 0,
                   })
                 );
                 history.push("/dashboard");

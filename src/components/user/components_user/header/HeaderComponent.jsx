@@ -13,7 +13,8 @@ import firebase from "firebase";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
-import { IconBell, IconSearch } from "../../assets/icons";
+import { IconBell } from "../../assets/icons";
+import AlertComponent from "../alerts/AlertComponent";
 
 const useStyles = createUseStyles(() => ({
   avatar: {
@@ -119,29 +120,8 @@ function HeaderComponent() {
       </span>
       <Row vertical="center">
         <div className={classes.iconStyles}>
-          <IconSearch />
-        </div>
-        <div className={classes.iconStyles}>
-          <DropdownComponent
+          <AlertComponent
             label={<IconBell />}
-            options={[
-              {
-                label: "Notification #1",
-                onClick: () => console.log("Notification #1"),
-              },
-              {
-                label: "Notification #2",
-                onClick: () => console.log("Notification #2"),
-              },
-              {
-                label: "Notification #3",
-                onClick: () => console.log("Notification #3"),
-              },
-              {
-                label: "Notification #4",
-                onClick: () => console.log("Notification #4"),
-              },
-            ]}
             position={{
               top: 42,
               right: -14,

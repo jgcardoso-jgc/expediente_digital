@@ -2,7 +2,6 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable prefer-template */
 /* eslint-disable comma-dangle */
-/* eslint-disable no-unused-vars */
 /* eslint-disable spaced-comment */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
@@ -21,7 +20,7 @@ import styles from "../../../../resources/theme";
 let incode = null;
 
 const globalTheme = createUseStyles(styles);
-const useStyles = createUseStyles((theme) => ({
+const useStyles = createUseStyles(() => ({
   ".idFront": { maxWidth: "200px" },
   ".imgCard": { borderTopLeftRadius: "14px", borderTopRightRadius: "14px" },
   ".scan": { width: "100%" },
@@ -69,7 +68,6 @@ function Documents() {
   const [grantAccess, setAccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("user"));
-  const [image, setImage] = useState("");
   const [docs, setDocs] = useState([]);
   const metadata = {
     contentType: "image/jpeg",
@@ -88,12 +86,6 @@ function Documents() {
       const docArray = [];
       response.forEach((objImg) => {
         docArray.push(objImg);
-        /*const frontId = new Image();
-        frontId.src = url;
-        frontId.style.width = "100%";
-        frontId.style.borderTopLeftRadius = "14px";
-        frontId.style.borderTopRightRadius = "14px";
-        document.getElementById("ineFront").appendChild(frontId);*/
       });
       setDocs(docArray);
       setLoading(false);
@@ -129,7 +121,7 @@ function Documents() {
                   .ref("users")
                   .child("/" + user.email + "/" + key)
                   .putString(imgs[key], "base64", metadata)
-                  .then((res) => {
+                  .then(() => {
                     console.log("uploaded");
                     setLoading(false);
                     document.getElementById("ineFront").appendChild(frontId);
@@ -163,7 +155,7 @@ function Documents() {
                 console.log("founded");
               })
               .catch((err) => {
-                console.log("not founded");
+                console.log("not founded" + err);
                 urls.push({ url: "404", title: "404" });
               })
           );
@@ -286,4 +278,9 @@ export default Documents;
       />
       <button onClick={() => upload()}>Upload</button>
 
-*/
+              /*const frontId = new Image();
+        frontId.src = url;
+        frontId.style.width = "100%";
+        frontId.style.borderTopLeftRadius = "14px";
+        frontId.style.borderTopRightRadius = "14px";
+        document.getElementById("ineFront").appendChild(frontId);*/

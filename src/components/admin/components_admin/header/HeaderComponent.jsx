@@ -13,7 +13,7 @@ import firebase from "firebase";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
-import { IconBell, IconSearch } from "../../assets/icons";
+import { IconBell } from "../../assets/icons";
 
 const useStyles = createUseStyles(() => ({
   avatar: {
@@ -99,6 +99,9 @@ function HeaderComponent() {
     case currentItem === SLUGS.contacts:
       title = "Usuarios";
       break;
+    case currentItem === SLUGS.editUser:
+      title = "Editar Usuario";
+      break;
     case currentItem === SLUGS.settings:
       title = "Settings";
       break;
@@ -122,9 +125,6 @@ function HeaderComponent() {
         </h4>
       </span>
       <Row vertical="center">
-        <div className={classes.iconStyles}>
-          <IconSearch />
-        </div>
         <div className={classes.iconStyles}>
           <DropdownComponent
             label={<IconBell />}

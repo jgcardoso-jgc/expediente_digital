@@ -15,7 +15,6 @@ import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
 import AdminInit from "./components/admin/admin_init";
 import "./App.css";
 import UserInit from "./components/user/user_init";
-//import ProtectedRoute from "./ProtectedRoute";
 
 const useStyles = createUseStyles({
   "@global": {

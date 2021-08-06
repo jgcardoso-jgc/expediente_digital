@@ -26,7 +26,7 @@ const useStyles = createUseStyles({
     paddingRight: "10px",
   },
   containerSearch: {
-    marginTop: "-27px",
+    marginTop: "-32px",
     marginBottom: "14px",
     display: "flex",
     background: "#cccccc",
@@ -35,9 +35,11 @@ const useStyles = createUseStyles({
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     borderRadius: "10px",
     padding: "4px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
   },
   inputPagination: {
-    minWidth: "40%",
+    minWidth: "90%",
     background: "transparent",
     border: "1px",
   },
@@ -99,6 +101,7 @@ const Table = ({ columns, data }) => {
         </span>
         <input
           type="text"
+          placeholder="Buscar"
           className={classes.inputPagination}
           value={globalFilter || ""}
           onChange={(e) => setGlobalFilter(e.target.value)}
@@ -187,9 +190,9 @@ const Table = ({ columns, data }) => {
             setPageSize(Number(e.target.value));
           }}
         >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
+          {[5, 10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
-              Show {pageSize}
+              Mostrar {pageSize}
             </option>
           ))}
         </select>

@@ -43,7 +43,7 @@ function HelloInit() {
           const saved = JSON.parse(localStorage.getItem("user"));
           saved.token = r.token;
           localStorage.setItem("user", JSON.stringify(saved));
-          history.push("/documents");
+          history.push("/documentos");
         },
         onError: (r) => {
           console.log("on error", r);
