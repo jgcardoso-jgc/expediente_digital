@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-console */
@@ -213,10 +214,21 @@ function Onboarding() {
           .where("uid", "==", uid)
           .get()
           .then((snapshot) => {
-            snapshot.docs.forEach((document) => {
+            snapshot.docs.forEach(async (document) => {
+              const doc = await db.collection("users").doc(document.id).get();
+              const { sizeDocuments } = doc.data();
+              const { documents } = doc.data();
+              documents.push(
+                { name: "croppedFrontID", state: true },
+                { name: "croppedBackID", state: true }
+              );
               db.collection("users")
                 .doc(document.id)
-                .update({ onboarding: true })
+                .update({
+                  onboarding: true,
+                  sizeDocuments: sizeDocuments + 2,
+                  documents,
+                })
                 .then(() => {
                   const saved = JSON.parse(localStorage.getItem("user"));
                   saved.onboarding = true;
@@ -249,14 +261,7 @@ function Onboarding() {
       <FrontId session={session} onSuccess={goNext} showError={showError} />
       <BackId session={session} onSuccess={goNext} showError={showError} />
       <ProcessId session={session} onSuccess={goNext} />
-      <Selfie
-        session={session}
-        onSuccess={toFinal}
-        showError={showError}
-        /* const response = await saveUser(session.token);
-          if (response) {
-            console.log("response:" + response); */
-      />
+      <Selfie session={session} onSuccess={toFinal} showError={showError} />
     </Steps>
   );
 }
