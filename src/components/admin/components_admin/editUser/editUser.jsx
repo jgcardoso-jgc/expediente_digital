@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable prefer-destructuring */
@@ -13,6 +14,9 @@ import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
 import "bootstrap/dist/css/bootstrap.css";
 import ModalEdit from "./modal";
+import getState from "./getDocuments";
+import { v4 as uuidv4 } from "uuid";
+// import { toast } from "react-toastify";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -50,7 +54,6 @@ const EditUser = () => {
   const classes = useStyles();
   const global = globalTheme();
   const location = useLocation();
-  console.log(location);
   const documentos = [
     { name: "ID Frontal", state: false },
     { name: "ID reverso", state: false },
@@ -61,47 +64,26 @@ const EditUser = () => {
   const [urlDocs, setUrls] = useState([]);
   const firebase = useFirebaseApp();
   const db = firebase.storage();
+  // const auth = firebase.auth();
   const [show, setShow] = useState(false);
   const [urlView, setUrl] = useState("");
 
   function handleShow(url) {
-    console.log("clicked");
     setUrl(url.url);
     setShow(true);
-    console.log(show);
   }
 
-  async function getState() {
-    const docs = ["croppedFrontID", "croppedBackID"];
-    const urls = [];
-    const promises = [];
-    const email = locData.email;
-    docs.forEach((doc) => {
-      const route = `users/${email}/${doc}`;
-      promises.push(
-        db
-          .ref(route)
-          .getDownloadURL()
-          .then((response) => {
-            urls.push({ url: response, title: doc });
-            console.log("founded");
-          })
-          .catch((err) => {
-            console.log(`not founded${err}`);
-            urls.push({ url: "404", title: "No se encontró" });
-          })
-      );
-    });
-    await Promise.all(promises).then(() => {
-      console.log("all resolved");
+  function getDocs() {
+    getState(db, locData).then((urls) => {
       console.log(urls);
       setUrls(urls);
     });
   }
 
   useEffect(() => {
-    getState();
+    getDocs();
   }, []);
+
   return (
     <div>
       <div className="container max500">
@@ -117,23 +99,17 @@ const EditUser = () => {
           {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
           <p />
           <p>
-            <b>Documentos</b>
+            <b>Documentos Completados</b>
           </p>
-          {documentos.map((doc) => (
-            <label className={classes.checkbox}>
-              <input type="checkbox" checked={doc.state ? "checked" : ""} />
-              {doc.name}
-            </label>
-          ))}
           {urlDocs.length && (
             <div>
               <Row className={classes.rowDocs}>
                 {urlDocs.map((url) => (
-                  <Col className={classes.col}>
+                  <Col className={classes.col} key={uuidv4()}>
                     <div
                       className={`${classes.container} ${classes.pointer}`}
-                      key={url}
                       onKeyPress={() => handleShow(url)}
+                      key={uuidv4()}
                       onClick={() => handleShow(url)}
                     >
                       <p className={classes.center}>{url.title}</p>
@@ -143,6 +119,22 @@ const EditUser = () => {
               </Row>
             </div>
           )}
+          <p>
+            <b>Documentos Pendientes</b>
+          </p>
+          <p>
+            <b>Agregar Documentos</b>
+          </p>
+          {documentos.map((doc) => (
+            <label className={classes.checkbox}>
+              <input
+                type="checkbox"
+                checked={doc.state ? "checked" : ""}
+                readOnly
+              />
+              {doc.name}
+            </label>
+          ))}
           <ModalEdit
             state={show}
             url={urlView}

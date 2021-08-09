@@ -6,18 +6,16 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
-import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import uuid from "react-uuid";
+import { useFirebaseApp } from "reactfire";
 import { createUseStyles, useTheme } from "react-jss";
+import docFunctions from "./getDocuments";
 import toOnboarding from "../../../../assets/toOnboarding.png";
 import facematch from "../../../../assets/facematch.png";
-import onBoardingConfig from "./onBoardingConfig";
 import styles from "../../../../resources/theme";
-
-let incode = null;
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -54,126 +52,58 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-function start() {
-  incode = window.OnBoarding.create(onBoardingConfig);
-}
-
 function Documents() {
-  const firebase = useFirebaseApp();
-  const db = firebase.storage();
   const theme = useTheme();
   const global = globalTheme({ theme });
   const classes = useStyles({ theme });
+  const firebase = useFirebaseApp();
+  const db = firebase.storage();
   const [onBoarding, setOnboarding] = useState(false);
   const [grantAccess, setAccess] = useState(false);
   const [loading, setLoading] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user"));
   const [docs, setDocs] = useState([]);
-  const metadata = {
-    contentType: "image/jpeg",
-  };
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  function exists(response) {
-    let notFound = false;
-    response.forEach((obj) => {
-      if (obj.url === "404") {
-        notFound = true;
-      }
-    });
-    if (notFound) {
-      notExists();
-    } else {
-      const docArray = [];
-      response.forEach((objImg) => {
-        docArray.push(objImg);
-      });
-      setDocs(docArray);
-      setLoading(false);
-    }
-  }
-
-  function notExists() {
-    const script = document.createElement("script");
-    script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js";
-    document.body.appendChild(script);
-    script.onload = () => {
-      start();
-      incode
-        .createSession("ALL", null, {
-          configurationId: "60f0969272a9270015196d70",
-        })
-        .then(async () => {
-          try {
-            const imgs = await incode.getImages({
-              token: user.token,
-              body: { images: ["croppedFrontID", "croppedBackID"] },
+  async function getDocs() {
+    docFunctions.getState(db, user).then((res) => {
+      if (Array.isArray(res)) {
+        setAccess(true);
+        docFunctions.exists(res).then((docArray) => {
+          //docs not exist
+          if (docArray === "not exists") {
+            docFunctions.notExists(db, user).then((resFinal) => {
+              if (resFinal === "all done") {
+                console.log("done!");
+              } else {
+                toast(resFinal);
+              }
+              setLoading(false);
             });
-            const keys = Object.keys(imgs);
-            const promises = [];
-            keys.forEach((key) => {
-              const frontId = new Image();
-              frontId.src = `data:image/png;base64,${imgs[key]}`;
-              frontId.style.width = "100%";
-              frontId.style.borderTopLeftRadius = "14px";
-              frontId.style.borderTopRightRadius = "14px";
-              promises.push(
-                db
-                  .ref("users")
-                  .child("/" + user.email + "/" + key)
-                  .putString(imgs[key], "base64", metadata)
-                  .then(() => {
-                    console.log("uploaded");
-                    setLoading(false);
-                    document.getElementById("ineFront").appendChild(frontId);
-                  })
-              );
-            });
-            await Promise.all(promises).then(console.log("all done"));
-          } catch (e) {
-            toast("Ocurrió un error." + e);
+          } else {
+            //docs exists
+            setDocs(docArray);
+            setLoading(false);
           }
         });
-    };
-  }
-
-  function getState() {
-    console.log(user.token);
-    const docsIncode = ["croppedFrontID", "croppedBackID"];
-    if (user.onboarding) {
-      if (user.token !== "") {
-        setAccess(true);
-        const urls = [];
-        const promises = [];
-        docsIncode.forEach((doc) => {
-          const route = "users/" + user.email + "/" + doc;
-          promises.push(
-            db
-              .ref(route)
-              .getDownloadURL()
-              .then((response) => {
-                urls.push({ url: response, title: doc });
-                console.log("founded");
-              })
-              .catch((err) => {
-                console.log("not founded" + err);
-                urls.push({ url: "404", title: "404" });
-              })
-          );
-        });
-        Promise.all(promises).then(() => {
-          console.log("all resolved");
-          console.log(urls);
-          exists(urls);
-        });
-        return;
       }
-      setOnboarding(true);
-    }
+      if (res === "Set Onboarding") {
+        setOnboarding(true);
+        setLoading(false);
+      }
+      if (res === "same state") {
+        console.log("do nothing");
+        setLoading(false);
+      }
+    });
   }
 
   useEffect(() => {
-    getState();
+    getDocs();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (onBoarding) {
     return (

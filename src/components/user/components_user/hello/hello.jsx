@@ -3,20 +3,23 @@
 import "./hello.css";
 import React, { useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { createUseStyles } from "react-jss";
 import loading from "../../../../assets/loading.gif";
-import logo from "../../../../assets/logo.png";
+import styles from "../../../../resources/theme";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 
-/*
-    <script
-      src="https://sdk-js.s3.amazonaws.com/sdk/hello-1.1.0.js"
-      type="text/javascript"
-    ></script>
-*/
+const globalTheme = createUseStyles(styles);
+const useStyles = createUseStyles({
+  mrAuto: {
+    marginRight: "auto",
+  },
+});
 
 function HelloInit() {
+  const global = globalTheme();
+  const classes = useStyles();
   const containerRef = useRef();
   const helloRef = useRef();
   const history = useHistory();
@@ -54,10 +57,6 @@ function HelloInit() {
   });
   return (
     <div className="App">
-      <div className="flex header">
-        <img src={logo} alt="logo" className="logoFace" />
-        <p className="segText">Seguridata</p>
-      </div>
       <h2 className="faceTitle">Facematch</h2>
       <div ref={containerRef}>
         <img src={loading} className="loadgif" alt="loading..." />
@@ -65,7 +64,7 @@ function HelloInit() {
       <button
         type="button"
         onClick={() => toLoginNormal()}
-        className="problemas logBt"
+        className={`${global.initBt} ${classes.mrAuto}`}
       >
         ¿Tienes problemas?
       </button>

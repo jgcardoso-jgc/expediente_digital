@@ -101,7 +101,8 @@ function Login() {
           <div className={classes.second}>
             <h4 className={classes.title}>Accede ahora</h4>
             <p className={classes.text}>
-              Si ya te has registrado previamente, puedes acceder con tu rostro.
+              Si ya te has registrado previamente, puedes acceder con tus
+              credenciales.
             </p>
             <Link to="/loginNormal" type="button" className={classes.dBlock}>
               <button

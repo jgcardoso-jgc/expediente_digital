@@ -90,12 +90,6 @@ function HeaderComponent() {
     ):
       title = "Overview";
       break;
-    case currentItem === SLUGS.tickets:
-      title = "Tickets";
-      break;
-    case [SLUGS.ideas, SLUGS.ideasTwo, SLUGS.ideasThree].includes(currentItem):
-      title = "Ideas";
-      break;
     case currentItem === SLUGS.contacts:
       title = "Usuarios";
       break;
@@ -103,7 +97,7 @@ function HeaderComponent() {
       title = "Editar Usuario";
       break;
     case currentItem === SLUGS.settings:
-      title = "Settings";
+      title = "Ajustes";
       break;
     default:
       title = "";

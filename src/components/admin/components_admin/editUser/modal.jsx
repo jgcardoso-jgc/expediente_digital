@@ -14,7 +14,9 @@ const ModalEdit = ({ state, onClose, url }) => {
       <Modal.Header onClick={onClose} closeButton>
         <Modal.Title>Login Form</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{url}</Modal.Body>
+      <Modal.Body>
+        <img alt="" src={url} />
+      </Modal.Body>
       <Modal.Footer>
         <Button onClick={onClose} variant="secondary">
           Close Modal

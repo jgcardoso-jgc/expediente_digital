@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
 import React, { useState } from "react";
@@ -41,6 +42,7 @@ const UserView = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [disable, setDisable] = useState(false);
+  const [name, setName] = useState("");
 
   async function submit() {
     try {
@@ -85,6 +87,20 @@ const UserView = () => {
                   id="password"
                   className={classes.inputStyle}
                   onChange={(event) => setPassword(event.target.value)}
+                />
+              </div>
+            </Col>
+            <Col>
+              {" "}
+              <div className="formGroup">
+                <label htmlFor="email" className="block pb10">
+                  Nombre Completo
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  className={classes.inputStyle}
+                  onChange={(event) => setName(event.target.value)}
                 />
               </div>
             </Col>
