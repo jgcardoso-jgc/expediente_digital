@@ -99,7 +99,7 @@ const EditUser = () => {
           {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
           <p />
           <p>
-            <b>Documentos Completados</b>
+            <b>Docs Completados</b>
           </p>
           {urlDocs.length && (
             <div>
