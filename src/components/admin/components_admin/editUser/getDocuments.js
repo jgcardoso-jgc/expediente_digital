@@ -74,6 +74,26 @@ async function setCheckboxes(db, urls) {
   });
 }
 
-const docFunctions = { getState, getDownloadURLS, setCheckboxes };
+async function setPendientes(db, locData) {
+  return new Promise((resolve) => {
+    const { email } = locData;
+    const query = db.collection("users").where("email", "==", email);
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const docs = doc.data().documents;
+        docs.push({ name: "test", state: false });
+        db.collection("users").doc(doc.id).update({ documents: docs });
+        resolve("Se agregó documento a Pendientes");
+      });
+    });
+  });
+}
+
+const docFunctions = {
+  getState,
+  getDownloadURLS,
+  setCheckboxes,
+  setPendientes,
+};
 
 export default docFunctions;

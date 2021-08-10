@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
+import { ToastContainer } from "react-toastify";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
@@ -16,7 +17,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import ModalEdit from "../modal/modal";
 import docFunctions from "./getDocuments";
 import { v4 as uuidv4 } from "uuid";
-// import { toast } from "react-toastify";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -65,11 +65,38 @@ const EditUser = () => {
   const [urlView, setUrl] = useState("");
   const [titleModal, setTitle] = useState("");
   const [cboxes, setCBoxes] = useState([]);
+  const [disabled, setDisabled] = useState(true);
+  const [docsToUpdate, setDocs] = useState([]);
+
+  function handleOnChange(e, cbox) {
+    const isChecked = e.target.checked;
+    const array = docsToUpdate;
+    if (isChecked) {
+      array.push(cbox);
+      setDocs(array);
+    }
+    const checkedBoxes = document.querySelectorAll(
+      "input[type=checkbox]:checked"
+    );
+    const length = checkedBoxes.length;
+    if (length > 0) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }
 
   function handleShow(url) {
     setUrl(url.url);
     setTitle("Documento");
     setShow(true);
+  }
+
+  function updatePendientes() {
+    console.log(docsToUpdate);
+    /* docFunctions.setPendientes(db, locData).then((res) => {
+      toast(res);
+    }); */
   }
 
   function getDocs() {
@@ -89,6 +116,7 @@ const EditUser = () => {
 
   return (
     <div>
+      <ToastContainer />
       <div className="container max500">
         <div className="cardDashboard pt10">
           <div className="row" />
@@ -133,7 +161,10 @@ const EditUser = () => {
             <div>
               {cboxes.map((cbox) => (
                 <label className={classes.checkbox}>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    onChange={(e) => handleOnChange(e, cbox)}
+                  />
                   {cbox}
                 </label>
               ))}
@@ -145,7 +176,12 @@ const EditUser = () => {
             title={titleModal}
             onClose={() => setShow(false)}
           />
-          <button type="button" className={global.initBt}>
+          <button
+            type="button"
+            onClick={() => updatePendientes()}
+            className={global.initBt}
+            disabled={disabled}
+          >
             Agregar Documentos
           </button>
         </div>
