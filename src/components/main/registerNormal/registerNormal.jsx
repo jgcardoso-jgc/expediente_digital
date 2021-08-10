@@ -58,31 +58,21 @@ const RegisterNormal = () => {
         .then((res) => {
           const id = res.user.uid;
           console.log(id);
+          const jsonRegister = {
+            uid: id,
+            fullname: name,
+            email,
+            rfc,
+            token: "",
+            onboarding: false,
+            documents: [],
+            sizeDocuments: 0,
+          };
           try {
             db.collection("users")
-              .add({
-                uid: id,
-                fullname: name,
-                email,
-                rfc,
-                token: "",
-                onboarding: false,
-                documents: [],
-                sizeDocuments: 0,
-              })
+              .add(jsonRegister)
               .then(() => {
-                localStorage.setItem(
-                  "user",
-                  JSON.stringify({
-                    fullName: name,
-                    email,
-                    rfc,
-                    token: "",
-                    onboarding: false,
-                    documents: [],
-                    sizeDocuments: 0,
-                  })
-                );
+                localStorage.setItem("user", JSON.stringify(jsonRegister));
                 history.push("/dashboard");
               });
           } catch (e) {

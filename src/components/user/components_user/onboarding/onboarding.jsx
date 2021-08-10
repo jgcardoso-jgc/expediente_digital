@@ -134,36 +134,6 @@ Selfie.propTypes = {
   showError: PropTypes.func.isRequired,
 };
 
-/* function Conference({ session, onSuccess, showError }) {
-  const [status, setStatus] = useState();
-  const containerRef = useRef();
-
-  useEffect(() => {
-    incode.renderConference(
-      containerRef.current,
-      {
-        token: session
-      },
-      {
-        onSuccess: (status) => {
-          setStatus(status);
-        },
-        onError: (error) => {
-          console.log("error", error);
-          setStatus(error);
-        },
-        onLog: (...params) => console.log("onLog", ...params)
-      }
-    );
-  }, [onSuccess, showError, session]);
-
-  if (status) {
-    return <p>Finished with status {status}</p>;
-  }
-
-  return <div ref={containerRef}></div>;
-} */
-
 function Onboarding() {
   const history = useHistory();
   const firebase = useFirebaseApp();
@@ -219,8 +189,12 @@ function Onboarding() {
               const { sizeDocuments } = doc.data();
               const { documents } = doc.data();
               documents.push(
-                { name: "croppedFrontID", state: true },
-                { name: "croppedBackID", state: true }
+                {
+                  name: "ID Frontal",
+                  imageName: "croppedFrontID",
+                  state: true,
+                },
+                { name: "ID Reverso", imageName: "croppedBackID", state: true }
               );
               db.collection("users")
                 .doc(document.id)
@@ -266,3 +240,33 @@ function Onboarding() {
   );
 }
 export default Onboarding;
+
+/* function Conference({ session, onSuccess, showError }) {
+  const [status, setStatus] = useState();
+  const containerRef = useRef();
+
+  useEffect(() => {
+    incode.renderConference(
+      containerRef.current,
+      {
+        token: session
+      },
+      {
+        onSuccess: (status) => {
+          setStatus(status);
+        },
+        onError: (error) => {
+          console.log("error", error);
+          setStatus(error);
+        },
+        onLog: (...params) => console.log("onLog", ...params)
+      }
+    );
+  }, [onSuccess, showError, session]);
+
+  if (status) {
+    return <p>Finished with status {status}</p>;
+  }
+
+  return <div ref={containerRef}></div>;
+} */

@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
@@ -42,6 +42,9 @@ const useStyles = createUseStyles(() => ({
     cursor: "pointer",
   },
   mt20: { marginTop: "20px" },
+  mb20: {
+    marginBottom: "20px",
+  },
   col: {},
   "@media screen and (max-width:768px)": {
     col: {
@@ -57,6 +60,7 @@ const EditUser = () => {
   const location = useLocation();
   const locData = location.state.objUser;
   const [urlDocs, setUrls] = useState([]);
+  const [pendientes, setPendientes] = useState([]);
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const storage = firebase.storage();
@@ -70,9 +74,12 @@ const EditUser = () => {
 
   function handleOnChange(e, cbox) {
     const isChecked = e.target.checked;
-    const array = docsToUpdate;
+    let array = docsToUpdate;
     if (isChecked) {
       array.push(cbox);
+      setDocs(array);
+    } else {
+      array = array.filter((element) => element !== cbox);
       setDocs(array);
     }
     const checkedBoxes = document.querySelectorAll(
@@ -93,20 +100,22 @@ const EditUser = () => {
   }
 
   function updatePendientes() {
-    console.log(docsToUpdate);
-    /* docFunctions.setPendientes(db, locData).then((res) => {
+    docFunctions.setPendientes(db, docsToUpdate, locData).then((res) => {
       toast(res);
-    }); */
+    });
   }
 
   function getDocs() {
     docFunctions.getState(db, locData).then((docArray) => {
-      docFunctions.getDownloadURLS(storage, docArray, locData).then((urls) => {
-        setUrls(urls);
-        docFunctions.setCheckboxes(db, urls).then((chboxes) => {
-          setCBoxes(chboxes);
+      docFunctions
+        .getDownloadURLS(storage, docArray, locData)
+        .then((arrayUrls) => {
+          setUrls(arrayUrls[0]);
+          setPendientes(arrayUrls[1]);
+          docFunctions.setCheckboxes(db, arrayUrls).then((chboxes) => {
+            setCBoxes(chboxes);
+          });
         });
-      });
     });
   }
 
@@ -153,11 +162,30 @@ const EditUser = () => {
           <p className={classes.mt20}>
             <b>Documentos Pendientes</b>
           </p>
-          <p> No hay documentos pendientes</p>
+          {pendientes.length > 0 ? (
+            <div>
+              <Row className={`${classes.rowDocs} ${classes.mb20}`}>
+                {pendientes.map((url) => (
+                  <Col className={classes.col} key={uuidv4()}>
+                    <div
+                      className={`${classes.container} ${classes.pointer}`}
+                      onKeyPress={() => handleShow(url)}
+                      key={uuidv4()}
+                      onClick={() => handleShow(url)}
+                    >
+                      <p className={classes.center}>{url.title}</p>
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          ) : (
+            <div>No hay documentos pendientes</div>
+          )}
           <p>
             <b>Agregar Documentos</b>
           </p>
-          {cboxes.length && (
+          {cboxes.length > 0 ? (
             <div>
               {cboxes.map((cbox) => (
                 <label className={classes.checkbox}>
@@ -169,6 +197,8 @@ const EditUser = () => {
                 </label>
               ))}
             </div>
+          ) : (
+            <div>Ya se solicitaron todos los documentos disponibles</div>
           )}
           <ModalEdit
             state={show}

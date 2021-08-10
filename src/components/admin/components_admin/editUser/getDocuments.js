@@ -19,35 +19,33 @@ async function getState(db, locData) {
 async function getDownloadURLS(storage, docsArray, locData) {
   return new Promise((resolve) => {
     const urls = [];
+    const pendientes = [];
     const promises = [];
     const { email } = locData;
     docsArray.forEach((doc) => {
-      const route = `users/${email}/${doc.name}`;
+      const route = `users/${email}/${doc.imageName}`;
       promises.push(
         storage
           .ref(route)
           .getDownloadURL()
           .then((response) => {
-            let { name } = doc;
-            if (doc.name === "croppedBackID") {
-              name = "ID Reverso";
+            if (!doc.state) {
+              // se ha subido el documento, pero aun no se aprueba por el admin
+              pendientes.push({ url: response, title: doc.name });
+            } else {
+              urls.push({ url: response, title: doc.name });
+              console.log("founded");
             }
-            if (doc.name === "croppedFrontID") {
-              name = "ID Frontal";
-            }
-            urls.push({ url: response, title: name });
-            console.log("founded");
           })
-          .catch((err) => {
-            console.log(`not founded${err}`);
-            urls.push({ url: "404", title: "No se encontró" });
+          .catch(() => {
+            pendientes.push({ url: "404", title: doc.name });
           })
       );
     });
     Promise.all(promises).then(() => {
       console.log("all resolved");
       console.log(urls);
-      resolve(urls);
+      resolve([urls, pendientes]);
     });
   });
 }
@@ -59,12 +57,18 @@ async function setCheckboxes(db, urls) {
     query.get().then((querySnapshot) => {
       querySnapshot.forEach((docs) => {
         const { lista } = docs.data();
-        const keys = Object.keys(urls);
+        const keysComp = Object.keys(urls[0]);
+        const keysPend = Object.keys(urls[1]);
+        const completados = urls[0];
+        const pendientes = urls[1];
         lista.forEach((docElement) => {
-          const found = keys.some(
-            (key) => urls[key].title === docElement.nombre
+          const found = keysComp.some(
+            (key) => completados[key].title === docElement.nombre
           );
-          if (!found) {
+          const pendiente = keysPend.some(
+            (key) => pendientes[key].title === docElement.nombre
+          );
+          if (!found && !pendiente) {
             checkboxes.push(docElement.nombre);
           }
         });
@@ -74,14 +78,16 @@ async function setCheckboxes(db, urls) {
   });
 }
 
-async function setPendientes(db, locData) {
+async function setPendientes(db, docsToUpdate, locData) {
   return new Promise((resolve) => {
     const { email } = locData;
     const query = db.collection("users").where("email", "==", email);
     query.get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const docs = doc.data().documents;
-        docs.push({ name: "test", state: false });
+        docsToUpdate.forEach((newDoc) => {
+          docs.push({ name: newDoc, imageName: newDoc, state: false });
+        });
         db.collection("users").doc(doc.id).update({ documents: docs });
         resolve("Se agregó documento a Pendientes");
       });
