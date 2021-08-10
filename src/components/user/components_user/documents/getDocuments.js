@@ -50,7 +50,14 @@ function getState(db, user) {
               .ref(route)
               .getDownloadURL()
               .then((response) => {
-                urls.push({ url: response, title: doc });
+                let title = doc;
+                if (doc === "croppedBackID") {
+                  title = "ID Reverso";
+                }
+                if (doc === "croppedFrontID") {
+                  title = "ID Frontal";
+                }
+                urls.push({ url: response, title });
                 console.log("founded");
               })
               .catch((err) => {

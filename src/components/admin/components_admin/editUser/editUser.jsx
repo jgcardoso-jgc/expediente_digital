@@ -13,8 +13,8 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
 import "bootstrap/dist/css/bootstrap.css";
-import ModalEdit from "./modal";
-import getState from "./getDocuments";
+import ModalEdit from "../modal/modal";
+import docFunctions from "./getDocuments";
 import { v4 as uuidv4 } from "uuid";
 // import { toast } from "react-toastify";
 
@@ -41,6 +41,7 @@ const useStyles = createUseStyles(() => ({
   pointer: {
     cursor: "pointer",
   },
+  mt20: { marginTop: "20px" },
   col: {},
   "@media screen and (max-width:768px)": {
     col: {
@@ -54,29 +55,31 @@ const EditUser = () => {
   const classes = useStyles();
   const global = globalTheme();
   const location = useLocation();
-  const documentos = [
-    { name: "ID Frontal", state: false },
-    { name: "ID reverso", state: false },
-    { name: "RFC", state: false },
-    { name: "Comprobante de Domicilio", state: false },
-  ];
   const locData = location.state.objUser;
   const [urlDocs, setUrls] = useState([]);
   const firebase = useFirebaseApp();
-  const db = firebase.storage();
+  const db = firebase.firestore();
+  const storage = firebase.storage();
   // const auth = firebase.auth();
   const [show, setShow] = useState(false);
   const [urlView, setUrl] = useState("");
+  const [titleModal, setTitle] = useState("");
+  const [cboxes, setCBoxes] = useState([]);
 
   function handleShow(url) {
     setUrl(url.url);
+    setTitle("Documento");
     setShow(true);
   }
 
   function getDocs() {
-    getState(db, locData).then((urls) => {
-      console.log(urls);
-      setUrls(urls);
+    docFunctions.getState(db, locData).then((docArray) => {
+      docFunctions.getDownloadURLS(storage, docArray, locData).then((urls) => {
+        setUrls(urls);
+        docFunctions.setCheckboxes(db, urls).then((chboxes) => {
+          setCBoxes(chboxes);
+        });
+      });
     });
   }
 
@@ -119,25 +122,27 @@ const EditUser = () => {
               </Row>
             </div>
           )}
-          <p>
+          <p className={classes.mt20}>
             <b>Documentos Pendientes</b>
           </p>
+          <p> No hay documentos pendientes</p>
           <p>
             <b>Agregar Documentos</b>
           </p>
-          {documentos.map((doc) => (
-            <label className={classes.checkbox}>
-              <input
-                type="checkbox"
-                checked={doc.state ? "checked" : ""}
-                readOnly
-              />
-              {doc.name}
-            </label>
-          ))}
+          {cboxes.length && (
+            <div>
+              {cboxes.map((cbox) => (
+                <label className={classes.checkbox}>
+                  <input type="checkbox" />
+                  {cbox}
+                </label>
+              ))}
+            </div>
+          )}
           <ModalEdit
             state={show}
             url={urlView}
+            title={titleModal}
             onClose={() => setShow(false)}
           />
           <button type="button" className={global.initBt}>

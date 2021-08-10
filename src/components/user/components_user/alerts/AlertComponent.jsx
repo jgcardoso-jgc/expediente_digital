@@ -105,7 +105,8 @@ function AlertComponent({ position, label }) {
     await query.get().then((querySnapshot) => {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
-          al.push(doc.data().rfc);
+          console.log(doc);
+          // al.push(doc.data().rfc);
         });
       }
       setAlerts(al);

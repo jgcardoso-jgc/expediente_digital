@@ -3,18 +3,39 @@
 /* eslint-disable quotes */
 async function getState(db, locData) {
   return new Promise((resolve) => {
-    const docs = ["croppedFrontID", "croppedBackID"];
+    const { email } = locData;
+    const query = db.collection("users").where("email", "==", email);
+    query.get().then((querySnapshot) => {
+      if (querySnapshot.size > 0) {
+        querySnapshot.forEach((doc) => {
+          const docs = doc.data().documents;
+          resolve(docs);
+        });
+      }
+    });
+  });
+}
+
+async function getDownloadURLS(storage, docsArray, locData) {
+  return new Promise((resolve) => {
     const urls = [];
     const promises = [];
     const { email } = locData;
-    docs.forEach((doc) => {
-      const route = `users/${email}/${doc}`;
+    docsArray.forEach((doc) => {
+      const route = `users/${email}/${doc.name}`;
       promises.push(
-        db
+        storage
           .ref(route)
           .getDownloadURL()
           .then((response) => {
-            urls.push({ url: response, title: doc });
+            let { name } = doc;
+            if (doc.name === "croppedBackID") {
+              name = "ID Reverso";
+            }
+            if (doc.name === "croppedFrontID") {
+              name = "ID Frontal";
+            }
+            urls.push({ url: response, title: name });
             console.log("founded");
           })
           .catch((err) => {
@@ -31,4 +52,28 @@ async function getState(db, locData) {
   });
 }
 
-export default getState;
+async function setCheckboxes(db, urls) {
+  return new Promise((resolve) => {
+    const checkboxes = [];
+    const query = db.collection("documentos");
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((docs) => {
+        const { lista } = docs.data();
+        const keys = Object.keys(urls);
+        lista.forEach((docElement) => {
+          const found = keys.some(
+            (key) => urls[key].title === docElement.nombre
+          );
+          if (!found) {
+            checkboxes.push(docElement.nombre);
+          }
+        });
+        resolve(checkboxes);
+      });
+    });
+  });
+}
+
+const docFunctions = { getState, getDownloadURLS, setCheckboxes };
+
+export default docFunctions;
