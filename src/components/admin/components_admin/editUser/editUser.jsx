@@ -180,7 +180,7 @@ const EditUser = () => {
               </Row>
             </div>
           ) : (
-            <div>No hay documentos pendientes</div>
+            <div className={classes.mb20}>No hay documentos pendientes</div>
           )}
           <p>
             <b>Agregar Documentos</b>
@@ -193,7 +193,7 @@ const EditUser = () => {
                     type="checkbox"
                     onChange={(e) => handleOnChange(e, cbox)}
                   />
-                  {cbox}
+                  {cbox.nombre}
                 </label>
               ))}
             </div>

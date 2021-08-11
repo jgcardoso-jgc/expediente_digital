@@ -31,9 +31,17 @@ async function getDownloadURLS(storage, docsArray, locData) {
           .then((response) => {
             if (!doc.state) {
               // se ha subido el documento, pero aun no se aprueba por el admin
-              pendientes.push({ url: response, title: doc.name });
+              pendientes.push({
+                url: response,
+                title: doc.name,
+                imageName: doc.imageName,
+              });
             } else {
-              urls.push({ url: response, title: doc.name });
+              urls.push({
+                url: response,
+                title: doc.name,
+                imageName: doc.imageName,
+              });
               console.log("founded");
             }
           })
@@ -69,7 +77,10 @@ async function setCheckboxes(db, urls) {
             (key) => pendientes[key].title === docElement.nombre
           );
           if (!found && !pendiente) {
-            checkboxes.push(docElement.nombre);
+            checkboxes.push({
+              nombre: docElement.nombre,
+              nombreImagen: docElement.nombreImagen,
+            });
           }
         });
         resolve(checkboxes);
@@ -86,7 +97,11 @@ async function setPendientes(db, docsToUpdate, locData) {
       querySnapshot.forEach((doc) => {
         const docs = doc.data().documents;
         docsToUpdate.forEach((newDoc) => {
-          docs.push({ name: newDoc, imageName: newDoc, state: false });
+          docs.push({
+            name: newDoc.nombre,
+            imageName: newDoc.nombreImagen,
+            state: false,
+          });
         });
         db.collection("users").doc(doc.id).update({ documents: docs });
         resolve("Se agregó documento a Pendientes");
