@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-console */
 /* eslint-disable react/prop-types */
@@ -8,6 +9,7 @@
 /* eslint-disable quotes */
 import React, { useState, useEffect, useRef } from "react";
 import { useFirebaseApp } from "reactfire";
+import { Link } from "react-router-dom";
 import { number, shape } from "prop-types";
 import { Column } from "simple-flexbox";
 import uuid from "react-uuid";
@@ -48,6 +50,10 @@ const useStyles = createUseStyles(() => ({
     "& button:first-of-type:hover div > svg > path": {
       fill: "#DDE2FF",
     },
+  },
+  verTodas: {
+    minWidth: "100%",
+    color: "blue",
   },
   dropdownItem: {
     cursor: "pointer",
@@ -94,7 +100,7 @@ function AlertComponent({ position, label }) {
       console.log("verified");
     } else {
       console.log("not verified");
-      al.push("No has confirmado tu correo.");
+      al.push("No has confirmado tu correo");
     }
     const user = firebase.auth().currentUser;
     let uid = "";
@@ -105,8 +111,12 @@ function AlertComponent({ position, label }) {
     await query.get().then((querySnapshot) => {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
-          console.log(doc);
-          // al.push(doc.data().rfc);
+          const docs = doc.data().documents;
+          docs.forEach((states) => {
+            if (!states.state) {
+              al.push(`Sube el siguiente documento: ${states.name}`);
+            }
+          });
         });
       }
       setAlerts(al);
@@ -147,7 +157,7 @@ function AlertComponent({ position, label }) {
           className={classes.dropdownButton}
           onClick={() => onDropdownClick()}
         >
-          {label}
+          {label} <span>{alerts.length}</span>
         </button>
         {userMenuOpen && (
           <div style={{ listStyleType: "none" }}>
@@ -164,6 +174,14 @@ function AlertComponent({ position, label }) {
                       {projName}
                     </button>
                   ))}
+                  <Link to="/alertas">
+                    <button
+                      type="button"
+                      className={`${classes.dropdownItem} ${classes.verTodas}`}
+                    >
+                      Ver todas
+                    </button>
+                  </Link>
                 </Column>
               )}
             </div>
