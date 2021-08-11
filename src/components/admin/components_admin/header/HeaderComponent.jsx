@@ -160,11 +160,11 @@ function HeaderComponent() {
           }
           options={[
             {
-              label: "Settings",
+              label: "Ajustes",
               onClick: onSettingsClick,
             },
             {
-              label: "Logout",
+              label: "Salir",
               onClick: () => logOut(),
             },
           ]}

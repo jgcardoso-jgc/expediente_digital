@@ -4,7 +4,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
@@ -79,6 +79,7 @@ function HeaderComponent() {
   const { push } = useHistory();
   const { currentItem } = useContext(SidebarContext);
   const theme = useTheme();
+  const [user, setUser] = useState("");
   const classes = useStyles({ theme });
 
   let title;
@@ -106,6 +107,11 @@ function HeaderComponent() {
     push(SLUGS.settings);
   }
 
+  useEffect(() => {
+    const userGet = localStorage.getItem("user");
+    setUser(JSON.parse(userGet));
+  }, []);
+
   return (
     <Row
       className={classes.container}
@@ -132,7 +138,7 @@ function HeaderComponent() {
         <DropdownComponent
           label={
             <>
-              <span className={classes.name}>User</span>
+              <span className={classes.name}>{user.fullName}</span>
               <img
                 src="https://avatars.githubusercontent.com/sofseguridata"
                 alt="avatar"
@@ -142,11 +148,11 @@ function HeaderComponent() {
           }
           options={[
             {
-              label: "Settings",
+              label: "Ajustes",
               onClick: onSettingsClick,
             },
             {
-              label: "Logout",
+              label: "Salir",
               onClick: () => logOut(),
             },
           ]}

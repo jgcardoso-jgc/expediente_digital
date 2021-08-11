@@ -6,4 +6,5 @@ export default {
   documentos: "/documentos",
   settings: "/ajustes",
   alerts: "/alertas",
+  subirDocumentos: "/subir",
 };

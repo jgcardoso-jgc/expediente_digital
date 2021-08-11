@@ -32,6 +32,21 @@ const useStyles = createUseStyles(() => ({
     borderBottom: "1px solid rgb(194, 194, 194)",
     fontSize: "16px",
   },
+  left: {
+    textAlign: "left",
+  },
+  right: {
+    textAlign: "right",
+  },
+  link: {
+    display: "block",
+    textAlign: "right",
+    paddingTop: "10px",
+    marginLeft: "auto",
+  },
+  pt10: {
+    paddingTop: "10px",
+  },
   regText: { marginBottom: "4px", paddingTop: "20px" },
   expText: { marginTop: "4px" },
   pb4: { paddingBottom: "4px" },
@@ -51,37 +66,36 @@ const RegisterNormal = () => {
   const [password, setPassword] = useState("");
   const [rfc, setRfc] = useState("");
   const submit = async () => {
-    try {
-      await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then((res) => {
-          const id = res.user.uid;
-          console.log(id);
-          const jsonRegister = {
-            uid: id,
-            fullname: name,
-            email,
-            rfc,
-            token: "",
-            onboarding: false,
-            documents: [],
-            sizeDocuments: 0,
-          };
-          try {
-            db.collection("users")
-              .add(jsonRegister)
-              .then(() => {
-                localStorage.setItem("user", JSON.stringify(jsonRegister));
-                history.push("/dashboard");
-              });
-          } catch (e) {
-            toast(e);
-          }
-        });
-    } catch (e) {
-      toast(e);
-    }
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((res) => {
+        const id = res.user.uid;
+        console.log(id);
+        const jsonRegister = {
+          uid: id,
+          fullname: name,
+          email,
+          rfc,
+          token: "",
+          onboarding: false,
+          documents: [],
+          sizeDocuments: 0,
+        };
+        try {
+          db.collection("users")
+            .add(jsonRegister)
+            .then(() => {
+              localStorage.setItem("user", JSON.stringify(jsonRegister));
+              history.push("/dashboard");
+            });
+        } catch (error) {
+          toast(error.message);
+        }
+      })
+      .catch((error) => {
+        toast(error.message);
+      });
   };
   return (
     <div className="center">
@@ -89,12 +103,14 @@ const RegisterNormal = () => {
       <ToastContainer />
       <div className="container max400 pt40 pt0-sm">
         <div>
-          <h2 className={classes.regText}>
+          <h2 className={`${classes.regText} ${classes.left}`}>
             <b>Regístrate</b>
           </h2>
-          <p className="expText">Ingresa tus datos</p>
+          <p className={classes.left}>
+            <b>Ingresa tus datos</b>
+          </p>
         </div>
-        <div className="formGroup">
+        <div className={classes.left}>
           <label htmlFor="email" className="block pb4">
             Nombre Completo
           </label>
@@ -105,7 +121,7 @@ const RegisterNormal = () => {
             onChange={(event) => setName(event.target.value)}
           />
         </div>
-        <div className="formGroup pt10">
+        <div className={`${classes.left} ${classes.pt10}`}>
           <label htmlFor="email" className="block pb4">
             Correo electrónico
           </label>
@@ -116,7 +132,7 @@ const RegisterNormal = () => {
             onChange={(event) => setEmail(event.target.value)}
           />
         </div>
-        <div className="formGroup pt10">
+        <div className={`${classes.left} ${classes.pt10}`}>
           <label htmlFor="email" className="block pb4">
             RFC
           </label>
@@ -127,7 +143,7 @@ const RegisterNormal = () => {
             onChange={(event) => setRfc(event.target.value)}
           />
         </div>
-        <div className="formGroup pt10">
+        <div className={`${classes.left} ${classes.pt10}`}>
           <label htmlFor="password" className="block pb10 pt4">
             Contraseña
           </label>
@@ -141,9 +157,15 @@ const RegisterNormal = () => {
         <button type="button" className={global.initBt} onClick={submit}>
           Registrarse
         </button>
-        <Link className="right d-block pt10" to="./loginNormal">
-          ¿Ya tienes una cuenta?
-        </Link>
+        <div className={classes.right}>
+          <Link
+            className={classes.link}
+            style={{ display: "inline-block" }}
+            to="./loginNormal"
+          >
+            ¿Ya tienes una cuenta?
+          </Link>
+        </div>
       </div>
       <Waves />
     </div>

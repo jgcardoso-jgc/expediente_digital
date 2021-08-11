@@ -75,3 +75,9 @@ h1 {
 /* Continue Button */
 .IncodeTutorialButtonFront {
 }
+
+@media (min-width: 768px) {
+  .fit {
+    width: auto !important;
+  }
+}

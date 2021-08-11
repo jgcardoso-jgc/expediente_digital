@@ -9,7 +9,7 @@
 /* eslint-disable quotes */
 import React, { useState, useEffect, useRef } from "react";
 import { useFirebaseApp } from "reactfire";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { number, shape } from "prop-types";
 import { Column } from "simple-flexbox";
 import uuid from "react-uuid";
@@ -37,7 +37,7 @@ const useStyles = createUseStyles(() => ({
     background: "white",
     border: "1px solid #DFE0EB",
     borderRadius: 5,
-    minWidth: 170,
+    minWidth: 250,
     padding: 0,
     WebkitBoxShadow: "0px 14px 28px 3px #CACACA",
     boxShadow: "0px 14px 28px 3px #CACACA",
@@ -59,7 +59,7 @@ const useStyles = createUseStyles(() => ({
     cursor: "pointer",
     background: "transparent",
     border: "none",
-    fontSize: 16,
+    fontSize: 14,
     outline: "none",
     padding: "10px 10px",
     "&:hover": {
@@ -82,6 +82,7 @@ const useStyles = createUseStyles(() => ({
 }));
 
 function AlertComponent({ position, label }) {
+  const history = useHistory();
   const ref = useRef();
   const firebase = useFirebaseApp();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -133,7 +134,7 @@ function AlertComponent({ position, label }) {
   };
 
   function onItemClick() {
-    console.log("clicked");
+    history.push("/subir");
   }
 
   useEffect(() => {

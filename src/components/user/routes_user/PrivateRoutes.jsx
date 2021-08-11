@@ -12,6 +12,7 @@ import Onboarding from "../components_user/onboarding/onboarding";
 import ToOnBoarding from "../components_user/toOnboarding/toOnboarding";
 import FinalStep from "../components_user/finalSteps/finalStep";
 import AjustesUser from "../components_user/ajustes/ajustes";
+import SubirDocumentos from "../components_user/subirDocumento/subirDocumento";
 
 const DashboardComponent = lazy(() => import("../components_user/dashboard"));
 
@@ -27,6 +28,7 @@ function PrivateRoutes() {
         <Route exact path="/toOnboarding" render={() => <ToOnBoarding />} />
         <Route exact path="/finalStep" render={() => <FinalStep />} />
         <Route exact path="/alertas" render={() => <AlertasPagina />} />
+        <Route exact path={SLUGS.subir} render={() => <SubirDocumentos />} />
         <Route exact path={SLUGS.settings} render={() => <AjustesUser />} />
         <Redirect to={SLUGS.dashboard} />
       </Switch>

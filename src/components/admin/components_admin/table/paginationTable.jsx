@@ -169,7 +169,7 @@ const Table = ({ columns, data }) => {
         <span>
           Página{" "}
           <strong>
-            {pageIndex + 1} of {pageOptions.length}
+            {pageIndex + 1} de {pageOptions.length}
           </strong>{" "}
         </span>
         <span>
@@ -200,7 +200,7 @@ const Table = ({ columns, data }) => {
 
       <br />
       <div>
-        Mostrando {pageSize} de {rows.length} resultados
+        Mostrando {rows.length} de {pageSize} resultados
       </div>
       <div>
         <pre>

@@ -14,7 +14,7 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-function UnresolvedTicketsComponent({ containerStyles }) {
+function DocumentsCard({ containerStyles }) {
   const theme = useTheme();
   const classes = useStyles({ theme });
 
@@ -34,8 +34,8 @@ function UnresolvedTicketsComponent({ containerStyles }) {
       containerStyles={containerStyles}
       title="Documentos"
       link="/documentos"
-      subtitle="Group:"
-      subtitleTwo="Support"
+      subtitle="Completados:"
+      subtitleTwo="0"
       items={[
         renderStat("Waiting on Feature Request", 4238),
         renderStat("Awaiting Customer Response", 1005),
@@ -46,4 +46,4 @@ function UnresolvedTicketsComponent({ containerStyles }) {
   );
 }
 
-export default UnresolvedTicketsComponent;
+export default DocumentsCard;

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
@@ -15,7 +16,7 @@ import loading from "../../../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
 import settings from "./settings";
 import "react-toastify/dist/ReactToastify.css";
-// import { saveUser } from "./api";
+import onboardingSDK from "../../../../config/onboarding-config";
 
 let incode = null;
 function start() {
@@ -138,19 +139,22 @@ function Onboarding() {
   const history = useHistory();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
+  const { url } = onboardingSDK;
+  const configID = onboardingSDK.idConfig;
+  console.log(configID);
   const [session, setSession] = useState("");
   const [step, setStep] = useState(0);
   const [error, setError] = useState(false);
   useEffect(() => {
     console.log("incode...");
     const script = document.createElement("script");
-    script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.33.0.js";
+    script.src = url;
     document.body.appendChild(script);
     script.onload = () => {
       start();
       incode
         .createSession("ALL", null, {
-          configurationId: "60f0969272a9270015196d70",
+          configurationId: configID,
         })
         .then(async (sessionRes) => {
           await incode.warmup();

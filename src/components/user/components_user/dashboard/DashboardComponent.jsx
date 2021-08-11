@@ -2,8 +2,8 @@
 import React from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
-import UnresolvedTicketsComponent from "./UnresolvedTicketsComponent";
-import TasksComponent from "./TasksComponent";
+import DocumentsCard from "./cardView";
+import AlertCard from "./alertCard";
 
 const useStyles = createUseStyles({
   cardsContainer: {
@@ -45,10 +45,8 @@ function DashboardComponent() {
         className={classes.lastRow}
         breakpoints={{ 1024: "column" }}
       >
-        <UnresolvedTicketsComponent
-          containerStyles={classes.unresolvedTickets}
-        />
-        <TasksComponent containerStyles={classes.tasks} />
+        <DocumentsCard containerStyles={classes.unresolvedTickets} />
+        <AlertCard containerStyles={classes.unresolvedTickets} />
       </Row>
     </Column>
   );

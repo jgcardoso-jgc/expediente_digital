@@ -227,16 +227,7 @@ function Documents() {
 
 export default Documents;
 
-/*
-      <input
-        type="file"
-        onChange={(e) => {
-          setImage(e.target.files[0]);
-        }}
-      />
-      <button onClick={() => upload()}>Upload</button>
-
-              /*const frontId = new Image();
+/*const frontId = new Image();
         frontId.src = url;
         frontId.style.width = "100%";
         frontId.style.borderTopLeftRadius = "14px";

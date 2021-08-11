@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import { useFirebaseApp } from "reactfire";
 import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
+import { FaEdit } from "react-icons/fa";
 import Table from "./paginationTable";
 
 const useStyles = createUseStyles({
@@ -114,7 +115,7 @@ function TableView() {
                   className={classes.editButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
-                  Edit
+                  <FaEdit />
                 </button>
               </div>
             ),
