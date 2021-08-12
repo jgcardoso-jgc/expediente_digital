@@ -1,34 +1,55 @@
 /* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 /* eslint-disable quotes */
-import React from "react";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { createUseStyles } from "react-jss";
+import { ToastContainer, toast } from "react-toastify";
+import { useFirebaseApp } from "reactfire";
+import styles from "../../../../resources/theme";
 
 function SubirDocumentos() {
+  const location = useLocation();
+  const globalTheme = createUseStyles(styles);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [file, setFile] = useState("");
+  const firebase = useFirebaseApp();
+  const db = firebase.storage();
+  const locData = location.state.doc;
+  const global = globalTheme();
+
+  function setImage(fileSelected) {
+    setFile(fileSelected);
+  }
+
   function uploadFile() {
     db.ref("users")
-      .child(`/${user.email}/croppedFace`)
-      .putString(imgs.croppedFace, "base64", metadata)
+      .child(`/${user.email}/test`)
+      .put(file)
       .then(() => {
         console.log("uploaded");
-        setLoading(false);
-        document.getElementById("pic").appendChild(frontId);
       })
       .catch((e) => {
         toast(`Ocurrió un error.${e}`);
       });
   }
+
   return (
     <div>
-      {" "}
+      <ToastContainer />
+      <h3>{locData}</h3>
       <input
         type="file"
+        accept="image/png, image/jpeg"
         onChange={(e) => {
           setImage(e.target.files[0]);
         }}
       />
-      <button type="button" onClick={() => upload()}>
-        Upload
+      <button
+        type="button"
+        className={global.initBt}
+        onClick={() => uploadFile()}
+      >
+        Subir archivo
       </button>
     </div>
   );

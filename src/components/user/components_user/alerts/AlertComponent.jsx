@@ -14,6 +14,7 @@ import { number, shape } from "prop-types";
 import { Column } from "simple-flexbox";
 import uuid from "react-uuid";
 import { createUseStyles, useTheme } from "react-jss";
+import { FaFileAlt } from "react-icons/fa";
 
 const useStyles = createUseStyles(() => ({
   arrowContainer: {
@@ -33,10 +34,14 @@ const useStyles = createUseStyles(() => ({
   dropdownContainer: {
     position: "relative",
   },
+  flex: {
+    display: "flex",
+    padding: "10px 10px",
+  },
   dropdownItemsContainer: {
     background: "white",
     border: "1px solid #DFE0EB",
-    borderRadius: 5,
+    borderRadius: 7,
     minWidth: 250,
     padding: 0,
     WebkitBoxShadow: "0px 14px 28px 3px #CACACA",
@@ -54,6 +59,28 @@ const useStyles = createUseStyles(() => ({
   verTodas: {
     minWidth: "100%",
     color: "blue",
+    textAlign: "center",
+    background: "transparent",
+    border: 0,
+    fontSize: "14px",
+  },
+  alertTitle: {
+    background: "#4e73df",
+    minWidth: "100%",
+    color: "white",
+    padding: "10px 0px 4px 10px",
+    borderTopLeftRadius: "7px",
+    borderTopRightRadius: "7px",
+  },
+  circle: {
+    height: "37px",
+    minWidth: "37px",
+    borderRadius: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#4e73df",
+    color: "white",
   },
   dropdownItem: {
     cursor: "pointer",
@@ -61,7 +88,7 @@ const useStyles = createUseStyles(() => ({
     border: "none",
     fontSize: 14,
     outline: "none",
-    padding: "10px 10px",
+    textAlign: "left",
     "&:hover": {
       background: "#DDE2FF",
     },
@@ -101,7 +128,7 @@ function AlertComponent({ position, label }) {
       console.log("verified");
     } else {
       console.log("not verified");
-      al.push("No has confirmado tu correo");
+      al.push({ message: "No has confirmado tu correo", doc: "" });
     }
     const user = firebase.auth().currentUser;
     let uid = "";
@@ -115,7 +142,10 @@ function AlertComponent({ position, label }) {
           const docs = doc.data().documents;
           docs.forEach((states) => {
             if (!states.state) {
-              al.push(`Sube el siguiente documento: ${states.name}`);
+              al.push({
+                message: `Sube el siguiente documento: ${states.name}`,
+                doc: states.imageName,
+              });
             }
           });
         });
@@ -133,8 +163,12 @@ function AlertComponent({ position, label }) {
     setUserMenuOpen(false);
   };
 
-  function onItemClick() {
-    history.push("/subir");
+  function onItemClick(doc) {
+    history.push({
+      pathname: "/subir",
+      state: { doc },
+    });
+    setUserMenuOpen(false);
   }
 
   useEffect(() => {
@@ -165,21 +199,24 @@ function AlertComponent({ position, label }) {
             <div>
               {alerts.length && (
                 <Column className={classes.dropdownItemsContainer}>
+                  <div className={classes.alertTitle}>Notificaciones</div>
                   {alerts.map((projName) => (
-                    <button
-                      type="button"
-                      key={uuid}
-                      className={classes.dropdownItem}
-                      onClick={() => onItemClick()}
-                    >
-                      {projName}
-                    </button>
+                    <div className={classes.flex}>
+                      <div className={classes.circle}>
+                        <FaFileAlt />
+                      </div>
+                      <button
+                        type="button"
+                        key={uuid}
+                        className={classes.dropdownItem}
+                        onClick={() => onItemClick(projName.doc)}
+                      >
+                        {projName.message}
+                      </button>
+                    </div>
                   ))}
                   <Link to="/alertas">
-                    <button
-                      type="button"
-                      className={`${classes.dropdownItem} ${classes.verTodas}`}
-                    >
+                    <button type="button" className={`${classes.verTodas}`}>
                       Ver todas
                     </button>
                   </Link>

@@ -99,6 +99,9 @@ function HeaderComponent() {
     case currentItem === SLUGS.alerts:
       title = "Alertas";
       break;
+    case currentItem === SLUGS.subirDocumentos:
+      title = "Subir Documento";
+      break;
     default:
       title = "";
   }
