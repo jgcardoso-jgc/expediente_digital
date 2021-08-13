@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 /* eslint-disable quotes */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
+import { useFirebaseApp } from "reactfire";
 import DocumentsCard from "./cardView";
 import AlertCard from "./alertCard";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
@@ -46,6 +48,31 @@ const useStyles = createUseStyles({
 });
 
 function DashboardComponent() {
+  const firebase = useFirebaseApp();
+  const db = firebase.firestore();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [completados, setCompletados] = useState(0);
+
+  function getStatusDocuments() {
+    const query = db.collection("users").where("email", "==", user.email);
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const gotDoc = doc.data().documents;
+        let docsCompletados = 0;
+        gotDoc.forEach((array) => {
+          console.log(array);
+          if (array.state) {
+            docsCompletados += 1;
+          }
+        });
+        setCompletados(docsCompletados);
+      });
+    });
+  }
+
+  useEffect(() => {
+    getStatusDocuments();
+  }, []);
   const classes = useStyles();
   return (
     <Column>
@@ -65,8 +92,8 @@ function DashboardComponent() {
         >
           <MiniCardComponent
             className={classes.miniCardContainer}
-            title="Documentos"
-            value="0"
+            title="Completados"
+            value={completados}
           />
           <MiniCardComponent
             className={classes.miniCardContainer}

@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 /* eslint-disable quotes */
-import React from "react";
+import React, { useEffect } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
+import { useFirebaseApp } from "reactfire";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
 import TodayTrendsComponent from "./TodayTrendsComponent";
 import UnresolvedTicketsComponent from "./UnresolvedTicketsComponent";
@@ -47,7 +50,29 @@ const useStyles = createUseStyles({
 });
 
 function DashboardComponent() {
+  const firebase = useFirebaseApp();
+  const db = firebase.firestore();
   const classes = useStyles();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  function getStatusDocuments() {
+    const query = db.collection("users").where("email", "==", user.email);
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const gotDoc = doc.data().documents;
+        gotDoc.forEach((array) => {
+          console.log(array);
+          if (array.state) {
+            console.log("completados");
+          }
+        });
+      });
+    });
+  }
+
+  useEffect(() => {
+    // getStatusDocuments();
+  }, []);
   return (
     <Column>
       <Row
