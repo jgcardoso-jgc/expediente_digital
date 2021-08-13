@@ -72,6 +72,8 @@ const EditUser = () => {
   const [type, setType] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [docsToUpdate, setDocs] = useState([]);
+  const [imageName, setImageName] = useState("");
+  const [email, setEmail] = useState("");
 
   function handleOnChange(e, cbox) {
     const isChecked = e.target.checked;
@@ -97,7 +99,9 @@ const EditUser = () => {
   function handleShow(url, typeModal) {
     setUrl(url.url);
     setTitle(url.title);
+    setImageName(url.imageName);
     setType(typeModal);
+    setEmail(url.email);
     setShow(true);
   }
 
@@ -208,6 +212,8 @@ const EditUser = () => {
             url={urlView}
             title={titleModal}
             type={type}
+            imageName={imageName}
+            email={email}
             onClose={() => setShow(false)}
           />
           <button

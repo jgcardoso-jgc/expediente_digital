@@ -31,11 +31,13 @@ async function getDownloadURLS(storage, docsArray, locData) {
           .then((response) => {
             if (!doc.state) {
               // se ha subido el documento, pero aun no se aprueba por el admin
+              console.log(email);
               pendientes.push({
                 url: response,
                 title: doc.name,
                 uploaded: doc.uploaded,
                 imageName: doc.imageName,
+                email,
               });
             } else {
               urls.push({

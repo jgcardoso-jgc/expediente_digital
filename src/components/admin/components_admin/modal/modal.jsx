@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
@@ -19,28 +18,28 @@ const useStyles = createUseStyles({
   },
 });
 
-const ModalEdit = ({ state, onClose, url, title, type }) => {
+const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
   const classes = useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  const user = JSON.parse(localStorage.getItem("user"));
+
   if (!state) {
     return null;
   }
 
   function aprobar() {
-    const query = db.collection("users").where("email", "==", user.email);
+    const query = db.collection("users").where("email", "==", email);
     query.get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const gotDoc = doc.data().documents;
         gotDoc.forEach((array, index) => {
-          if (array.uploaded !== "undefined" && array.imageName === title) {
-            gotDoc[index].uploaded = true;
+          if (array.imageName === imageName) {
+            gotDoc[index].state = true;
             db.collection("users").doc(doc.id).update({ documents: gotDoc });
           }
         });
       });
-      // setUploaded(true);
+      window.location.reload();
     });
   }
 
@@ -59,7 +58,7 @@ const ModalEdit = ({ state, onClose, url, title, type }) => {
           </Button>
         ) : (
           <div>
-            <Button onClick={onClose} className={classes.aprobarBt}>
+            <Button onClick={() => aprobar()} className={classes.aprobarBt}>
               Aprobar
             </Button>
             <Button onClick={onClose} className={classes.rechazarBt}>

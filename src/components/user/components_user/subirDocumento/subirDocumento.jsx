@@ -40,10 +40,7 @@ function SubirDocumentos() {
           querySnapshot.forEach((doc) => {
             const gotDoc = doc.data().documents;
             gotDoc.forEach((array, index) => {
-              if (
-                array.uploaded !== "undefined" &&
-                array.imageName === locData
-              ) {
+              if (array.imageName === locData) {
                 gotDoc[index].uploaded = true;
                 db.collection("users")
                   .doc(doc.id)
