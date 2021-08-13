@@ -197,6 +197,7 @@ function Onboarding() {
                   name: "ID Frontal",
                   imageName: "croppedFrontID",
                   state: true,
+                  uploaded: true,
                 },
                 { name: "ID Reverso", imageName: "croppedBackID", state: true }
               );

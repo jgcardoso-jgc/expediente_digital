@@ -4,6 +4,7 @@ import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import DocumentsCard from "./cardView";
 import AlertCard from "./alertCard";
+import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
 
 const useStyles = createUseStyles({
   cardsContainer: {
@@ -28,6 +29,14 @@ const useStyles = createUseStyles({
       marginRight: 0,
     },
   },
+  miniCardContainer: {
+    flexGrow: 1,
+    marginRight: 30,
+    "@media (max-width: 768px)": {
+      marginTop: 30,
+      maxWidth: "none",
+    },
+  },
   tasks: {
     marginTop: 0,
     "@media (max-width: 1024px)": {
@@ -40,6 +49,50 @@ function DashboardComponent() {
   const classes = useStyles();
   return (
     <Column>
+      <Row
+        className={classes.cardsContainer}
+        wrap
+        flexGrow={1}
+        horizontal="space-between"
+        breakpoints={{ 768: "column" }}
+      >
+        <Row
+          className={classes.cardRow}
+          wrap
+          flexGrow={1}
+          horizontal="space-between"
+          breakpoints={{ 384: "column" }}
+        >
+          <MiniCardComponent
+            className={classes.miniCardContainer}
+            title="Documentos"
+            value="0"
+          />
+          <MiniCardComponent
+            className={classes.miniCardContainer}
+            title="Pendientes"
+            value="0"
+          />
+        </Row>
+        <Row
+          className={classes.cardRow}
+          wrap
+          flexGrow={1}
+          horizontal="space-between"
+          breakpoints={{ 384: "column" }}
+        >
+          <MiniCardComponent
+            className={classes.miniCardContainer}
+            title="Faltantes"
+            value="0"
+          />
+          <MiniCardComponent
+            className={classes.miniCardContainer}
+            title="Alertas"
+            value="0"
+          />
+        </Row>
+      </Row>
       <Row
         horizontal="space-between"
         className={classes.lastRow}

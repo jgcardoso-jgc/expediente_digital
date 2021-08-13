@@ -69,6 +69,7 @@ const EditUser = () => {
   const [urlView, setUrl] = useState("");
   const [titleModal, setTitle] = useState("");
   const [cboxes, setCBoxes] = useState([]);
+  const [type, setType] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [docsToUpdate, setDocs] = useState([]);
 
@@ -93,9 +94,10 @@ const EditUser = () => {
     }
   }
 
-  function handleShow(url) {
+  function handleShow(url, typeModal) {
     setUrl(url.url);
-    setTitle("Documento");
+    setTitle(url.title);
+    setType(typeModal);
     setShow(true);
   }
 
@@ -139,7 +141,7 @@ const EditUser = () => {
           {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
           <p />
           <p>
-            <b>Docs Completados</b>
+            <b>Documentos Completados</b>
           </p>
           {urlDocs.length && (
             <div>
@@ -148,9 +150,9 @@ const EditUser = () => {
                   <Col className={classes.col} key={uuidv4()}>
                     <div
                       className={`${classes.container} ${classes.pointer}`}
-                      onKeyPress={() => handleShow(url)}
+                      onKeyPress={() => handleShow(url, "completados")}
                       key={uuidv4()}
-                      onClick={() => handleShow(url)}
+                      onClick={() => handleShow(url, "completados")}
                     >
                       <p className={classes.center}>{url.title}</p>
                     </div>
@@ -169,9 +171,9 @@ const EditUser = () => {
                   <Col className={classes.col} key={uuidv4()}>
                     <div
                       className={`${classes.container} ${classes.pointer}`}
-                      onKeyPress={() => handleShow(url)}
+                      onKeyPress={() => handleShow(url, "pendientes")}
                       key={uuidv4()}
-                      onClick={() => handleShow(url)}
+                      onClick={() => handleShow(url, "pendientes")}
                     >
                       <p className={classes.center}>{url.title}</p>
                     </div>
@@ -185,6 +187,7 @@ const EditUser = () => {
           <p>
             <b>Agregar Documentos</b>
           </p>
+          <p>Selecciona los documentos requeridos para el usuario</p>
           {cboxes.length > 0 ? (
             <div>
               {cboxes.map((cbox) => (
@@ -204,6 +207,7 @@ const EditUser = () => {
             state={show}
             url={urlView}
             title={titleModal}
+            type={type}
             onClose={() => setShow(false)}
           />
           <button

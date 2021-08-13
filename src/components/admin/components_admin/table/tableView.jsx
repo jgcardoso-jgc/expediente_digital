@@ -98,8 +98,16 @@ function TableView() {
             ),
           },
           {
-            Header: "Documentos",
+            Header: "🟢",
             accessor: "sizeDocuments",
+          },
+          {
+            Header: "🟡",
+            accessor: 0,
+          },
+          {
+            Header: "🔴",
+            accessor: 0,
           },
           {
             Header: "RFC",

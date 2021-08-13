@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useState } from "react";
@@ -12,9 +13,15 @@ function SubirDocumentos() {
   const globalTheme = createUseStyles(styles);
   const user = JSON.parse(localStorage.getItem("user"));
   const [file, setFile] = useState("");
+  const [uploaded, setUploaded] = useState(false);
   const firebase = useFirebaseApp();
-  const db = firebase.storage();
-  const locData = location.state.doc;
+  const storage = firebase.storage();
+  const db = firebase.firestore();
+  let locData = "";
+  if (location.state != null) {
+    console.log(location.state);
+    locData = location.state.doc;
+  }
   const global = globalTheme();
 
   function setImage(fileSelected) {
@@ -22,11 +29,30 @@ function SubirDocumentos() {
   }
 
   function uploadFile() {
-    db.ref("users")
-      .child(`/${user.email}/test`)
+    storage
+      .ref("users")
+      .child(`/${user.email}/${locData}`)
       .put(file)
       .then(() => {
         console.log("uploaded");
+        const query = db.collection("users").where("email", "==", user.email);
+        query.get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const gotDoc = doc.data().documents;
+            gotDoc.forEach((array, index) => {
+              if (
+                array.uploaded !== "undefined" &&
+                array.imageName === locData
+              ) {
+                gotDoc[index].uploaded = true;
+                db.collection("users")
+                  .doc(doc.id)
+                  .update({ documents: gotDoc });
+              }
+            });
+          });
+          setUploaded(true);
+        });
       })
       .catch((e) => {
         toast(`Ocurrió un error.${e}`);
@@ -44,6 +70,7 @@ function SubirDocumentos() {
           setImage(e.target.files[0]);
         }}
       />
+      {uploaded ? <div>Archivo subido</div> : ""}
       <button
         type="button"
         className={global.initBt}

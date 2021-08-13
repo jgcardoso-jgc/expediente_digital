@@ -66,13 +66,13 @@ function DashboardComponent() {
         >
           <MiniCardComponent
             className={classes.miniCardContainer}
-            title="Unresolved"
-            value="60"
+            title="Documentos"
+            value="0"
           />
           <MiniCardComponent
             className={classes.miniCardContainer}
-            title="Overdue"
-            value="16"
+            title="Pendientes"
+            value="0"
           />
         </Row>
         <Row
@@ -84,13 +84,13 @@ function DashboardComponent() {
         >
           <MiniCardComponent
             className={classes.miniCardContainer}
-            title="Open"
-            value="43"
+            title="Faltantes"
+            value="0"
           />
           <MiniCardComponent
             className={classes.miniCardContainer}
-            title="On hold"
-            value="64"
+            title="Alertas"
+            value="0"
           />
         </Row>
       </Row>

@@ -141,7 +141,7 @@ function AlertComponent({ position, label }) {
         querySnapshot.forEach((doc) => {
           const docs = doc.data().documents;
           docs.forEach((states) => {
-            if (!states.state) {
+            if (!states.state && !states.uploaded) {
               al.push({
                 message: `Sube el siguiente documento: ${states.name}`,
                 doc: states.imageName,

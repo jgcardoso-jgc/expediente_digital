@@ -34,6 +34,7 @@ async function getDownloadURLS(storage, docsArray, locData) {
               pendientes.push({
                 url: response,
                 title: doc.name,
+                uploaded: doc.uploaded,
                 imageName: doc.imageName,
               });
             } else {
@@ -100,6 +101,7 @@ async function setPendientes(db, docsToUpdate, locData) {
           docs.push({
             name: newDoc.nombre,
             imageName: newDoc.nombreImagen,
+            uploaded: false,
             state: false,
           });
         });

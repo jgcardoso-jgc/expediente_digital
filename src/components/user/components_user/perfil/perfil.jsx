@@ -142,7 +142,7 @@ const MyProfile = () => {
                 </Link>
               </div>
             ) : (
-              "Cargando tus documentos..."
+              "Cargando tu perfil..."
             )}
           </div>
         ) : (
