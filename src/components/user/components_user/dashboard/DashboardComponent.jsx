@@ -31,6 +31,9 @@ const useStyles = createUseStyles({
       marginRight: 0,
     },
   },
+  mt40: {
+    marginTop: 40,
+  },
   miniCardContainer: {
     flexGrow: 1,
     marginRight: 30,
@@ -97,33 +100,22 @@ function DashboardComponent() {
           />
           <MiniCardComponent
             className={classes.miniCardContainer}
-            title="Pendientes"
+            title="Revisión"
             value="0"
           />
-        </Row>
-        <Row
-          className={classes.cardRow}
-          wrap
-          flexGrow={1}
-          horizontal="space-between"
-          breakpoints={{ 384: "column" }}
-        >
           <MiniCardComponent
             className={classes.miniCardContainer}
             title="Faltantes"
             value="0"
           />
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Alertas"
-            value="0"
-          />
         </Row>
       </Row>
       <Row
+        className={`${classes.cardsContainer} ${classes.mt40}`}
+        wrap
+        flexGrow={1}
         horizontal="space-between"
-        className={classes.lastRow}
-        breakpoints={{ 1024: "column" }}
+        breakpoints={{ 768: "column" }}
       >
         <DocumentsCard containerStyles={classes.unresolvedTickets} />
         <AlertCard containerStyles={classes.unresolvedTickets} />

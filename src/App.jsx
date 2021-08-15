@@ -120,7 +120,7 @@ function App() {
   }, [firebase]);
 
   if (isLoading) {
-    return <div className="App">Loading...</div>;
+    return <div className="App">Cargando...</div>;
   }
 
   return (

@@ -19,6 +19,7 @@ const useStyles = createUseStyles({
 });
 
 const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
+  console.log(url);
   const classes = useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
@@ -35,11 +36,15 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
         gotDoc.forEach((array, index) => {
           if (array.imageName === imageName) {
             gotDoc[index].state = true;
-            db.collection("users").doc(doc.id).update({ documents: gotDoc });
+            db.collection("users")
+              .doc(doc.id)
+              .update({ documents: gotDoc })
+              .then(() => {
+                window.location.reload();
+              });
           }
         });
       });
-      window.location.reload();
     });
   }
 
@@ -49,7 +54,11 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <img alt="" src={url} />
+        {url !== "404" ? (
+          <img alt="" src={url} />
+        ) : (
+          <div>No se ha subido la imagen</div>
+        )}
       </Modal.Body>
       <Modal.Footer>
         {type === "completados" ? (
@@ -58,12 +67,18 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
           </Button>
         ) : (
           <div>
-            <Button onClick={() => aprobar()} className={classes.aprobarBt}>
-              Aprobar
-            </Button>
-            <Button onClick={onClose} className={classes.rechazarBt}>
-              Rechazar
-            </Button>
+            {url !== "404" ? (
+              <div>
+                <Button onClick={() => aprobar()} className={classes.aprobarBt}>
+                  Aprobar
+                </Button>
+                <Button onClick={onClose} className={classes.rechazarBt}>
+                  Rechazar
+                </Button>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         )}
       </Modal.Footer>

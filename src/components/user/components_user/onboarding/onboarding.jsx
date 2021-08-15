@@ -199,7 +199,12 @@ function Onboarding() {
                   state: true,
                   uploaded: true,
                 },
-                { name: "ID Reverso", imageName: "croppedBackID", state: true }
+                {
+                  name: "ID Reverso",
+                  imageName: "croppedBackID",
+                  uploaded: true,
+                  state: true,
+                }
               );
               db.collection("users")
                 .doc(document.id)

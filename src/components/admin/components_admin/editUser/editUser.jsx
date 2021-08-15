@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
@@ -29,6 +29,15 @@ const useStyles = createUseStyles(() => ({
     padding: "24px 32px 0px 32px",
     height: "100%",
   },
+  containerPendiente: {
+    backgroundColor: "#f2bd85",
+    border: `1px solid #f5f5f5`,
+    borderRadius: 4,
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    padding: "24px 32px 0px 32px",
+    height: "100%",
+  },
   center: {
     textAlign: "center",
   },
@@ -41,11 +50,16 @@ const useStyles = createUseStyles(() => ({
   pointer: {
     cursor: "pointer",
   },
+  btDisabled: {
+    opacity: 0.5,
+  },
   mt20: { marginTop: "20px" },
   mb20: {
     marginBottom: "20px",
   },
-  col: {},
+  col: {
+    maxWidth: "33.3333%",
+  },
   "@media screen and (max-width:768px)": {
     col: {
       marginTop: "20px",
@@ -106,8 +120,13 @@ const EditUser = () => {
   }
 
   function updatePendientes() {
+    setDisabled(true);
     docFunctions.setPendientes(db, docsToUpdate, locData).then((res) => {
-      toast(res);
+      if (res === "listo") {
+        window.location.reload();
+      } else {
+        setDisabled(false);
+      }
     });
   }
 
@@ -174,7 +193,11 @@ const EditUser = () => {
                 {pendientes.map((url) => (
                   <Col className={classes.col} key={uuidv4()}>
                     <div
-                      className={`${classes.container} ${classes.pointer}`}
+                      className={
+                        url.url !== "404"
+                          ? `${classes.containerPendiente} ${classes.pointer}`
+                          : `${classes.container} ${classes.pointer}`
+                      }
                       onKeyPress={() => handleShow(url, "pendientes")}
                       key={uuidv4()}
                       onClick={() => handleShow(url, "pendientes")}
@@ -219,7 +242,7 @@ const EditUser = () => {
           <button
             type="button"
             onClick={() => updatePendientes()}
-            className={global.initBt}
+            className={disabled ? global.initBtDisabled : global.initBt}
             disabled={disabled}
           >
             Agregar Documentos

@@ -99,6 +99,7 @@ async function setPendientes(db, docsToUpdate, locData) {
     query.get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const docs = doc.data().documents;
+        // se agregan los nuevos documentos pendientes
         docsToUpdate.forEach((newDoc) => {
           docs.push({
             name: newDoc.nombre,
@@ -107,8 +108,13 @@ async function setPendientes(db, docsToUpdate, locData) {
             state: false,
           });
         });
-        db.collection("users").doc(doc.id).update({ documents: docs });
-        resolve("Se agregó documento a Pendientes");
+        db.collection("users")
+          .doc(doc.id)
+          .update({ documents: docs })
+          .then(() => {
+            console.log(docs);
+            resolve("listo");
+          });
       });
     });
   });
