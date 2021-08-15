@@ -19,7 +19,6 @@ const useStyles = createUseStyles({
 });
 
 const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
-  console.log(url);
   const classes = useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
