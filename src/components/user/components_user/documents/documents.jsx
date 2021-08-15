@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-use-before-define */
 /* eslint-disable operator-linebreak */
@@ -20,16 +21,16 @@ import toOnboarding from "../../../../assets/toOnboarding.png";
 import facematch from "../../../../assets/facematch.png";
 import styles from "../../../../resources/theme";
 import ModalEdit from "../modal/modal";
+import docwave from "../../../../assets/docwave.svg";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   card: {
     backgroundColor: "#f5f5f5",
     border: `1px solid #f5f5f5`,
-    borderRadius: 4,
+    borderRadius: 10,
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
-    padding: "24px 32px 0px 32px",
     height: "100%",
   },
   pointer: {
@@ -37,6 +38,9 @@ const useStyles = createUseStyles(() => ({
   },
   max400: {
     maxWidth: "400px",
+  },
+  titleCard: {
+    padding: 10,
   },
   ".idFront": { maxWidth: "200px" },
   ".imgCard": { borderTopLeftRadius: "14px", borderTopRightRadius: "14px" },
@@ -64,6 +68,13 @@ const useStyles = createUseStyles(() => ({
     display: "block",
     marginRight: "auto",
   },
+  mb20: {
+    marginBottom: 20,
+  },
+  wave: {
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
+  },
   ".cardText": {
     paddingTop: "4px",
     paddingLeft: "10px",
@@ -76,7 +87,8 @@ function Documents() {
   const global = globalTheme({ theme });
   const classes = useStyles({ theme });
   const firebase = useFirebaseApp();
-  const db = firebase.storage();
+  const storage = firebase.storage();
+  const db = firebase.firestore();
   const [onBoarding, setOnboarding] = useState(false);
   const [grantAccess, setAccess] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -85,15 +97,16 @@ function Documents() {
   const [show, setShow] = useState(false);
   const [urlView, setUrl] = useState("");
   const [titleModal, setTitle] = useState("");
+  const [size, setSize] = useState(0);
 
   async function getDocs() {
-    docFunctions.getState(db, user).then((res) => {
+    docFunctions.getState(db, storage, user).then((res) => {
       if (Array.isArray(res)) {
         setAccess(true);
         docFunctions.exists(res).then((docArray) => {
           //docs not exist
           if (docArray === "not exists") {
-            docFunctions.notExists(db, user).then((resFinal) => {
+            docFunctions.notExists(storage, user).then((resFinal) => {
               if (resFinal === "all done") {
                 console.log("done!");
               } else {
@@ -103,6 +116,7 @@ function Documents() {
             });
           } else {
             //docs exists
+            setSize(docArray.length);
             setDocs(docArray);
             setLoading(false);
           }
@@ -125,12 +139,12 @@ function Documents() {
 
   function handleShow(url) {
     setUrl(url.url);
-    setTitle("Documento");
+    setTitle(url.title);
     setShow(true);
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   if (onBoarding) {
@@ -171,11 +185,14 @@ function Documents() {
         <ToastContainer />
         <div>
           {" "}
-          <div className={classes.max400}>
+          <div>
             {loading ? (
               <div className="center pb10"> Cargando tus documentos...</div>
             ) : (
               <div>
+                <h4 className={classes.mb20}>
+                  <b>{size}</b> documentos
+                </h4>
                 <Row className={classes.rowDocs}>
                   {docs.map((url) => (
                     <Col className={classes.col} key={uuidv4()}>
@@ -185,7 +202,10 @@ function Documents() {
                         key={uuidv4()}
                         onClick={() => handleShow(url)}
                       >
-                        <p className={classes.center}>{url.title}</p>
+                        <p className={classes.titleCard}>
+                          <b>{url.title}</b>
+                        </p>
+                        <img alt="" src={docwave} className={classes.wave} />
                       </div>
                     </Col>
                   ))}

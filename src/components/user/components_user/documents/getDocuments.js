@@ -33,42 +33,51 @@ function exists(response) {
   });
 }
 
-function getState(db, user) {
+function getState(db, storage, user) {
   return new Promise((resolve) => {
-    const docsIncode = ["croppedFrontID", "croppedBackID"];
     if (user.onboarding) {
       if (user.token === "") {
         resolve("Set Onboarding");
       }
       if (user.token !== "") {
+        const docs = [];
         const urls = [];
         const promises = [];
-        docsIncode.forEach((doc) => {
-          const route = `users/${user.email}/${doc}`;
-          promises.push(
-            db
-              .ref(route)
-              .getDownloadURL()
-              .then((response) => {
-                let title = doc;
-                if (doc === "croppedBackID") {
-                  title = "ID Reverso";
-                }
-                if (doc === "croppedFrontID") {
-                  title = "ID Frontal";
-                }
-                urls.push({ url: response, title });
-                console.log("founded");
-              })
-              .catch((err) => {
-                console.log(`not founded${err}`);
-                urls.push({ url: "404", title: "404" });
-              })
-          );
-        });
-        Promise.all(promises).then(() => {
-          console.log("all resolved");
-          resolve(urls);
+        const query = db.collection("users").where("email", "==", user.email);
+        query.get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const gotDoc = doc.data().documents;
+            gotDoc.forEach((array) => {
+              docs.push(array.imageName);
+            });
+          });
+          docs.forEach((doc) => {
+            const route = `users/${user.email}/${doc}`;
+            promises.push(
+              storage
+                .ref(route)
+                .getDownloadURL()
+                .then((response) => {
+                  let title = doc;
+                  if (doc === "croppedBackID") {
+                    title = "ID Reverso";
+                  }
+                  if (doc === "croppedFrontID") {
+                    title = "ID Frontal";
+                  }
+                  urls.push({ url: response, title });
+                  console.log("founded");
+                })
+                .catch((err) => {
+                  console.log(`not founded${err}`);
+                  urls.push({ url: "404", title: "404" });
+                })
+            );
+          });
+          Promise.all(promises).then(() => {
+            console.log("all resolved");
+            resolve(urls);
+          });
         });
       }
     } else {
