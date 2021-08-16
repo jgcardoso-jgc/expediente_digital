@@ -190,7 +190,6 @@ function Onboarding() {
           .then((snapshot) => {
             snapshot.docs.forEach(async (document) => {
               const doc = await db.collection("users").doc(document.id).get();
-              const { sizeDocuments } = doc.data();
               const { documents } = doc.data();
               documents.push(
                 {
@@ -210,7 +209,6 @@ function Onboarding() {
                 .doc(document.id)
                 .update({
                   onboarding: true,
-                  sizeDocuments: sizeDocuments + 2,
                   documents,
                 })
                 .then(() => {

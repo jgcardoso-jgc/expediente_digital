@@ -102,10 +102,16 @@ function Documents() {
   async function getDocs() {
     docFunctions.getState(db, storage, user).then((res) => {
       if (Array.isArray(res)) {
+        //es array cuando ya se hizo onboarding y facematch
         setAccess(true);
         docFunctions.exists(res).then((docArray) => {
           //docs not exist
+          if (docArray === "pendiente") {
+            toast("Hay pendientes");
+            setLoading(false);
+          }
           if (docArray === "not exists") {
+            //call this function only in case the missing docs are incode docs
             docFunctions.notExists(storage, user).then((resFinal) => {
               if (resFinal === "all done") {
                 console.log("done!");

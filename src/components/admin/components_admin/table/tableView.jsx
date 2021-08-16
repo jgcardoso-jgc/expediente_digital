@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable spaced-comment */
-/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 import React, { useState, useEffect } from "react";
@@ -35,7 +34,24 @@ function TableView() {
         const dataGet = [];
         if (querySnapshot.size > 0) {
           querySnapshot.forEach((doc) => {
-            dataGet.push(doc.data());
+            const generalData = doc.data();
+            const docData = generalData.documents;
+            let sizeDocs = 0;
+            let revDocs = 0;
+            let penDocs = 0;
+            docData.forEach((docState) => {
+              if (docState.state === true) {
+                sizeDocs += 1;
+              } else if (docState.uploaded === true) {
+                revDocs += 1;
+              } else {
+                penDocs += 1;
+              }
+            });
+            generalData.sizeDocuments = sizeDocs;
+            generalData.revisionDocs = revDocs;
+            generalData.pendientesDocs = penDocs;
+            dataGet.push(generalData);
           });
           resolve(dataGet);
         } else {
@@ -55,7 +71,6 @@ function TableView() {
         const dataGot = res;
         const keys = Object.keys(res);
         const size = keys.length;
-        const keysObj = Object.keys(dataGot[0]);
         if (size > 0) {
           const JSONdata = dataGot;
           setData(JSONdata);
@@ -65,7 +80,6 @@ function TableView() {
   }, [data]);
 
   function handleClickEditRow(obj) {
-    console.log("clicked");
     console.log(Object.keys(obj));
     console.log(obj.row.original.uid);
     history.push({
@@ -103,11 +117,11 @@ function TableView() {
           },
           {
             Header: "🟡",
-            accessor: 0,
+            accessor: "revisionDocs",
           },
           {
             Header: "🔴",
-            accessor: 0,
+            accessor: "pendientesDocs",
           },
           {
             Header: "RFC",

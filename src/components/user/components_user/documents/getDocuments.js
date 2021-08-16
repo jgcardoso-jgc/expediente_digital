@@ -16,11 +16,18 @@ function start() {
 function exists(response) {
   return new Promise((resolve) => {
     let notFound = false;
+    let pendiente = false;
     response.forEach((obj) => {
-      if (obj.url === "404") {
+      if (obj.title === "incode") {
         notFound = true;
       }
+      if (obj.title === "pendiente") {
+        pendiente = true;
+      }
     });
+    if (pendiente) {
+      resolve("pendiente");
+    }
     if (notFound) {
       resolve("not exists");
     } else {
@@ -70,7 +77,11 @@ function getState(db, storage, user) {
                 })
                 .catch((err) => {
                   console.log(`not founded${err}`);
-                  urls.push({ url: "404", title: "404" });
+                  if (doc === "croppedBackID" || doc === "croppedFrontID") {
+                    urls.push({ url: "404", title: "incode" });
+                  } else {
+                    urls.push({ url: "404", title: "pendiente" });
+                  }
                 })
             );
           });

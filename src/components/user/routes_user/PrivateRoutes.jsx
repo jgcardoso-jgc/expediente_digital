@@ -28,8 +28,8 @@ function PrivateRoutes() {
         <Route exact path="/toOnboarding" render={() => <ToOnBoarding />} />
         <Route exact path="/finalStep" render={() => <FinalStep />} />
         <Route exact path="/alertas" render={() => <AlertasPagina />} />
-        <Route exact path={SLUGS.subir} render={() => <SubirDocumentos />} />
         <Route exact path={SLUGS.settings} render={() => <AjustesUser />} />
+        <Route exact path="/subir" render={() => <SubirDocumentos />} />
         <Redirect to={SLUGS.dashboard} />
       </Switch>
     </Suspense>
