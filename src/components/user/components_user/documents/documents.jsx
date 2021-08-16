@@ -158,6 +158,12 @@ function Documents() {
     setShow(true);
   }
 
+  function handleOnReview(url) {
+    setUrl(url.url);
+    setTitle(url.title);
+    setShow(true);
+  }
+
   function handlePendiente(url) {
     const doc = url.url;
     history.push({
@@ -245,17 +251,17 @@ function Documents() {
                 ) : (
                   ""
                 )}
-                {pendientes.length > 0 ? (
+                {revision.length > 0 ? (
                   <div>
-                    <p className={classes.mt30}>Pendientes</p>{" "}
+                    <p className={classes.mt30}>En revisión</p>{" "}
                     <Row className={classes.rowDocs}>
-                      {pendientes.map((pend) => (
+                      {revision.map((pend) => (
                         <Col className={classes.col} key={uuidv4()}>
                           <div
                             className={`${classes.card} ${classes.pointer}`}
-                            onKeyPress={() => handlePendiente(pend)}
+                            onKeyPress={() => handleOnReview(pend)}
                             key={uuidv4()}
-                            onClick={() => handlePendiente(pend)}
+                            onClick={() => handleOnReview(pend)}
                           >
                             <p className={classes.titleCard}>
                               <b>{pend.title}</b>
@@ -273,11 +279,11 @@ function Documents() {
                 ) : (
                   ""
                 )}
-                {revision.length > 0 ? (
+                {pendientes.length > 0 ? (
                   <div>
-                    <p className={classes.mt30}>En revisión</p>{" "}
+                    <p className={classes.mt30}>Pendientes</p>{" "}
                     <Row className={classes.rowDocs}>
-                      {revision.map((pend) => (
+                      {pendientes.map((pend) => (
                         <Col className={classes.col} key={uuidv4()}>
                           <div
                             className={`${classes.card} ${classes.pointer}`}
