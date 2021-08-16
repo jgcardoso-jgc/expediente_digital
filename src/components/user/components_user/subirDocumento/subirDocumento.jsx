@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
 import { useFirebaseApp } from "reactfire";
@@ -11,15 +11,16 @@ import styles from "../../../../resources/theme";
 function SubirDocumentos() {
   const location = useLocation();
   const globalTheme = createUseStyles(styles);
+  const history = useHistory();
   const user = JSON.parse(localStorage.getItem("user"));
   const [file, setFile] = useState("");
-  const [uploaded, setUploaded] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const firebase = useFirebaseApp();
   const storage = firebase.storage();
   const db = firebase.firestore();
   let locData = "";
   if (location.state != null) {
-    console.log(location.state);
+    console.log(`state:${location.state.doc}`);
     locData = location.state.doc;
   }
   const global = globalTheme();
@@ -29,12 +30,12 @@ function SubirDocumentos() {
   }
 
   function uploadFile() {
+    setDisabled(true);
     storage
       .ref("users")
       .child(`/${user.email}/${locData}`)
       .put(file)
       .then(() => {
-        console.log("uploaded");
         const query = db.collection("users").where("email", "==", user.email);
         query.get().then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
@@ -48,7 +49,7 @@ function SubirDocumentos() {
               }
             });
           });
-          setUploaded(true);
+          history.push("/documentos");
         });
       })
       .catch((e) => {
@@ -67,11 +68,11 @@ function SubirDocumentos() {
           setImage(e.target.files[0]);
         }}
       />
-      {uploaded ? <div>Archivo subido</div> : ""}
       <button
         type="button"
         className={global.initBt}
         onClick={() => uploadFile()}
+        disabled={disabled}
       >
         Subir archivo
       </button>

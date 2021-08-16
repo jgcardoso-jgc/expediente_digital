@@ -56,6 +56,8 @@ function DashboardComponent() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [completados, setCompletados] = useState(0);
 
+  // eslint-disable-next-line no-unused-vars
+
   function getStatusDocuments() {
     const query = db.collection("users").where("email", "==", user.email);
     query.get().then((querySnapshot) => {
@@ -63,7 +65,6 @@ function DashboardComponent() {
         const gotDoc = doc.data().documents;
         let docsCompletados = 0;
         gotDoc.forEach((array) => {
-          console.log(array);
           if (array.state) {
             docsCompletados += 1;
           }
@@ -97,6 +98,7 @@ function DashboardComponent() {
             className={classes.miniCardContainer}
             title="Completados"
             value={completados}
+            url="/documentos"
           />
           <MiniCardComponent
             className={classes.miniCardContainer}

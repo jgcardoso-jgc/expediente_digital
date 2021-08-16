@@ -4,11 +4,10 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable prefer-template */
 /* eslint-disable comma-dangle */
-/* eslint-disable spaced-comment */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFirebaseApp } from "reactfire";
@@ -58,6 +57,9 @@ const useStyles = createUseStyles(() => ({
     marginRight: "auto",
     borderRadius: "14px",
   },
+  col: {
+    maxWidth: "33.33333%",
+  },
   ".cardTitle": {
     paddingTop: "4px",
     paddingLeft: "10px",
@@ -70,6 +72,9 @@ const useStyles = createUseStyles(() => ({
   },
   mb20: {
     marginBottom: 20,
+  },
+  mt30: {
+    marginTop: 30,
   },
   wave: {
     borderBottomRightRadius: 10,
@@ -88,11 +93,14 @@ function Documents() {
   const classes = useStyles({ theme });
   const firebase = useFirebaseApp();
   const storage = firebase.storage();
+  const history = useHistory();
   const db = firebase.firestore();
   const [onBoarding, setOnboarding] = useState(false);
   const [grantAccess, setAccess] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [docs, setDocs] = useState([]);
+  const [completados, setCompletados] = useState([]);
+  const [revision, setRevision] = useState([]);
+  const [pendientes, setPendientes] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const [show, setShow] = useState(false);
   const [urlView, setUrl] = useState("");
@@ -102,16 +110,12 @@ function Documents() {
   async function getDocs() {
     docFunctions.getState(db, storage, user).then((res) => {
       if (Array.isArray(res)) {
-        //es array cuando ya se hizo onboarding y facematch
+        // es array cuando ya se hizo onboarding y facematch
         setAccess(true);
         docFunctions.exists(res).then((docArray) => {
-          //docs not exist
-          if (docArray === "pendiente") {
-            toast("Hay pendientes");
-            setLoading(false);
-          }
+          // docs not exist
           if (docArray === "not exists") {
-            //call this function only in case the missing docs are incode docs
+            // call this function only in case the missing docs are incode docs
             docFunctions.notExists(storage, user).then((resFinal) => {
               if (resFinal === "all done") {
                 console.log("done!");
@@ -120,12 +124,14 @@ function Documents() {
               }
               setLoading(false);
             });
-          } else {
-            //docs exists
-            setSize(docArray.length);
-            setDocs(docArray);
-            setLoading(false);
+            return;
           }
+          // docs exists
+          setSize(docArray[0].length + docArray[1].length + docArray[2].length);
+          setCompletados(docArray[0]);
+          setRevision(docArray[1]);
+          setPendientes(docArray[2]);
+          setLoading(false);
         });
       }
       if (res === "Set Onboarding") {
@@ -133,7 +139,6 @@ function Documents() {
         setLoading(false);
       }
       if (res === "same state") {
-        console.log("do nothing");
         setLoading(false);
       }
     });
@@ -147,6 +152,14 @@ function Documents() {
     setUrl(url.url);
     setTitle(url.title);
     setShow(true);
+  }
+
+  function handlePendiente(url) {
+    const doc = url.title;
+    history.push({
+      pathname: "/subir",
+      state: { doc },
+    });
   }
 
   if (loading) {
@@ -199,23 +212,91 @@ function Documents() {
                 <h4 className={classes.mb20}>
                   <b>{size}</b> documentos
                 </h4>
-                <Row className={classes.rowDocs}>
-                  {docs.map((url) => (
-                    <Col className={classes.col} key={uuidv4()}>
-                      <div
-                        className={`${classes.card} ${classes.pointer}`}
-                        onKeyPress={() => handleShow(url)}
-                        key={uuidv4()}
-                        onClick={() => handleShow(url)}
-                      >
-                        <p className={classes.titleCard}>
-                          <b>{url.title}</b>
-                        </p>
-                        <img alt="" src={docwave} className={classes.wave} />
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
+                {completados.length > 0 ? (
+                  <div>
+                    {" "}
+                    <p>Completados</p>
+                    <Row className={classes.rowDocs}>
+                      {completados.map((url) => (
+                        <Col className={classes.col} key={uuidv4()}>
+                          <div
+                            className={`${classes.card} ${classes.pointer}`}
+                            onKeyPress={() => handleShow(url)}
+                            key={uuidv4()}
+                            onClick={() => handleShow(url)}
+                          >
+                            <p className={classes.titleCard}>
+                              <b>{url.title}</b>
+                            </p>
+                            <img
+                              alt=""
+                              src={docwave}
+                              className={classes.wave}
+                            />
+                          </div>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {pendientes.length > 0 ? (
+                  <div>
+                    <p className={classes.mt30}>Pendientes</p>{" "}
+                    <Row className={classes.rowDocs}>
+                      {pendientes.map((pend) => (
+                        <Col className={classes.col} key={uuidv4()}>
+                          <div
+                            className={`${classes.card} ${classes.pointer}`}
+                            onKeyPress={() => handlePendiente(pend)}
+                            key={uuidv4()}
+                            onClick={() => handlePendiente(pend)}
+                          >
+                            <p className={classes.titleCard}>
+                              <b>{pend.title}</b>
+                            </p>
+                            <img
+                              alt=""
+                              src={docwave}
+                              className={classes.wave}
+                            />
+                          </div>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {revision.length > 0 ? (
+                  <div>
+                    <p className={classes.mt30}>En revisión</p>{" "}
+                    <Row className={classes.rowDocs}>
+                      {revision.map((pend) => (
+                        <Col className={classes.col} key={uuidv4()}>
+                          <div
+                            className={`${classes.card} ${classes.pointer}`}
+                            onKeyPress={() => handlePendiente(pend)}
+                            key={uuidv4()}
+                            onClick={() => handlePendiente(pend)}
+                          >
+                            <p className={classes.titleCard}>
+                              <b>{pend.title}</b>
+                            </p>
+                            <img
+                              alt=""
+                              src={docwave}
+                              className={classes.wave}
+                            />
+                          </div>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             )}
           </div>
@@ -252,10 +333,3 @@ function Documents() {
 }
 
 export default Documents;
-
-/*const frontId = new Image();
-        frontId.src = url;
-        frontId.style.width = "100%";
-        frontId.style.borderTopLeftRadius = "14px";
-        frontId.style.borderTopRightRadius = "14px";
-        document.getElementById("ineFront").appendChild(frontId);*/

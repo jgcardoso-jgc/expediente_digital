@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
 /* eslint-disable comma-dangle */
@@ -47,47 +48,44 @@ function getState(db, storage, user) {
         resolve("Set Onboarding");
       }
       if (user.token !== "") {
-        const docs = [];
-        const urls = [];
+        let docs = [];
+        const completados = [];
+        const revision = [];
+        const pendientes = [];
         const promises = [];
         const query = db.collection("users").where("email", "==", user.email);
         query.get().then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            const gotDoc = doc.data().documents;
-            gotDoc.forEach((array) => {
-              docs.push(array.imageName);
-            });
+            docs = doc.data().documents;
           });
           docs.forEach((doc) => {
-            const route = `users/${user.email}/${doc}`;
+            const route = `users/${user.email}/${doc.imageName}`;
             promises.push(
               storage
                 .ref(route)
                 .getDownloadURL()
                 .then((response) => {
-                  let title = doc;
-                  if (doc === "croppedBackID") {
-                    title = "ID Reverso";
-                  }
-                  if (doc === "croppedFrontID") {
-                    title = "ID Frontal";
-                  }
-                  urls.push({ url: response, title });
-                  console.log("founded");
-                })
-                .catch((err) => {
-                  console.log(`not founded${err}`);
-                  if (doc === "croppedBackID" || doc === "croppedFrontID") {
-                    urls.push({ url: "404", title: "incode" });
+                  if (doc.state) {
+                    completados.push({ url: response, title: doc.name });
                   } else {
-                    urls.push({ url: "404", title: "pendiente" });
+                    revision.push({ url: response, title: doc.name });
+                  }
+                })
+                .catch(() => {
+                  if (
+                    doc.imageName === "croppedBackID" ||
+                    doc.imageName === "croppedFrontID"
+                  ) {
+                    pendientes.push({ url: "404", title: "incode" });
+                  } else {
+                    pendientes.push({ url: "404", title: doc });
                   }
                 })
             );
           });
           Promise.all(promises).then(() => {
             console.log("all resolved");
-            resolve(urls);
+            resolve([completados, revision, pendientes]);
           });
         });
       }

@@ -1,7 +1,9 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
 import React from "react";
 import { Column } from "simple-flexbox";
+import { useHistory } from "react-router-dom";
 import { createUseStyles, useTheme } from "react-jss";
 
 const useStyles = createUseStyles(() => ({
@@ -37,13 +39,20 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-function MiniCardComponent({ className = "", title, value }) {
+function MiniCardComponent({ className = "", title, value, url }) {
   const theme = useTheme();
+  const history = useHistory();
   const classes = useStyles({ theme });
   const composedClassName = [classes.container, className].join(" ");
+  function toDocuments() {
+    if (url !== "undefined") {
+      history.push(url);
+    }
+  }
   return (
     <Column
       flexGrow={1}
+      onClick={() => toDocuments()}
       className={composedClassName}
       horizontal="center"
       vertical="center"
