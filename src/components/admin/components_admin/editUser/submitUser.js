@@ -20,7 +20,6 @@ const submit = async (auth, db, name, rfc, email, password) => {
               token: "",
               onboarding: false,
               documents: [],
-              sizeDocuments: 0,
             })
             .then(() => {
               localStorage.setItem(
@@ -32,7 +31,6 @@ const submit = async (auth, db, name, rfc, email, password) => {
                   token: "",
                   onboarding: false,
                   documents: [],
-                  sizeDocuments: 0,
                 })
               );
               return "Usuario registrado";

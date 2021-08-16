@@ -80,7 +80,6 @@ const RegisterNormal = () => {
           token: "",
           onboarding: false,
           documents: [],
-          sizeDocuments: 0,
         };
         try {
           db.collection("users")
