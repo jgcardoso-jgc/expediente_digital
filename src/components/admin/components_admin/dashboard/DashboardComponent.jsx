@@ -1,7 +1,7 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
@@ -53,25 +53,54 @@ function DashboardComponent() {
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const classes = useStyles();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [completados, setCompletados] = useState(0);
+  const [pendientes, setPendientes] = useState(0);
+  const [faltantes, setFaltantes] = useState(0);
 
-  function getStatusDocuments() {
-    const query = db.collection("users").where("email", "==", user.email);
-    query.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const gotDoc = doc.data().documents;
-        gotDoc.forEach((array) => {
-          console.log(array);
-          if (array.state) {
-            console.log("completados");
-          }
-        });
+  async function getDataDocs() {
+    getData().then((objSize) => {
+      setCompletados(objSize.completados);
+      setPendientes(objSize.revision);
+      setFaltantes(objSize.faltantes);
+    });
+  }
+
+  async function getData() {
+    return new Promise((resolve) => {
+      const query = db.collection("users").where("rfc", "!=", "");
+      query.get().then((querySnapshot) => {
+        const dataGet = [];
+        if (querySnapshot.size > 0) {
+          let sizeDocs = 0;
+          let revDocs = 0;
+          let penDocs = 0;
+          querySnapshot.forEach((doc) => {
+            const generalData = doc.data();
+            const docData = generalData.documents;
+            docData.forEach((docState) => {
+              if (docState.state === true) {
+                sizeDocs += 1;
+              } else if (docState.uploaded === true) {
+                revDocs += 1;
+              } else {
+                penDocs += 1;
+              }
+            });
+          });
+          resolve({
+            completados: sizeDocs,
+            revision: revDocs,
+            faltantes: penDocs,
+          });
+        } else {
+          resolve(dataGet);
+        }
       });
     });
   }
 
   useEffect(() => {
-    // getStatusDocuments();
+    getDataDocs();
   }, []);
   return (
     <Column>
@@ -92,12 +121,12 @@ function DashboardComponent() {
           <MiniCardComponent
             className={classes.miniCardContainer}
             title="Documentos"
-            value="0"
+            value={completados}
           />
           <MiniCardComponent
             className={classes.miniCardContainer}
             title="Pendientes"
-            value="0"
+            value={pendientes}
           />
         </Row>
         <Row
@@ -110,7 +139,7 @@ function DashboardComponent() {
           <MiniCardComponent
             className={classes.miniCardContainer}
             title="Faltantes"
-            value="0"
+            value={faltantes}
           />
           <MiniCardComponent
             className={classes.miniCardContainer}

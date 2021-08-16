@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-use-before-define */
@@ -22,6 +21,8 @@ import facematch from "../../../../assets/facematch.png";
 import styles from "../../../../resources/theme";
 import ModalEdit from "../modal/modal";
 import docwave from "../../../../assets/docwave.svg";
+import docwavefaltantes from "../../../../assets/docwavefaltantes.svg";
+import docwavependiente from "../../../../assets/docwavependiente.svg";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -60,6 +61,8 @@ const useStyles = createUseStyles(() => ({
   },
   col: {
     maxWidth: "33.33333%",
+    minWidth: "33.33333%",
+    padding: 10,
   },
   ".cardTitle": {
     paddingTop: "4px",
@@ -156,7 +159,7 @@ function Documents() {
   }
 
   function handlePendiente(url) {
-    const doc = url.title;
+    const doc = url.url;
     history.push({
       pathname: "/subir",
       state: { doc },
@@ -259,7 +262,7 @@ function Documents() {
                             </p>
                             <img
                               alt=""
-                              src={docwave}
+                              src={docwavependiente}
                               className={classes.wave}
                             />
                           </div>
@@ -287,7 +290,7 @@ function Documents() {
                             </p>
                             <img
                               alt=""
-                              src={docwave}
+                              src={docwavefaltantes}
                               className={classes.wave}
                             />
                           </div>

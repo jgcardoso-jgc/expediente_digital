@@ -59,6 +59,8 @@ const useStyles = createUseStyles(() => ({
   },
   col: {
     maxWidth: "33.3333%",
+    minWidth: "33.3333%",
+    padding: 10,
   },
   "@media screen and (max-width:768px)": {
     col: {

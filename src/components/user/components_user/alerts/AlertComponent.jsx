@@ -9,7 +9,7 @@
 /* eslint-disable quotes */
 import React, { useState, useEffect, useRef } from "react";
 import { useFirebaseApp } from "reactfire";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { number, shape } from "prop-types";
 import { Column } from "simple-flexbox";
 import uuid from "react-uuid";
@@ -163,6 +163,11 @@ function AlertComponent({ position, label }) {
     setUserMenuOpen(false);
   };
 
+  function verTodas() {
+    history.push("/alertas");
+    setUserMenuOpen(false);
+  }
+
   function onItemClick(doc) {
     history.push({
       pathname: "/subir",
@@ -215,11 +220,13 @@ function AlertComponent({ position, label }) {
                       </button>
                     </div>
                   ))}
-                  <Link to="/alertas">
-                    <button type="button" className={`${classes.verTodas}`}>
-                      Ver todas
-                    </button>
-                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => verTodas()}
+                    className={`${classes.verTodas}`}
+                  >
+                    Ver todas
+                  </button>
                 </Column>
               )}
             </div>
