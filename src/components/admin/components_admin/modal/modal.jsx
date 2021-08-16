@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
@@ -25,6 +26,10 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
 
   if (!state) {
     return null;
+  }
+
+  function cancelar() {
+    console.log("cancelado");
   }
 
   function aprobar() {
@@ -76,7 +81,9 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
                 </Button>
               </div>
             ) : (
-              ""
+              <Button onClick={() => cancelar()} className={classes.aprobarBt}>
+                Cancelar documento
+              </Button>
             )}
           </div>
         )}

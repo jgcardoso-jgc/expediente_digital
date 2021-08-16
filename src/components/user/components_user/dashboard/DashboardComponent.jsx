@@ -55,6 +55,8 @@ function DashboardComponent() {
   const db = firebase.firestore();
   const user = JSON.parse(localStorage.getItem("user"));
   const [completados, setCompletados] = useState(0);
+  const [revision, setRevision] = useState(0);
+  const [faltantes, setFaltantes] = useState(0);
 
   // eslint-disable-next-line no-unused-vars
 
@@ -64,12 +66,22 @@ function DashboardComponent() {
       querySnapshot.forEach((doc) => {
         const gotDoc = doc.data().documents;
         let docsCompletados = 0;
+        let docsRevision = 0;
+        let docsFaltantes = 0;
         gotDoc.forEach((array) => {
           if (array.state) {
             docsCompletados += 1;
           }
+          if (!array.state && array.uploaded) {
+            docsRevision += 1;
+          }
+          if (!array.uploaded) {
+            docsFaltantes += 1;
+          }
         });
         setCompletados(docsCompletados);
+        setRevision(docsRevision);
+        setFaltantes(docsFaltantes);
       });
     });
   }
@@ -103,12 +115,14 @@ function DashboardComponent() {
           <MiniCardComponent
             className={classes.miniCardContainer}
             title="Revisión"
-            value="0"
+            value={revision}
+            url="/documentos"
           />
           <MiniCardComponent
             className={classes.miniCardContainer}
             title="Faltantes"
-            value="0"
+            value={faltantes}
+            url="/documentos"
           />
         </Row>
       </Row>
