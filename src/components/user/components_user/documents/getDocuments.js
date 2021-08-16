@@ -44,51 +44,51 @@ function exists(response) {
 function getState(db, storage, user) {
   return new Promise((resolve) => {
     if (user.onboarding) {
-      // if (user.token === "") {
-      //  resolve("Set Onboarding");
-      // }
-      // if (user.token !== "") {
-      let docs = [];
-      const completados = [];
-      const revision = [];
-      const pendientes = [];
-      const promises = [];
-      const query = db.collection("users").where("email", "==", user.email);
-      query.get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          docs = doc.data().documents;
+      if (user.token === "") {
+        resolve("Set Onboarding");
+      }
+      if (user.token !== "") {
+        let docs = [];
+        const completados = [];
+        const revision = [];
+        const pendientes = [];
+        const promises = [];
+        const query = db.collection("users").where("email", "==", user.email);
+        query.get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            docs = doc.data().documents;
+          });
+          docs.forEach((doc) => {
+            const route = `users/${user.email}/${doc.imageName}`;
+            promises.push(
+              storage
+                .ref(route)
+                .getDownloadURL()
+                .then((response) => {
+                  if (doc.state) {
+                    completados.push({ url: response, title: doc.name });
+                  } else {
+                    revision.push({ url: response, title: doc.name });
+                  }
+                })
+                .catch(() => {
+                  if (
+                    doc.imageName === "croppedBackID" ||
+                    doc.imageName === "croppedFrontID"
+                  ) {
+                    pendientes.push({ url: "404", title: "incode" });
+                  } else {
+                    pendientes.push({ url: "404", title: doc.name });
+                  }
+                })
+            );
+          });
+          Promise.all(promises).then(() => {
+            console.log("all resolved");
+            resolve([completados, revision, pendientes]);
+          });
         });
-        docs.forEach((doc) => {
-          const route = `users/${user.email}/${doc.imageName}`;
-          promises.push(
-            storage
-              .ref(route)
-              .getDownloadURL()
-              .then((response) => {
-                if (doc.state) {
-                  completados.push({ url: response, title: doc.name });
-                } else {
-                  revision.push({ url: response, title: doc.name });
-                }
-              })
-              .catch(() => {
-                if (
-                  doc.imageName === "croppedBackID" ||
-                  doc.imageName === "croppedFrontID"
-                ) {
-                  pendientes.push({ url: "404", title: "incode" });
-                } else {
-                  pendientes.push({ url: "404", title: doc.name });
-                }
-              })
-          );
-        });
-        Promise.all(promises).then(() => {
-          console.log("all resolved");
-          resolve([completados, revision, pendientes]);
-        });
-      });
-      // }
+      }
     } else {
       resolve("same state");
     }
