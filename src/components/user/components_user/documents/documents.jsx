@@ -74,6 +74,9 @@ const useStyles = createUseStyles(() => ({
     display: "block",
     marginRight: "auto",
   },
+  center: {
+    textAlign: "center",
+  },
   mb20: {
     marginBottom: 20,
   },
@@ -327,14 +330,16 @@ function Documents() {
       <div className={global.center}>
         No has registrado tu Identificación Oficial
       </div>
-      <Link style={{ display: "block" }} to="/onboard">
-        <button
-          type="button"
-          className={`${global.initBt} ${classes.toBoarding}`}
-        >
-          Ir al OnBoarding
-        </button>
-      </Link>
+      <div className={classes.center}>
+        <Link style={{ display: "inline-block" }} to="/onboard">
+          <button
+            type="button"
+            className={`${global.initBt} ${classes.toBoarding}`}
+          >
+            Ir al OnBoarding
+          </button>
+        </Link>
+      </div>
       <div className="container">
         <img alt="" className="scan" src={toOnboarding} />
       </div>

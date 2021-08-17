@@ -1,50 +1,96 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
-import React from "react";
-import { Link } from "react-router-dom";
-import logo from "../../../assets/logo.png";
-import "firebase/auth";
-import "firebase/firestore";
-// import { useFirebaseApp } from "reactfire";
-// import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import Div100vh from "react-div-100vh";
+import { Link, useHistory } from "react-router-dom";
+import styles from "../../../resources/theme";
+import { createUseStyles } from "react-jss";
+import NavBarMainPage from "../navBarMainPage/navBarMainPage";
+import { useFirebaseApp } from "reactfire";
 import Waves from "../waves/waves";
 
+const globalTheme = createUseStyles(styles);
+const useStyles = createUseStyles(() => ({
+  navmain: { top: "0px", position: "absolute !important", width: "100%" },
+  inputStyle: {
+    width: "100%",
+    border: "0",
+    borderBottom: "1px solid rgb(194, 194, 194)",
+    fontSize: "16px",
+  },
+  title: {
+    textAlign: "left",
+    marginTop: 40,
+  },
+  correoTxt: {
+    textAlign: "left",
+  },
+  link: {
+    textAlign: "right",
+    marginTop: 10,
+  },
+}));
+
 const RecoverPassword = () => {
-  // const firebase = useFirebaseApp();
-  // const history = useHistory();
+  const firebase = useFirebaseApp();
+  const classes = useStyles();
+  const global = globalTheme();
+  const auth = firebase.auth();
+  const history = useHistory();
+  const [email, setEmail] = useState("");
   // const db = firebase.firestore();
   // const [email, setEmail] = useState("");
-  const submit = async () => {};
+  function recover() {
+    auth
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        history.push("/login");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  }
   return (
-    <div className="center">
-      <header>
-        <Link to="./login">
-          <img src={logo} alt="logo" className="logoNav" />
-        </Link>
-      </header>
-      <div className="container max400 pt40">
-        <div>
-          <h2 className="regText">
-            <b>Recuperación</b>
-          </h2>
-          <p className="expText">Ingresa tus datos</p>
-        </div>
-        <div className="formGroup pt10">
-          <label htmlFor="email" className="block pb4">
-            Correo electrónico
-          </label>
-          <input type="email" id="email" className="inputStyle" />
-        </div>
+    <Div100vh>
+      <NavBarMainPage className={classes.navmain} />
+      <div className="center">
+        <div className="container max400 pt40">
+          <div>
+            <h2 className={classes.title}>
+              <b>Recupera tu contraseña</b>
+            </h2>
+            <p className={classes.correoTxt}>Ingresa tus datos</p>
+          </div>
+          <div className={classes.correoTxt}>
+            <label htmlFor="email">Correo electrónico</label>
+            <input
+              type="email"
+              id="email"
+              className={classes.inputStyle}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
 
-        <button type="button" className="initBt" onClick={submit}>
-          Recuperar
-        </button>
-        <Link className="right d-block pt10" to="./loginNormal">
-          ¿Ya tienes una cuenta?
-        </Link>
+          <button
+            type="button"
+            className={global.initBt}
+            onClick={() => recover()}
+          >
+            Recuperar
+          </button>
+          <div className={classes.link}>
+            <Link style={{ display: "inline-block" }} to="./loginNormal">
+              ¿Ya tienes una cuenta?
+            </Link>
+          </div>
+        </div>
+        <Waves />
       </div>
-      <Waves />
-    </div>
+    </Div100vh>
   );
 };
 export default RecoverPassword;

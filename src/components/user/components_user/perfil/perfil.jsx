@@ -131,7 +131,7 @@ const MyProfile = () => {
             {" "}
             {toFaceMatch ? (
               <div>
-                <p>Debes hacer Facematch</p>
+                <p>Debes hacer Facematch para descargar tu información</p>
                 <Link to="/hello">
                   <button
                     type="button"

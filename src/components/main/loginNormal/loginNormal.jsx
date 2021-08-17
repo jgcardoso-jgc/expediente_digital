@@ -28,6 +28,9 @@ const useStyles = createUseStyles(() => ({
     borderBottom: "1px solid rgb(194, 194, 194)",
     fontSize: "16px",
   },
+  tright: {
+    textAlign: "right",
+  },
   expText: { marginTop: "4px" },
   pt20: { paddingTop: "20px" },
   pb10: { paddingBottom: "10px" },
@@ -117,19 +120,23 @@ const LoginNormal = () => {
         >
           Iniciar Sesión
         </button>
-        <Link
-          style={{ display: "block", marginTop: "14px" }}
-          to="./registerNormal"
-        >
-          <p className={(classes.qa, classes.right)}>
-            ¿Aun no tienes una cuenta?
-          </p>
-        </Link>
-        <Link style={{ display: "block" }} to="./recoverPassword">
-          <p className={(classes.qa, classes.right)}>
-            ¿Olvidaste tu contraseña?
-          </p>
-        </Link>
+        <div className={classes.tright}>
+          <Link
+            style={{ display: "inline-block", marginTop: "14px" }}
+            to="./registerNormal"
+          >
+            <p className={(classes.qa, classes.right)}>
+              ¿Aun no tienes una cuenta?
+            </p>
+          </Link>
+        </div>
+        <div className={classes.tright}>
+          <Link style={{ display: "inline-block" }} to="./recoverPassword">
+            <p className={(classes.qa, classes.right)}>
+              ¿Olvidaste tu contraseña?
+            </p>
+          </Link>
+        </div>
       </Container>
       <Waves />
     </div>

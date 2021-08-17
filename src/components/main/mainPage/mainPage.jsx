@@ -3,7 +3,7 @@
 import React from "react";
 import Div100vh from "react-div-100vh";
 import { Link } from "react-router-dom";
-import { createUseStyles, useTheme } from "react-jss";
+import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import Waves from "../waves/waves";
@@ -70,8 +70,7 @@ const useStyles = createUseStyles(() => ({
 }));
 
 function Login() {
-  const theme = useTheme();
-  const classes = useStyles({ theme });
+  const classes = useStyles();
 
   return (
     <Div100vh>
