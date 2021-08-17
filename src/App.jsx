@@ -13,6 +13,8 @@ import LoginNormal from "./components/main/loginNormal/loginNormal";
 import RegisterNormal from "./components/main/registerNormal/registerNormal";
 import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
 import AdminInit from "./components/admin/admin_init";
+import PrivacidadView from "./components/main/privacidad/privacidad";
+import TerminosView from "./components/main/terminos/terminos";
 import "./App.css";
 import UserInit from "./components/user/user_init";
 
@@ -157,6 +159,12 @@ function App() {
         </Route>
         <Route path="/recoverPassword">
           <RecoverPassword />
+        </Route>
+        <Route path="/terminos">
+          <TerminosView />
+        </Route>
+        <Route path="/privacidad">
+          <PrivacidadView />
         </Route>
         <Route
           path="/"
