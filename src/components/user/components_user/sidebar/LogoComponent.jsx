@@ -13,6 +13,7 @@ const useStyles = createUseStyles(() => ({
     color: "#A4A6B3",
     opacity: 0.7,
     marginLeft: 12,
+    fontSize: 17,
   },
   logo: {
     width: "20px",
@@ -25,7 +26,7 @@ function LogoComponent() {
   return (
     <Row className={classes.container} horizontal="center" vertical="center">
       <img alt="logo" className={classes.logo} src={logo} />
-      <span className={classes.title}>Seguridata</span>
+      <span className={classes.title}>Expediente</span>
     </Row>
   );
 }

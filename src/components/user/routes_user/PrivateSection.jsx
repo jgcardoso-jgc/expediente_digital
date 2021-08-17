@@ -9,7 +9,6 @@ import PrivateRoutes from "./PrivateRoutes";
 const useStyles = createUseStyles({
   container: {
     height: "100%",
-    minHeight: 850,
   },
   mainBlock: {
     marginLeft: 255,
@@ -20,6 +19,12 @@ const useStyles = createUseStyles({
   },
   contentBlock: {
     marginTop: 54,
+  },
+  footer: {
+    position: "relative",
+    paddingTop: 20,
+    bottom: 0,
+    textAlign: "right",
   },
 });
 
@@ -35,6 +40,9 @@ function PrivateSection() {
           <HeaderComponent />
           <div className={classes.contentBlock}>
             <PrivateRoutes />
+          </div>
+          <div className={classes.footer}>
+            <p>Seguridata 2021</p>
           </div>
         </Column>
       </Row>
