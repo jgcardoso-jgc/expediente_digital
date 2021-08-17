@@ -117,6 +117,7 @@ const EditUser = () => {
     setTitle(url.title);
     setImageName(url.imageName);
     setType(typeModal);
+    console.log(url.email);
     setEmail(url.email);
     setShow(true);
   }

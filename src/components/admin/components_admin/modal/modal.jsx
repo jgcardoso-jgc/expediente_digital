@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
@@ -23,13 +23,43 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
   const classes = useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
+  const storage = firebase.storage();
+  const [cancelDocBt, setDocBt] = useState(false);
 
   if (!state) {
     return null;
   }
 
+  function download(urlDownload) {
+    const a = document.createElement("a");
+    a.href = urlDownload;
+    a.download = url.split("/").pop();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
   function cancelar() {
-    console.log("cancelado");
+    setDocBt(true);
+    const query = db.collection("users").where("email", "==", email);
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const gotDoc = doc.data().documents;
+        const newArray = [];
+        console.log(imageName);
+        gotDoc.forEach((filter) => {
+          if (filter.imageName !== imageName) {
+            newArray.push(filter);
+          }
+        });
+        db.collection("users")
+          .doc(doc.id)
+          .update({ documents: newArray })
+          .then(() => {
+            window.location.reload();
+          });
+      });
+    });
   }
 
   function aprobar() {
@@ -52,6 +82,33 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
     });
   }
 
+  function rechazar() {
+    const query = db.collection("users").where("email", "==", email);
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const gotDoc = doc.data().documents;
+        gotDoc.forEach((array, index) => {
+          if (array.imageName === imageName) {
+            gotDoc[index].uploaded = false;
+            db.collection("users")
+              .doc(doc.id)
+              .update({ documents: gotDoc })
+              .then(() => {
+                // erase file
+                const route = `users/${email}/${array.imageName}`;
+                storage
+                  .ref(route)
+                  .delete()
+                  .then(() => {
+                    window.location.reload();
+                  });
+              });
+          }
+        });
+      });
+    });
+  }
+
   return (
     <Modal show={state}>
       <Modal.Header onClick={onClose} closeButton>
@@ -66,7 +123,7 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
       </Modal.Body>
       <Modal.Footer>
         {type === "completados" ? (
-          <Button onClick={onClose} variant="secondary">
+          <Button onClick={() => download(url)} variant="secondary">
             Descargar
           </Button>
         ) : (
@@ -76,12 +133,19 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
                 <Button onClick={() => aprobar()} className={classes.aprobarBt}>
                   Aprobar
                 </Button>
-                <Button onClick={onClose} className={classes.rechazarBt}>
+                <Button
+                  onClick={() => rechazar()}
+                  className={classes.rechazarBt}
+                >
                   Rechazar
                 </Button>
               </div>
             ) : (
-              <Button onClick={() => cancelar()} className={classes.aprobarBt}>
+              <Button
+                onClick={() => cancelar()}
+                disabled={cancelDocBt}
+                className={classes.aprobarBt}
+              >
                 Cancelar documento
               </Button>
             )}

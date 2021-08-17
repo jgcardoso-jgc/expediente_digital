@@ -49,7 +49,12 @@ async function getDownloadURLS(storage, docsArray, locData) {
             }
           })
           .catch(() => {
-            pendientes.push({ url: "404", title: doc.name });
+            pendientes.push({
+              url: "404",
+              title: doc.name,
+              email,
+              imageName: doc.imageName,
+            });
           })
       );
     });
