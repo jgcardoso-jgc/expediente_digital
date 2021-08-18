@@ -2,6 +2,7 @@
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
+import { FaBell } from "react-icons/fa";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
@@ -53,6 +54,12 @@ function SidebarComponent() {
         title="Usuarios"
         icon={IconContacts}
         onClick={() => onClick(SLUGS.contacts)}
+      />
+      <MenuItem
+        id={SLUGS.alertas}
+        title="Alertas"
+        icon={FaBell}
+        onClick={() => onClick(SLUGS.alertas)}
       />
       <div className={classes.separator} />
       <MenuItem

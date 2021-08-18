@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
 import React, { useState } from "react";
@@ -6,6 +5,7 @@ import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { ToastContainer, toast } from "react-toastify";
 import TableView from "../table/tableView";
 import styles from "../../../../resources/theme";
 
@@ -39,16 +39,42 @@ const UserView = () => {
   const classes = useStyles();
   const global = globalTheme();
   const firebase = useFirebaseApp();
+  const db = firebase.firestore();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
 
   async function submit() {
     try {
-      if (email !== "" && password !== "") {
+      if (email !== "") {
         setDisable(true);
-        await firebase.auth().signInWithEmailAndPassword(email, password);
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, "seguridata11")
+          .then((res) => {
+            const id = res.user.uid;
+            const jsonRegister = {
+              uid: id,
+              fullname: name,
+              email,
+              rfc: "",
+              token: "",
+              onboarding: false,
+              documents: [],
+            };
+            try {
+              db.collection("users")
+                .add(jsonRegister)
+                .then(() => {
+                  window.location.reload();
+                });
+            } catch (error) {
+              toast(error.message);
+            }
+          })
+          .catch((error) => {
+            toast(error.message);
+          });
       }
     } catch (e) {
       setDisable(false);
@@ -58,6 +84,7 @@ const UserView = () => {
   return (
     <div>
       <TableView />
+      <ToastContainer />
       <div className={classes.userDiv}>
         <div className={classes.card}>
           <p>
@@ -74,19 +101,6 @@ const UserView = () => {
                   id="email"
                   className={classes.inputStyle}
                   onChange={(event) => setEmail(event.target.value)}
-                />
-              </div>
-            </Col>
-            <Col>
-              <div className="formGroup">
-                <label htmlFor="password" className="block pb10">
-                  Contraseña
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className={classes.inputStyle}
-                  onChange={(event) => setPassword(event.target.value)}
                 />
               </div>
             </Col>

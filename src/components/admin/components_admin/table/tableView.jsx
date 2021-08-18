@@ -29,7 +29,7 @@ function TableView() {
   async function getData() {
     setLoading(true);
     return new Promise((resolve) => {
-      const query = db.collection("users").where("rfc", "!=", "");
+      const query = db.collection("users").where("fullname", "!=", "");
       query.get().then((querySnapshot) => {
         const dataGet = [];
         if (querySnapshot.size > 0) {
@@ -39,15 +39,17 @@ function TableView() {
             let sizeDocs = 0;
             let revDocs = 0;
             let penDocs = 0;
-            docData.forEach((docState) => {
-              if (docState.state === true) {
-                sizeDocs += 1;
-              } else if (docState.uploaded === true) {
-                revDocs += 1;
-              } else {
-                penDocs += 1;
-              }
-            });
+            if (docData > 0) {
+              docData.forEach((docState) => {
+                if (docState.state === true) {
+                  sizeDocs += 1;
+                } else if (docState.uploaded === true) {
+                  revDocs += 1;
+                } else {
+                  penDocs += 1;
+                }
+              });
+            }
             generalData.sizeDocuments = sizeDocs;
             generalData.revisionDocs = revDocs;
             generalData.pendientesDocs = penDocs;

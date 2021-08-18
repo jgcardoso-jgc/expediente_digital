@@ -5,4 +5,5 @@ export default {
   contacts: "/contacts",
   editUser: "/contacts/editUser",
   settings: "/settings",
+  alertas: "/alertas",
 };

@@ -9,7 +9,6 @@ import PrivateRoutes from "./PrivateRoutes";
 const useStyles = createUseStyles({
   container: {
     height: "100%",
-    minHeight: 850,
   },
   mainBlock: {
     marginLeft: 255,
