@@ -31,6 +31,15 @@ const useStyles = createUseStyles(() => ({
     textAlign: "right",
     marginTop: 10,
   },
+  container: {
+    maxWidth: "400px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "left",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    marginTop: 100,
+  },
 }));
 
 const RecoverPassword = () => {
@@ -58,7 +67,7 @@ const RecoverPassword = () => {
     <Div100vh>
       <NavBarMainPage className={classes.navmain} />
       <div className="center">
-        <div className="container max400 pt40">
+        <div className={classes.container}>
           <div>
             <h2 className={classes.title}>
               <b>Recupera tu contraseña</b>

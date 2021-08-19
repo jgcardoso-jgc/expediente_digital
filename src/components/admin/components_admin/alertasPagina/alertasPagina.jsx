@@ -19,6 +19,9 @@ const useStyles = createUseStyles(() => ({
     position: "absolute",
     width: "100%",
   },
+  container: {
+    minHeight: "80vh",
+  },
   flex: {
     display: "flex",
     justifyContent: "center",
@@ -99,7 +102,7 @@ const AlertasPagina = () => {
   }, []);
   return (
     <div>
-      <div className="container max500">
+      <div className={classes.container}>
         {alerts.length > 0 && (
           <div>
             {alerts.map((projName) => (

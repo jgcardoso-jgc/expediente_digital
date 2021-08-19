@@ -26,6 +26,14 @@ const useStyles = createUseStyles(() => ({
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
+  container: {
+    maxWidth: "400px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "left",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+  },
 }));
 
 let incode = null;
@@ -125,7 +133,7 @@ const MyProfile = () => {
   return (
     <div>
       <ToastContainer />
-      <div className="container max500">
+      <div className={classes.container}>
         {loading ? (
           <div className={classes.center}>
             {" "}

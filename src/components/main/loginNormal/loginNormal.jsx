@@ -31,6 +31,9 @@ const useStyles = createUseStyles(() => ({
   tright: {
     textAlign: "right",
   },
+  mb20: {
+    marginBottom: 20,
+  },
   expText: { marginTop: "4px" },
   pt20: { paddingTop: "20px" },
   pb10: { paddingBottom: "10px" },
@@ -90,10 +93,8 @@ const LoginNormal = () => {
           </h2>
           <p className="expText">Accede a tu expediente</p>
         </div>
-        <div className="formGroup">
-          <label htmlFor="email" className="block pb10">
-            Correo electrónico
-          </label>
+        <div className={classes.mb20}>
+          <label htmlFor="email">Correo electrónico</label>
           <input
             type="email"
             id="email"
@@ -101,7 +102,7 @@ const LoginNormal = () => {
             onChange={(event) => setEmail(event.target.value)}
           />
         </div>
-        <div className="formGroup">
+        <div>
           <label htmlFor="password" className="block pb10 pt20">
             Contraseña
           </label>

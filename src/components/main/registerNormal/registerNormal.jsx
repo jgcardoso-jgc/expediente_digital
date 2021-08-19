@@ -25,6 +25,7 @@ const useStyles = createUseStyles(() => ({
     textAlign: "left",
     paddingLeft: "20px",
     paddingRight: "20px",
+    marginTop: 50,
   },
   inputStyle: {
     width: "100%",
@@ -100,7 +101,7 @@ const RegisterNormal = () => {
     <div className="center">
       <NavBarMainPage />
       <ToastContainer />
-      <div className="container max400 pt40 pt0-sm">
+      <div className={classes.container}>
         <div>
           <h2 className={`${classes.regText} ${classes.left}`}>
             <b>Regístrate</b>

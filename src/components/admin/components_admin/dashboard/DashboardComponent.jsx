@@ -6,7 +6,6 @@ import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
-import TodayTrendsComponent from "./TodayTrendsComponent";
 import UnresolvedTicketsComponent from "./UnresolvedTicketsComponent";
 import TasksComponent from "./TasksComponent";
 
@@ -148,9 +147,6 @@ function DashboardComponent() {
           />
         </Row>
       </Row>
-      <div className={classes.todayTrends}>
-        <TodayTrendsComponent />
-      </div>
       <Row
         horizontal="space-between"
         className={classes.lastRow}

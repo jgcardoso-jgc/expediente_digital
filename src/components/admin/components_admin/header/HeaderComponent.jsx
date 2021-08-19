@@ -11,6 +11,7 @@ import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
 import firebase from "firebase";
 import SLUGS from "../../resources/slugs";
+import AlertComponent from "../alerts/AlertComponent";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
 import { IconBell } from "../../assets/icons";
@@ -123,26 +124,8 @@ function HeaderComponent() {
       </span>
       <Row vertical="center">
         <div className={classes.iconStyles}>
-          <DropdownComponent
+          <AlertComponent
             label={<IconBell />}
-            options={[
-              {
-                label: "Notification #1",
-                onClick: () => console.log("Notification #1"),
-              },
-              {
-                label: "Notification #2",
-                onClick: () => console.log("Notification #2"),
-              },
-              {
-                label: "Notification #3",
-                onClick: () => console.log("Notification #3"),
-              },
-              {
-                label: "Notification #4",
-                onClick: () => console.log("Notification #4"),
-              },
-            ]}
             position={{
               top: 42,
               right: -14,
