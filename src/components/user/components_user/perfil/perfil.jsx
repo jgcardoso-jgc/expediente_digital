@@ -34,6 +34,9 @@ const useStyles = createUseStyles(() => ({
     paddingLeft: "20px",
     paddingRight: "20px",
   },
+  mt20: {
+    marginTop: 20,
+  },
 }));
 
 let incode = null;
@@ -170,6 +173,11 @@ const MyProfile = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className={classes.container}>
+        <div className={`${classes.cardDashboard} ${classes.mt20}`}>
+          <b>Editar Información</b>
+        </div>
       </div>
     </div>
   );

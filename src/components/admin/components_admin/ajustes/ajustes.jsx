@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
@@ -57,6 +57,27 @@ const AjustesAdmin = () => {
 
   function submit() {
     setDisable(true);
+    const query = db.collection("documentos");
+    query.get().then((querySnapshot) => {
+      let dataGet = [];
+      let id = "";
+      if (querySnapshot.size > 0) {
+        querySnapshot.forEach((doc) => {
+          dataGet = doc.data().lista;
+          id = doc.id;
+        });
+        dataGet.push({ nombre: name, descripcion, nombreImagen: "test" });
+        db.collection("documentos")
+          .doc(id)
+          .update({ lista: dataGet })
+          .then(() => {
+            window.location.reload();
+          })
+          .catch((e) => {
+            console.log(e.message);
+          });
+      }
+    });
   }
 
   useEffect(() => {
@@ -104,7 +125,7 @@ const AjustesAdmin = () => {
                             className={classes.text}
                             key={`${doc.nombreImagen}i`}
                           >
-                            {doc.nombreImagen}
+                            {doc.descripcion}
                           </p>
                         </td>
                         <td>0</td>

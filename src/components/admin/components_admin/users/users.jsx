@@ -60,6 +60,7 @@ const UserView = () => {
               rfc: "",
               token: "",
               onboarding: false,
+              cargo: "",
               documents: [],
             };
             try {

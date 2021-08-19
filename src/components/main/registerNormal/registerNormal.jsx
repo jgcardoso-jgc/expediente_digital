@@ -80,6 +80,7 @@ const RegisterNormal = () => {
           rfc,
           token: "",
           onboarding: false,
+          cargo: "",
           documents: [],
         };
         try {

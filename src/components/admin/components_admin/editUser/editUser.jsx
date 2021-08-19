@@ -28,6 +28,11 @@ const useStyles = createUseStyles(() => ({
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     padding: "24px 32px 0px 32px",
     height: "100%",
+    maxWidth: 600,
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+    paddingBottom: 20,
   },
   containerPendiente: {
     backgroundColor: "#f2bd85",
@@ -154,7 +159,7 @@ const EditUser = () => {
   return (
     <div>
       <ToastContainer />
-      <div className="container max500">
+      <div className={classes.container}>
         <div className="cardDashboard pt10">
           <div className="row" />
           <b>Nombre</b>

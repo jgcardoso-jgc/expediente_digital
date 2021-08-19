@@ -39,7 +39,7 @@ function TableView() {
             let sizeDocs = 0;
             let revDocs = 0;
             let penDocs = 0;
-            if (docData > 0) {
+            if (docData.length > 0) {
               docData.forEach((docState) => {
                 if (docState.state === true) {
                   sizeDocs += 1;

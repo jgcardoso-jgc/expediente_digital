@@ -73,12 +73,7 @@ const AlertasPagina = () => {
       console.log("not verified");
       al.push({ message: "No has confirmado tu correo", doc: "" });
     }
-    const user = firebase.auth().currentUser;
-    let uid = "";
-    if (user) {
-      uid = user.uid;
-    }
-    const query = db.collection("users").where("uid", "==", uid);
+    const query = db.collection("users").where("name", "!=", "");
     await query.get().then((querySnapshot) => {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
