@@ -1,8 +1,11 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable quotes */
 /* eslint-disable react/jsx-one-expression-per-line */
 import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
+import PropTypes from "prop-types";
 
 const SignedDocuments = (props) => {
   const { signedDocuments } = props;
@@ -49,6 +52,11 @@ const SignedDocuments = (props) => {
       </Accordion.Body>
     </Accordion>
   );
+};
+
+SignedDocuments.propTypes = {
+  signedDocuments: PropTypes.any.isRequired,
+  seguriSignController: PropTypes.any.isRequired,
 };
 
 export default SignedDocuments;

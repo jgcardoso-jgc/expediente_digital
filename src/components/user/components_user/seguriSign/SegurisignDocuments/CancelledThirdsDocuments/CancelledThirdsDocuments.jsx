@@ -1,8 +1,11 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
 import { Accordion } from "react-bootstrap";
 import React from "react";
-import { any } from "prop-types";
+import PropTypes from "prop-types";
 
 const CancelledThirdsDocuments = (props) => {
   const { cancelledByThirds } = props;
@@ -49,7 +52,8 @@ const CancelledThirdsDocuments = (props) => {
 };
 
 CancelledThirdsDocuments.propTypes = {
-  cancelledByThirds: propTypes.any.isRequired,
+  cancelledByThirds: PropTypes.any.isRequired,
+  seguriSignController: PropTypes.any.isRequired,
 };
 
 export default CancelledThirdsDocuments;

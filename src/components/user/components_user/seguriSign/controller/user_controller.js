@@ -113,6 +113,7 @@ class UserController {
       const docData = doc.data();
       docData.firmados.push(uid);
       docData.usuarios.forEach((u) => {
+        // eslint-disable-next-line no-param-reassign
         u.firmo = u.uid === uid;
       });
       await doc.ref.update(docData);

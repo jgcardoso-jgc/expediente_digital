@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
 import {
@@ -15,6 +18,7 @@ import {
   TiDeleteOutline,
 } from "react-icons/all";
 // import UserController from "../../controller/user_controller";
+import PropTypes from "prop-types";
 import SignPopUP from "../../SignPopup/SignPopup";
 import CancelPopup from "../../CancelPopup/CancelPopup";
 import CustomLoader from "../../CustomLoader/CustomLoader";
@@ -22,6 +26,10 @@ import CustomLoader from "../../CustomLoader/CustomLoader";
 const UnsignedDocuments = (props) => {
   const [loading, setLoading] = useState(false);
   const { unsignedDocuments } = props;
+  const { toaster } = props;
+  const { seguriSignController } = props;
+  const { long } = props;
+  const { lat } = props;
   // const userController = new UserController();
 
   const renderTableCell = (user, index) => (
@@ -92,10 +100,10 @@ const UnsignedDocuments = (props) => {
                     <Row>
                       <Col>
                         <CancelPopup
-                          toaster={props.toaster}
+                          toaster={toaster}
                           key={item.multilateralId}
                           multilateralId={item.multilateralId}
-                          seguriSignController={props.seguriSignController}
+                          seguriSignController={seguriSignController}
                         />
                       </Col>
                       <Col>
@@ -108,7 +116,7 @@ const UnsignedDocuments = (props) => {
                             style={{ width: "80%" }}
                             onClick={() => {
                               setLoading(true);
-                              props.seguriSignController
+                              seguriSignController
                                 .getDocument(item.multilateralId)
                                 .then((docUrl) => {
                                   window.open(
@@ -118,7 +126,7 @@ const UnsignedDocuments = (props) => {
                                 })
                                 .catch((e) => {
                                   setLoading(false);
-                                  props.toaster.errorToast(e);
+                                  toaster.errorToast(e);
                                 });
                             }}
                           >
@@ -128,10 +136,10 @@ const UnsignedDocuments = (props) => {
                       </Col>
                       <Col>
                         <SignPopUP
-                          toaster={props.toaster}
-                          seguriSignController={props.seguriSignController}
-                          long={props.long}
-                          lat={props.lat}
+                          toaster={toaster}
+                          seguriSignController={seguriSignController}
+                          long={long}
+                          lat={lat}
                           key={item.multilateralId}
                           multilateralId={item.multilateralId}
                           fileName={item.fileName}
@@ -147,6 +155,14 @@ const UnsignedDocuments = (props) => {
       </Accordion.Body>
     </Accordion>
   );
+};
+
+UnsignedDocuments.propTypes = {
+  unsignedDocuments: PropTypes.any.isRequired,
+  toaster: PropTypes.any.isRequired,
+  seguriSignController: PropTypes.any.isRequired,
+  long: PropTypes.any.isRequired,
+  lat: PropTypes.any.isRequired,
 };
 
 export default UnsignedDocuments;
