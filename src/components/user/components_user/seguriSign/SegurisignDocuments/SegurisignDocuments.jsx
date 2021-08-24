@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
@@ -52,10 +53,6 @@ const SegurisignDocuments = (props) => {
     }
   }, [location]);
 
-  useEffect(() => {
-    getDocuments();
-  }, []);
-
   const getDocuments = async () => {
     const [
       signedDoc,
@@ -80,6 +77,10 @@ const SegurisignDocuments = (props) => {
       cancelledByThirds: cancelledByThirdsDoc,
     });
   };
+
+  useEffect(() => {
+    getDocuments();
+  }, []);
 
   return () => {
     if (location.loading) {

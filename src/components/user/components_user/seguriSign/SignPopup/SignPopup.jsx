@@ -1,28 +1,39 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable operator-linebreak */
+/* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable no-console */
+/* eslint-disable quotes */
 import React, { useRef, useState } from "react";
 import Popup from "reactjs-popup";
 import Card from "react-bootstrap/Card";
 import { Col } from "react-bootstrap";
 import SignatureCanvas from "react-signature-canvas";
 import Button from "react-bootstrap/Button";
-import UserController from "../../../controller/user_controller";
+import PropTypes from "prop-types";
+import UserController from "../controller/user_controller";
 
 const SignPopUP = (props) => {
   const sigCanvas = useRef({});
+  const { seguriSignController } = props;
+  const { multilateralId } = props;
+  const { lat } = props;
+  const { long } = props;
+  const { toaster } = props;
   const clear = () => sigCanvas.current.clear();
   const userController = new UserController();
   const [loading, setLoading] = useState(false);
   const sign = async () => {
-    const signedSuccessfully =
-      await props.seguriSignController.biometricSignature(
-        sigCanvas.current,
-        props.multilateralId,
-        props.lat,
-        props.long
-      );
+    const signedSuccessfully = await seguriSignController.biometricSignature(
+      sigCanvas.current,
+      multilateralId,
+      lat,
+      long
+    );
     if (signedSuccessfully) {
-      alert(signedSuccessfully);
+      console.log(signedSuccessfully);
     } else {
-      alert("Error al firmar");
+      console.log("Error al firmar");
     }
     return signedSuccessfully;
   };
@@ -31,7 +42,11 @@ const SignPopUP = (props) => {
       <Popup
         modal
         trigger={
-          <button style={{ width: "100%" }} className="btn-seguridata-lg">
+          <button
+            type="button"
+            style={{ width: "100%" }}
+            className="btn-seguridata-lg"
+          >
             Firmar
           </button>
         }
@@ -66,6 +81,7 @@ const SignPopUP = (props) => {
                   </Button>
                   <button
                     className="btn-seguridata-lg"
+                    type="button"
                     style={{
                       height: "3rem",
                       width: "9rem",
@@ -78,9 +94,7 @@ const SignPopUP = (props) => {
                         await userController.updateDocSigned(
                           props.multilateralId
                         );
-                        props.toaster.successToast(
-                          "Documento firmado con éxito"
-                        );
+                        toaster.successToast("Documento firmado con éxito");
                       } else {
                         props.toaster.errorToast("Error al firmar documento");
                       }
@@ -90,6 +104,7 @@ const SignPopUP = (props) => {
                   >
                     Firmar
                   </button>
+                  {loading ? <div>cargando...</div> : <div>Listo</div>}
                 </Col>
               </Card.Body>
             </Card>
@@ -98,5 +113,13 @@ const SignPopUP = (props) => {
       </Popup>
     </div>
   );
+};
+
+SignPopUP.propTypes = {
+  seguriSignController: PropTypes.any.isRequired,
+  lat: PropTypes.any.isRequired,
+  long: PropTypes.any.isRequired,
+  multilateralId: PropTypes.any.isRequired,
+  toaster: PropTypes.any.isRequired,
 };
 export default SignPopUP;
