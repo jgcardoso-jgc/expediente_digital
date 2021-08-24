@@ -21,6 +21,7 @@ import CustomLoader from "../../CustomLoader/CustomLoader";
 
 const UnsignedDocuments = (props) => {
   const [loading, setLoading] = useState(false);
+  const { unsignedDocuments } = props;
   // const userController = new UserController();
 
   const renderTableCell = (user, index) => (
@@ -45,12 +46,12 @@ const UnsignedDocuments = (props) => {
       <Accordion.Header>
         Por Firmar
         <Badge style={{ marginLeft: "3rem" }} pill bg="dark">
-          {props.unsignedDocuments.length}
+          {unsignedDocuments.length}
         </Badge>
       </Accordion.Header>
       <Accordion.Body>
         <Accordion flush>
-          {props.unsignedDocuments.map((item, index) => {
+          {unsignedDocuments.map((item, index) => {
             const now = getPercentage(item);
             return (
               <Accordion.Item eventKey={index + 1}>
