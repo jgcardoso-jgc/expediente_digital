@@ -70,6 +70,12 @@ function SidebarComponent() {
         icon={IconContacts}
         onClick={() => onClick(SLUGS.documentos)}
       />
+      <MenuItem
+        id={SLUGS.sign}
+        title="SeguriSign"
+        icon={IconContacts}
+        onClick={() => onClick(SLUGS.sign)}
+      />
       <div className={classes.separator} />
       <MenuItem
         id={SLUGS.alerts}
