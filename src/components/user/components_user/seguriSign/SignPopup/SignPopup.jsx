@@ -1,10 +1,9 @@
-import React, { useRef, useState } from "react";
-import Popup from "reactjs-popup";
-import Card from "react-bootstrap/Card";
-import { Col } from "react-bootstrap";
-import SignatureCanvas from "react-signature-canvas";
-import Button from "react-bootstrap/Button";
-import UserController from "../../../controller/user_controller";
+import React, { useRef, useState } from 'react';
+import Popup from 'reactjs-popup';
+import Card from 'react-bootstrap/Card';
+import { Col } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import UserController from '../controller/user_controller';
 
 const SignPopUP = (props) => {
   const sigCanvas = useRef({});
@@ -22,7 +21,7 @@ const SignPopUP = (props) => {
     if (signedSuccessfully) {
       alert(signedSuccessfully);
     } else {
-      alert("Error al firmar");
+      alert('Error al firmar');
     }
     return signedSuccessfully;
   };
@@ -31,7 +30,7 @@ const SignPopUP = (props) => {
       <Popup
         modal
         trigger={
-          <button style={{ width: "100%" }} className="btn-seguridata-lg">
+          <button style={{ width: '100%' }} className="btn-seguridata-lg">
             Firmar
           </button>
         }
@@ -48,7 +47,7 @@ const SignPopUP = (props) => {
                     canvasProps={{
                       width: 500,
                       height: 200,
-                      className: "sigCanvas",
+                      className: 'sigCanvas',
                     }}
                   />
                 </Col>
@@ -59,7 +58,7 @@ const SignPopUP = (props) => {
                   </Button>
                   <Button
                     variant="outline-dark"
-                    style={{ "margin-left": "2rem" }}
+                    style={{ 'margin-left': '2rem' }}
                     onClick={clear}
                   >
                     Borrar
@@ -67,9 +66,9 @@ const SignPopUP = (props) => {
                   <button
                     className="btn-seguridata-lg"
                     style={{
-                      height: "3rem",
-                      width: "9rem",
-                      "margin-left": "3rem",
+                      height: '3rem',
+                      width: '9rem',
+                      'margin-left': '3rem',
                     }}
                     onClick={async () => {
                       setLoading(true);
@@ -79,10 +78,10 @@ const SignPopUP = (props) => {
                           props.multilateralId
                         );
                         props.toaster.successToast(
-                          "Documento firmado con éxito"
+                          'Documento firmado con éxito',
                         );
                       } else {
-                        props.toaster.errorToast("Error al firmar documento");
+                        props.toaster.errorToast('Error al firmar documento');
                       }
                       setLoading(false);
                       close();
