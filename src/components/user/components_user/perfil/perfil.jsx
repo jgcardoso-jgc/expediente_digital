@@ -34,6 +34,12 @@ const useStyles = createUseStyles(() => ({
     paddingLeft: "20px",
     paddingRight: "20px",
   },
+  inputStyle: {
+    width: "100%",
+    border: "0",
+    borderBottom: "1px solid rgb(194, 194, 194)",
+    fontSize: "16px",
+  },
   mt20: {
     marginTop: 20,
   },
@@ -177,6 +183,8 @@ const MyProfile = () => {
       <div className={classes.container}>
         <div className={`${classes.cardDashboard} ${classes.mt20}`}>
           <b>Editar Información</b>
+          <p>RFC</p>
+          <p>Ocupación</p>
         </div>
       </div>
     </div>
