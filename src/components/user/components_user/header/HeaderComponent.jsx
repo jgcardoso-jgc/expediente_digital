@@ -74,6 +74,7 @@ function HeaderComponent() {
         console.log("logged out");
         localStorage.removeItem("admin");
         localStorage.removeItem("user");
+        localStorage.removeItem("profilepic");
       });
   }
   const { push } = useHistory();

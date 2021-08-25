@@ -43,6 +43,12 @@ const useStyles = createUseStyles(() => ({
   mt20: {
     marginTop: 20,
   },
+  textCard: {
+    marginBottom: 4,
+  },
+  img: {
+    borderRadius: 10,
+  },
 }));
 
 let incode = null;
@@ -166,15 +172,15 @@ const MyProfile = () => {
           <div className={classes.cardDashboard}>
             <div className="row">
               <div className="col max40">
-                <img src={urlProfile} alt="profile" />
+                <img src={urlProfile} className={classes.img} alt="profile" />
               </div>
               <div className="col min50">
                 <p className="mb0">
                   <b>{name}</b>
                 </p>
-                <p className="mt4 mb0">Frontend Developer</p>
-                <p className="mt4 mb0">{email}</p>
-                <p className="mt4">{rfc}</p>
+                <p className={classes.textCard}>Frontend Developer</p>
+                <p className={classes.textCard}>{email}</p>
+                <p className={classes.textCard}>{rfc}</p>
               </div>
             </div>
           </div>
