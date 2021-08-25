@@ -11,14 +11,25 @@ import { ButtonGroup, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import Button from "react-bootstrap/Button";
 import React, { useRef, useState } from "react";
+import { createUseStyles } from "react-jss";
 import PropTypes from "prop-types";
 import CustomLoader from "../CustomLoader/CustomLoader";
 import UserController from "../controller/user_controller";
+import styles from "../../../../../resources/theme";
+
+const globalTheme = createUseStyles(styles);
+const useStyles = createUseStyles(() => ({
+  subirBt: {
+    marginRight: "auto",
+  },
+}));
 
 const UploadPopup = (props) => {
   const signerInput = useRef(null);
   const { toaster } = props;
+  const classes = useStyles();
   const { seguriSignController } = props;
+  const global = globalTheme();
   const [loader, setLoader] = useState(false);
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
@@ -94,9 +105,13 @@ const UploadPopup = (props) => {
       <Popup
         modal
         trigger={
-          <button type="button" size="lg" className="btn-seguridata-upload">
-            <h6 style={{ color: "#83bb04" }}>Subir documento</h6>
+          <button
+            type="button"
+            size="lg"
+            className={`${global.initBt} ${classes.subirBt}`}
+          >
             <FcUpload />
+            <h6>Subir documento</h6>
           </button>
         }
       >
