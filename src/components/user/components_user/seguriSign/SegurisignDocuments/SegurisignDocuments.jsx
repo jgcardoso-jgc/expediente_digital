@@ -1,8 +1,11 @@
 /* eslint-disable comma-dangle */
+/* eslint-disable react/no-typos */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import Card from "react-bootstrap/Card";
+import PropTypes from "prop-types";
 import CustomToasts from "../../Toasts/CustomToasts";
 import UploadPopup from "../UploadPopup/UploadPopup";
 import SignedDocuments from "./SignedDocuments/SignedDocuments";
@@ -82,12 +85,17 @@ const SegurisignDocuments = (props) => {
     getDocuments();
   }, []);
 
-  return () => {
-    if (location.loading) {
-      <div>Cargando...</div>;
-    }
-    if (location.isEnabled) {
-      if (loaded.hasLoaded) {
+  SegurisignDocuments.propTypes = {
+
+    seguriSignController: PropTypes.any.isRequired,
+  };
+
+  if (location.loading) {
+    return <div>Cargando...</div>;
+  }
+  if (location.isEnabled) {
+    if (loaded.hasLoaded) {
+      return (
         <div className="inner box-shadow">
           <ToastContainer />
           <Card>
@@ -126,16 +134,18 @@ const SegurisignDocuments = (props) => {
               />
             </Card.Body>
           </Card>
-        </div>;
-      } else {
-        <div>Cargando...</div>;
-      }
-    } else {
-      <div className="centered">
-        <h2>Necesitas activar tu ubicación</h2>
-      </div>;
+        </div>
+      );
     }
-  };
+    if (loaded.loading) {
+      return <div>Cargando...</div>;
+    }
+  }
+  return (
+    <div className="centered">
+      <h2>Necesitas activar tu ubicación</h2>
+    </div>
+  );
 };
 
 export default SegurisignDocuments;

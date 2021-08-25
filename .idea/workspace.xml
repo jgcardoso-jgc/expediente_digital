@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f827d0b-671f-4398-810d-02a185ddbe3e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/seguriSign.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/seguriSign.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/SegurisignDocuments/SegurisignDocuments.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/SegurisignDocuments/SegurisignDocuments.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/controller/user_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/controller/user_controller.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +47,7 @@
       <workItem from="1629818526230" duration="4803000" />
       <workItem from="1629824782273" duration="2312000" />
       <workItem from="1629835394402" duration="43000" />
+      <workItem from="1629865680913" duration="60000" />
     </task>
     <servers />
   </component>

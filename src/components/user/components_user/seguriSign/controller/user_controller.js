@@ -86,7 +86,7 @@ class UserController {
     });
   }
 
-  static getUserDocs(uid) {
+  getUserDocs = (uid) => {
     const docs = [];
     db.collection("sign-docs")
       .where("uids", "array-contains", { uid })
