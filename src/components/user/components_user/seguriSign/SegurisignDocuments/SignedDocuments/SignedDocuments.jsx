@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable implicit-arrow-linebreak */
@@ -8,7 +10,10 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const SignedDocuments = (props) => {
-  const { signedDocuments } = props;
+  let { signedDocuments } = props;
+  if (signedDocuments === "404") {
+    signedDocuments = [];
+  }
   const { seguriSignController } = props;
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
@@ -20,34 +25,42 @@ const SignedDocuments = (props) => {
       </Accordion.Header>
       <Accordion.Body>
         <Accordion flush>
-          {signedDocuments.map((item, index) => (
-            <Accordion.Item eventKey={index + 1}>
-              <Accordion.Header>{item.fileName}</Accordion.Header>
-              <Accordion.Body>
-                <div align="center">
-                  <div style={{ "margin-left": "2rem" }} align="left">
-                    <li>Tipo de documento: {item.docType}</li>
-                    <li>Número de firmas: {item.numberSignatures}</li>
-                    <li>Fecha de firmado: {item.signDate}</li>
-                  </div>
-                  <br />
-                  <button
-                    type="button"
-                    className="btn-seguridata-lg"
-                    onClick={() =>
-                      seguriSignController
-                        .getDocument(item.multilateralId)
-                        .then((docUrl) => {
-                          window.open(`data:application/pdf;base64,${docUrl}`);
-                        })
-                    }
-                  >
-                    Descargar
-                  </button>
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          ))}
+          {signedDocuments.length > 0 ? (
+            <div>
+              {signedDocuments.map((item, index) => (
+                <Accordion.Item eventKey={index + 1}>
+                  <Accordion.Header>{item.fileName}</Accordion.Header>
+                  <Accordion.Body>
+                    <div align="center">
+                      <div style={{ "margin-left": "2rem" }} align="left">
+                        <li>Tipo de documento: {item.docType}</li>
+                        <li>Número de firmas: {item.numberSignatures}</li>
+                        <li>Fecha de firmado: {item.signDate}</li>
+                      </div>
+                      <br />
+                      <button
+                        type="button"
+                        className="btn-seguridata-lg"
+                        onClick={() =>
+                          seguriSignController
+                            .getDocument(item.multilateralId)
+                            .then((docUrl) => {
+                              window.open(
+                                `data:application/pdf;base64,${docUrl}`
+                              );
+                            })
+                        }
+                      >
+                        Descargar
+                      </button>
+                    </div>
+                  </Accordion.Body>
+                </Accordion.Item>
+              ))}
+            </div>
+          ) : (
+            ""
+          )}
         </Accordion>
       </Accordion.Body>
     </Accordion>

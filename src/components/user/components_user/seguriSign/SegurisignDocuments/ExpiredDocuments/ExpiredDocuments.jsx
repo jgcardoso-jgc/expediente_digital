@@ -8,8 +8,13 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const ExpiredDocuments = (props) => {
-  const { expiredDoc } = props;
+  let { expiredDoc } = props;
   const { seguriSignController } = props;
+
+  if (expiredDoc === "404") {
+    expiredDoc = [];
+  }
+
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
       <Accordion.Header>Expirados</Accordion.Header>

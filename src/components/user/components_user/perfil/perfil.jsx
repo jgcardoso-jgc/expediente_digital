@@ -57,6 +57,7 @@ const MyProfile = () => {
   const theme = useTheme();
   const global = globalTheme({ theme });
   const classes = useStyles({ theme });
+  const [urlProfile, setUrlProfile] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
   const { email } = user;
@@ -71,12 +72,9 @@ const MyProfile = () => {
     if (response.includes("404", 0)) {
       notExists();
     } else {
-      const frontId = new Image();
-      frontId.src = response;
-      frontId.style.width = "100%";
-      frontId.style.borderRadius = "7px";
       setLoading(false);
-      document.getElementById("pic").appendChild(frontId);
+      setUrlProfile(response);
+      localStorage.setItem("profilepic", response);
     }
   }
 
@@ -121,18 +119,20 @@ const MyProfile = () => {
   }
 
   function getState() {
-    console.log(user.token);
-    const route = `users/${user.email}/croppedFace`;
-    db.ref(route)
-      .getDownloadURL()
-      .then((response) => {
-        console.log("founded");
-        exists(response);
-      })
-      .catch(() => {
-        console.log("not founded");
-        notExists();
-      });
+    if (localStorage.getItem("profilepic") === null) {
+      const route = `users/${user.email}/croppedFace`;
+      db.ref(route)
+        .getDownloadURL()
+        .then((response) => {
+          exists(response);
+        })
+        .catch(() => {
+          notExists();
+        });
+    } else {
+      const url = localStorage.getItem("profilepic");
+      exists(url);
+    }
   }
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const MyProfile = () => {
           <div className={classes.cardDashboard}>
             <div className="row">
               <div className="col max40">
-                <div id="pic" />
+                <img src={urlProfile} alt="profile" />
               </div>
               <div className="col min50">
                 <p className="mb0">

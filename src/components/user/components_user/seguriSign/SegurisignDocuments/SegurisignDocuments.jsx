@@ -26,6 +26,9 @@ const useStyles = createUseStyles(() => ({
     height: "100%",
     padding: 20,
   },
+  title: {
+    marginBottom: 20,
+  },
 }));
 
 const SegurisignDocuments = (props) => {
@@ -110,7 +113,7 @@ const SegurisignDocuments = (props) => {
       return (
         <div className={classes.card}>
           <ToastContainer />
-          <h5>
+          <h5 className={classes.title}>
             <b>Mis Documentos</b>
           </h5>
           <UnsignedDocuments

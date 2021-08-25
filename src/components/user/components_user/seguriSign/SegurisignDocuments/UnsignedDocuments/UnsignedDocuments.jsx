@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/forbid-prop-types */
@@ -19,16 +20,19 @@ import {
 } from "react-icons/all";
 // import UserController from "../../controller/user_controller";
 import PropTypes from "prop-types";
+import { createUseStyles } from "react-jss";
 import SignPopUP from "../../SignPopup/SignPopup";
 import CancelPopup from "../../CancelPopup/CancelPopup";
 import CustomLoader from "../../CustomLoader/CustomLoader";
 
+const useStyles = createUseStyles(() => ({}));
 const UnsignedDocuments = (props) => {
   const [loading, setLoading] = useState(false);
   const { unsignedDocuments } = props;
   const { toaster } = props;
   const { seguriSignController } = props;
   const { long } = props;
+  const classes = useStyles();
   const { lat } = props;
   // const userController = new UserController();
 

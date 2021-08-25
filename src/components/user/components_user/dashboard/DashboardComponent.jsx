@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
-import DocumentsCard from "./cardView";
-import AlertCard from "./alertCard";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
 
 const useStyles = createUseStyles({
@@ -126,6 +124,13 @@ function DashboardComponent() {
           />
         </Row>
       </Row>
+    </Column>
+  );
+}
+
+export default DashboardComponent;
+
+/*
       <Row
         className={`${classes.cardsContainer} ${classes.mt40}`}
         wrap
@@ -136,8 +141,4 @@ function DashboardComponent() {
         <DocumentsCard containerStyles={classes.unresolvedTickets} />
         <AlertCard containerStyles={classes.unresolvedTickets} />
       </Row>
-    </Column>
-  );
-}
-
-export default DashboardComponent;
+*/

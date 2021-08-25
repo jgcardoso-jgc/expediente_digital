@@ -124,7 +124,7 @@ class SegurisignController {
       const data = await response.json();
       return data.resultado === 1;
     }
-    return "404";
+    return [];
   }
 
   async getDocument(multilateralId) {
@@ -145,7 +145,7 @@ class SegurisignController {
       const data = await response.json();
       return data.resultado === 1 ? data.document : "";
     }
-    return "404";
+    return [];
   }
 
   async getStatus(status) {

@@ -4,7 +4,7 @@ import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { BiUserCircle } from "react-icons/bi";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaSignature } from "react-icons/fa";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
@@ -73,7 +73,7 @@ function SidebarComponent() {
       <MenuItem
         id={SLUGS.sign}
         title="SeguriSign"
-        icon={IconContacts}
+        icon={FaSignature}
         onClick={() => onClick(SLUGS.sign)}
       />
       <div className={classes.separator} />
