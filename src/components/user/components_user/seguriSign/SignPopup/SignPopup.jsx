@@ -5,13 +5,17 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useRef, useState } from "react";
+
+import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
+import { ToastContainer } from "react-toastify";
 import Card from "react-bootstrap/Card";
 import { Col } from "react-bootstrap";
 import SignatureCanvas from "react-signature-canvas";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import UserController from "../controller/user_controller";
+import facematch from "../../../../../assets/facematch.png";
 
 const SignPopUP = (props) => {
   const sigCanvas = useRef({});
@@ -23,6 +27,7 @@ const SignPopUP = (props) => {
   const clear = () => sigCanvas.current.clear();
   const userController = new UserController();
   const [loading, setLoading] = useState(false);
+  const [faceMatched] = useState(false);
   const sign = async () => {
     const signedSuccessfully = await seguriSignController.biometricSignature(
       sigCanvas.current,
@@ -37,80 +42,112 @@ const SignPopUP = (props) => {
     }
     return signedSuccessfully;
   };
+
+  if (faceMatched) {
+    return (
+      <div>
+        <Popup
+          modal
+          trigger={
+            <button
+              type="button"
+              style={{ width: "100%" }}
+              className="btn-seguridata-lg"
+            >
+              Firmar
+            </button>
+          }
+        >
+          {(close) => (
+            <div align="center">
+              <Card style={{}}>
+                <Card.Body>
+                  <Card.Title>Firmar documento</Card.Title>
+                  <Col>
+                    <SignatureCanvas
+                      ref={sigCanvas}
+                      penColor="black"
+                      canvasProps={{
+                        width: 500,
+                        height: 200,
+                        className: "sigCanvas",
+                      }}
+                    />
+                  </Col>
+
+                  <Col>
+                    <Button variant="outline-dark" onClick={close}>
+                      Cerrar
+                    </Button>
+                    <Button
+                      variant="outline-dark"
+                      style={{ "margin-left": "2rem" }}
+                      onClick={clear}
+                    >
+                      Borrar
+                    </Button>
+                    <button
+                      className="btn-seguridata-lg"
+                      type="button"
+                      style={{
+                        height: "3rem",
+                        width: "9rem",
+                        "margin-left": "3rem",
+                      }}
+                      onClick={async () => {
+                        setLoading(true);
+                        const status = await sign();
+                        if (status) {
+                          await userController.updateDocSigned(
+                            props.multilateralId
+                          );
+                          toaster.successToast("Documento firmado con éxito");
+                        } else {
+                          props.toaster.errorToast("Error al firmar documento");
+                        }
+                        setLoading(false);
+                        close();
+                      }}
+                    >
+                      Firmar
+                    </button>
+                    {loading ? <div>cargando...</div> : <div>Listo</div>}
+                  </Col>
+                </Card.Body>
+              </Card>
+            </div>
+          )}
+        </Popup>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Popup
-        modal
-        trigger={
-          <button
-            type="button"
-            style={{ width: "100%" }}
-            className="btn-seguridata-lg"
-          >
-            Firmar
-          </button>
-        }
-      >
-        {(close) => (
-          <div align="center">
-            <Card style={{}}>
-              <Card.Body>
-                <Card.Title>Firmar documento</Card.Title>
-                <Col>
-                  <SignatureCanvas
-                    ref={sigCanvas}
-                    penColor="black"
-                    canvasProps={{
-                      width: 500,
-                      height: 200,
-                      className: "sigCanvas",
-                    }}
-                  />
-                </Col>
-
-                <Col>
-                  <Button variant="outline-dark" onClick={close}>
-                    Cerrar
-                  </Button>
-                  <Button
-                    variant="outline-dark"
-                    style={{ "margin-left": "2rem" }}
-                    onClick={clear}
-                  >
-                    Borrar
-                  </Button>
-                  <button
-                    className="btn-seguridata-lg"
-                    type="button"
-                    style={{
-                      height: "3rem",
-                      width: "9rem",
-                      "margin-left": "3rem",
-                    }}
-                    onClick={async () => {
-                      setLoading(true);
-                      const status = await sign();
-                      if (status) {
-                        await userController.updateDocSigned(
-                          props.multilateralId
-                        );
-                        toaster.successToast("Documento firmado con éxito");
-                      } else {
-                        props.toaster.errorToast("Error al firmar documento");
-                      }
-                      setLoading(false);
-                      close();
-                    }}
-                  >
-                    Firmar
-                  </button>
-                  {loading ? <div>cargando...</div> : <div>Listo</div>}
-                </Col>
-              </Card.Body>
-            </Card>
+      <ToastContainer />
+      <div>
+        <div>
+          <div>
+            {" "}
+            <div className="container">
+              <div className="center pb10">
+                {" "}
+                Deberás hacer Facematch para comprobar tu identidad
+              </div>
+              <Link to="/hello">
+                <button
+                  type="button"
+                >
+                  Ir al Facematch
+                </button>
+              </Link>
+            </div>
+            <div className="container">
+              <img alt="" className="scan" src={facematch} />
+            </div>
           </div>
-        )}
-      </Popup>
+        </div>
+      </div>
     </div>
   );
 };
