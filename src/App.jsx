@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -76,7 +75,6 @@ function App() {
   async function authState() {
     firebase.auth().onAuthStateChanged(async (res) => {
       if (res) {
-        console.log(res.uid);
         const { uid } = res;
         const isAdmin = localStorage.getItem("admin");
         const isUser = localStorage.getItem("user");
@@ -84,25 +82,21 @@ function App() {
           await checkAdmin(uid).then((adminRes) => {
             if (adminRes === "isAdmin") {
               setAdmin(true);
-              setLoading(false);
             }
             if (adminRes === "isUser") {
               setUser(true);
-              setLoading(false);
             }
           });
         } else if (isAdmin) {
           setAdmin(true);
-          setLoading(false);
         } else {
           setUser(true);
-          setLoading(false);
         }
       } else {
         setUser(false);
         setAdmin(false);
-        setLoading(false);
       }
+      setLoading(false);
     });
   }
 
