@@ -5,8 +5,6 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useRef, useState } from "react";
-
-import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
 import { ToastContainer } from "react-toastify";
 import Card from "react-bootstrap/Card";
@@ -15,7 +13,7 @@ import SignatureCanvas from "react-signature-canvas";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import UserController from "../controller/user_controller";
-import facematch from "../../../../../assets/facematch.png";
+import HelloInitSign from "../../hello-sign/hello";
 
 const SignPopUP = (props) => {
   const sigCanvas = useRef({});
@@ -28,6 +26,7 @@ const SignPopUP = (props) => {
   const userController = new UserController();
   const [loading, setLoading] = useState(false);
   const [faceMatched] = useState(false);
+  const [renderHello, setRender] = useState(false);
   const sign = async () => {
     const signedSuccessfully = await seguriSignController.biometricSignature(
       sigCanvas.current,
@@ -122,31 +121,21 @@ const SignPopUP = (props) => {
     );
   }
 
+  if (renderHello) {
+    return (
+      <div>
+        <ToastContainer />
+        <div>
+          <HelloInitSign />
+        </div>
+      </div>
+    );
+  }
   return (
     <div>
       <ToastContainer />
       <div>
-        <div>
-          <div>
-            {" "}
-            <div className="container">
-              <div className="center pb10">
-                {" "}
-                Deberás hacer Facematch para comprobar tu identidad
-              </div>
-              <Link to="/hello">
-                <button
-                  type="button"
-                >
-                  Ir al Facematch
-                </button>
-              </Link>
-            </div>
-            <div className="container">
-              <img alt="" className="scan" src={facematch} />
-            </div>
-          </div>
-        </div>
+        <button type="button" onClick={() => setRender(true)}>Facematch</button>
       </div>
     </div>
   );
