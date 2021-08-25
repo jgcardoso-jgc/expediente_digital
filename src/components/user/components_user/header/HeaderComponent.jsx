@@ -91,7 +91,7 @@ function HeaderComponent() {
       title = "Perfil";
       break;
     case currentItem === SLUGS.documentos:
-      title = "Documentos";
+      title = "Expediente";
       break;
     case currentItem === SLUGS.settings:
       title = "Ajustes";

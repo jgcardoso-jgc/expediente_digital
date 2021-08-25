@@ -66,7 +66,7 @@ function SidebarComponent() {
       />
       <MenuItem
         id={SLUGS.documentos}
-        title="Documentos"
+        title="Expediente"
         icon={IconContacts}
         onClick={() => onClick(SLUGS.documentos)}
       />
