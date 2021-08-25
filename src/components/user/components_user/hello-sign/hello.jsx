@@ -2,22 +2,23 @@
 /* eslint-disable quotes */
 import "./hello.css";
 import React, { useRef, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 
-function HelloInitSign() {
+const HelloInitSign = (props) => {
   const containerRef = useRef();
   const helloRef = useRef();
-  const history = useHistory();
 
+  HelloInitSign.propTypes = {
+    setFaceMatched: PropTypes.func.isRequired,
+  };
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://sdk-js.s3.amazonaws.com/sdk/hello-1.1.0.js";
     document.body.appendChild(script);
     script.onload = () => {
-      console.log("loaded");
       const { Hello } = window;
       helloRef.current = Hello.create({
         apiKey,
@@ -31,10 +32,11 @@ function HelloInitSign() {
           const saved = JSON.parse(localStorage.getItem("user"));
           saved.token = r.token;
           localStorage.setItem("user", JSON.stringify(saved));
-          history.push("/documentos");
+          props.setFaceMatched(true);
         },
         onError: (r) => {
           console.log("on error", r);
+          props.setFaceMatched(false);
         },
       });
     };
@@ -45,6 +47,6 @@ function HelloInitSign() {
       <div ref={containerRef} />
     </div>
   );
-}
+};
 
 export default HelloInitSign;

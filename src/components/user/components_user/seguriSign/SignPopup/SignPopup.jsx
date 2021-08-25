@@ -25,8 +25,7 @@ const SignPopUP = (props) => {
   const clear = () => sigCanvas.current.clear();
   const userController = new UserController();
   const [loading, setLoading] = useState(false);
-  const [faceMatched] = useState(false);
-  const [renderHello, setRender] = useState(false);
+  const [faceMatched, setFaceMatched] = useState(false);
   const sign = async () => {
     const signedSuccessfully = await seguriSignController.biometricSignature(
       sigCanvas.current,
@@ -121,22 +120,39 @@ const SignPopUP = (props) => {
     );
   }
 
-  if (renderHello) {
-    return (
-      <div>
-        <ToastContainer />
-        <div>
-          <HelloInitSign />
-        </div>
-      </div>
-    );
-  }
   return (
     <div>
       <ToastContainer />
-      <div>
-        <button type="button" onClick={() => setRender(true)}>Facematch</button>
-      </div>
+      <Popup
+        modal
+        trigger={
+          <button
+            type="button"
+            style={{ width: "100%" }}
+            className="btn-seguridata-lg"
+          >
+            Firmar
+          </button>
+        }
+      >
+        {(close) => (
+          <div align="center">
+            <Card style={{}}>
+              <Card.Body>
+                <Card.Title>Firmar documento</Card.Title>
+                <div>
+                  <HelloInitSign setFaceMatched={setFaceMatched} />
+                </div>
+                <Col>
+                  <Button variant="outline-dark" onClick={close}>
+                    Cerrar
+                  </Button>
+                </Col>
+              </Card.Body>
+            </Card>
+          </div>
+        )}
+      </Popup>
     </div>
   );
 };
