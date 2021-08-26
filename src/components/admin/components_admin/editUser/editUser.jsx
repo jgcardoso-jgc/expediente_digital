@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
@@ -23,7 +23,7 @@ const useStyles = createUseStyles(() => ({
   container: {
     backgroundColor: "#f5f5f5",
     border: `1px solid #f5f5f5`,
-    borderRadius: 4,
+    borderRadius: 10,
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     padding: "24px 32px 0px 32px",
@@ -34,10 +34,17 @@ const useStyles = createUseStyles(() => ({
     marginRight: "auto",
     paddingBottom: 20,
   },
+  inputStyle: {
+    width: "100%",
+    border: "0",
+    borderBottom: "1px solid rgb(194, 194, 194)",
+    fontSize: "16px",
+    background: "transparent",
+  },
   containerPendiente: {
     backgroundColor: "#f2bd85",
     border: `1px solid #f5f5f5`,
-    borderRadius: 4,
+    borderRadius: 10,
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     padding: "24px 32px 0px 32px",
@@ -85,7 +92,6 @@ const EditUser = () => {
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const storage = firebase.storage();
-  // const auth = firebase.auth();
   const [show, setShow] = useState(false);
   const [urlView, setUrl] = useState("");
   const [titleModal, setTitle] = useState("");
@@ -94,7 +100,10 @@ const EditUser = () => {
   const [disabled, setDisabled] = useState(true);
   const [docsToUpdate, setDocs] = useState([]);
   const [imageName, setImageName] = useState("");
+  const [nameDoc, setNameDoc] = useState("");
+  const [descDoc, setDescripcionDoc] = useState("");
   const [email, setEmail] = useState("");
+  const [file, setFile] = useState("");
 
   function handleOnChange(e, cbox) {
     const isChecked = e.target.checked;
@@ -127,6 +136,34 @@ const EditUser = () => {
     setShow(true);
   }
 
+  function uploadFile() {
+    setDisabled(true);
+    storage
+      .ref("users")
+      .child(`/${locData.email}/${nameDoc}`)
+      .put(file)
+      .then(() => {
+        const query = db
+          .collection("users")
+          .where("email", "==", locData.email);
+        query.get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const gotDoc = doc.data().docsAdmin;
+            gotDoc.push({
+              name: nameDoc,
+              fileName: nameDoc,
+              descripcion: descDoc,
+            });
+            db.collection("users").doc(doc.id).update({ documents: gotDoc });
+          });
+          window.location.reload();
+        });
+      })
+      .catch((e) => {
+        toast(`Ocurrió un error.${e}`);
+      });
+  }
+
   function updatePendientes() {
     setDisabled(true);
     docFunctions.setPendientes(db, docsToUpdate, locData).then((res) => {
@@ -136,6 +173,10 @@ const EditUser = () => {
         setDisabled(false);
       }
     });
+  }
+
+  function setImage(fileSelected) {
+    setFile(fileSelected);
   }
 
   function getDocs() {
@@ -254,6 +295,53 @@ const EditUser = () => {
             disabled={disabled}
           >
             Solicitar Documentos
+          </button>
+          <p className={classes.mt20}>
+            <b>Documentos Administrativos</b>
+          </p>
+          <Row>
+            <Col>
+              <div className="formGroup">
+                <label htmlFor="email" className="block pb10">
+                  Nombre del Documento
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className={classes.inputStyle}
+                  onChange={(event) => setNameDoc(event.target.value)}
+                />
+              </div>
+            </Col>
+            <Col>
+              {" "}
+              <div className="formGroup">
+                <label htmlFor="email" className="block pb10">
+                  Descripción
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  className={classes.inputStyle}
+                  onChange={(event) => setDescripcionDoc(event.target.value)}
+                />
+              </div>
+            </Col>
+          </Row>
+          <input
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => uploadFile()}
+            className={disabled ? global.initBtDisabled : global.initBt}
+            disabled={disabled}
+          >
+            Agregar Documento
           </button>
         </div>
       </div>

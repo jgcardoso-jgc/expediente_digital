@@ -15,26 +15,15 @@ const submit = async (auth, db, name, rfc, email, password) => {
             .add({
               uid: id,
               fullname: name,
+              cargo: "",
               email,
               rfc,
               token: "",
               onboarding: false,
+              docsAdmin: [],
               documents: [],
             })
-            .then(() => {
-              localStorage.setItem(
-                "user",
-                JSON.stringify({
-                  fullName: name,
-                  email,
-                  rfc,
-                  token: "",
-                  onboarding: false,
-                  documents: [],
-                })
-              );
-              return "Usuario registrado";
-            });
+            .then(() => "Usuario registrado");
         } catch (e) {
           return e;
         }

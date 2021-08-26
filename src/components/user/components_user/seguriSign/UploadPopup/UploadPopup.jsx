@@ -101,7 +101,7 @@ const UploadPopup = (props) => {
     setSigners({ arr: signers.arr.filter((sig) => sig !== signer) });
   };
   return (
-    <div style={{ "margin-top": "3rem" }}>
+    <div style={{ marginTop: "3rem" }}>
       <Popup
         modal
         trigger={
