@@ -98,6 +98,7 @@ const EditUser = () => {
   const [cboxes, setCBoxes] = useState([]);
   const [type, setType] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [disabledAdminDoc, setDisabledAdminDoc] = useState(true);
   const [docsToUpdate, setDocs] = useState([]);
   const [imageName, setImageName] = useState("");
   const [nameDoc, setNameDoc] = useState("");
@@ -140,7 +141,7 @@ const EditUser = () => {
     setDisabled(true);
     storage
       .ref("users")
-      .child(`/${locData.email}/${nameDoc}`)
+      .child(`/${locData.email}/administrativos/${nameDoc}`)
       .put(file)
       .then(() => {
         const query = db
@@ -177,6 +178,24 @@ const EditUser = () => {
 
   function setImage(fileSelected) {
     setFile(fileSelected);
+  }
+
+  function setName(e) {
+    setNameDoc(e);
+    if (e !== "") {
+      setDisabledAdminDoc(false);
+    } else {
+      setDisabledAdminDoc(true);
+    }
+  }
+
+  function setDescripcion(e) {
+    setDescripcionDoc(e);
+    if (e !== "") {
+      setDisabledAdminDoc(false);
+    } else {
+      setDisabledAdminDoc(true);
+    }
   }
 
   function getDocs() {
@@ -309,7 +328,7 @@ const EditUser = () => {
                   type="email"
                   id="email"
                   className={classes.inputStyle}
-                  onChange={(event) => setNameDoc(event.target.value)}
+                  onChange={(event) => setName(event.target.value)}
                 />
               </div>
             </Col>
@@ -323,14 +342,15 @@ const EditUser = () => {
                   type="text"
                   id="name"
                   className={classes.inputStyle}
-                  onChange={(event) => setDescripcionDoc(event.target.value)}
+                  onChange={(event) => setDescripcion(event.target.value)}
                 />
               </div>
             </Col>
           </Row>
           <input
             type="file"
-            accept="image/png, image/jpeg"
+            accept="image/png, image/jpeg, application/pdf"
+            className={classes.mt20}
             onChange={(e) => {
               setImage(e.target.files[0]);
             }}
@@ -338,8 +358,8 @@ const EditUser = () => {
           <button
             type="button"
             onClick={() => uploadFile()}
-            className={disabled ? global.initBtDisabled : global.initBt}
-            disabled={disabled}
+            className={disabledAdminDoc ? global.initBtDisabled : global.initBt}
+            disabled={disabledAdminDoc}
           >
             Agregar Documento
           </button>
