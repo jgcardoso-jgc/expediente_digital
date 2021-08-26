@@ -37,9 +37,7 @@ class UserController {
   }
 
   async getSignDocData(multilateralId) {
-    const snapshot = await Promise.resolve(
-      this.signDocCollection.where("multilateralId", "==", multilateralId).get()
-    );
+    const snapshot = await this.signDocCollection.where("multilateralId", "==", multilateralId).get();
     if (snapshot.size > 0) {
       return snapshot.docs[0].data();
     }
@@ -61,6 +59,16 @@ class UserController {
       });
     }));
     return users;
+  }
+
+  async compareCustomerId(customerId) {
+    const { uid } = auth.currentUser;
+    const snapshot = await this.userCollection.where("uid", "==", uid).get();
+    if (snapshot.size > 0) {
+      const data = snapshot.docs[0].data();
+      return data.customerId === customerId;
+    }
+    return false;
   }
 
   static async addNewDocAlert(users, multilateralID) {

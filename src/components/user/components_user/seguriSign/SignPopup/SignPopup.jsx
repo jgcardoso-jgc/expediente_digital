@@ -143,7 +143,7 @@ const SignPopUP = (props) => {
               <Card.Body>
                 <Card.Title>Firmar documento</Card.Title>
                 <div>
-                  <HelloInitSign setFaceMatched={setFaceMatched} />
+                  <HelloInitSign toaster={props.toaster} setFaceMatched={setFaceMatched} />
                 </div>
                 <Col>
                   <Button variant="outline-dark" onClick={close}>
