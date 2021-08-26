@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/no-typos */
 /* eslint-disable react/forbid-prop-types */
@@ -13,8 +14,11 @@ import UnsignedDocuments from "./UnsignedDocuments/UnsignedDocuments";
 import CancelledDocuments from "./CancelledDocuments/CancelledDocuments";
 import CancelledThirdsDocuments from "./CancelledThirdsDocuments/CancelledThirdsDocuments";
 import ExpiredDocuments from "./ExpiredDocuments/ExpiredDocuments";
+import styles from "../../../../../resources/theme";
 import UserController from "../controller/user_controller";
+import loading from "../../../../../assets/loading.gif";
 
+const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   card: {
     backgroundColor: "#f5f5f5",
@@ -25,13 +29,26 @@ const useStyles = createUseStyles(() => ({
     height: "100%",
     padding: 20,
   },
+  imgLoading: {
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  center: {
+    textAlign: "center",
+  },
   title: {
     marginBottom: 20,
+  },
+  mr: {
+    marginRight: "auto",
   },
 }));
 
 const SegurisignDocuments = (props) => {
   const userController = new UserController();
+  const global = globalTheme();
+  const [show, setShow] = useState(false);
   const [location, setLocation] = useState({
     loading: true,
     isEnabled: false,
@@ -79,9 +96,9 @@ const SegurisignDocuments = (props) => {
       expiredDoc,
       cancelledByThirdsDoc,
     ] = await Promise.all([
-      userController.getUserDocs('CONCLUIDO'),
-      userController.getUserDocs('PENDIENTE'),
-      userController.getUserDocs('CANCELADO'),
+      userController.getUserDocs("CONCLUIDO"),
+      userController.getUserDocs("PENDIENTE"),
+      userController.getUserDocs("CANCELADO"),
       props.seguriSignController.getStatus("EXPIRADOS"),
       props.seguriSignController.getStatus("CANCELADOS_TERCEROS"),
     ]);
@@ -105,7 +122,12 @@ const SegurisignDocuments = (props) => {
   };
 
   if (location.loading) {
-    return <div>Cargando...</div>;
+    return (
+      <div className={classes.center}>
+        <img className={classes.imgLoading} alt="load" src={loading} />
+        <p className={classes.center}>Cargando tu ubicación...</p>
+      </div>
+    );
   }
   if (location.isEnabled) {
     if (loaded.hasLoaded) {
@@ -146,11 +168,23 @@ const SegurisignDocuments = (props) => {
             seguriSignController={props.seguriSignController}
             toaster={toaster}
           />
+          <UploadPopup state={show} onClose={() => setShow(false)} />
+          <button
+            type="button"
+            className={`${global.initBt} ${classes.mr}`}
+            onClick={() => setShow(true)}
+          >
+            Subir Documentos
+          </button>
         </div>
       );
     }
     if (loaded.loading) {
-      return <div>Cargando...</div>;
+      return (
+        <div className={classes.center}>
+          <img className={classes.imgLoading} alt="load" src={loading} />
+        </div>
+      );
     }
   }
   return (

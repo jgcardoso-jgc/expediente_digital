@@ -25,6 +25,7 @@ const useStyles = createUseStyles({
       border: "1px solid black",
       display: "block",
       marginLeft: "auto",
+      marginRight: "auto",
       minWidth: "150px",
       paddingTop: "10px",
       marginTop: "20px",

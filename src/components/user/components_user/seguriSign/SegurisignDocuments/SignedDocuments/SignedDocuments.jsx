@@ -8,8 +8,13 @@
 import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
 import PropTypes from "prop-types";
+import { createUseStyles } from "react-jss";
+import styles from "../../../../../../resources/theme";
+
+const globalTheme = createUseStyles(styles);
 
 const SignedDocuments = (props) => {
+  const global = globalTheme();
   let { signedDocuments } = props;
   if (signedDocuments === "404") {
     signedDocuments = [];
@@ -40,7 +45,7 @@ const SignedDocuments = (props) => {
                       <br />
                       <button
                         type="button"
-                        className="btn-seguridata-lg"
+                        className={global.initBt}
                         onClick={() =>
                           seguriSignController
                             .getDocument(item.multilateralId)
