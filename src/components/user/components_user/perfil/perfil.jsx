@@ -43,6 +43,12 @@ const useStyles = createUseStyles(() => ({
   mt20: {
     marginTop: 20,
   },
+  textCard: {
+    marginBottom: 4,
+  },
+  img: {
+    borderRadius: 10,
+  },
 }));
 
 let incode = null;
@@ -57,6 +63,7 @@ const MyProfile = () => {
   const theme = useTheme();
   const global = globalTheme({ theme });
   const classes = useStyles({ theme });
+  const [urlProfile, setUrlProfile] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
   const { email } = user;
@@ -71,12 +78,9 @@ const MyProfile = () => {
     if (response.includes("404", 0)) {
       notExists();
     } else {
-      const frontId = new Image();
-      frontId.src = response;
-      frontId.style.width = "100%";
-      frontId.style.borderRadius = "7px";
       setLoading(false);
-      document.getElementById("pic").appendChild(frontId);
+      setUrlProfile(response);
+      localStorage.setItem("profilepic", response);
     }
   }
 
@@ -121,18 +125,20 @@ const MyProfile = () => {
   }
 
   function getState() {
-    console.log(user.token);
-    const route = `users/${user.email}/croppedFace`;
-    db.ref(route)
-      .getDownloadURL()
-      .then((response) => {
-        console.log("founded");
-        exists(response);
-      })
-      .catch(() => {
-        console.log("not founded");
-        notExists();
-      });
+    if (localStorage.getItem("profilepic") === null) {
+      const route = `users/${user.email}/croppedFace`;
+      db.ref(route)
+        .getDownloadURL()
+        .then((response) => {
+          exists(response);
+        })
+        .catch(() => {
+          notExists();
+        });
+    } else {
+      const url = localStorage.getItem("profilepic");
+      exists(url);
+    }
   }
 
   useEffect(() => {
@@ -166,15 +172,15 @@ const MyProfile = () => {
           <div className={classes.cardDashboard}>
             <div className="row">
               <div className="col max40">
-                <div id="pic" />
+                <img src={urlProfile} className={classes.img} alt="profile" />
               </div>
               <div className="col min50">
                 <p className="mb0">
                   <b>{name}</b>
                 </p>
-                <p className="mt4 mb0">Frontend Developer</p>
-                <p className="mt4 mb0">{email}</p>
-                <p className="mt4">{rfc}</p>
+                <p className={classes.textCard}>Frontend Developer</p>
+                <p className={classes.textCard}>{email}</p>
+                <p className={classes.textCard}>{rfc}</p>
               </div>
             </div>
           </div>

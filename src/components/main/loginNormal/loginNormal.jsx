@@ -91,7 +91,7 @@ const LoginNormal = () => {
           <h2 className="mb4">
             <b>Login</b>
           </h2>
-          <p className="expText">Accede a tu expediente</p>
+          <p className="expText">Accede a tu cuenta</p>
         </div>
         <div className={classes.mb20}>
           <label htmlFor="email">Correo electrónico</label>

@@ -74,6 +74,7 @@ function HeaderComponent() {
         console.log("logged out");
         localStorage.removeItem("admin");
         localStorage.removeItem("user");
+        localStorage.removeItem("profilepic");
       });
   }
   const { push } = useHistory();
@@ -91,7 +92,7 @@ function HeaderComponent() {
       title = "Perfil";
       break;
     case currentItem === SLUGS.documentos:
-      title = "Documentos";
+      title = "Expediente";
       break;
     case currentItem === SLUGS.settings:
       title = "Ajustes";

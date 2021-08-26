@@ -26,7 +26,10 @@ function LogoComponent() {
   return (
     <Row className={classes.container} horizontal="center" vertical="center">
       <img alt="logo" className={classes.logo} src={logo} />
-      <span className={classes.title}>Expediente</span>
+      <span className={classes.title}>
+        <b>ONE</b>
+        Seguridata
+      </span>
     </Row>
   );
 }

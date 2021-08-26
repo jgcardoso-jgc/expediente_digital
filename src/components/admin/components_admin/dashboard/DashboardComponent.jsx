@@ -6,8 +6,6 @@ import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
-import UnresolvedTicketsComponent from "./UnresolvedTicketsComponent";
-import TasksComponent from "./TasksComponent";
 
 const useStyles = createUseStyles({
   cardsContainer: {
@@ -147,6 +145,13 @@ function DashboardComponent() {
           />
         </Row>
       </Row>
+    </Column>
+  );
+}
+
+export default DashboardComponent;
+
+/*
       <Row
         horizontal="space-between"
         className={classes.lastRow}
@@ -157,8 +162,5 @@ function DashboardComponent() {
         />
         <TasksComponent containerStyles={classes.tasks} />
       </Row>
-    </Column>
-  );
-}
 
-export default DashboardComponent;
+*/

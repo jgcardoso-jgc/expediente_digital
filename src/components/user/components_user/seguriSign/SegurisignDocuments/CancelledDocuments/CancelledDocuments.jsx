@@ -8,8 +8,11 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const CancelledDocuments = (props) => {
-  const { cancelledDoc } = props;
+  let { cancelledDoc } = props;
   const { seguriSignController } = props;
+  if (cancelledDoc === "404") {
+    cancelledDoc = [];
+  }
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
       <Accordion.Header>Cancelados</Accordion.Header>

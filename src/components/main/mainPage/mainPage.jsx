@@ -77,7 +77,7 @@ function Login() {
       <NavBarMainPage className={classes.navmain} />
       <div>
         <h1 className={classes.segTitle}>
-          <b>Seguridata</b> | Expediente
+          <b>ONE</b> Seguridata
         </h1>
         <Row className={classes.rowMax400}>
           <div className={classes.first}>
@@ -100,8 +100,8 @@ function Login() {
           <div className={classes.second}>
             <h4 className={classes.title}>Accede ahora</h4>
             <p className={classes.text}>
-              Si ya te has registrado previamente, puedes acceder con tus
-              credenciales.
+              Si ya te has registrado previamente, puedes acceder
+              <br /> con tus credenciales.
             </p>
             <Link to="/loginNormal" type="button" className={classes.dBlock}>
               <button
