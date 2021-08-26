@@ -167,8 +167,9 @@ const SegurisignDocuments = (props) => {
           <UploadPopup
             seguriSignController={props.seguriSignController}
             toaster={toaster}
+            state={show}
+            onClose={() => setShow(false)}
           />
-          <UploadPopup state={show} onClose={() => setShow(false)} />
           <button
             type="button"
             className={`${global.initBt} ${classes.mr}`}

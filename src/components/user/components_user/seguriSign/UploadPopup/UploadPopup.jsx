@@ -122,11 +122,11 @@ const UploadPopup = (props) => {
   const addSigner = async () => {
     const signerMail = signerInput.current.value;
     if (signerMail === "") {
-      props.toaster.warningToast("Ingrese el correo de un firmante");
+      toaster.warningToast("Ingrese el correo de un firmante");
       return;
     }
     setLoader(true);
-    const isValid = await props.seguriSignController.getSignersList(signerMail);
+    const isValid = await seguriSignController.getSignersList(signerMail);
     setLoader(false);
     if (isValid) {
       if (signers.arr.includes(signerMail)) {
