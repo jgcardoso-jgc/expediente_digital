@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f827d0b-671f-4398-810d-02a185ddbe3e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/SegurisignDocuments/SegurisignDocuments.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/SegurisignDocuments/SegurisignDocuments.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/controller/user_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user/components_user/seguriSign/controller/user_controller.js" afterDir="false" />
-    </list>
+    <list default="true" id="9f827d0b-671f-4398-810d-02a185ddbe3e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,7 +22,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../seguridata-in-a-box/sib" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -48,6 +45,8 @@
       <workItem from="1629824782273" duration="2312000" />
       <workItem from="1629835394402" duration="43000" />
       <workItem from="1629865680913" duration="60000" />
+      <workItem from="1629898231876" duration="25000" />
+      <workItem from="1629962293848" duration="24000" />
     </task>
     <servers />
   </component>

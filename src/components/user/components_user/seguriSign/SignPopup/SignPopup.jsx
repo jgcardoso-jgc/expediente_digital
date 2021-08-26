@@ -22,11 +22,11 @@ const SignPopUP = (props) => {
   const { lat } = props;
   const { long } = props;
   const { toaster } = props;
+  const { requiresFaceMatch } = props;
   const clear = () => sigCanvas.current.clear();
   const userController = new UserController();
   const [loading, setLoading] = useState(false);
-  const [faceMatched] = useState(false);
-  const [renderHello, setRender] = useState(false);
+  const [faceMatched, setFaceMatched] = useState(false);
   const sign = async () => {
     const signedSuccessfully = await seguriSignController.biometricSignature(
       sigCanvas.current,
@@ -42,7 +42,7 @@ const SignPopUP = (props) => {
     return signedSuccessfully;
   };
 
-  if (faceMatched) {
+  if (!requiresFaceMatch || faceMatched) {
     return (
       <div>
         <Popup
@@ -98,7 +98,8 @@ const SignPopUP = (props) => {
                         const status = await sign();
                         if (status) {
                           await userController.updateDocSigned(
-                            props.multilateralId
+                            props.multilateralId,
+                            { lat: props.lat, long: props.long }
                           );
                           toaster.successToast("Documento firmado con éxito");
                         } else {
@@ -121,22 +122,39 @@ const SignPopUP = (props) => {
     );
   }
 
-  if (renderHello) {
-    return (
-      <div>
-        <ToastContainer />
-        <div>
-          <HelloInitSign />
-        </div>
-      </div>
-    );
-  }
   return (
     <div>
       <ToastContainer />
-      <div>
-        <button type="button" onClick={() => setRender(true)}>Facematch</button>
-      </div>
+      <Popup
+        modal
+        trigger={
+          <button
+            type="button"
+            style={{ width: "100%" }}
+            className="btn-seguridata-lg"
+          >
+            Firmar
+          </button>
+        }
+      >
+        {(close) => (
+          <div align="center">
+            <Card style={{}}>
+              <Card.Body>
+                <Card.Title>Firmar documento</Card.Title>
+                <div>
+                  <HelloInitSign toaster={props.toaster} setFaceMatched={setFaceMatched} />
+                </div>
+                <Col>
+                  <Button variant="outline-dark" onClick={close}>
+                    Cerrar
+                  </Button>
+                </Col>
+              </Card.Body>
+            </Card>
+          </div>
+        )}
+      </Popup>
     </div>
   );
 };
@@ -145,6 +163,7 @@ SignPopUP.propTypes = {
   seguriSignController: PropTypes.any.isRequired,
   lat: PropTypes.any.isRequired,
   long: PropTypes.any.isRequired,
+  requiresFaceMatch: PropTypes.any.isRequired,
   multilateralId: PropTypes.any.isRequired,
   toaster: PropTypes.any.isRequired,
 };

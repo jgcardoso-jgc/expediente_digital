@@ -31,6 +31,7 @@ const UploadPopup = (props) => {
   const { seguriSignController } = props;
   const global = globalTheme();
   const [loader, setLoader] = useState(false);
+  const [requiresFM, setRequiresFM] = useState(false);
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
     hasSelected: false,
@@ -57,7 +58,7 @@ const UploadPopup = (props) => {
         if (succeed) {
           const document = response[1];
           console.log(signers.arr);
-          await userController.addNewDocToFirebase(signers.arr, document);
+          await userController.addNewDocToFirebase(signers.arr, document, requiresFM);
           props.toaster.successToast("Documento subido con éxito");
         } else {
           props.toaster.errorToast(
@@ -179,6 +180,13 @@ const UploadPopup = (props) => {
                           />
                         </Col>
                       </Form.Group>
+                      <Row>
+                        <Form.Check
+                          type="checkbox"
+                          label="Requiere Facematch"
+                          onChange={(event) => setRequiresFM(event.target.value)}
+                        />
+                      </Row>
                       <Row>
                         <Document
                           onLoadError={console.error}
