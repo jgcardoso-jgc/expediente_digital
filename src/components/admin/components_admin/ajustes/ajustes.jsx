@@ -6,9 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import { Row, Col, Table } from "react-bootstrap";
-import styles from "../../../../resources/theme";
 
-const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles({
   text: {
     padding: 0,
@@ -23,6 +21,19 @@ const useStyles = createUseStyles({
   mt20: {
     marginTop: 20,
   },
+  addBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    minWidth: "150px",
+    paddingTop: "10px",
+    marginTop: "20px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
   inputStyle: {
     width: "100%",
     border: "0",
@@ -36,7 +47,6 @@ const AjustesAdmin = () => {
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const [data, setData] = useState([]);
-  const global = globalTheme();
   const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -173,7 +183,7 @@ const AjustesAdmin = () => {
             </Row>
             <button
               type="button"
-              className={global.initBt}
+              className={classes.addBt}
               disabled={disable}
               onClick={() => submit()}
             >

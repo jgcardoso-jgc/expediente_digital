@@ -7,9 +7,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import TableView from "../table/tableView";
-import styles from "../../../../resources/theme";
 
-const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles({
   editButton: {
     border: "1px solid transparent",
@@ -22,6 +20,19 @@ const useStyles = createUseStyles({
     borderBottom: "1px solid rgb(194, 194, 194)",
     fontSize: "16px",
     background: "transparent",
+  },
+  addBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    minWidth: "150px",
+    paddingTop: "10px",
+    marginTop: "20px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
   },
   card: {
     background: "#f5f5f5",
@@ -37,7 +48,6 @@ const useStyles = createUseStyles({
 
 const UserView = () => {
   const classes = useStyles();
-  const global = globalTheme();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const [email, setEmail] = useState("");
@@ -123,7 +133,7 @@ const UserView = () => {
           </Row>
           <button
             type="button"
-            className={global.initBt}
+            className={classes.addBt}
             disabled={disable}
             onClick={() => submit()}
           >

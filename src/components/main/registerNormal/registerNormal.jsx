@@ -10,11 +10,9 @@ import { useHistory, Link } from "react-router-dom";
 import { createUseStyles, useTheme } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
-import styles from "../../../resources/theme";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../waves/waves";
 
-const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   block: { display: "block" },
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
@@ -39,6 +37,19 @@ const useStyles = createUseStyles(() => ({
   right: {
     textAlign: "right",
   },
+  regBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    minWidth: "150px",
+    paddingTop: "10px",
+    marginTop: "20px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
   link: {
     display: "block",
     textAlign: "right",
@@ -60,7 +71,6 @@ const RegisterNormal = () => {
   const history = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
-  const global = globalTheme({ theme });
   const db = firebase.firestore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -156,7 +166,7 @@ const RegisterNormal = () => {
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button type="button" className={global.initBt} onClick={submit}>
+        <button type="button" className={classes.regBt} onClick={submit}>
           Registrarse
         </button>
         <div className={classes.right}>
