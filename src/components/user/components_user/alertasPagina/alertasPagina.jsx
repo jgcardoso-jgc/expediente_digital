@@ -21,7 +21,7 @@ const useStyles = createUseStyles(() => ({
   },
   flex: {
     display: "flex",
-    justifyContent: "center",
+    marginBottom: 10,
   },
   verTodas: {
     minWidth: "100%",
@@ -45,6 +45,25 @@ const useStyles = createUseStyles(() => ({
     borderRadius: 10,
     border: "1px solid transparent",
     marginLeft: 10,
+    minWidth: "85%",
+    maxWidth: "85%",
+    textAlign: "left",
+    paddingLeft: 10,
+  },
+  cardDashboard: {
+    background: "#f5f5f5",
+    borderRadius: "10px",
+    padding: "10px",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+  },
+  container: {
+    maxWidth: "400px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "left",
+    paddingLeft: "20px",
+    paddingRight: "20px",
   },
 }));
 
@@ -99,9 +118,9 @@ const AlertasPagina = () => {
   }, []);
   return (
     <div>
-      <div className="container max500">
+      <div className={classes.container}>
         {alerts.length > 0 && (
-          <div>
+          <div className={classes.cardDashboard}>
             {alerts.map((projName) => (
               <div className={classes.flex}>
                 <div className={classes.circle}>

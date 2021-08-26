@@ -6,7 +6,7 @@ import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createUseStyles, useTheme } from "react-jss";
+import { createUseStyles } from "react-jss";
 import onBoardingConfig from "../documents/onBoardingConfig";
 import styles from "../../../../resources/theme";
 
@@ -46,6 +46,9 @@ const useStyles = createUseStyles(() => ({
   textCard: {
     marginBottom: 4,
   },
+  mb0: {
+    marginBottom: 0,
+  },
   img: {
     borderRadius: 10,
   },
@@ -60,28 +63,24 @@ function start() {
 const MyProfile = () => {
   const firebase = useFirebaseApp();
   const db = firebase.storage();
-  const theme = useTheme();
-  const global = globalTheme({ theme });
-  const classes = useStyles({ theme });
+  const global = globalTheme();
+  const classes = useStyles();
   const [urlProfile, setUrlProfile] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
   const { email } = user;
   const { rfc } = user;
   const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(false);
   const [toFaceMatch, setFaceMatch] = useState(false);
   const metadata = {
     contentType: "image/jpeg",
   };
 
   function exists(response) {
-    if (response.includes("404", 0)) {
-      notExists();
-    } else {
-      setLoading(false);
-      setUrlProfile(response);
-      localStorage.setItem("profilepic", response);
-    }
+    setLoading(false);
+    setUrlProfile(response);
+    localStorage.setItem("profilepic", response);
   }
 
   function notExists() {
@@ -104,18 +103,11 @@ const MyProfile = () => {
               token: user.token,
               body: { images: ["croppedFace"] },
             });
-            const frontId = new Image();
-            frontId.src = `data:image/png;base64,${imgs.croppedFace}`;
-            frontId.style.width = "100%";
-            frontId.style.borderTopLeftRadius = "14px";
-            frontId.style.borderTopRightRadius = "14px";
             db.ref("users")
               .child(`/${user.email}/croppedFace`)
               .putString(imgs.croppedFace, "base64", metadata)
               .then(() => {
-                console.log("uploaded");
-                setLoading(false);
-                document.getElementById("pic").appendChild(frontId);
+                setReload(true);
               });
           } catch (e) {
             toast(`Ocurrió un error.${e}`);
@@ -143,7 +135,7 @@ const MyProfile = () => {
 
   useEffect(() => {
     getState();
-  }, []);
+  }, [reload]);
 
   return (
     <div>
@@ -178,7 +170,7 @@ const MyProfile = () => {
                 <p className="mb0">
                   <b>{name}</b>
                 </p>
-                <p className={classes.textCard}>Frontend Developer</p>
+                <p className={classes.textCard}>Desarrollador Frontend</p>
                 <p className={classes.textCard}>{email}</p>
                 <p className={classes.textCard}>{rfc}</p>
               </div>
@@ -188,9 +180,13 @@ const MyProfile = () => {
       </div>
       <div className={classes.container}>
         <div className={`${classes.cardDashboard} ${classes.mt20}`}>
-          <b>Editar Información</b>
-          <p>RFC</p>
-          <p>Ocupación</p>
+          <p>
+            <b>Editar Información</b>
+          </p>
+          <p className={classes.mb0}>RFC</p>
+          <p>{rfc}</p>
+          <p className={classes.mb0}>Ocupación</p>
+          <p>Desarrollador Frontend</p>
         </div>
       </div>
     </div>
