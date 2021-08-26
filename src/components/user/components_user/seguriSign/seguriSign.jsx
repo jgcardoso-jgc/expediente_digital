@@ -9,6 +9,7 @@ import SegurisignDocuments from "./SegurisignDocuments/SegurisignDocuments";
 import CustomToasts from "../Toasts/CustomToasts";
 import locked from "../../../../assets/locked.png";
 import styles from "../../../../resources/theme";
+import loading from "../../../../assets/loading.gif";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -69,6 +70,14 @@ const useStyles = createUseStyles(() => ({
       backgroundColor: "white !important",
       color: "#83bb04 !important",
     },
+  },
+  center: {
+    textAlign: "center",
+  },
+  imgLoading: {
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   inputPasswordSign: {
     padding: "0.3rem",
@@ -143,7 +152,7 @@ const Segurisign = () => {
   const [logged, setLogged] = useState(false);
   const global = globalTheme();
   const [loadedCache, setLoadedCache] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [load, setLoading] = useState(true);
   const classes = useStyles();
 
   const signIn = (e) => {
@@ -180,8 +189,12 @@ const Segurisign = () => {
   if (logged) {
     return <SegurisignDocuments seguriSignController={seguriSignController} />;
   }
-  if (loading) {
-    return <div>Cargando...</div>;
+  if (load) {
+    return (
+      <div className={classes.center}>
+        <img className={classes.imgLoading} alt="load" src={loading} />
+      </div>
+    );
   }
 
   return (
