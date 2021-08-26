@@ -177,7 +177,7 @@ const AjustesAdmin = () => {
               disabled={disable}
               onClick={() => submit()}
             >
-              Agregar Usuario
+              Agregar Documento
             </button>
           </div>
         </div>

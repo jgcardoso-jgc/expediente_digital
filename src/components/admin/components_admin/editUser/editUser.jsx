@@ -220,7 +220,7 @@ const EditUser = () => {
             <div className={classes.mb20}>No hay documentos pendientes</div>
           )}
           <p>
-            <b>Agregar Documentos</b>
+            <b>Solicitar Documentos</b>
           </p>
           <p>Selecciona los documentos requeridos para el usuario</p>
           {cboxes.length > 0 ? (
@@ -253,7 +253,7 @@ const EditUser = () => {
             className={disabled ? global.initBtDisabled : global.initBt}
             disabled={disabled}
           >
-            Agregar Documentos
+            Solicitar Documentos
           </button>
         </div>
       </div>

@@ -4,8 +4,8 @@
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-import Card from "react-bootstrap/Card";
 import PropTypes from "prop-types";
+import { createUseStyles } from "react-jss";
 import CustomToasts from "../../Toasts/CustomToasts";
 import UploadPopup from "../UploadPopup/UploadPopup";
 import SignedDocuments from "./SignedDocuments/SignedDocuments";
@@ -16,6 +16,18 @@ import ExpiredDocuments from "./ExpiredDocuments/ExpiredDocuments";
 import UserController from "../controller/user_controller";
 import { auth } from "../controller/firebase_controller";
 
+const useStyles = createUseStyles(() => ({
+  card: {
+    backgroundColor: "#f5f5f5",
+    border: `1px solid #f5f5f5`,
+    borderRadius: 10,
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    height: "100%",
+    padding: 20,
+  },
+}));
+
 const SegurisignDocuments = (props) => {
   const userController = new UserController();
   const [location, setLocation] = useState({
@@ -24,6 +36,7 @@ const SegurisignDocuments = (props) => {
     lat: 0,
     long: 0,
   });
+  const classes = useStyles();
   const toaster = new CustomToasts();
   const [loaded, setLoaded] = useState({
     hasLoaded: false,
@@ -86,7 +99,6 @@ const SegurisignDocuments = (props) => {
   }, []);
 
   SegurisignDocuments.propTypes = {
-
     seguriSignController: PropTypes.any.isRequired,
   };
 
@@ -96,44 +108,42 @@ const SegurisignDocuments = (props) => {
   if (location.isEnabled) {
     if (loaded.hasLoaded) {
       return (
-        <div className="inner box-shadow">
+        <div className={classes.card}>
           <ToastContainer />
-          <Card>
-            <Card.Body>
-              <Card.Title>Mis Documentos</Card.Title>
-              <UnsignedDocuments
-                lat={location.lat}
-                long={location.long}
-                toaster={toaster}
-                unsignedDocuments={loaded.unsignedDocuments}
-                seguriSignController={props.seguriSignController}
-              />
+          <h5>
+            <b>Mis Documentos</b>
+          </h5>
+          <UnsignedDocuments
+            lat={location.lat}
+            long={location.long}
+            toaster={toaster}
+            unsignedDocuments={loaded.unsignedDocuments}
+            seguriSignController={props.seguriSignController}
+          />
 
-              <SignedDocuments
-                seguriSignController={props.seguriSignController}
-                signedDocuments={loaded.signedDocuments}
-              />
+          <SignedDocuments
+            seguriSignController={props.seguriSignController}
+            signedDocuments={loaded.signedDocuments}
+          />
 
-              <CancelledDocuments
-                cancelledDoc={loaded.cancelledDoc}
-                seguriSignController={props.seguriSignController}
-              />
+          <CancelledDocuments
+            cancelledDoc={loaded.cancelledDoc}
+            seguriSignController={props.seguriSignController}
+          />
 
-              <CancelledThirdsDocuments
-                cancelledByThirds={loaded.cancelledByThirds}
-                seguriSignController={props.seguriSignController}
-              />
+          <CancelledThirdsDocuments
+            cancelledByThirds={loaded.cancelledByThirds}
+            seguriSignController={props.seguriSignController}
+          />
 
-              <ExpiredDocuments
-                expiredDoc={loaded.expiredDoc}
-                seguriSignController={props.seguriSignController}
-              />
-              <UploadPopup
-                seguriSignController={props.seguriSignController}
-                toaster={toaster}
-              />
-            </Card.Body>
-          </Card>
+          <ExpiredDocuments
+            expiredDoc={loaded.expiredDoc}
+            seguriSignController={props.seguriSignController}
+          />
+          <UploadPopup
+            seguriSignController={props.seguriSignController}
+            toaster={toaster}
+          />
         </div>
       );
     }
