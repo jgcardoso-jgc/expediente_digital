@@ -9,7 +9,7 @@ import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import firebase from "firebase";
+import { useFirebaseApp } from "reactfire";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
@@ -66,6 +66,11 @@ const useStyles = createUseStyles(() => ({
 }));
 
 function HeaderComponent() {
+  const firebase = useFirebaseApp();
+  const db = firebase.storage();
+  const [urlProfile, setUrlProfile] = useState(
+    "https://avatars.githubusercontent.com/sofseguridata"
+  );
   function logOut() {
     firebase
       .auth()
@@ -115,9 +120,39 @@ function HeaderComponent() {
     push(SLUGS.settings);
   }
 
+  function exists(response) {
+    setUrlProfile(response);
+    localStorage.setItem("profilepic", response);
+  }
+
+  function notExists() {
+    console.log("not exists");
+  }
+
+  function getState() {
+    if (localStorage.getItem("profilepic") === null) {
+      const route = `users/${user.email}/croppedFace`;
+      db.ref(route)
+        .getDownloadURL()
+        .then((response) => {
+          exists(response);
+        })
+        .catch(() => {
+          notExists();
+        });
+    } else {
+      const url = localStorage.getItem("profilepic");
+      exists(url);
+    }
+  }
+
   useEffect(() => {
     const userGet = localStorage.getItem("user");
     setUser(JSON.parse(userGet));
+  }, []);
+
+  useEffect(() => {
+    getState();
   }, []);
 
   return (
@@ -147,11 +182,7 @@ function HeaderComponent() {
           label={
             <>
               <span className={classes.name}>{user.fullName}</span>
-              <img
-                src="https://avatars.githubusercontent.com/sofseguridata"
-                alt="avatar"
-                className={classes.avatar}
-              />
+              <img src={urlProfile} alt="avatar" className={classes.avatar} />
             </>
           }
           options={[
