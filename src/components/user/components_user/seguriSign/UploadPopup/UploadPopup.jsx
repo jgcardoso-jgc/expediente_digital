@@ -1,13 +1,13 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/jsx-curly-newline */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable no-console */
 /* eslint-disable object-curly-newline */
 /* eslint-disable quotes */
-import Popup from "reactjs-popup";
-import { FcUpload, FiDelete } from "react-icons/all";
-import Card from "react-bootstrap/Card";
-import { ButtonGroup, Col, Dropdown, Form, Row } from "react-bootstrap";
+import { FiDelete } from "react-icons/all";
+import { ButtonGroup, Col, Dropdown, Form, Row, Modal } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import Button from "react-bootstrap/Button";
 import React, { useRef, useState } from "react";
@@ -15,21 +15,63 @@ import { createUseStyles } from "react-jss";
 import PropTypes from "prop-types";
 import CustomLoader from "../CustomLoader/CustomLoader";
 import UserController from "../controller/user_controller";
-import styles from "../../../../../resources/theme";
 
-const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   subirBt: {
-    marginRight: "auto",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    fontSize: 15,
+    minWidth: 150,
+    paddingTop: 10,
+    borderRadius: 10,
+    paddingBottom: 10,
+    backgroundColor: "rgb(75, 75, 75)",
+  },
+  mt14: {
+    marginTop: 14,
+  },
+  flex: {
+    display: "flex",
+    marginTop: 20,
+  },
+  firmanteBt: {
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    fontSize: 15,
+    minWidth: 150,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    backgroundColor: "rgb(75, 75, 75)",
+  },
+  inputStyle: {
+    width: "100%",
+    border: "0",
+    borderBottom: "1px solid rgb(194, 194, 194)",
+    fontSize: "16px",
+    background: "transparent",
+  },
+  spaceCheckbox: {
+    marginLeft: 20,
+    marginTop: 10,
+    marginBottom: 10,
   },
 }));
 
 const UploadPopup = (props) => {
+  const { onClose } = props;
+  const { state } = props;
+  if (!state) {
+    return null;
+  }
+
   const signerInput = useRef(null);
   const { toaster } = props;
   const classes = useStyles();
   const { seguriSignController } = props;
-  const global = globalTheme();
   const [loader, setLoader] = useState(false);
   const [requiresFM, setRequiresFM] = useState(false);
   const [selectedFile, setSelectedFile] = useState({
@@ -58,7 +100,11 @@ const UploadPopup = (props) => {
         if (succeed) {
           const document = response[1];
           console.log(signers.arr);
-          await userController.addNewDocToFirebase(signers.arr, document, requiresFM);
+          await userController.addNewDocToFirebase(
+            signers.arr,
+            document,
+            requiresFM
+          );
           props.toaster.successToast("Documento subido con éxito");
         } else {
           props.toaster.errorToast(
@@ -102,133 +148,107 @@ const UploadPopup = (props) => {
     setSigners({ arr: signers.arr.filter((sig) => sig !== signer) });
   };
   return (
-    <div style={{ marginTop: "3rem" }}>
-      <Popup
-        modal
-        trigger={
-          <button
-            type="button"
-            size="lg"
-            className={`${global.initBt} ${classes.subirBt}`}
-          >
-            <FcUpload />
-            <h6>Subir documento</h6>
-          </button>
-        }
-      >
-        {(close) => (
-          <div className="sigNewDoc">
-            {loader ? (
-              <CustomLoader />
-            ) : (
-              <Card border="black" style={{}}>
-                <Card.Header>Subir Documento</Card.Header>
-                <Card.Body className="box-shadow">
-                  <div className="newDocContent">
-                    <Col>
-                      <Row style={{ marginBottom: "1rem" }}>
-                        <Col>
-                          <input
-                            className="input-email-firmante"
-                            type="text"
-                            ref={signerInput}
-                            placeholder="Ingresa el correo de los firmantes"
-                          />
-                        </Col>
-                        <Col>
-                          <Dropdown as={ButtonGroup}>
-                            <Button
-                              bsPrefix="btn-seguridata-lg"
-                              onClick={addSigner}
-                              variant="success"
-                            >
-                              Agregar firmante
-                            </Button>
-                            <Dropdown.Toggle
-                              style={{
-                                "background-color": "#88be0f",
-                              }}
-                              split
-                              variant="success"
-                              id="dropdown-split-basic"
-                            />
-                            <Dropdown.Menu>
-                              {signers.arr.map((signer) => (
-                                <Dropdown.Item key={signer}>
-                                  {signer}
-                                  <button
-                                    type="button"
-                                    className="btn-del-signer"
-                                    onClick={() => {
-                                      deleteSigner(signer);
-                                    }}
-                                  >
-                                    <FiDelete />
-                                  </button>
-                                </Dropdown.Item>
-                              ))}
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </Col>
-                      </Row>
-                      <Form.Group as={Row}>
-                        <Col>
-                          <Form.Control
-                            type="file"
-                            size="sm"
-                            onChange={onFileChange}
-                          />
-                        </Col>
-                      </Form.Group>
-                      <Row>
-                        <Form.Check
-                          type="checkbox"
-                          label="Requiere Facematch"
-                          onChange={(event) => setRequiresFM(event.target.value)}
-                        />
-                      </Row>
-                      <Row>
-                        <Document
-                          onLoadError={console.error}
-                          file={selectedFile.selectedFile}
-                        >
-                          <Page pageNumber={1} />
-                        </Document>
-                      </Row>
-                      <Col style={{ "margin-top": "1rem" }}>
-                        <Button variant="outline-dark" onClick={close}>
-                          Cerrar
-                        </Button>
-                        <button
-                          type="button"
-                          style={{
-                            "margin-left": "2rem",
-                            height: "2.5rem",
-                          }}
-                          className="btn-seguridata-lg"
-                          onClick={async () => {
-                            await addDocument();
-                            close();
-                          }}
-                        >
-                          Enviar archivo!
-                        </button>
-                      </Col>
-                    </Col>
-                  </div>
-                </Card.Body>
-              </Card>
-            )}
+    <Modal show={state}>
+      <Modal.Header onClick={onClose} closeButton>
+        <Modal.Title>Subir Documento</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {loader ? (
+          <CustomLoader />
+        ) : (
+          <div className="newDocContent">
+            <input
+              className={classes.inputStyle}
+              type="text"
+              ref={signerInput}
+              placeholder="Ingresa el correo de los firmantes"
+            />
+            <Dropdown className={classes.mt14} as={ButtonGroup}>
+              <Button
+                bsPrefix="btn-seguridata-lg"
+                onClick={addSigner}
+                variant="success"
+                className={classes.firmanteBt}
+              >
+                Agregar firmante
+              </Button>
+              <Dropdown.Toggle
+                style={{
+                  "background-color": "#88be0f",
+                }}
+                split
+                variant="success"
+                id="dropdown-split-basic"
+              />
+              <Dropdown.Menu>
+                {signers.arr.map((signer) => (
+                  <Dropdown.Item key={signer}>
+                    {signer}
+                    <button
+                      type="button"
+                      className="btn-del-signer"
+                      onClick={() => {
+                        deleteSigner(signer);
+                      }}
+                    >
+                      <FiDelete />
+                    </button>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Form.Group as={Row} className={classes.mt14}>
+              <Col>
+                <Form.Control type="file" size="sm" onChange={onFileChange} />
+              </Col>
+            </Form.Group>
+            <Row>
+              <Form.Check
+                type="checkbox"
+                label="Requiere Facematch"
+                className={classes.spaceCheckbox}
+                onChange={(event) => setRequiresFM(event.target.value)}
+              />
+            </Row>
+            <Row>
+              <Document
+                onLoadError={console.error}
+                file={selectedFile.selectedFile}
+              >
+                <Page pageNumber={1} />
+              </Document>
+            </Row>
+            <div className={classes.flex}>
+              <Button variant="outline-dark" onClick={onClose}>
+                Cerrar
+              </Button>
+              <button
+                type="button"
+                style={{
+                  "margin-left": "2rem",
+                  height: "2.5rem",
+                }}
+                className={classes.subirBt}
+                onClick={async () => {
+                  await addDocument();
+                  onClose();
+                }}
+              >
+                Enviar Documento
+              </button>
+            </div>
           </div>
         )}
-      </Popup>
-    </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 
 UploadPopup.propTypes = {
   toaster: PropTypes.func,
   seguriSignController: PropTypes.any,
+  onClose: PropTypes.any.isRequired,
+  state: PropTypes.any.isRequired,
 };
 
 UploadPopup.defaultProps = {

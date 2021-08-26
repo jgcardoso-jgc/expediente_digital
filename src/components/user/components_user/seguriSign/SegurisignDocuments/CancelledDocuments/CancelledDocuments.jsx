@@ -6,8 +6,13 @@
 import { Accordion } from "react-bootstrap";
 import React from "react";
 import PropTypes from "prop-types";
+import { createUseStyles } from "react-jss";
+import styles from "../../../../../../resources/theme";
+
+const globalTheme = createUseStyles(styles);
 
 const CancelledDocuments = (props) => {
+  const global = globalTheme();
   let { cancelledDoc } = props;
   const { seguriSignController } = props;
   if (cancelledDoc === "404") {
@@ -31,7 +36,7 @@ const CancelledDocuments = (props) => {
                   <br />
                   <button
                     type="button"
-                    className="btn-seguridata-lg"
+                    className={global.initBt}
                     onClick={() =>
                       seguriSignController
                         .getDocument(item.multilateralId)

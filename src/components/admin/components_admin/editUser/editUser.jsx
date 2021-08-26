@@ -155,9 +155,13 @@ const EditUser = () => {
               fileName: nameDoc,
               descripcion: descDoc,
             });
-            db.collection("users").doc(doc.id).update({ documents: gotDoc });
+            db.collection("users")
+              .doc(doc.id)
+              .update({ documents: gotDoc })
+              .then(() => {
+                window.location.reload();
+              });
           });
-          window.location.reload();
         });
       })
       .catch((e) => {
