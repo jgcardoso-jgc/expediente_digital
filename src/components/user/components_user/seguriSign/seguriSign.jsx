@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Card from "react-bootstrap/Card";
 import { createUseStyles } from "react-jss";
 import { ToastContainer } from "react-toastify";
-import { ReactSession } from "react-client-session";
 import SegurisignController from "./controller/segurisign_controller";
 import SegurisignDocuments from "./SegurisignDocuments/SegurisignDocuments";
 import CustomToasts from "../Toasts/CustomToasts";
@@ -145,7 +144,6 @@ const Segurisign = () => {
   const global = globalTheme();
   const [loadedCache, setLoadedCache] = useState(false);
   const [loading, setLoading] = useState(true);
-  ReactSession.setStoreType("sessionStorage");
   const classes = useStyles();
 
   const signIn = (e) => {
@@ -155,7 +153,7 @@ const Segurisign = () => {
       .loginUser(passwordRef.current.value)
       .then((value) => {
         setLogged(value);
-        ReactSession.set(
+        localStorage.setItem(
           "sign-user",
           JSON.stringify(seguriSignController.segurisignUser)
         );
@@ -169,7 +167,7 @@ const Segurisign = () => {
 
   useEffect(() => {
     if (!loadedCache) {
-      const cookie = ReactSession.get("sign-user");
+      const cookie = localStorage.getItem("sign-user");
       if (cookie) {
         seguriSignController.segurisignUser = JSON.parse(cookie);
         setLogged(true);

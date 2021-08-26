@@ -81,6 +81,7 @@ const RegisterNormal = () => {
           token: "",
           onboarding: false,
           cargo: "",
+          docsAdmin: [],
           documents: [],
         };
         try {

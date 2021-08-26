@@ -61,6 +61,7 @@ const UserView = () => {
               token: "",
               onboarding: false,
               cargo: "",
+              docsAdmin: [],
               documents: [],
             };
             try {
