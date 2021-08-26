@@ -22,6 +22,7 @@ const SignPopUP = (props) => {
   const { lat } = props;
   const { long } = props;
   const { toaster } = props;
+  const { requiresFaceMatch } = props;
   const clear = () => sigCanvas.current.clear();
   const userController = new UserController();
   const [loading, setLoading] = useState(false);
@@ -41,7 +42,7 @@ const SignPopUP = (props) => {
     return signedSuccessfully;
   };
 
-  if (faceMatched) {
+  if (!requiresFaceMatch || faceMatched) {
     return (
       <div>
         <Popup
@@ -162,6 +163,7 @@ SignPopUP.propTypes = {
   seguriSignController: PropTypes.any.isRequired,
   lat: PropTypes.any.isRequired,
   long: PropTypes.any.isRequired,
+  requiresFaceMatch: PropTypes.any.isRequired,
   multilateralId: PropTypes.any.isRequired,
   toaster: PropTypes.any.isRequired,
 };

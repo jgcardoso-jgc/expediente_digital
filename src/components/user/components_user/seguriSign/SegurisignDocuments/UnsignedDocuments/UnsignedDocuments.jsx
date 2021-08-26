@@ -21,6 +21,7 @@ import {
 // import UserController from "../../controller/user_controller";
 import PropTypes from "prop-types";
 import { createUseStyles } from "react-jss";
+import { FcBiotech } from 'react-icons/fc';
 import SignPopUP from "../../SignPopup/SignPopup";
 import CancelPopup from "../../CancelPopup/CancelPopup";
 import CustomLoader from "../../CustomLoader/CustomLoader";
@@ -85,6 +86,8 @@ const UnsignedDocuments = (props) => {
                       <li>Número de firmas: {item.numeroFirmas}</li>
 
                       <li>Firmados: {item.firmados.length}</li>
+                      {item.requiresFaceMatch
+                        ? <li>Protegido con biometría <FcBiotech /></li> : <></>}
                     </div>
                     <div>
                       <Table striped bordered hover>
@@ -144,6 +147,7 @@ const UnsignedDocuments = (props) => {
                           seguriSignController={seguriSignController}
                           long={long}
                           lat={lat}
+                          requiresFaceMatch={item.requiresFaceMatch}
                           key={item.multilateralId}
                           multilateralId={item.multilateralId}
                           fileName={item.fileName}
