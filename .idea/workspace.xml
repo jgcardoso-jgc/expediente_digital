@@ -22,7 +22,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../seguridata-in-a-box/sib" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -46,6 +46,7 @@
       <workItem from="1629835394402" duration="43000" />
       <workItem from="1629865680913" duration="60000" />
       <workItem from="1629898231876" duration="25000" />
+      <workItem from="1629962293848" duration="24000" />
     </task>
     <servers />
   </component>

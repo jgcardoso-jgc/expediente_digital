@@ -1,6 +1,8 @@
 /* eslint-disable comma-dangle */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
 import { auth, db } from "./firebase_controller";
 
 class UserController {
@@ -8,7 +10,7 @@ class UserController {
 
   signDocCollection = db.collection("sign-docs");
 
-  async addNewDocToFirebase(emailList, document) {
+  async addNewDocToFirebase(emailList, document, requiresFaceMatch) {
     const users = await this.getUIDsFromEmails(emailList);
     console.log(users);
     const docRef = db.collection("sign-docs").doc();
@@ -21,6 +23,7 @@ class UserController {
       numeroFirmas: users.length,
       docType: document.docType,
       usuarios: users,
+      status: 'PENDIENTE',
       uids,
     };
     console.log(body);
@@ -86,10 +89,12 @@ class UserController {
     });
   }
 
-  getUserDocs = (uid) => {
+  getUserDocs = (status) => {
     const docs = [];
+    const { uid } = auth.currentUser;
     db.collection("sign-docs")
       .where("uids", "array-contains", { uid })
+      .where("status", "==", status)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -103,7 +108,7 @@ class UserController {
     return docs;
   }
 
-  async updateDocSigned(multilateralId) {
+  async updateDocSigned(multilateralId, location) {
     const snapshot = await this.signDocCollection
       .where("multilateralId", "==", multilateralId)
       .get();
@@ -111,10 +116,23 @@ class UserController {
       const { uid } = auth.currentUser;
       const doc = snapshot.docs[0];
       const docData = doc.data();
+      const time = new Date().toLocaleString('es').split(' ');
+
       docData.firmados.push(uid);
+      docData.status = docData.firmados.length === docData.numeroFirmas ? 'CONCLUIDO' : 'PENDIENTE';
       docData.usuarios.forEach((u) => {
-        // eslint-disable-next-line no-param-reassign
-        u.firmo = u.uid === uid;
+        if (u.uid === uid) {
+          u.firmo = true;
+          u.datosFirma = {
+            fechaFirma: time[0],
+            horaFirma: time[1],
+            ubicacion: {
+              lat: location.lat,
+              long: location.long
+            },
+            agente: navigator.userAgent
+          };
+        }
       });
       await doc.ref.update(docData);
     }

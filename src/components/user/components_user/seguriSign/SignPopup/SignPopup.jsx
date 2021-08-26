@@ -97,7 +97,8 @@ const SignPopUP = (props) => {
                         const status = await sign();
                         if (status) {
                           await userController.updateDocSigned(
-                            props.multilateralId
+                            props.multilateralId,
+                            { lat: props.lat, long: props.long }
                           );
                           toaster.successToast("Documento firmado con éxito");
                         } else {

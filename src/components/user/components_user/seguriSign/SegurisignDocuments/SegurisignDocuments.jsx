@@ -14,7 +14,6 @@ import CancelledDocuments from "./CancelledDocuments/CancelledDocuments";
 import CancelledThirdsDocuments from "./CancelledThirdsDocuments/CancelledThirdsDocuments";
 import ExpiredDocuments from "./ExpiredDocuments/ExpiredDocuments";
 import UserController from "../controller/user_controller";
-import { auth } from "../controller/firebase_controller";
 
 const useStyles = createUseStyles(() => ({
   card: {
@@ -80,8 +79,8 @@ const SegurisignDocuments = (props) => {
       expiredDoc,
       cancelledByThirdsDoc,
     ] = await Promise.all([
-      props.seguriSignController.getStatus("CONCLUIDO"),
-      userController.getUserDocs(auth.currentUser.uid),
+      userController.getUserDocs('CONCLUIDO'),
+      userController.getUserDocs('PENDIENTE'),
       props.seguriSignController.getStatus("CANCELADOS"),
       props.seguriSignController.getStatus("EXPIRADOS"),
       props.seguriSignController.getStatus("CANCELADOS_TERCEROS"),
