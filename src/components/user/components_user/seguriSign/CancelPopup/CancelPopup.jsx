@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import CustomLoader from "../CustomLoader/CustomLoader";
+import UserController from "../controller/user_controller";
 
 const CancelPopup = (props) => {
   const reasonText = useRef(null);
@@ -14,13 +15,15 @@ const CancelPopup = (props) => {
   const { seguriSignController } = props;
   const { toaster } = props;
   const { multilateralId } = props;
+  const userController = new UserController();
   const cancel = () => {
     setLoading(true);
     seguriSignController
       .cancelDocument(multilateralId, reasonText.current.value)
-      .then((result) => {
+      .then(async (result) => {
         setLoading(false);
         if (result) {
+          await userController.updateDocCancelled(props.multilateralId);
           toaster.successToast("Documento cancelado con éxito");
         } else {
           toaster.errorToast("Error al cancelar documento, intente de nuevo");

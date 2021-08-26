@@ -81,11 +81,11 @@ const SegurisignDocuments = (props) => {
     ] = await Promise.all([
       userController.getUserDocs('CONCLUIDO'),
       userController.getUserDocs('PENDIENTE'),
-      props.seguriSignController.getStatus("CANCELADOS"),
+      userController.getUserDocs('CANCELADO'),
       props.seguriSignController.getStatus("EXPIRADOS"),
       props.seguriSignController.getStatus("CANCELADOS_TERCEROS"),
     ]);
-
+    console.log(cancelledDoc);
     setLoaded({
       signedDocuments: signedDoc,
       hasLoaded: true,

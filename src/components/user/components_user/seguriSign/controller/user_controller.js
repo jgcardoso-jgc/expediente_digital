@@ -23,6 +23,7 @@ class UserController {
       numeroFirmas: users.length,
       docType: document.docType,
       usuarios: users,
+      requiresFaceMatch: requiresFaceMatch === 'on',
       status: 'PENDIENTE',
       uids,
     };
@@ -47,25 +48,18 @@ class UserController {
 
   async getUIDsFromEmails(emailList) {
     const users = [];
-    emailList.forEach(async (email) => {
-      await this.userCollection
-        .where("email", "==", email)
-        .get()
-        .then((snapshot) => {
-          snapshot.forEach((doc) => {
-            const docData = doc.data();
-            users.push({
-              uid: docData.uid,
-              email: docData.email,
-              name: docData.fullname,
-              firmo: false,
-            });
-          });
-        })
-        .catch((err) => {
-          console.log("Error getting documents", err);
+    await Promise.all(emailList.map(async (email) => {
+      const snapshot = await this.userCollection.where("email", "==", email).get();
+      snapshot.forEach((doc) => {
+        const docData = doc.data();
+        users.push({
+          uid: docData.uid,
+          email: docData.email,
+          name: docData.fullname,
+          firmo: false,
         });
-    });
+      });
+    }));
     return users;
   }
 
@@ -137,6 +131,17 @@ class UserController {
       await doc.ref.update(docData);
     }
   }
-}
 
+  async updateDocCancelled(multilateralId) {
+    const snapshot = await this.signDocCollection
+      .where("multilateralId", "==", multilateralId)
+      .get();
+    if (snapshot.size > 0) {
+      const doc = snapshot.docs[0];
+      const docData = doc.data();
+      docData.status = 'CANCELADO';
+      await doc.ref.update(docData);
+    }
+  }
+}
 export default UserController;
