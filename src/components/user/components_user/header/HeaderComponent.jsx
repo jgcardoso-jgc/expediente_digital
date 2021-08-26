@@ -76,7 +76,6 @@ function HeaderComponent() {
       .auth()
       .signOut()
       .then(() => {
-        console.log("logged out");
         localStorage.removeItem("admin");
         localStorage.removeItem("user");
         localStorage.removeItem("profilepic");
@@ -130,8 +129,9 @@ function HeaderComponent() {
   }
 
   function getState() {
+    const userInfo = JSON.parse(localStorage.getItem("user"));
     if (localStorage.getItem("profilepic") === null) {
-      const route = `users/${user.email}/croppedFace`;
+      const route = `users/${userInfo.email}/croppedFace`;
       db.ref(route)
         .getDownloadURL()
         .then((response) => {
@@ -149,9 +149,6 @@ function HeaderComponent() {
   useEffect(() => {
     const userGet = localStorage.getItem("user");
     setUser(JSON.parse(userGet));
-  }, []);
-
-  useEffect(() => {
     getState();
   }, []);
 
