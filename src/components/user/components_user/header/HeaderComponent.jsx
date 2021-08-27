@@ -80,6 +80,7 @@ function HeaderComponent() {
         localStorage.removeItem("user");
         localStorage.removeItem("profilepic");
         localStorage.removeItem("sign-user");
+        localStorage.removeItem("reload");
       });
   }
   const { push } = useHistory();
