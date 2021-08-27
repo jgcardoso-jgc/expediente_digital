@@ -113,8 +113,10 @@ function Documents() {
   const [urlView, setUrl] = useState("");
   const [titleModal, setTitle] = useState("");
   const [size, setSize] = useState(0);
+  const [reload, setReload] = useState(false);
 
   async function getDocs() {
+    console.log("here");
     docFunctions.getState(db, storage, user).then((res) => {
       if (Array.isArray(res)) {
         // es array cuando ya se hizo onboarding y facematch
@@ -122,10 +124,12 @@ function Documents() {
         docFunctions.exists(res).then((docArray) => {
           // docs not exist
           if (docArray === "not exists") {
+            console.log("not exist");
             // call this function only in case the missing docs are incode docs
             docFunctions.notExists(storage, user).then((resFinal) => {
               if (resFinal === "all done") {
-                console.log("done!");
+                console.log("toreload");
+                setReload(!reload);
               } else {
                 toast(resFinal);
               }
@@ -133,6 +137,7 @@ function Documents() {
             });
             return;
           }
+          console.log("herethis:" + docArray);
           // docs exists
           setSize(docArray[0].length + docArray[1].length + docArray[2].length);
           setCompletados(docArray[0]);
@@ -153,7 +158,7 @@ function Documents() {
 
   useEffect(() => {
     getDocs();
-  }, []);
+  }, [reload]);
 
   function handleShow(url) {
     setUrl(url.url);

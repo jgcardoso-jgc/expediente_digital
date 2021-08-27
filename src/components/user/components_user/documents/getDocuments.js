@@ -19,12 +19,14 @@ function exists(response) {
     let notFound = false;
     let pendiente = false;
     response.forEach((obj) => {
-      if (obj.title === "incode") {
-        notFound = true;
-      }
-      if (obj.title === "pendiente") {
-        pendiente = true;
-      }
+      obj.forEach((checkTitle) => {
+        if (checkTitle.title === "incode") {
+          notFound = true;
+        }
+        if (checkTitle.title === "pendiente") {
+          pendiente = true;
+        }
+      });
     });
     if (pendiente) {
       resolve("pendiente");
@@ -85,6 +87,10 @@ function getState(db, storage, user) {
           });
           Promise.all(promises).then(() => {
             console.log("all resolved");
+            pendientes.forEach((check) => {
+              console.log(Object.keys(check));
+              console.log(`title:${check.title}`);
+            });
             resolve([completados, revision, pendientes]);
           });
         });

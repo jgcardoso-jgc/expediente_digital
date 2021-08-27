@@ -41,7 +41,7 @@ const HelloInitSign = (props) => {
             localStorage.setItem("user", JSON.stringify(saved));
             props.setFaceMatched(true);
           } else {
-            props.toaster.errorToast('Error al confirmar identidad');
+            props.toaster.errorToast("Error al confirmar identidad");
             props.setFaceMatched(false);
           }
         },
