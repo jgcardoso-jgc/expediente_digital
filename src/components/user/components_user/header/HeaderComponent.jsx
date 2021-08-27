@@ -8,8 +8,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
-import { createUseStyles, useTheme } from "react-jss";
-import firebase from "firebase";
+import { createUseStyles } from "react-jss";
+import { useFirebaseApp } from "reactfire";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
@@ -66,12 +66,16 @@ const useStyles = createUseStyles(() => ({
 }));
 
 function HeaderComponent() {
+  const firebase = useFirebaseApp();
+  const db = firebase.storage();
+  const [urlProfile, setUrlProfile] = useState(
+    "https://avatars.githubusercontent.com/sofseguridata"
+  );
   function logOut() {
     firebase
       .auth()
       .signOut()
       .then(() => {
-        console.log("logged out");
         localStorage.removeItem("admin");
         localStorage.removeItem("user");
         localStorage.removeItem("profilepic");
@@ -80,9 +84,8 @@ function HeaderComponent() {
   }
   const { push } = useHistory();
   const { currentItem } = useContext(SidebarContext);
-  const theme = useTheme();
   const [user, setUser] = useState("");
-  const classes = useStyles({ theme });
+  const classes = useStyles();
 
   let title;
   switch (true) {
@@ -115,9 +118,37 @@ function HeaderComponent() {
     push(SLUGS.settings);
   }
 
+  function exists(response) {
+    setUrlProfile(response);
+    localStorage.setItem("profilepic", response);
+  }
+
+  function notExists() {
+    console.log("not exists");
+  }
+
+  function getState() {
+    const userInfo = JSON.parse(localStorage.getItem("user"));
+    if (localStorage.getItem("profilepic") === null) {
+      const route = `users/${userInfo.email}/croppedFace`;
+      db.ref(route)
+        .getDownloadURL()
+        .then((response) => {
+          exists(response);
+        })
+        .catch(() => {
+          notExists();
+        });
+    } else {
+      const url = localStorage.getItem("profilepic");
+      exists(url);
+    }
+  }
+
   useEffect(() => {
     const userGet = localStorage.getItem("user");
     setUser(JSON.parse(userGet));
+    getState();
   }, []);
 
   return (
@@ -147,11 +178,7 @@ function HeaderComponent() {
           label={
             <>
               <span className={classes.name}>{user.fullName}</span>
-              <img
-                src="https://avatars.githubusercontent.com/sofseguridata"
-                alt="avatar"
-                className={classes.avatar}
-              />
+              <img src={urlProfile} alt="avatar" className={classes.avatar} />
             </>
           }
           options={[
