@@ -210,13 +210,11 @@ const Segurisign = () => {
           </h5>
           <Card.Text>
             <div>
-              <form>
-                <input
-                  className={classes.inputStyle}
-                  ref={passwordRef}
-                  type="password"
-                />
-              </form>
+              <input
+                className={classes.inputStyle}
+                ref={passwordRef}
+                type="password"
+              />
             </div>
           </Card.Text>
           <button type="button" className={global.initBt} onClick={signIn}>

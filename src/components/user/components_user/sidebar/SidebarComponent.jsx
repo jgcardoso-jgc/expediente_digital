@@ -2,14 +2,12 @@
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
-import { useFirebaseApp } from "reactfire";
 import { BiUserCircle } from "react-icons/bi";
 import { FaBell, FaSignature } from "react-icons/fa";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
   IconContacts,
-  IconLogout,
   IconSettings,
   IconSubscription,
 } from "../../assets/icons";
@@ -27,21 +25,10 @@ const useStyles = createUseStyles({
 });
 
 function SidebarComponent() {
-  const firebase = useFirebaseApp();
   const { push } = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
   const isMobile = window.innerWidth <= 1080;
-
-  function logOut() {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        localStorage.removeItem("admin");
-        localStorage.removeItem("user");
-      });
-  }
 
   function onClick(slug, parameters = {}) {
     push(convertSlugToUrl(slug, parameters));
@@ -88,13 +75,6 @@ function SidebarComponent() {
         title="Ajustes"
         icon={IconSettings}
         onClick={() => onClick(SLUGS.settings)}
-      />
-
-      <MenuItem
-        id="logout"
-        title="Logout"
-        icon={IconLogout}
-        onClick={() => logOut()}
       />
     </Menu>
   );

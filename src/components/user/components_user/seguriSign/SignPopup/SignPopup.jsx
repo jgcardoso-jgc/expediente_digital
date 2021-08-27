@@ -17,6 +17,7 @@ import { createUseStyles } from "react-jss";
 import UserController from "../controller/user_controller";
 import HelloInitSign from "../../hello-sign/hello";
 import signGif from "../../../../../assets/sign.gif";
+import loadingGif from "../../../../../assets/loading.gif";
 
 const useStyles = createUseStyles(() => ({
   border: { border: "3px solid black", marginBottom: 14 },
@@ -33,12 +34,18 @@ const useStyles = createUseStyles(() => ({
     fontSize: "15px",
     borderRadius: "10px",
   },
+  loadGif: {
+    maxWidth: 50,
+  },
   signImg: {
     maxWidth: 200,
     marginBottom: 20,
   },
   flex: {
     display: "flex",
+  },
+  loadingBlock: {
+    display: "block",
   },
   title: {
     marginTop: 5,
@@ -83,7 +90,7 @@ const SignPopUP = (props) => {
             <button
               type="button"
               style={{ width: "100%" }}
-              className="btn-seguridata-lg"
+              className={classes.firmarBt}
             >
               Firmar
             </button>
@@ -108,7 +115,7 @@ const SignPopUP = (props) => {
                       }}
                     />
                   </Col>
-
+                  <p> Firma biométrica</p>
                   <div className={classes.flex}>
                     <Button variant="outline-dark" onClick={close}>
                       Cerrar
@@ -141,8 +148,18 @@ const SignPopUP = (props) => {
                     >
                       Firmar
                     </button>
-                    {loading ? <div>cargando...</div> : ""}
                   </div>
+                  {loading ? (
+                    <div className={classes.loadingBlock}>
+                      <img
+                        className={classes.loadGif}
+                        src={loadingGif}
+                        alt="load"
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </Card.Body>
               </Card>
             </div>
@@ -161,7 +178,7 @@ const SignPopUP = (props) => {
           <button
             type="button"
             style={{ width: "100%" }}
-            className="btn-seguridata-lg"
+            className={classes.firmarBt}
           >
             Firmar
           </button>

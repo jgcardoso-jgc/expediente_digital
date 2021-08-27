@@ -49,7 +49,7 @@ function TutorialFrontId({ onSuccess }) {
   }, [onSuccess, screenOrientation]);
 
   return (
-    <div className="fit" ref={containerRef}>
+    <div style={{ marginTop: -54 }} ref={containerRef}>
       {horizontal ? <ContinuePhone /> : ""}
     </div>
   );

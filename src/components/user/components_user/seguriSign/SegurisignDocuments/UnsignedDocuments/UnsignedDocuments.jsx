@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/forbid-prop-types */
@@ -21,12 +20,59 @@ import {
 // import UserController from "../../controller/user_controller";
 import PropTypes from "prop-types";
 import { createUseStyles } from "react-jss";
-import { FcBiotech } from 'react-icons/fc';
 import SignPopUP from "../../SignPopup/SignPopup";
 import CancelPopup from "../../CancelPopup/CancelPopup";
 import CustomLoader from "../../CustomLoader/CustomLoader";
+import faceid from "../../../../../../assets/faceid.gif";
 
-const useStyles = createUseStyles(() => ({}));
+const useStyles = createUseStyles(() => ({
+  recordarBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    minWidth: "150px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+  fontTitles: {
+    fontSize: 25,
+  },
+  biometric: { maxWidth: 40 },
+  mt10: {
+    marginTop: 20,
+  },
+  verBt: {
+    backgroundColor: "  rgb(97 137 184)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    minWidth: "150px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+  recordarMiniBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    minWidth: 50,
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+}));
 const UnsignedDocuments = (props) => {
   const [loading, setLoading] = useState(false);
   const { unsignedDocuments } = props;
@@ -44,7 +90,7 @@ const UnsignedDocuments = (props) => {
       <td>{user.email}</td>
       <td>{user.firmo ? <AiOutlineCheck /> : <TiDeleteOutline />}</td>
       <td>
-        <button type="button">
+        <button className={classes.recordarMiniBt} type="button">
           <AiOutlineMail />
         </button>
       </td>
@@ -80,17 +126,45 @@ const UnsignedDocuments = (props) => {
                 </Accordion.Header>
                 <Accordion.Body>
                   <div align="center">
-                    <div style={{ "margin-left": "2rem" }} align="left">
-                      <li>Tipo de documento: {item.docType}</li>
+                    <Row>
+                      <Col>
+                        <span className={classes.fontTitles}>
+                          <b>{item.docType}</b>
+                        </span>{" "}
+                        <br />
+                        Tipo de documento
+                      </Col>
 
-                      <li>Número de firmas: {item.numeroFirmas}</li>
+                      <Col>
+                        <span className={classes.fontTitles}>
+                          <b>{item.numeroFirmas}</b>
+                        </span>{" "}
+                        <br />
+                        Firmas
+                      </Col>
 
-                      <li>Firmados: {item.firmados.length}</li>
-                      {item.requiresFaceMatch
-                        ? <li>Protegido con biometría <FcBiotech /></li> : <></>}
-                    </div>
+                      <Col>
+                        <span className={classes.fontTitles}>
+                          <b>{item.firmados.length}</b>
+                        </span>{" "}
+                        <br />
+                        Firmados
+                      </Col>
+                      {item.requiresFaceMatch ? (
+                        <Col>
+                          <img
+                            src={faceid}
+                            className={classes.biometric}
+                            alt="faceid"
+                          />
+                          Protegido con biometría
+                        </Col>
+                      ) : (
+                        <></>
+                      )}
+                    </Row>
                     <div>
-                      <Table striped bordered hover>
+                      <Table striped bordered hover className={classes.mt10}>
                         <thead>
                           <tr>
                             <th>#</th>
@@ -119,7 +193,7 @@ const UnsignedDocuments = (props) => {
                         ) : (
                           <button
                             type="button"
-                            className="btn-seguridata-lg"
+                            className={classes.verBt}
                             style={{ width: "80%" }}
                             onClick={() => {
                               setLoading(true);

@@ -13,11 +13,6 @@ h1 {
   display: block;
 }
 
-.fit {
-  width: 100vw !important;
-  height: 100vh !important;
-}
-
 .main {
   border-radius: "20px";
   color: "#fff";
@@ -30,11 +25,9 @@ h1 {
   border: "4px solid gray";
 }
 
-/*.IncodeTutorialVideoFront {
-  border: 1px solid green;
-  background-color: black;
-  /*transform: rotate(90deg);
-}*/
+.IncodeTutorialVideoFront {
+  max-width: 100%;
+}
 
 .IncodeTutorialButtonContainerFront {
   margin-bottom: 300px;
@@ -68,6 +61,7 @@ h1 {
 }
 /* Video */
 .IncodeTutorialVideoFront {
+  max-width: 100%;
 }
 /* Button container */
 .IncodeTutorialButtonContainerFront {

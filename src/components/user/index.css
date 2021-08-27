@@ -21,6 +21,10 @@ ol[class] {
   box-shadow: 0px 6px 10px 0px #d3d3d3 !important;
 }
 
+.popup-overlay {
+  background: #00000080 !important;
+}
+
 .accordion-body {
   background: #f5f5f5 !important;
 }

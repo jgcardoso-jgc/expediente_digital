@@ -56,7 +56,11 @@ function ContinuePhone() {
       <div className={classes.card}>
         <img className={classes.qrStyle} src={qr} alt="qr" />
       </div>
-      <button type="button" onClick={() => goBack()} className="inicioBt">
+      <button
+        type="button"
+        onClick={() => goBack()}
+        className={classes.inicioBt}
+      >
         Regresar al Inicio
       </button>
     </div>
