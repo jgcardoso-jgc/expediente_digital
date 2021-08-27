@@ -8,7 +8,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
-import { createUseStyles, useTheme } from "react-jss";
+import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
@@ -84,9 +84,8 @@ function HeaderComponent() {
   }
   const { push } = useHistory();
   const { currentItem } = useContext(SidebarContext);
-  const theme = useTheme();
   const [user, setUser] = useState("");
-  const classes = useStyles({ theme });
+  const classes = useStyles();
 
   let title;
   switch (true) {

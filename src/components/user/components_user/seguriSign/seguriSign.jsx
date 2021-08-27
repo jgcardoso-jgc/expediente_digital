@@ -59,6 +59,8 @@ const useStyles = createUseStyles(() => ({
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     height: "100%",
     padding: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   inner: { width: "80%", margin: "0 auto", marginTop: "3rem" },
   accordionButton: {
