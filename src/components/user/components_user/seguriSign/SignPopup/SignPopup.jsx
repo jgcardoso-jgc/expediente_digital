@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable operator-linebreak */
@@ -12,12 +13,43 @@ import { Col } from "react-bootstrap";
 import SignatureCanvas from "react-signature-canvas";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
+import { createUseStyles } from "react-jss";
 import UserController from "../controller/user_controller";
 import HelloInitSign from "../../hello-sign/hello";
+import signGif from "../../../../../assets/sign.gif";
+
+const useStyles = createUseStyles(() => ({
+  border: { border: "3px solid black", marginBottom: 14 },
+  firmarBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    minWidth: "150px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+  signImg: {
+    maxWidth: 200,
+    marginBottom: 20,
+  },
+  flex: {
+    display: "flex",
+  },
+  title: {
+    marginTop: 5,
+    marginBottom: 14,
+  },
+}));
 
 const SignPopUP = (props) => {
   const sigCanvas = useRef({});
   const { seguriSignController } = props;
+  const classes = useStyles();
   const { multilateralId } = props;
   const { lat } = props;
   const { long } = props;
@@ -61,8 +93,11 @@ const SignPopUP = (props) => {
             <div align="center">
               <Card style={{}}>
                 <Card.Body>
-                  <Card.Title>Firmar documento</Card.Title>
-                  <Col>
+                  <Card.Title className={classes.title}>
+                    <b>ONESeguridata</b> | Firmar documento
+                  </Card.Title>
+                  <img className={classes.signImg} src={signGif} alt="sign" />
+                  <Col className={classes.border}>
                     <SignatureCanvas
                       ref={sigCanvas}
                       penColor="black"
@@ -74,7 +109,7 @@ const SignPopUP = (props) => {
                     />
                   </Col>
 
-                  <Col>
+                  <div className={classes.flex}>
                     <Button variant="outline-dark" onClick={close}>
                       Cerrar
                     </Button>
@@ -86,13 +121,8 @@ const SignPopUP = (props) => {
                       Borrar
                     </Button>
                     <button
-                      className="btn-seguridata-lg"
+                      className={classes.firmarBt}
                       type="button"
-                      style={{
-                        height: "3rem",
-                        width: "9rem",
-                        "margin-left": "3rem",
-                      }}
                       onClick={async () => {
                         setLoading(true);
                         const status = await sign();
@@ -111,8 +141,8 @@ const SignPopUP = (props) => {
                     >
                       Firmar
                     </button>
-                    {loading ? <div>cargando...</div> : <div>Listo</div>}
-                  </Col>
+                    {loading ? <div>cargando...</div> : ""}
+                  </div>
                 </Card.Body>
               </Card>
             </div>
@@ -143,7 +173,10 @@ const SignPopUP = (props) => {
               <Card.Body>
                 <Card.Title>Firmar documento</Card.Title>
                 <div>
-                  <HelloInitSign toaster={props.toaster} setFaceMatched={setFaceMatched} />
+                  <HelloInitSign
+                    toaster={props.toaster}
+                    setFaceMatched={setFaceMatched}
+                  />
                 </div>
                 <Col>
                   <Button variant="outline-dark" onClick={close}>

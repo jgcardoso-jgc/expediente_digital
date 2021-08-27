@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import { number, shape } from "prop-types";
 import { Column } from "simple-flexbox";
 import uuid from "react-uuid";
-import { createUseStyles, useTheme } from "react-jss";
+import { createUseStyles } from "react-jss";
 import { FaFileAlt } from "react-icons/fa";
 
 const useStyles = createUseStyles(() => ({
@@ -44,6 +44,7 @@ const useStyles = createUseStyles(() => ({
     borderRadius: 7,
     minWidth: 250,
     padding: 0,
+    zIndex: 99,
     WebkitBoxShadow: "0px 14px 28px 3px #CACACA",
     boxShadow: "0px 14px 28px 3px #CACACA",
     position: "absolute",
@@ -113,8 +114,7 @@ function AlertComponent({ position, label }) {
   const ref = useRef();
   const firebase = useFirebaseApp();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const theme = useTheme();
-  const classes = useStyles({ theme, position });
+  const classes = useStyles({ position });
   const db = firebase.firestore();
   const [alerts, setAlerts] = useState([]);
 
