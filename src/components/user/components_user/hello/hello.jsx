@@ -60,7 +60,7 @@ function HelloInit() {
       </div>
       <button
         type="button"
-        onClick={() => () => window.location.reload(true)}
+        onClick={() => window.location.reload(true)}
         className={`${global.initBt} ${classes.mrAuto}`}
       >
         ¿Tienes problemas?
