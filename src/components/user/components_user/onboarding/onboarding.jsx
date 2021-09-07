@@ -49,7 +49,7 @@ function TutorialFrontId({ onSuccess }) {
   }, [onSuccess, screenOrientation]);
 
   return (
-    <div style={{ marginTop: -54 }} ref={containerRef}>
+    <div className="fit" ref={containerRef}>
       {horizontal ? <ContinuePhone /> : ""}
     </div>
   );
@@ -126,6 +126,20 @@ function Selfie({ session, onSuccess, showError }) {
       numberOfTries: 3,
     });
   }, [onSuccess, showError, session]);
+
+  return <div ref={containerRef} />;
+}
+
+function RenderLogin({ onSuccess, onError }) {
+  const containerRef = useRef();
+
+  useEffect(() => {
+    incode.renderLogin(containerRef.current, {
+      // token: session,
+      onSuccess,
+      onError,
+    });
+  }, [onSuccess, onError]);
 
   return <div ref={containerRef} />;
 }
@@ -244,6 +258,11 @@ function Onboarding() {
       <BackId session={session} onSuccess={goNext} showError={showError} />
       <ProcessId session={session} onSuccess={goNext} />
       <Selfie session={session} onSuccess={toFinal} showError={showError} />
+      <RenderLogin
+        session={session}
+        onSuccess={goNext}
+        onError={(e) => console.log(e)}
+      />
     </Steps>
   );
 }
