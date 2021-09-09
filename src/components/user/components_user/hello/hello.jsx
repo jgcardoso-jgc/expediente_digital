@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-import "./hello.css";
 import React, { useRef, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";

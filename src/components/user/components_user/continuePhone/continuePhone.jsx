@@ -41,7 +41,7 @@ function ContinuePhone() {
   const classes = useStyles();
   const history = useHistory();
   function goBack() {
-    history.goBack();
+    history.push("/dashboard");
   }
   return (
     <div>

@@ -11,11 +11,11 @@ import { useFirebaseApp } from "reactfire";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import Steps from "./Steps";
-import "./styles.css";
 import loading from "../../../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
 import settings from "./settings";
 import "react-toastify/dist/ReactToastify.css";
+import "./styles.css";
 import onboardingSDK from "../../../../config/onboarding-config";
 
 let incode = null;
@@ -72,7 +72,7 @@ const FrontId = ({ session, onSuccess, showError }) => {
     });
   }, [onSuccess, showError, session]);
 
-  return <div ref={containerRef} />;
+  return <div className="fit" ref={containerRef} />;
 };
 
 FrontId.propTypes = {
@@ -267,7 +267,7 @@ function Onboarding() {
   );
 }
 export default Onboarding;
-
+/* render login es para hello para facematch
 /* function Conference({ session, onSuccess, showError }) {
   const [status, setStatus] = useState();
   const containerRef = useRef();

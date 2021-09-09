@@ -2,11 +2,6 @@
 
 body {
   font-family: "Source Sans Pro", sans-serif !important;
-  position: relative !important;
-}
-
-#root {
-  overflow-x: hidden !important;
 }
 
 a {
