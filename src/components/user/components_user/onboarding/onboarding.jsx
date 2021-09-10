@@ -130,20 +130,6 @@ function Selfie({ session, onSuccess, showError }) {
   return <div ref={containerRef} />;
 }
 
-function RenderLogin({ onSuccess, onError }) {
-  const containerRef = useRef();
-
-  useEffect(() => {
-    incode.renderLogin(containerRef.current, {
-      // token: session,
-      onSuccess,
-      onError,
-    });
-  }, [onSuccess, onError]);
-
-  return <div ref={containerRef} />;
-}
-
 Selfie.propTypes = {
   onSuccess: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
@@ -153,29 +139,21 @@ function Onboarding() {
   const history = useHistory();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  const { url } = onboardingSDK;
   const configID = onboardingSDK.idConfig;
-  console.log(configID);
   const [session, setSession] = useState("");
   const [step, setStep] = useState(0);
   const [error, setError] = useState(false);
   useEffect(() => {
-    console.log("incode...");
-    const script = document.createElement("script");
-    script.src = url;
-    document.body.appendChild(script);
-    script.onload = () => {
-      start();
-      incode
-        .createSession("ALL", null, {
-          configurationId: configID,
-        })
-        .then(async (sessionRes) => {
-          await incode.warmup();
-          setSession(sessionRes);
-          console.log(`session:${Object.keys(sessionRes)}`);
-        });
-    };
+    start();
+    incode
+      .createSession("ALL", null, {
+        configurationId: configID,
+      })
+      .then(async (sessionRes) => {
+        await incode.warmup();
+        setSession(sessionRes);
+        console.log(`session:${Object.keys(sessionRes)}`);
+      });
   }, []);
 
   function goNext() {
@@ -258,11 +236,6 @@ function Onboarding() {
       <BackId session={session} onSuccess={goNext} showError={showError} />
       <ProcessId session={session} onSuccess={goNext} />
       <Selfie session={session} onSuccess={toFinal} showError={showError} />
-      <RenderLogin
-        session={session}
-        onSuccess={goNext}
-        onError={(e) => console.log(e)}
-      />
     </Steps>
   );
 }
