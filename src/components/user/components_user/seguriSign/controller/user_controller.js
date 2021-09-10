@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
-import { auth, db } from "./firebase_controller";
+import { auth, db, functions } from "./firebase_controller";
 
 class UserController {
   userCollection = db.collection("users");
@@ -150,6 +150,15 @@ class UserController {
       docData.status = 'CANCELADO';
       await doc.ref.update(docData);
     }
+  }
+
+  testEmail = () => {
+    const val = functions.httpsCallable('signedDocEmail');
+    val().then((result) => {
+      console.log(result.data.output);
+    }).catch((error) => {
+      console.log(`error: ${JSON.stringify(error)}`);
+    });
   }
 }
 export default UserController;
