@@ -123,6 +123,13 @@ const SignPopUP = (props) => {
                     <Button
                       variant="outline-dark"
                       style={{ "margin-left": "2rem" }}
+                      onClick={userController.testEmail()}
+                    >
+                      Email
+                    </Button>
+                    <Button
+                      variant="outline-dark"
+                      style={{ "margin-left": "2rem" }}
                       onClick={clear}
                     >
                       Borrar
