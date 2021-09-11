@@ -8,7 +8,7 @@ import { useFirebaseApp } from "reactfire";
 import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import { FaEdit } from "react-icons/fa";
-import Table from "./paginationTable";
+import Table from "./table";
 
 const useStyles = createUseStyles({
   editButton: {
@@ -65,8 +65,6 @@ function TableView() {
 
   useEffect(() => {
     if (data.length > 0) {
-      console.log("stop");
-      console.log(`data:${data}`);
       setLoading(false);
     } else {
       getData().then((res) => {
@@ -82,8 +80,6 @@ function TableView() {
   }, [data]);
 
   function handleClickEditRow(obj) {
-    console.log(Object.keys(obj));
-    console.log(obj.row.original.uid);
     history.push({
       pathname: "/contacts/editUser",
       state: { objUser: obj.row.original },
@@ -101,6 +97,10 @@ function TableView() {
           {
             Header: "Nombre",
             accessor: "fullname",
+          },
+          {
+            Header: "Cargo",
+            accessor: "cargo",
           },
           {
             Header: "Email",

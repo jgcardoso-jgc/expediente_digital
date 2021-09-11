@@ -55,7 +55,6 @@ const useStyles = createUseStyles({
 
 const Table = ({ columns, data }) => {
   const classes = useStyles();
-  console.log(`heredata:${data}`);
   const props = useTable(
     {
       columns,
@@ -86,11 +85,8 @@ const Table = ({ columns, data }) => {
     setPageSize,
     state: { pageIndex, pageSize, globalFilter },
   } = props;
-  console.log(props);
 
-  useEffect(() => {
-    console.log(globalFilter);
-  }, [globalFilter]);
+  useEffect(() => {}, [globalFilter]);
 
   return (
     <div className={classes.card}>
@@ -200,7 +196,7 @@ const Table = ({ columns, data }) => {
 
       <br />
       <div>
-        Mostrando {rows.length} de {pageSize} resultados
+        Mostrando {pageSize} de {rows.length} resultados
       </div>
       <div>
         <pre>

@@ -132,9 +132,32 @@ const EditUser = () => {
     setTitle(url.title);
     setImageName(url.imageName);
     setType(typeModal);
-    console.log(url.email);
     setEmail(url.email);
     setShow(true);
+  }
+
+  function reload() {
+    window.location.reload();
+  }
+
+  function searchEmail() {
+    const query = db.collection("users").where("email", "==", locData.email);
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const gotDoc = doc.data().docsAdmin;
+        gotDoc.push({
+          name: nameDoc,
+          fileName: nameDoc,
+          descripcion: descDoc,
+        });
+        db.collection("users")
+          .doc(doc.id)
+          .update({ documents: gotDoc })
+          .then(() => {
+            reload();
+          });
+      });
+    });
   }
 
   function uploadFile() {
@@ -144,25 +167,7 @@ const EditUser = () => {
       .child(`/${locData.email}/administrativos/${nameDoc}`)
       .put(file)
       .then(() => {
-        const query = db
-          .collection("users")
-          .where("email", "==", locData.email);
-        query.get().then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const gotDoc = doc.data().docsAdmin;
-            gotDoc.push({
-              name: nameDoc,
-              fileName: nameDoc,
-              descripcion: descDoc,
-            });
-            db.collection("users")
-              .doc(doc.id)
-              .update({ documents: gotDoc })
-              .then(() => {
-                window.location.reload();
-              });
-          });
-        });
+        searchEmail();
       })
       .catch((e) => {
         toast(`Ocurrió un error.${e}`);
@@ -202,17 +207,25 @@ const EditUser = () => {
     }
   }
 
+  function setURLS(arrayUrls) {
+    setUrls(arrayUrls[0]);
+    setPendientes(arrayUrls[1]);
+    docFunctions.setCheckboxes(db, arrayUrls).then((chboxes) => {
+      setCBoxes(chboxes);
+    });
+  }
+
+  function getURLS(docArray) {
+    docFunctions
+      .getDownloadURLS(storage, docArray, locData)
+      .then((arrayUrls) => {
+        setURLS(arrayUrls);
+      });
+  }
+
   function getDocs() {
     docFunctions.getState(db, locData).then((docArray) => {
-      docFunctions
-        .getDownloadURLS(storage, docArray, locData)
-        .then((arrayUrls) => {
-          setUrls(arrayUrls[0]);
-          setPendientes(arrayUrls[1]);
-          docFunctions.setCheckboxes(db, arrayUrls).then((chboxes) => {
-            setCBoxes(chboxes);
-          });
-        });
+      getURLS(docArray);
     });
   }
 
@@ -232,6 +245,8 @@ const EditUser = () => {
           <p>{locData.rfc}</p>
           <b>Email</b>
           <p>{locData.email}</p>
+          <b>Cargo</b>
+          <p>{locData.cargo}</p>
           <b>Onboarding</b>
           {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
           <p />

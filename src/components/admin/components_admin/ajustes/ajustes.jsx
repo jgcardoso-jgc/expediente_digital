@@ -5,7 +5,9 @@
 import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
-import { Row, Col, Table } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import { FaEdit } from "react-icons/fa";
+import Table from "../table/table";
 
 const useStyles = createUseStyles({
   text: {
@@ -41,6 +43,10 @@ const useStyles = createUseStyles({
     fontSize: "16px",
     background: "transparent",
   },
+  title: {
+    marginBottom: 30,
+    marginTop: 10,
+  },
 });
 
 const AjustesAdmin = () => {
@@ -51,6 +57,10 @@ const AjustesAdmin = () => {
   const [name, setName] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const classes = useStyles();
+
+  function handleClickEditRow() {
+    console.log("e");
+  }
 
   async function getData() {
     const query = db.collection("documentos");
@@ -97,52 +107,93 @@ const AjustesAdmin = () => {
   return (
     <div>
       <div className="container">
-        <div className="cardDashboard pt10">
+        <div className={classes.card}>
           <div className="row" />
-          <div className={classes.card}>
+          <div>
             {data.length > 0 ? (
               <div>
-                <p>
+                <p className={classes.title}>
                   <b>Lista de Documentos</b>
                 </p>
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Nombre en BD</th>
-                      <th>Descripción</th>
-                      <th>Cantidad</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((doc) => (
-                      <tr>
-                        <td>
-                          <p className={classes.text} key={doc.nombreImagen}>
-                            {doc.nombre}
-                          </p>
-                        </td>
-                        <td>
-                          <p
-                            className={classes.text}
-                            key={`${doc.nombreImagen}i`}
-                          >
-                            {doc.nombreImagen}
-                          </p>
-                        </td>
-                        <td>
-                          <p
-                            className={classes.text}
-                            key={`${doc.nombreImagen}i`}
-                          >
-                            {doc.descripcion}
-                          </p>
-                        </td>
-                        <td>0</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                <div>
+                  <Table
+                    columns={[
+                      {
+                        Header: "Nombre",
+                        accessor: "nombre",
+                      },
+                      {
+                        Header: "Nombre en BD",
+                        accessor: "nombreImagen",
+                      },
+                      {
+                        Header: "Descripcion",
+                        accessor: "descripcion",
+                      },
+                      {
+                        Header: "Editar",
+                        accessor: "fullName",
+                        Cell: (cellObj) => (
+                          <div>
+                            <button
+                              type="button"
+                              className={classes.editButton}
+                              onClick={() => handleClickEditRow(cellObj)}
+                            >
+                              <FaEdit />
+                            </button>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    data={data}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div>Loading...</div>
+            )}
+          </div>
+          <div>
+            {data.length > 0 ? (
+              <div>
+                <p className={classes.title}>
+                  <b>Lista de Cargos</b>
+                </p>
+                <div>
+                  <Table
+                    columns={[
+                      {
+                        Header: "Nombre",
+                        accessor: "nombre",
+                      },
+                      {
+                        Header: "Nombre en BD",
+                        accessor: "nombreImagen",
+                      },
+                      {
+                        Header: "Descripcion",
+                        accessor: "descripcion",
+                      },
+                      {
+                        Header: "Editar",
+                        accessor: "fullName",
+                        Cell: (cellObj) => (
+                          <div>
+                            <button
+                              type="button"
+                              className={classes.editButton}
+                              onClick={() => handleClickEditRow(cellObj)}
+                            >
+                              <FaEdit />
+                            </button>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    data={data}
+                  />
+                </div>
               </div>
             ) : (
               <div>Loading...</div>
@@ -190,6 +241,34 @@ const AjustesAdmin = () => {
               Agregar Documento
             </button>
           </div>
+          <div className={`${classes.card} ${classes.mt20}`}>
+            <p>
+              <b>Agregar Cargo</b>
+            </p>
+            <Row>
+              <Col>
+                <div>
+                  <label htmlFor="email" className="block pb10">
+                    Nombre del Cargo
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    className={classes.inputStyle}
+                    onChange={(event) => setName(event.target.value)}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <button
+              type="button"
+              className={classes.addBt}
+              disabled={disable}
+              onClick={() => submit()}
+            >
+              Agregar Cargo
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -197,3 +276,45 @@ const AjustesAdmin = () => {
 };
 
 export default AjustesAdmin;
+
+/*
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Nombre en BD</th>
+                      <th>Descripción</th>
+                      <th>Cantidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((doc) => (
+                      <tr>
+                        <td>
+                          <p className={classes.text} key={doc.nombreImagen}>
+                            {doc.nombre}
+                          </p>
+                        </td>
+                        <td>
+                          <p
+                            className={classes.text}
+                            key={`${doc.nombreImagen}i`}
+                          >
+                            {doc.nombreImagen}
+                          </p>
+                        </td>
+                        <td>
+                          <p
+                            className={classes.text}
+                            key={`${doc.nombreImagen}i`}
+                          >
+                            {doc.descripcion}
+                          </p>
+                        </td>
+                        <td>0</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+
+*/
