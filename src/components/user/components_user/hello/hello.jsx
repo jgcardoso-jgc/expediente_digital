@@ -1,5 +1,3 @@
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useRef, useEffect, useState } from "react";
@@ -7,10 +5,9 @@ import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import loading from "../../../../assets/loading.gif";
 import styles from "../../../../resources/theme";
-import settings from "./settings";
-import onboardingSDK from "../../../../config/onboarding-config";
 
-let incode = null;
+const apiURL = "https://demo-api.incodesmile.com/";
+const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles({
@@ -22,55 +19,50 @@ const useStyles = createUseStyles({
 function HelloInit() {
   const global = globalTheme();
   const classes = useStyles();
+  const containerRef = useRef();
+  const helloRef = useRef();
   const history = useHistory();
-  const [session, setSession] = useState("");
-  const configID = onboardingSDK.idConfig;
+  const [reload, setReload] = useState(false);
 
-  function RenderLogin({ onSuccess, onError }) {
-    const containerRef = useRef();
-    useEffect(() => {
-      incode.renderLogin(containerRef.current, {
-        // token: session,
-        onSuccess,
-        onError,
-      });
-    }, [onSuccess, onError]);
-
-    return <div ref={containerRef} />;
+  function load() {
+    const { Hello } = window;
+    helloRef.current = Hello.create({
+      apiKey,
+      apiURL,
+      language: "es",
+    });
+    const instance = helloRef.current;
+    instance.renderLogin(containerRef.current, {
+      onSuccess: (r) => {
+        console.log("onSuccess", r);
+        const saved = JSON.parse(localStorage.getItem("user"));
+        saved.token = r.token;
+        localStorage.setItem("user", JSON.stringify(saved));
+        history.push("/documentos");
+      },
+      onError: (r) => {
+        console.log("on error", r);
+        history.push({ pathname: "/toOnboarding", state: { reload: true } });
+      },
+    });
   }
 
-  const success = (r) => {
-    const saved = JSON.parse(localStorage.getItem("user"));
-    saved.token = r.token;
-    localStorage.setItem("user", JSON.stringify(saved));
-    history.push("/documentos");
-  };
-
-  const error = () => {
-    history.push({ pathname: "/toOnboarding", state: { reload: true } });
-  };
-
   useEffect(() => {
-    incode = window.OnBoarding.create(settings);
-    incode
-      .createSession("ALL", null, {
-        configurationId: configID,
-      })
-      .then(async (sessionRes) => {
-        await incode.warmup();
-        console.log(`session:${Object.keys(sessionRes)}`);
-        setSession(sessionRes);
-      });
-  }, []);
-
+    if (reload) {
+      load();
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://sdk-js.s3.amazonaws.com/sdk/hello-1.1.0.js";
+      document.body.appendChild(script);
+      script.onload = () => setReload(true);
+    }
+  }, [reload]);
   return (
     <div className="App">
       <h2 className="faceTitle">Facematch</h2>
-      {session !== "" ? (
-        <RenderLogin session={session} onSuccess={success} onError={error} />
-      ) : (
+      <div ref={containerRef}>
         <img src={loading} className="loadgif" alt="loading..." />
-      )}
+      </div>
       <button
         type="button"
         onClick={() => window.location.reload(true)}
@@ -83,3 +75,24 @@ function HelloInit() {
 }
 
 export default HelloInit;
+
+/*
+function RenderLogin({ onSuccess, onError }) {
+  const containerRef = useRef();
+
+  useEffect(() => {
+    incode.renderLogin(containerRef.current, {
+      // token: session,
+      onSuccess,
+      onError,
+    });
+  }, [onSuccess, onError]);
+
+  return <div ref={containerRef} />;
+}
+
+      <RenderLogin
+        session={session}
+        onSuccess={goNext}
+        onError={(e) => console.log(e)}
+      /> */
