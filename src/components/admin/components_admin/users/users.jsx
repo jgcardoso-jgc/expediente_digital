@@ -60,7 +60,7 @@ const UserView = () => {
         setDisable(true);
         firebase
           .auth()
-          .createUserWithEmailAndPassword(email, "seguridata11")
+          .createUserWithEmailAndPassword(email, "test123")
           .then((res) => {
             const id = res.user.uid;
             const jsonRegister = {

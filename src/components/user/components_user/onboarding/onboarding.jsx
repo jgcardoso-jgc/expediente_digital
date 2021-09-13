@@ -160,58 +160,62 @@ function Onboarding() {
     setStep(step + 1);
   }
 
-  function toFinal() {
+  function checkAuth() {
     let uid = "";
-    console.log(`interviewId:${session.interviewId}`);
-    console.log(`token:${session.token}`);
-    incode
-      .getFinishStatus(session.interviewId, { token: session.token })
-      .then(() => {
-        firebase.auth().onAuthStateChanged((user) => {
-          if (user) {
-            uid = user.uid;
-          }
-        });
-        const user = firebase.auth().currentUser;
+    {
+      firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           uid = user.uid;
         }
-        db.collection("users")
-          .where("uid", "==", uid)
-          .get()
-          .then((snapshot) => {
-            snapshot.docs.forEach(async (document) => {
-              const doc = await db.collection("users").doc(document.id).get();
-              const { documents } = doc.data();
-              documents.push(
-                {
-                  name: "ID Frontal",
-                  imageName: "croppedFrontID",
-                  state: true,
-                  uploaded: true,
-                },
-                {
-                  name: "ID Reverso",
-                  imageName: "croppedBackID",
-                  uploaded: true,
-                  state: true,
-                }
-              );
-              db.collection("users")
-                .doc(document.id)
-                .update({
-                  onboarding: true,
-                  documents,
-                })
-                .then(() => {
-                  const saved = JSON.parse(localStorage.getItem("user"));
-                  saved.onboarding = true;
-                  localStorage.setItem("user", JSON.stringify(saved));
-                  history.push("/finalStep");
-                });
-            });
+      });
+      const user = firebase.auth().currentUser;
+      if (user) {
+        uid = user.uid;
+      }
+      db.collection("users")
+        .where("uid", "==", uid)
+        .get()
+        .then((snapshot) => {
+          snapshot.docs.forEach(async (document) => {
+            const doc = await db.collection("users").doc(document.id).get();
+            const { documents } = doc.data();
+            documents.push(
+              {
+                name: "ID Frontal",
+                imageName: "croppedFrontID",
+                state: true,
+                uploaded: true,
+              },
+              {
+                name: "ID Reverso",
+                imageName: "croppedBackID",
+                uploaded: true,
+                state: true,
+              }
+            );
+            db.collection("users")
+              .doc(document.id)
+              .update({
+                onboarding: true,
+                documents,
+              })
+              .then(() => {
+                const saved = JSON.parse(localStorage.getItem("user"));
+                saved.onboarding = true;
+                localStorage.setItem("user", JSON.stringify(saved));
+                history.push("/finalStep");
+              });
           });
-      })
+        });
+    }
+  }
+
+  function toFinal() {
+    // console.log(`interviewId:${session.interviewId}`);
+    // console.log(`token:${session.token}`);
+    incode
+      .getFinishStatus(session.interviewId, { token: session.token })
+      .then(() => checkAuth())
       .catch((e) => {
         toast(e);
       });
