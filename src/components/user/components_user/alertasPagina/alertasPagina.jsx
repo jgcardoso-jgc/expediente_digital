@@ -75,27 +75,25 @@ const AlertasPagina = () => {
   const classes = useStyles();
 
   function onItemClick(doc) {
-    history.push({
-      pathname: "/subir",
-      state: { doc },
-    });
+    if (doc === "mail") {
+      window.open("https://hotmail.com");
+    } else {
+      history.push({
+        pathname: "/subir",
+        state: { doc },
+      });
+    }
   }
 
   async function appendAlerts() {
     const al = [];
-    if (firebase.auth().currentUser.emailVerified) {
-      console.log("verified");
-    } else {
-      console.log("not verified");
-      al.push({ message: "No has confirmado tu correo", doc: "" });
-    }
     const user = firebase.auth().currentUser;
-    let uid = "";
-    if (user) {
-      uid = user.uid;
+    const { uid } = user;
+    if (!user.emailVerified) {
+      al.push({ message: "No has confirmado tu correo", doc: "mail" });
     }
     const query = db.collection("users").where("uid", "==", uid);
-    await query.get().then((querySnapshot) => {
+    query.get().then((querySnapshot) => {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
           const docs = doc.data().documents;

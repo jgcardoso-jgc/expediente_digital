@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import React from "react";
+import React, { useState } from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
 import { BiUserCircle } from "react-icons/bi";
@@ -28,14 +28,16 @@ function SidebarComponent() {
   const { push } = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
+  const [open, setOpen] = useState(false);
   const isMobile = window.innerWidth <= 1080;
 
   function onClick(slug, parameters = {}) {
+    setOpen(false);
     push(convertSlugToUrl(slug, parameters));
   }
 
   return (
-    <Menu isMobile={isMobile}>
+    <Menu open={open} isMobile={isMobile}>
       <div style={{ paddingTop: 30, paddingBottom: 30 }}>
         <LogoComponent />
       </div>

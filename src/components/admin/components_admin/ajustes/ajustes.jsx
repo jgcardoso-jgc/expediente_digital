@@ -5,6 +5,7 @@
 import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
+import { ToastContainer, toast } from "react-toastify";
 import { Row, Col } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import Table from "../table/table";
@@ -55,8 +56,10 @@ const AjustesAdmin = () => {
   const [data, setData] = useState([]);
   const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
+  const [cargo, setCargo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const classes = useStyles();
+  const [reload, setReload] = useState(false);
 
   function handleClickEditRow() {
     console.log("e");
@@ -77,8 +80,8 @@ const AjustesAdmin = () => {
 
   function submit() {
     setDisable(true);
-    const query = db.collection("documentos");
-    query.get().then((querySnapshot) => {
+    const collection = db.collection("documentos");
+    collection.get().then((querySnapshot) => {
       let dataGet = [];
       let id = "";
       if (querySnapshot.size > 0) {
@@ -86,12 +89,20 @@ const AjustesAdmin = () => {
           dataGet = doc.data().lista;
           id = doc.id;
         });
-        dataGet.push({ nombre: name, descripcion, nombreImagen: "test" });
-        db.collection("documentos")
+        const transformed = descripcion.toLowerCase().replace(/\s/g, "");
+        dataGet.push({
+          nombre: name,
+          descripcion: transformed,
+          nombreImagen: "test",
+        });
+        collection
           .doc(id)
           .update({ lista: dataGet })
           .then(() => {
-            window.location.reload();
+            setReload((prev) => !prev);
+            setName("");
+            setDescripcion("");
+            setDisable(false);
           })
           .catch((e) => {
             console.log(e.message);
@@ -100,12 +111,38 @@ const AjustesAdmin = () => {
     });
   }
 
+  function addCargo() {
+    setDisable(true);
+    const query = db.collection("cargos");
+    query.get().then((querySnapshot) => {
+      let dataGet = [];
+      let id = "";
+      if (querySnapshot.size > 0) {
+        querySnapshot.forEach((doc) => {
+          dataGet = doc.data().cargos;
+          id = doc.id;
+        });
+        dataGet.push({ nombre: cargo });
+        db.collection("documentos")
+          .doc(id)
+          .update({ lista: dataGet })
+          .then(() => {
+            setReload((prev) => !prev);
+          })
+          .catch((e) => {
+            toast(e.message);
+          });
+      }
+    });
+  }
+
   useEffect(() => {
     getData();
-  }, []);
+  }, [reload]);
 
   return (
     <div>
+      <ToastContainer />
       <div className="container">
         <div className={classes.card}>
           <div className="row" />
@@ -210,8 +247,9 @@ const AjustesAdmin = () => {
                     Nombre del Documento
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     id="email"
+                    value={name}
                     className={classes.inputStyle}
                     onChange={(event) => setName(event.target.value)}
                   />
@@ -226,6 +264,7 @@ const AjustesAdmin = () => {
                   <input
                     type="text"
                     id="name"
+                    value={descripcion}
                     className={classes.inputStyle}
                     onChange={(event) => setDescripcion(event.target.value)}
                   />
@@ -255,7 +294,7 @@ const AjustesAdmin = () => {
                     type="email"
                     id="email"
                     className={classes.inputStyle}
-                    onChange={(event) => setName(event.target.value)}
+                    onChange={(event) => setCargo(event.target.value)}
                   />
                 </div>
               </Col>
@@ -264,7 +303,7 @@ const AjustesAdmin = () => {
               type="button"
               className={classes.addBt}
               disabled={disable}
-              onClick={() => submit()}
+              onClick={() => addCargo()}
             >
               Agregar Cargo
             </button>
