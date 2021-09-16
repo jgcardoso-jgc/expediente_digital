@@ -54,6 +54,7 @@ const AjustesAdmin = () => {
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const [data, setData] = useState([]);
+  const [cargos, setCargos] = useState([]);
   const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
   const [cargo, setCargo] = useState("");
@@ -74,6 +75,16 @@ const AjustesAdmin = () => {
           dataGet = doc.data().lista;
         });
         setData(dataGet);
+      }
+    });
+    const cargosquery = db.collection("cargos");
+    await cargosquery.get().then((querySnapshot) => {
+      let cargosGet = [];
+      if (querySnapshot.size > 0) {
+        querySnapshot.forEach((doc) => {
+          cargosGet = doc.data().lista;
+        });
+        setCargos(cargosGet);
       }
     });
   }
@@ -99,10 +110,10 @@ const AjustesAdmin = () => {
           .doc(id)
           .update({ lista: dataGet })
           .then(() => {
-            setReload((prev) => !prev);
             setName("");
             setDescripcion("");
             setDisable(false);
+            setReload((prev) => !prev);
           })
           .catch((e) => {
             console.log(e.message);
@@ -113,20 +124,23 @@ const AjustesAdmin = () => {
 
   function addCargo() {
     setDisable(true);
+    let dataGet = [];
     const query = db.collection("cargos");
     query.get().then((querySnapshot) => {
-      let dataGet = [];
       let id = "";
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
-          dataGet = doc.data().cargos;
+          dataGet = doc.data().lista;
           id = doc.id;
         });
+        console.log(dataGet);
         dataGet.push({ nombre: cargo });
-        db.collection("documentos")
+        db.collection("cargos")
           .doc(id)
           .update({ lista: dataGet })
           .then(() => {
+            setDisable(false);
+            setCargo("");
             setReload((prev) => !prev);
           })
           .catch((e) => {
@@ -192,7 +206,7 @@ const AjustesAdmin = () => {
             )}
           </div>
           <div>
-            {data.length > 0 ? (
+            {cargos.length > 0 ? (
               <div>
                 <p className={classes.title}>
                   <b>Lista de Cargos</b>
@@ -203,14 +217,6 @@ const AjustesAdmin = () => {
                       {
                         Header: "Nombre",
                         accessor: "nombre",
-                      },
-                      {
-                        Header: "Nombre en BD",
-                        accessor: "nombreImagen",
-                      },
-                      {
-                        Header: "Descripcion",
-                        accessor: "descripcion",
                       },
                       {
                         Header: "Editar",
@@ -228,7 +234,7 @@ const AjustesAdmin = () => {
                         ),
                       },
                     ]}
-                    data={data}
+                    data={cargos}
                   />
                 </div>
               </div>
@@ -287,12 +293,9 @@ const AjustesAdmin = () => {
             <Row>
               <Col>
                 <div>
-                  <label htmlFor="email" className="block pb10">
-                    Nombre del Cargo
-                  </label>
+                  <label className="block pb10">Nombre del Cargo</label>
                   <input
-                    type="email"
-                    id="email"
+                    type="text"
                     className={classes.inputStyle}
                     onChange={(event) => setCargo(event.target.value)}
                   />

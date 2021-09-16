@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
@@ -53,6 +53,7 @@ const UserView = () => {
   const [email, setEmail] = useState("");
   const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
+  const [reload, setReload] = useState(false);
 
   async function submit() {
     try {
@@ -78,7 +79,7 @@ const UserView = () => {
               db.collection("users")
                 .add(jsonRegister)
                 .then(() => {
-                  window.location.reload();
+                  setReload((prev) => !prev);
                 });
             } catch (error) {
               toast(error.message);
@@ -92,6 +93,8 @@ const UserView = () => {
       setDisable(false);
     }
   }
+
+  useEffect(() => {}, [reload]);
 
   return (
     <div>

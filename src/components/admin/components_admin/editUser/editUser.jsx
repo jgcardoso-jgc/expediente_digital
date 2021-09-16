@@ -17,6 +17,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import ModalEdit from "../modal/modal";
 import docFunctions from "./getDocuments";
 import { v4 as uuidv4 } from "uuid";
+import Select from "react-select";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -105,6 +106,17 @@ const EditUser = () => {
   const [descDoc, setDescripcionDoc] = useState("");
   const [email, setEmail] = useState("");
   const [file, setFile] = useState("");
+  const [selectedOption, setSelected] = useState("");
+
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+
+  const handleChange = (selected) => {
+    setSelected(selected);
+  };
 
   function handleOnChange(e, cbox) {
     const isChecked = e.target.checked;
@@ -381,6 +393,22 @@ const EditUser = () => {
             disabled={disabledAdminDoc}
           >
             Agregar Documento
+          </button>
+          <p className={classes.mt20}>
+            <b>Editar cargo</b>
+          </p>
+          <Select
+            value={selectedOption}
+            onChange={handleChange}
+            options={options}
+          />
+          <button
+            type="button"
+            onClick={() => uploadFile()}
+            className={disabledAdminDoc ? global.initBtDisabled : global.initBt}
+            disabled={disabledAdminDoc}
+          >
+            Cambiar Cargo
           </button>
         </div>
       </div>
