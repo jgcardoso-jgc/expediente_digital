@@ -107,14 +107,32 @@ const EditUser = () => {
   const [email, setEmail] = useState("");
   const [file, setFile] = useState("");
   const [selectedOption, setSelected] = useState("");
+  const [cargoBt, setCargoBt] = useState(true);
+  const [reload, setReload] = useState(false);
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  const [cargos, setCargos] = useState([]);
+
+  function fetchCargos() {
+    const query = db.collection("cargos");
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const dataLista = doc.data().lista;
+        const cargosLista = [];
+        dataLista.forEach((c) => {
+          console.log(c);
+          cargosLista.push({
+            value: c.nombre,
+            label: c.nombre,
+          });
+        });
+        setCargos(cargosLista);
+        setReload((prev) => !prev);
+      });
+    });
+  }
 
   const handleChange = (selected) => {
+    setCargoBt(false);
     setSelected(selected);
   };
 
@@ -148,10 +166,6 @@ const EditUser = () => {
     setShow(true);
   }
 
-  function reload() {
-    window.location.reload();
-  }
-
   function searchEmail() {
     const query = db.collection("users").where("email", "==", locData.email);
     query.get().then((querySnapshot) => {
@@ -166,7 +180,7 @@ const EditUser = () => {
           .doc(doc.id)
           .update({ documents: gotDoc })
           .then(() => {
-            reload();
+            setReload((prev) => !prev);
           });
       });
     });
@@ -186,11 +200,27 @@ const EditUser = () => {
       });
   }
 
+  function editCargo() {
+    const query = db
+      .collection("users")
+      .where("fullname", "==", locData.fullname);
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        db.collection("users")
+          .doc(doc.id)
+          .update({ cargo: selectedOption.label })
+          .then(() => {
+            setReload((prev) => !prev);
+          });
+      });
+    });
+  }
+
   function updatePendientes() {
     setDisabled(true);
     docFunctions.setPendientes(db, docsToUpdate, locData).then((res) => {
       if (res === "listo") {
-        window.location.reload();
+        setReload((prev) => !prev);
       } else {
         setDisabled(false);
       }
@@ -242,8 +272,11 @@ const EditUser = () => {
   }
 
   useEffect(() => {
+    fetchCargos();
     getDocs();
   }, []);
+
+  useEffect(() => {}, [reload]);
 
   return (
     <div>
@@ -400,13 +433,13 @@ const EditUser = () => {
           <Select
             value={selectedOption}
             onChange={handleChange}
-            options={options}
+            options={cargos}
           />
           <button
             type="button"
-            onClick={() => uploadFile()}
-            className={disabledAdminDoc ? global.initBtDisabled : global.initBt}
-            disabled={disabledAdminDoc}
+            onClick={() => editCargo()}
+            className={cargoBt ? global.initBtDisabled : global.initBt}
+            disabled={cargoBt}
           >
             Cambiar Cargo
           </button>

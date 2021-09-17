@@ -37,6 +37,9 @@ const useStyles = createUseStyles({
     fontSize: "15px",
     borderRadius: "10px",
   },
+  mt30: {
+    marginTop: 30,
+  },
   inputStyle: {
     width: "100%",
     border: "0",
@@ -158,15 +161,15 @@ const AjustesAdmin = () => {
     <div>
       <ToastContainer />
       <div className="container">
-        <div className={classes.card}>
+        <div>
           <div className="row" />
           <div>
             {data.length > 0 ? (
               <div>
-                <p className={classes.title}>
-                  <b>Lista de Documentos</b>
-                </p>
                 <div>
+                  <p className={classes.title}>
+                    <b>Lista de Documentos</b>
+                  </p>
                   <Table
                     columns={[
                       {
@@ -207,8 +210,8 @@ const AjustesAdmin = () => {
           </div>
           <div>
             {cargos.length > 0 ? (
-              <div>
-                <p className={classes.title}>
+              <div className={classes.mt30}>
+                <p className={`${classes.title} ${classes.mt20}`}>
                   <b>Lista de Cargos</b>
                 </p>
                 <div>
