@@ -1,8 +1,8 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable comma-dangle */
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "firebase/auth";
 import "firebase/firestore";
 import { useFirebaseApp } from "reactfire";
@@ -76,35 +76,70 @@ const RegisterNormal = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rfc, setRfc] = useState("");
+  const [correct, setCorrect] = useState(false);
+  const rfcText = useRef();
+
+  function rfcValido(rfcPassed) {
+    const rfcpm =
+      "^(([A-ZÑ&]{3})([0-9]{2})([0][13578]|[1][02])(([0][1-9]|[12][\\d])|[3][01])([A-Z0-9]{3}))|" +
+      "(([A-ZÑ&]{3})([0-9]{2})([0][13456789]|[1][012])(([0][1-9]|[12][\\d])|[3][0])([A-Z0-9]{3}))|" +
+      "(([A-ZÑ&]{3})([02468][048]|[13579][26])[0][2]([0][1-9]|[12][\\d])([A-Z0-9]{3}))|" +
+      "(([A-ZÑ&]{3})([0-9]{2})[0][2]([0][1-9]|[1][0-9]|[2][0-8])([A-Z0-9]{3}))$";
+    // patron del RFC, persona fisica
+    const rfcpf =
+      "^(([A-ZÑ&]{4})([0-9]{2})([0][13578]|[1][02])(([0][1-9]|[12][\\d])|[3][01])([A-Z0-9]{3}))|" +
+      "(([A-ZÑ&]{4})([0-9]{2})([0][13456789]|[1][012])(([0][1-9]|[12][\\d])|[3][0])([A-Z0-9]{3}))|" +
+      "(([A-ZÑ&]{4})([02468][048]|[13579][26])[0][2]([0][1-9]|[12][\\d])([A-Z0-9]{3}))|" +
+      "(([A-ZÑ&]{4})([0-9]{2})[0][2]([0][1-9]|[1][0-9]|[2][0-8])([A-Z0-9]{3}))$";
+
+    if (rfcPassed.match(rfcpm) || rfcPassed.match(rfcpf)) {
+      rfcText.current.innerHTML = "Válido";
+      rfcText.current.style.color = "green";
+      setRfc(rfcPassed);
+      setCorrect(true);
+      return true;
+    }
+    rfcText.current.innerHTML = "No válido";
+    rfcText.current.style.color = "red";
+    return false;
+  }
+
+  // resultado.innerText = `RFC: ${rfc}\nResultado: ${rfcCorrecto}\nFormato: ${valido}`;
+
+  function navigate(jsonRegister) {
+    localStorage.setItem("user", JSON.stringify(jsonRegister));
+    history.push("/dashboard");
+  }
+
+  function uploadData(res) {
+    if (correct) {
+      const id = res.user.uid;
+      const jsonRegister = {
+        uid: id,
+        fullname: name,
+        email,
+        rfc,
+        token: "",
+        onboarding: false,
+        cargo: "",
+        docsAdmin: [],
+        documents: [],
+      };
+      try {
+        db.collection("users")
+          .add(jsonRegister)
+          .then(() => navigate(jsonRegister));
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+  }
+
   const submit = async () => {
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((res) => {
-        const id = res.user.uid;
-        console.log(id);
-        const jsonRegister = {
-          uid: id,
-          fullname: name,
-          email,
-          rfc,
-          token: "",
-          onboarding: false,
-          cargo: "",
-          docsAdmin: [],
-          documents: [],
-        };
-        try {
-          db.collection("users")
-            .add(jsonRegister)
-            .then(() => {
-              localStorage.setItem("user", JSON.stringify(jsonRegister));
-              history.push("/dashboard");
-            });
-        } catch (error) {
-          toast(error.message);
-        }
-      })
+      .then((res) => uploadData(res))
       .catch((error) => {
         toast(error.message);
       });
@@ -152,8 +187,9 @@ const RegisterNormal = () => {
             type="text"
             id="rfc"
             className={classes.inputStyle}
-            onChange={(event) => setRfc(event.target.value)}
+            onChange={(event) => rfcValido(event.target.value)}
           />
+          <p ref={rfcText} />
         </div>
         <div className={`${classes.left} ${classes.pt10}`}>
           <label htmlFor="password" className="block pb10 pt4">

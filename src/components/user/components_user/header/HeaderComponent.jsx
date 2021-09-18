@@ -69,7 +69,7 @@ function HeaderComponent() {
   const firebase = useFirebaseApp();
   const db = firebase.storage();
   const [urlProfile, setUrlProfile] = useState(
-    "https://avatars.githubusercontent.com/sofseguridata"
+    "https://cdn.iconscout.com/icon/free/png-256/user-1648810-1401302.png"
   );
   function logOut() {
     firebase

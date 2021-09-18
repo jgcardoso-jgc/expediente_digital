@@ -6,6 +6,7 @@ import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
+import Select from "react-select";
 import TableView from "../table/tableView";
 
 const useStyles = createUseStyles({
@@ -44,6 +45,12 @@ const useStyles = createUseStyles({
   userDiv: {
     marginTop: "40px",
   },
+  mt20: {
+    marginTop: 20,
+  },
+  pb10: {
+    paddingBottom: 10,
+  },
 });
 
 const UserView = () => {
@@ -54,6 +61,26 @@ const UserView = () => {
   const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
   const [reload, setReload] = useState(false);
+  const [selectedOption, setSelected] = useState("");
+  const [cargos, setCargos] = useState([]);
+
+  function fetchCargos() {
+    const query = db.collection("cargos");
+    query.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const dataLista = doc.data().lista;
+        const cargosLista = [];
+        dataLista.forEach((c) => {
+          cargosLista.push({
+            value: c.nombre,
+            label: c.nombre,
+          });
+        });
+        setCargos(cargosLista);
+        setReload((prev) => !prev);
+      });
+    });
+  }
 
   async function submit() {
     try {
@@ -94,6 +121,14 @@ const UserView = () => {
     }
   }
 
+  const handleChange = (selected) => {
+    setSelected(selected);
+  };
+
+  useEffect(() => {
+    fetchCargos();
+  }, []);
+
   useEffect(() => {}, [reload]);
 
   return (
@@ -122,9 +157,7 @@ const UserView = () => {
             <Col>
               {" "}
               <div className="formGroup">
-                <label htmlFor="email" className="block pb10">
-                  Nombre Completo
-                </label>
+                <label className="block pb10">Nombre Completo</label>
                 <input
                   type="text"
                   id="name"
@@ -134,6 +167,12 @@ const UserView = () => {
               </div>
             </Col>
           </Row>
+          <label className={`${classes.mt20} ${classes.pb10}`}>Cargo</label>
+          <Select
+            value={selectedOption}
+            onChange={handleChange}
+            options={cargos}
+          />
           <button
             type="button"
             className={classes.addBt}

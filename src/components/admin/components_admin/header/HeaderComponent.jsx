@@ -23,7 +23,6 @@ const useStyles = createUseStyles(() => ({
     minWidth: 35,
     borderRadius: 50,
     marginLeft: 14,
-    border: "1px solid #9fa2b4",
     "@media (max-width: 768px)": {
       marginLeft: 14,
     },
@@ -138,7 +137,7 @@ function HeaderComponent() {
             <>
               <span className={classes.name}>Admin</span>
               <img
-                src="https://avatars.githubusercontent.com/sofseguridata"
+                src="https://cdn.iconscout.com/icon/free/png-256/user-1648810-1401302.png"
                 alt="avatar"
                 className={classes.avatar}
               />
