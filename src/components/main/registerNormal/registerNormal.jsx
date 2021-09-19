@@ -9,27 +9,32 @@ import { useFirebaseApp } from "reactfire";
 import { useHistory, Link } from "react-router-dom";
 import { createUseStyles, useTheme } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
+import Div100vh from "react-div-100vh";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../waves/waves";
 
 const useStyles = createUseStyles(() => ({
   block: { display: "block" },
+  navmain: { top: "0px", position: "absolute !important", width: "100%" },
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
   container: {
-    maxWidth: "400px",
+    maxWidth: 400,
     marginLeft: "auto",
     marginRight: "auto",
     textAlign: "left",
     paddingLeft: "20px",
     paddingRight: "20px",
-    marginTop: 50,
+    paddingTop: 50,
   },
   inputStyle: {
     width: "100%",
     border: "0",
     borderBottom: "1px solid rgb(194, 194, 194)",
     fontSize: "16px",
+  },
+  rfcText: {
+    marginBottom: 0,
   },
   left: {
     textAlign: "left",
@@ -76,8 +81,8 @@ const RegisterNormal = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rfc, setRfc] = useState("");
-  const [correct, setCorrect] = useState(false);
   const rfcText = useRef();
+  const passText = useRef();
 
   function rfcValido(rfcPassed) {
     const rfcpm =
@@ -96,15 +101,37 @@ const RegisterNormal = () => {
       rfcText.current.innerHTML = "Válido";
       rfcText.current.style.color = "green";
       setRfc(rfcPassed);
-      setCorrect(true);
       return true;
     }
     rfcText.current.innerHTML = "No válido";
     rfcText.current.style.color = "red";
+    setRfc("");
     return false;
   }
 
-  // resultado.innerText = `RFC: ${rfc}\nResultado: ${rfcCorrecto}\nFormato: ${valido}`;
+  function checkForm() {
+    if (rfc !== "" && password !== "") {
+      return true;
+    }
+    return false;
+  }
+
+  function passwordValida(pass) {
+    const regexPass = new RegExp(
+      "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
+    );
+    if (regexPass.test(pass)) {
+      passText.current.innerHTML = "Contraseña válida";
+      passText.current.style.color = "green";
+      setPassword(pass);
+      return true;
+    }
+    passText.current.innerHTML =
+      "Contraseña no válida. Al menos una mayúscula, un número y 8 carácteres.";
+    passText.current.style.color = "red";
+    setPassword("");
+    return false;
+  }
 
   function navigate(jsonRegister) {
     localStorage.setItem("user", JSON.stringify(jsonRegister));
@@ -112,7 +139,7 @@ const RegisterNormal = () => {
   }
 
   function uploadData(res) {
-    if (correct) {
+    if (checkForm()) {
       const id = res.user.uid;
       const jsonRegister = {
         uid: id,
@@ -145,8 +172,8 @@ const RegisterNormal = () => {
       });
   };
   return (
-    <div className="center">
-      <NavBarMainPage />
+    <Div100vh>
+      <NavBarMainPage className={classes.navmain} />
       <ToastContainer />
       <div className={classes.container}>
         <div>
@@ -189,7 +216,7 @@ const RegisterNormal = () => {
             className={classes.inputStyle}
             onChange={(event) => rfcValido(event.target.value)}
           />
-          <p ref={rfcText} />
+          <p className={classes.rfcText} ref={rfcText} />
         </div>
         <div className={`${classes.left} ${classes.pt10}`}>
           <label htmlFor="password" className="block pb10 pt4">
@@ -199,8 +226,9 @@ const RegisterNormal = () => {
             type="password"
             id="password"
             className={classes.inputStyle}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => passwordValida(event.target.value)}
           />
+          <p className={classes.rfcText} ref={passText} />
         </div>
         <button type="button" className={classes.regBt} onClick={submit}>
           Registrarse
@@ -216,7 +244,7 @@ const RegisterNormal = () => {
         </div>
       </div>
       <Waves />
-    </div>
+    </Div100vh>
   );
 };
 export default RegisterNormal;
