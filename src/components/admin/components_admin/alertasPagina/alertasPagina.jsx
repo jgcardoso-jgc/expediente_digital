@@ -57,6 +57,7 @@ const AlertasPagina = () => {
   const db = firebase.firestore();
   const [alerts, setAlerts] = useState([]);
   const classes = useStyles();
+  const [mailVerified, setVerified] = useState(false);
 
   function onItemClick(doc) {
     history.push({
@@ -68,9 +69,9 @@ const AlertasPagina = () => {
   async function appendAlerts() {
     const al = [];
     if (firebase.auth().currentUser.emailVerified) {
-      console.log("verified");
+      setVerified(true);
     } else {
-      console.log("not verified");
+      setVerified(false);
       al.push({ message: "No has confirmado tu correo", doc: "" });
     }
     const query = db.collection("users").where("name", "!=", "");
@@ -115,6 +116,11 @@ const AlertasPagina = () => {
                 </button>
               </div>
             ))}
+            {mailVerified ? (
+              <p>¿No has recibido el correo de confirmación?</p>
+            ) : (
+              <p>¿No has recibido el correo de confirmación?</p>
+            )}
           </div>
         )}
       </div>
