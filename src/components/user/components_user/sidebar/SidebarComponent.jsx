@@ -29,7 +29,7 @@ function SidebarComponent() {
   const theme = useTheme();
   const classes = useStyles({ theme });
   const [open, setOpen] = useState(false);
-  const isMobile = window.innerWidth <= 1080;
+  const isMobile = window.innerWidth <= 768;
 
   function onClick(slug, parameters = {}) {
     setOpen(false);

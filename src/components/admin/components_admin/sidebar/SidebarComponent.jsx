@@ -28,7 +28,7 @@ function SidebarComponent() {
   const { push } = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
-  const isMobile = window.innerWidth <= 1080;
+  const isMobile = window.innerWidth <= 768;
 
   async function logout() {
     push(SLUGS.login);

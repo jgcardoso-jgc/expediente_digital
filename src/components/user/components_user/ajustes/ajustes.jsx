@@ -29,12 +29,10 @@ const AjustesUser = () => {
   return (
     <div>
       <div className={classes.container}>
-        <div className={classes.cardDashboard}>
-          <div>
-            <button type="button" className={`${global.initBt} ${classes.mr}`}>
-              Cambiar contraseña
-            </button>
-          </div>
+        <div>
+          <button type="button" className={`${global.initBt} ${classes.mr}`}>
+            Cambiar contraseña
+          </button>
         </div>
       </div>
     </div>

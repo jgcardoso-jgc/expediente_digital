@@ -14,6 +14,7 @@ import FinalStep from "../components_user/finalSteps/finalStep";
 import AjustesUser from "../components_user/ajustes/ajustes";
 import SubirDocumentos from "../components_user/subirDocumento/subirDocumento";
 import Segurisign from "../components_user/seguriSign/seguriSign";
+import RecoverPassword from "../components_user/resetPassword/resetPassword";
 
 const DashboardComponent = lazy(() => import("../components_user/dashboard"));
 
@@ -32,6 +33,7 @@ function PrivateRoutes() {
         <Route exact path="/segurisign" render={() => <Segurisign />} />
         <Route exact path={SLUGS.settings} render={() => <AjustesUser />} />
         <Route exact path="/subir" render={() => <SubirDocumentos />} />
+        <Route exact path="/recuperar" render={() => <RecoverPassword />} />
         <Redirect to={SLUGS.dashboard} />
       </Switch>
     </Suspense>
