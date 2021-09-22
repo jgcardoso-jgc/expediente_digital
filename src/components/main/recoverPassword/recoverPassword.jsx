@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
@@ -6,6 +5,7 @@ import React, { useState } from "react";
 import Div100vh from "react-div-100vh";
 import { Link, useHistory } from "react-router-dom";
 import styles from "../../../resources/theme";
+import { ToastContainer, toast } from "react-toastify";
 import { createUseStyles } from "react-jss";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import { useFirebaseApp } from "reactfire";
@@ -49,8 +49,6 @@ const RecoverPassword = () => {
   const auth = firebase.auth();
   const history = useHistory();
   const [email, setEmail] = useState("");
-  // const db = firebase.firestore();
-  // const [email, setEmail] = useState("");
   function recover() {
     auth
       .sendPasswordResetEmail(email)
@@ -58,13 +56,14 @@ const RecoverPassword = () => {
         history.push("/login");
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
+        toast(errorMessage);
         // ..
       });
   }
   return (
     <Div100vh>
+      <ToastContainer />
       <NavBarMainPage className={classes.navmain} />
       <div className="center">
         <div className={classes.container}>

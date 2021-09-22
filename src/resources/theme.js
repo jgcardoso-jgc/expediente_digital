@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 const styles = {
   initBt: {
-    backgroundColor: "rgb(75, 75, 75)",
+    backgroundColor: "black",
     color: "white",
     border: "1px solid black",
     display: "block",

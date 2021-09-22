@@ -183,9 +183,13 @@ const MyProfile = () => {
           <p>
             <b>Editar Información</b>
           </p>
-          <p className={classes.mb0}>RFC</p>
+          <p className={classes.mb0}>
+            <b>RFC</b>
+          </p>
           <p>{rfc}</p>
-          <p className={classes.mb0}>Ocupación</p>
+          <p className={classes.mb0}>
+            <b>Ocupación</b>
+          </p>
           <p>Desarrollador Frontend</p>
         </div>
       </div>

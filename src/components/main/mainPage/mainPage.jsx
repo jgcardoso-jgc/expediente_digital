@@ -86,7 +86,7 @@ function Login() {
               Se te solicitará un medio de identificación y se almacenará tu
               rostro.
             </p>
-            <Link to="registerNormal" type="button" className={classes.dBlock}>
+            <Link to="registerNormal" role="button" className={classes.dBlock}>
               <button
                 type="button"
                 className={`${classes.logBt} ${classes.bgWhite}`}
@@ -103,7 +103,7 @@ function Login() {
               Si ya te has registrado previamente, puedes acceder
               <br /> con tus credenciales.
             </p>
-            <Link to="/loginNormal" type="button" className={classes.dBlock}>
+            <Link to="/loginNormal" role="button" className={classes.dBlock}>
               <button
                 type="button"
                 className={`${classes.logBt} ${classes.bgBlack}`}
