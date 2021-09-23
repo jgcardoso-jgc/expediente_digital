@@ -214,7 +214,7 @@ function Onboarding() {
     // console.log(`interviewId:${session.interviewId}`);
     // console.log(`token:${session.token}`);
     incode
-      .getFinishStatus(session.interviewId, { token: session.token })
+      .getFinishStatus(configID, { token: session.token })
       .then(() => checkAuth())
       .catch((e) => {
         toast(e);
