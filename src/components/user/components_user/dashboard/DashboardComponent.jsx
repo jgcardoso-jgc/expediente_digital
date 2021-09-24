@@ -4,7 +4,34 @@ import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
+import { Doughnut } from "react-chartjs-2";
+import { chartColors } from "./colors";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
+
+const options = {
+  legend: {
+    display: false,
+    position: "right",
+  },
+  elements: {
+    arc: {
+      borderWidth: 0,
+    },
+  },
+};
+
+const data = {
+  maintainAspectRatio: false,
+  responsive: false,
+  labels: ["a", "b", "c", "d"],
+  datasets: [
+    {
+      data: [300, 50, 100, 50],
+      backgroundColor: chartColors,
+      hoverBackgroundColor: chartColors,
+    },
+  ],
+};
 
 const useStyles = createUseStyles({
   cardsContainer: {
@@ -123,6 +150,7 @@ function DashboardComponent() {
             url="/documentos"
           />
         </Row>
+        <Doughnut data={data} options={options} />
       </Row>
     </Column>
   );
