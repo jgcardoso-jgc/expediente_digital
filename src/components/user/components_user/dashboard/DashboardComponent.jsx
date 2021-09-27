@@ -4,34 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
-import { Doughnut } from "react-chartjs-2";
-import { chartColors } from "./colors";
+import Donut from "./donutComponent";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
-
-const options = {
-  legend: {
-    display: false,
-    position: "right",
-  },
-  elements: {
-    arc: {
-      borderWidth: 0,
-    },
-  },
-};
-
-const data = {
-  maintainAspectRatio: false,
-  responsive: false,
-  labels: ["a", "b", "c", "d"],
-  datasets: [
-    {
-      data: [300, 50, 100, 50],
-      backgroundColor: chartColors,
-      hoverBackgroundColor: chartColors,
-    },
-  ],
-};
 
 const useStyles = createUseStyles({
   cardsContainer: {
@@ -59,6 +33,9 @@ const useStyles = createUseStyles({
   mt40: {
     marginTop: 40,
   },
+  mt30: {
+    marginTop: 30,
+  },
   miniCardContainer: {
     flexGrow: 1,
     marginRight: 30,
@@ -66,6 +43,13 @@ const useStyles = createUseStyles({
       marginTop: 30,
       maxWidth: "none",
     },
+  },
+  card: {
+    background: "#f5f5f5",
+    padding: "10px",
+    borderRadius: "10px",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   tasks: {
     marginTop: 0,
@@ -82,77 +66,90 @@ function DashboardComponent() {
   const [completados, setCompletados] = useState(0);
   const [revision, setRevision] = useState(0);
   const [faltantes, setFaltantes] = useState(0);
+  const [data, setData] = useState([]);
 
-  // eslint-disable-next-line no-unused-vars
+  function setDocs(querySnapshot) {
+    querySnapshot.forEach((doc) => {
+      const gotDoc = doc.data().documents;
+      let docsCompletados = 0;
+      let docsRevision = 0;
+      let docsFaltantes = 0;
+      gotDoc.forEach((array) => {
+        if (array.state) {
+          docsCompletados += 1;
+        }
+        if (!array.state && array.uploaded) {
+          docsRevision += 1;
+        }
+        if (!array.uploaded) {
+          docsFaltantes += 1;
+        }
+      });
+      setCompletados(docsCompletados);
+      setRevision(docsRevision);
+      setFaltantes(docsFaltantes);
+      setData([docsCompletados, docsRevision, docsFaltantes]);
+    });
+  }
 
   function getStatusDocuments() {
     const query = db.collection("users").where("email", "==", user.email);
-    query.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const gotDoc = doc.data().documents;
-        let docsCompletados = 0;
-        let docsRevision = 0;
-        let docsFaltantes = 0;
-        gotDoc.forEach((array) => {
-          if (array.state) {
-            docsCompletados += 1;
-          }
-          if (!array.state && array.uploaded) {
-            docsRevision += 1;
-          }
-          if (!array.uploaded) {
-            docsFaltantes += 1;
-          }
-        });
-        setCompletados(docsCompletados);
-        setRevision(docsRevision);
-        setFaltantes(docsFaltantes);
-      });
-    });
+    query.get().then((querySnapshot) => setDocs(querySnapshot));
   }
 
   useEffect(() => {
     getStatusDocuments();
   }, []);
+
   const classes = useStyles();
   return (
-    <Column>
-      <Row
-        className={classes.cardsContainer}
-        wrap
-        flexGrow={1}
-        horizontal="space-between"
-        breakpoints={{ 768: "column" }}
-      >
+    <div>
+      <Column>
         <Row
-          className={classes.cardRow}
+          className={classes.cardsContainer}
           wrap
           flexGrow={1}
           horizontal="space-between"
-          breakpoints={{ 384: "column" }}
+          breakpoints={{ 768: "column" }}
         >
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Completados"
-            value={completados}
-            url="/documentos"
-          />
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Revisión"
-            value={revision}
-            url="/documentos"
-          />
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Faltantes"
-            value={faltantes}
-            url="/documentos"
-          />
+          <Row
+            className={classes.cardRow}
+            wrap
+            flexGrow={1}
+            horizontal="space-between"
+            breakpoints={{ 384: "column" }}
+          >
+            <MiniCardComponent
+              className={classes.miniCardContainer}
+              title="Completados"
+              value={completados}
+              url="/documentos"
+            />
+            <MiniCardComponent
+              className={classes.miniCardContainer}
+              title="Revisión"
+              value={revision}
+              url="/documentos"
+            />
+            <MiniCardComponent
+              className={classes.miniCardContainer}
+              title="Faltantes"
+              value={faltantes}
+              url="/documentos"
+            />
+          </Row>
         </Row>
-        <Doughnut data={data} options={options} />
+      </Column>
+      <Row className={classes.mt30}>
+        {data.length > 0 && (
+          <Column>
+            <div className={classes.card}>
+              <Donut dataFetched={data} />
+            </div>
+          </Column>
+        )}
       </Row>
-    </Column>
+    </div>
   );
 }
 
