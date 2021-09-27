@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
+import Donut from "./donutComponent";
 import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
 
 const useStyles = createUseStyles({
@@ -38,6 +39,16 @@ const useStyles = createUseStyles({
       marginRight: 0,
     },
   },
+  card: {
+    background: "#f5f5f5",
+    padding: "10px",
+    borderRadius: "10px",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+  },
+  mt30: {
+    marginTop: 30,
+  },
   tasks: {
     marginTop: 0,
     "@media (max-width: 1024px)": {
@@ -53,114 +64,103 @@ function DashboardComponent() {
   const [completados, setCompletados] = useState(0);
   const [pendientes, setPendientes] = useState(0);
   const [faltantes, setFaltantes] = useState(0);
+  const [data, setData] = useState([]);
 
-  async function getDataDocs() {
-    getData().then((objSize) => {
-      setCompletados(objSize.completados);
-      setPendientes(objSize.revision);
-      setFaltantes(objSize.faltantes);
-    });
+  function setDocs(querySnapshot) {
+    const dataGet = [];
+    if (querySnapshot.size > 0) {
+      let sizeDocs = 0;
+      let revDocs = 0;
+      let penDocs = 0;
+      querySnapshot.forEach((doc) => {
+        const generalData = doc.data();
+        const docData = generalData.documents;
+        docData.forEach((docState) => {
+          if (docState.state) {
+            sizeDocs += 1;
+          } else if (docState.uploaded) {
+            revDocs += 1;
+          } else {
+            penDocs += 1;
+          }
+        });
+      });
+      setCompletados(sizeDocs);
+      setPendientes(revDocs);
+      setFaltantes(penDocs);
+      setData([sizeDocs, revDocs, penDocs]);
+    }
+    return dataGet;
   }
 
   async function getData() {
-    return new Promise((resolve) => {
-      const query = db.collection("users").where("rfc", "!=", "");
-      query.get().then((querySnapshot) => {
-        const dataGet = [];
-        if (querySnapshot.size > 0) {
-          let sizeDocs = 0;
-          let revDocs = 0;
-          let penDocs = 0;
-          querySnapshot.forEach((doc) => {
-            const generalData = doc.data();
-            const docData = generalData.documents;
-            docData.forEach((docState) => {
-              if (docState.state === true) {
-                sizeDocs += 1;
-              } else if (docState.uploaded === true) {
-                revDocs += 1;
-              } else {
-                penDocs += 1;
-              }
-            });
-          });
-          resolve({
-            completados: sizeDocs,
-            revision: revDocs,
-            faltantes: penDocs,
-          });
-        } else {
-          resolve(dataGet);
-        }
-      });
-    });
+    const query = db.collection("users").where("rfc", "!=", "");
+    query.get().then((querySnapshot) => setDocs(querySnapshot));
   }
 
   useEffect(() => {
-    getDataDocs();
+    getData();
   }, []);
+
   return (
-    <Column>
-      <Row
-        className={classes.cardsContainer}
-        wrap
-        flexGrow={1}
-        horizontal="space-between"
-        breakpoints={{ 768: "column" }}
-      >
+    <div>
+      <Column>
         <Row
-          className={classes.cardRow}
+          className={classes.cardsContainer}
           wrap
           flexGrow={1}
           horizontal="space-between"
-          breakpoints={{ 384: "column" }}
+          breakpoints={{ 768: "column" }}
         >
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Documentos"
-            value={completados}
-          />
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Pendientes"
-            value={pendientes}
-          />
+          <Row
+            className={classes.cardRow}
+            wrap
+            flexGrow={1}
+            horizontal="space-between"
+            breakpoints={{ 384: "column" }}
+          >
+            <MiniCardComponent
+              className={classes.miniCardContainer}
+              title="Documentos"
+              value={completados}
+            />
+            <MiniCardComponent
+              className={classes.miniCardContainer}
+              title="Pendientes"
+              value={pendientes}
+            />
+          </Row>
+          <Row
+            className={classes.cardRow}
+            wrap
+            flexGrow={1}
+            horizontal="space-between"
+            breakpoints={{ 384: "column" }}
+          >
+            <MiniCardComponent
+              className={classes.miniCardContainer}
+              title="Faltantes"
+              value={faltantes}
+            />
+            <MiniCardComponent
+              className={classes.miniCardContainer}
+              title="Alertas"
+              value="0"
+            />
+          </Row>
         </Row>
-        <Row
-          className={classes.cardRow}
-          wrap
-          flexGrow={1}
-          horizontal="space-between"
-          breakpoints={{ 384: "column" }}
-        >
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Faltantes"
-            value={faltantes}
-          />
-          <MiniCardComponent
-            className={classes.miniCardContainer}
-            title="Alertas"
-            value="0"
-          />
-        </Row>
+      </Column>
+      <Row className={classes.mt30}>
+        {data.length > 0 && (
+          <Column>
+            <div className={classes.card}>
+              <Donut dataFetched={data} />
+            </div>
+          </Column>
+        )}
       </Row>
-    </Column>
+    </div>
   );
 }
 
 export default DashboardComponent;
-
-/*
-      <Row
-        horizontal="space-between"
-        className={classes.lastRow}
-        breakpoints={{ 1024: "column" }}
-      >
-        <UnresolvedTicketsComponent
-          containerStyles={classes.unresolvedTickets}
-        />
-        <TasksComponent containerStyles={classes.tasks} />
-      </Row>
-
-*/

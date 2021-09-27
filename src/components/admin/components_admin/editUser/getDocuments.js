@@ -1,7 +1,9 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-async function getState(db, locData) {
+async function getAllDocs(db, locData) {
   return new Promise((resolve) => {
     const { email } = locData;
     const query = db.collection("users").where("email", "==", email);
@@ -9,20 +11,25 @@ async function getState(db, locData) {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
           const docs = doc.data().documents;
-          resolve(docs);
+          let { docsAdmin } = doc.data();
+          if (docsAdmin == null) {
+            docsAdmin = [];
+          }
+          resolve([docs, docsAdmin]);
         });
       }
     });
   });
 }
 
-async function getDownloadURLS(storage, docsArray, locData) {
+async function getDownloadURLS(storage, docArray, locData) {
   return new Promise((resolve) => {
-    const urls = [];
+    const completed = [];
     const pendientes = [];
+    const administrativos = [];
     const promises = [];
     const { email } = locData;
-    docsArray.forEach((doc) => {
+    docArray[0].forEach((doc) => {
       const route = `users/${email}/${doc.imageName}`;
       promises.push(
         storage
@@ -31,37 +38,48 @@ async function getDownloadURLS(storage, docsArray, locData) {
           .then((response) => {
             if (!doc.state) {
               // se ha subido el documento, pero aun no se aprueba por el admin
-              console.log(email);
-              pendientes.push({
+              const pendientesFormat = {
                 url: response,
                 title: doc.name,
                 uploaded: doc.uploaded,
                 imageName: doc.imageName,
                 email,
-              });
+              };
+              pendientes.push(pendientesFormat);
             } else {
-              urls.push({
+              const completedFormat = {
                 url: response,
                 title: doc.name,
                 imageName: doc.imageName,
-              });
-              console.log("founded");
+              };
+              completed.push(completedFormat);
             }
           })
           .catch(() => {
-            pendientes.push({
+            const missingFormat = {
               url: "404",
               title: doc.name,
               email,
               imageName: doc.imageName,
-            });
+            };
+            pendientes.push(missingFormat);
+          })
+      );
+    });
+    docArray[1].forEach((docAdmin) => {
+      const routeAdmin = `users/${email}/administrativos/${docAdmin.name}`;
+      promises.push(
+        storage
+          .ref(routeAdmin)
+          .getDownloadURL()
+          .then((response) => {
+            const adminDocFormat = { url: response, title: docAdmin.name };
+            administrativos.push(adminDocFormat);
           })
       );
     });
     Promise.all(promises).then(() => {
-      console.log("all resolved");
-      console.log(urls);
-      resolve([urls, pendientes]);
+      resolve([completed, pendientes, administrativos]);
     });
   });
 }
@@ -106,12 +124,13 @@ async function setPendientes(db, docsToUpdate, locData) {
         const docs = doc.data().documents;
         // se agregan los nuevos documentos pendientes
         docsToUpdate.forEach((newDoc) => {
-          docs.push({
+          const newDocFormat = {
             name: newDoc.nombre,
             imageName: newDoc.nombreImagen,
             uploaded: false,
             state: false,
-          });
+          };
+          docs.push(newDocFormat);
         });
         db.collection("users")
           .doc(doc.id)
@@ -125,11 +144,59 @@ async function setPendientes(db, docsToUpdate, locData) {
   });
 }
 
+function updateAdminDocs(db, locData, nameDoc, descDoc) {
+  return new Promise((resolve) => {
+    const format = {
+      name: nameDoc,
+      fileName: nameDoc,
+      descripcion: descDoc,
+    };
+    const query = db.collection("users").where("email", "==", locData.email);
+    query
+      .get()
+      .then((querySnapshot) =>
+        querySnapshot.forEach((doc) => {
+          let gotDoc = doc.data().docsAdmin;
+          if (gotDoc == null) {
+            gotDoc = [];
+          }
+          gotDoc.push(format);
+          db.collection("users")
+            .doc(doc.id)
+            .update({ docsAdmin: gotDoc })
+            .then(() => {
+              resolve(gotDoc);
+            });
+        })
+      )
+      .catch((e) => {
+        throw e;
+      });
+  });
+}
+
+function uploadFile(storage, file, locData, nameDoc) {
+  return new Promise((resolve) => {
+    storage
+      .ref("users")
+      .child(`/${locData.email}/administrativos/${nameDoc}`)
+      .put(file)
+      .then(() => {
+        resolve("searchEmail");
+      })
+      .catch((e) => {
+        throw e;
+      });
+  });
+}
+
 const docFunctions = {
-  getState,
+  getAllDocs,
   getDownloadURLS,
   setCheckboxes,
   setPendientes,
+  uploadFile,
+  updateAdminDocs,
 };
 
 export default docFunctions;

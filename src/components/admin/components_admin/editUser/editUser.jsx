@@ -88,8 +88,9 @@ const EditUser = () => {
   const global = globalTheme();
   const location = useLocation();
   const locData = location.state.objUser;
-  const [urlDocs, setUrls] = useState([]);
+  const [urlsCompleted, setCompleted] = useState([]);
   const [pendientes, setPendientes] = useState([]);
+  const [administrativos, setAdministrativos] = useState([]);
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const storage = firebase.storage();
@@ -109,26 +110,30 @@ const EditUser = () => {
   const [selectedOption, setSelected] = useState("");
   const [cargoBt, setCargoBt] = useState(true);
   const [reload, setReload] = useState(false);
-
   const [cargos, setCargos] = useState([]);
+
+  function reloadFinal() {
+    setReload((prev) => !prev);
+  }
+
+  function setCargosData(querySnapshot) {
+    querySnapshot.forEach((doc) => {
+      const dataLista = doc.data().lista;
+      const cargosLista = [];
+      dataLista.forEach((c) => {
+        cargosLista.push({
+          value: c.nombre,
+          label: c.nombre,
+        });
+      });
+      setCargos(cargosLista);
+      reloadFinal();
+    });
+  }
 
   function fetchCargos() {
     const query = db.collection("cargos");
-    query.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const dataLista = doc.data().lista;
-        const cargosLista = [];
-        dataLista.forEach((c) => {
-          console.log(c);
-          cargosLista.push({
-            value: c.nombre,
-            label: c.nombre,
-          });
-        });
-        setCargos(cargosLista);
-        setReload((prev) => !prev);
-      });
-    });
+    query.get().then((querySnapshot) => setCargosData(querySnapshot));
   }
 
   const handleChange = (selected) => {
@@ -166,34 +171,35 @@ const EditUser = () => {
     setShow(true);
   }
 
-  function searchEmail() {
-    const query = db.collection("users").where("email", "==", locData.email);
-    query.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const gotDoc = doc.data().docsAdmin;
-        gotDoc.push({
-          name: nameDoc,
-          fileName: nameDoc,
-          descripcion: descDoc,
+  function updateCargo(querySnapshot) {
+    querySnapshot.forEach((doc) => {
+      db.collection("users")
+        .doc(doc.id)
+        .update({ cargo: selectedOption.label })
+        .then(() => {
+          reloadFinal();
         });
-        db.collection("users")
-          .doc(doc.id)
-          .update({ documents: gotDoc })
-          .then(() => {
-            setReload((prev) => !prev);
-          });
-      });
     });
+  }
+
+  function toSearchEmail() {
+    docFunctions
+      .updateAdminDocs(db, locData, nameDoc, descDoc)
+      .then((res) => {
+        setAdministrativos(res);
+        reloadFinal();
+      })
+      .catch((e) => {
+        toast(`Ocurrió un error.${e}`);
+      });
   }
 
   function uploadFile() {
     setDisabled(true);
-    storage
-      .ref("users")
-      .child(`/${locData.email}/administrativos/${nameDoc}`)
-      .put(file)
+    docFunctions
+      .uploadFile(storage, file, locData, nameDoc)
       .then(() => {
-        searchEmail();
+        toSearchEmail();
       })
       .catch((e) => {
         toast(`Ocurrió un error.${e}`);
@@ -204,23 +210,14 @@ const EditUser = () => {
     const query = db
       .collection("users")
       .where("fullname", "==", locData.fullname);
-    query.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        db.collection("users")
-          .doc(doc.id)
-          .update({ cargo: selectedOption.label })
-          .then(() => {
-            setReload((prev) => !prev);
-          });
-      });
-    });
+    query.get().then((querySnapshot) => updateCargo(querySnapshot));
   }
 
   function updatePendientes() {
     setDisabled(true);
     docFunctions.setPendientes(db, docsToUpdate, locData).then((res) => {
       if (res === "listo") {
-        setReload((prev) => !prev);
+        reloadFinal();
       } else {
         setDisabled(false);
       }
@@ -233,7 +230,7 @@ const EditUser = () => {
 
   function setName(e) {
     setNameDoc(e);
-    if (e !== "") {
+    if (e !== "" && descDoc !== "") {
       setDisabledAdminDoc(false);
     } else {
       setDisabledAdminDoc(true);
@@ -242,7 +239,7 @@ const EditUser = () => {
 
   function setDescripcion(e) {
     setDescripcionDoc(e);
-    if (e !== "") {
+    if (e !== "" && descDoc !== "") {
       setDisabledAdminDoc(false);
     } else {
       setDisabledAdminDoc(true);
@@ -250,8 +247,9 @@ const EditUser = () => {
   }
 
   function setURLS(arrayUrls) {
-    setUrls(arrayUrls[0]);
+    setCompleted(arrayUrls[0]);
     setPendientes(arrayUrls[1]);
+    setAdministrativos(arrayUrls[2]);
     docFunctions.setCheckboxes(db, arrayUrls).then((chboxes) => {
       setCBoxes(chboxes);
     });
@@ -266,14 +264,14 @@ const EditUser = () => {
   }
 
   function getDocs() {
-    docFunctions.getState(db, locData).then((docArray) => {
+    docFunctions.getAllDocs(db, locData).then((docArray) => {
       getURLS(docArray);
     });
   }
 
   useEffect(() => {
-    fetchCargos();
     getDocs();
+    fetchCargos();
   }, []);
 
   useEffect(() => {}, [reload]);
@@ -298,10 +296,10 @@ const EditUser = () => {
           <p>
             <b>Documentos Completados</b>
           </p>
-          {urlDocs.length && (
+          {urlsCompleted.length && (
             <div>
               <Row className={classes.rowDocs}>
-                {urlDocs.map((url) => (
+                {urlsCompleted.map((url) => (
                   <Col className={classes.col} key={uuidv4()}>
                     <div
                       className={`${classes.container} ${classes.pointer}`}
@@ -382,6 +380,22 @@ const EditUser = () => {
           <p className={classes.mt20}>
             <b>Documentos Administrativos</b>
           </p>
+          <div>
+            <Row className={classes.rowDocs}>
+              {administrativos.map((url) => (
+                <Col className={classes.col} key={uuidv4()}>
+                  <div
+                    className={`${classes.container} ${classes.pointer}`}
+                    onKeyPress={() => handleShow(url, "completados")}
+                    key={uuidv4()}
+                    onClick={() => handleShow(url, "completados")}
+                  >
+                    <p className={classes.center}>{url.title}</p>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </div>
           <Row>
             <Col>
               <div className="formGroup">
