@@ -111,6 +111,9 @@ function HeaderComponent() {
     case currentItem === SLUGS.subirDocumentos:
       title = "Subir Documento";
       break;
+    case currentItem === SLUGS.verificar:
+      title = "Verificar Correo";
+      break;
     default:
       title = "";
   }

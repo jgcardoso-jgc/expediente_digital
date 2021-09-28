@@ -2,10 +2,10 @@
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
+import { Link, useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import uuid from "react-uuid";
 import { FaFileAlt } from "react-icons/fa";
-import { useHistory } from "react-router-dom";
 
 const useStyles = createUseStyles(() => ({
   dropdownItemsContainer: {
@@ -64,6 +64,9 @@ const useStyles = createUseStyles(() => ({
     textAlign: "left",
     paddingLeft: "20px",
     paddingRight: "20px",
+  },
+  noMailText: {
+    marginTop: 20,
   },
 }));
 
@@ -140,9 +143,13 @@ const AlertasPagina = () => {
           </div>
         )}
         {mailVerified ? (
-          <p>¿No has recibido el correo de confirmación?</p>
+          ""
         ) : (
-          <p>¿No has recibido el correo de confirmación?</p>
+          <Link to="/verificar">
+            <p className={classes.noMailText}>
+              ¿No has recibido el correo de confirmación?
+            </p>
+          </Link>
         )}
       </div>
     </div>

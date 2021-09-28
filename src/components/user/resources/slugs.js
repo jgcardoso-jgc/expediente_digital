@@ -8,4 +8,5 @@ export default {
   alerts: "/alertas",
   subirDocumentos: "/subir",
   sign: "/segurisign",
+  verificar: "/verificar",
 };
