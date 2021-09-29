@@ -59,6 +59,7 @@ const Table = ({ columns, data }) => {
     {
       columns,
       data,
+      initialState: { pageSize: 20 },
     },
     useGlobalFilter, // useGlobalFilter!
     usePagination
@@ -90,7 +91,6 @@ const Table = ({ columns, data }) => {
 
   return (
     <div className={classes.card}>
-      {console.log(globalFilter)}
       <div className={classes.containerSearch}>
         <span className={classes.searchIcon}>
           <FaSearch />
@@ -186,7 +186,7 @@ const Table = ({ columns, data }) => {
             setPageSize(Number(e.target.value));
           }}
         >
-          {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+          {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Mostrar {pageSize}
             </option>
