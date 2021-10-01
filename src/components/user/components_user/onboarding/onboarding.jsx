@@ -221,10 +221,10 @@ function Onboarding() {
   function toFinal() {
     // console.log(`interviewId:${session.interviewId}`);
     // console.log(`token:${session.token}`);
-    const customerID = session.customerId;
+    const { interviewId } = session;
     incode
       .getFinishStatus(configID, { token: session.token })
-      .then(() => checkAuth(customerID))
+      .then(() => checkAuth(interviewId))
       .catch((e) => {
         toast(e);
       });
