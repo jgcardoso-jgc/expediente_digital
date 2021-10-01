@@ -31,8 +31,6 @@ const useStyles = createUseStyles(() => ({
     marginLeft: "auto",
     marginRight: "auto",
     textAlign: "left",
-    paddingLeft: "20px",
-    paddingRight: "20px",
   },
   inputStyle: {
     width: "100%",
@@ -163,10 +161,10 @@ const MyProfile = () => {
         ) : (
           <div className={classes.cardDashboard}>
             <div className="row">
-              <div className="col max40">
+              <div className="col">
                 <img src={urlProfile} className={classes.img} alt="profile" />
               </div>
-              <div className="col min50">
+              <div className="col">
                 <p className="mb0">
                   <b>{name}</b>
                 </p>

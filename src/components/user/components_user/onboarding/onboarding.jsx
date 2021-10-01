@@ -160,8 +160,9 @@ function Onboarding() {
     setStep(step + 1);
   }
 
-  function checkAuth() {
+  function checkAuth(id) {
     let uid = "";
+    const clientID = id;
     {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
@@ -175,47 +176,55 @@ function Onboarding() {
       db.collection("users")
         .where("uid", "==", uid)
         .get()
-        .then((snapshot) => {
-          snapshot.docs.forEach(async (document) => {
-            const doc = await db.collection("users").doc(document.id).get();
-            const { documents } = doc.data();
-            documents.push(
-              {
-                name: "ID Frontal",
-                imageName: "croppedFrontID",
-                state: true,
-                uploaded: true,
-              },
-              {
-                name: "ID Reverso",
-                imageName: "croppedBackID",
-                uploaded: true,
-                state: true,
-              }
-            );
-            db.collection("users")
-              .doc(document.id)
-              .update({
-                onboarding: true,
-                documents,
-              })
-              .then(() => {
-                const saved = JSON.parse(localStorage.getItem("user"));
-                saved.onboarding = true;
-                localStorage.setItem("user", JSON.stringify(saved));
-                history.push("/finalStep");
-              });
-          });
-        });
+        .then((snapshot) => updateDocs(snapshot, clientID));
     }
+  }
+
+  function updateDocs(snapshot, clientID) {
+    snapshot.docs.forEach(async (document) => {
+      const doc = await db.collection("users").doc(document.id).get();
+      const { documents } = doc.data();
+      documents.push(
+        {
+          name: "ID Frontal",
+          imageName: "croppedFrontID",
+          state: true,
+          uploaded: true,
+        },
+        {
+          name: "ID Reverso",
+          imageName: "croppedBackID",
+          uploaded: true,
+          state: true,
+        }
+      );
+      db.collection("users")
+        .doc(document.id)
+        .update({
+          onboarding: true,
+          documents,
+          token: clientID,
+        })
+        .then(() => {
+          save();
+        });
+    });
+  }
+
+  function save() {
+    const saved = JSON.parse(localStorage.getItem("user"));
+    saved.onboarding = true;
+    localStorage.setItem("user", JSON.stringify(saved));
+    history.push("/finalStep");
   }
 
   function toFinal() {
     // console.log(`interviewId:${session.interviewId}`);
     // console.log(`token:${session.token}`);
+    const customerID = session.customerId;
     incode
       .getFinishStatus(configID, { token: session.token })
-      .then(() => checkAuth())
+      .then(() => checkAuth(customerID))
       .catch((e) => {
         toast(e);
       });
