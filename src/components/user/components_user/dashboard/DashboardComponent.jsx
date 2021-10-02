@@ -5,7 +5,7 @@ import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
 import Donut from "./donutComponent";
-import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
+import MiniCardComponent from "./MiniCardComponent";
 
 const useStyles = createUseStyles({
   cardsContainer: {

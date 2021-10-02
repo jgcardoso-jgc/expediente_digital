@@ -2,7 +2,7 @@
 export default {
   // private
   dashboard: "/dashboard",
-  contacts: "/contacts",
+  usuarios: "/usuarios",
   editUser: "/contacts/editUser",
   settings: "/settings",
   alertas: "/alertas",

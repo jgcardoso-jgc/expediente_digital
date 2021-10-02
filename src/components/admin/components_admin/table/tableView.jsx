@@ -18,7 +18,7 @@ const useStyles = createUseStyles({
   },
 });
 
-function TableView() {
+const TableView = (docsNumber) => {
   const classes = useStyles();
   const history = useHistory();
   const firebase = useFirebaseApp();
@@ -146,9 +146,10 @@ function TableView() {
           },
         ]}
         data={data}
+        docNumber={docsNumber.docsNumber}
       />
     </div>
   );
-}
+};
 
 export default TableView;

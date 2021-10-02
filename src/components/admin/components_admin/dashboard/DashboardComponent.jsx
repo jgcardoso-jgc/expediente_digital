@@ -5,8 +5,9 @@ import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
+import { useHistory } from "react-router-dom";
 import Donut from "./donutComponent";
-import MiniCardComponent from "../../../shared/cards/MiniCardComponent";
+import MiniCardComponent from "./MiniCardComponent";
 
 const useStyles = createUseStyles({
   cardsContainer: {
@@ -60,6 +61,7 @@ const useStyles = createUseStyles({
 function DashboardComponent() {
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
+  const history = useHistory();
   const classes = useStyles();
   const [completados, setCompletados] = useState(0);
   const [pendientes, setPendientes] = useState(0);
@@ -98,6 +100,11 @@ function DashboardComponent() {
     query.get().then((querySnapshot) => setDocs(querySnapshot));
   }
 
+  function toDocs(value) {
+    console.log("pressed");
+    history.push("/usuarios", { search: value });
+  }
+
   useEffect(() => {
     getData();
   }, []);
@@ -123,29 +130,19 @@ function DashboardComponent() {
               className={classes.miniCardContainer}
               title="Documentos"
               value={completados}
+              onClick={() => toDocs(completados)}
             />
             <MiniCardComponent
               className={classes.miniCardContainer}
               title="Pendientes"
               value={pendientes}
+              onClick={() => toDocs(pendientes)}
             />
-          </Row>
-          <Row
-            className={classes.cardRow}
-            wrap
-            flexGrow={1}
-            horizontal="space-between"
-            breakpoints={{ 384: "column" }}
-          >
             <MiniCardComponent
               className={classes.miniCardContainer}
               title="Faltantes"
               value={faltantes}
-            />
-            <MiniCardComponent
-              className={classes.miniCardContainer}
-              title="Alertas"
-              value="0"
+              onClick={() => toDocs(faltantes)}
             />
           </Row>
         </Row>

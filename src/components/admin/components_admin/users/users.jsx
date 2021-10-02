@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
+import { useLocation } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
@@ -56,6 +57,11 @@ const useStyles = createUseStyles({
 const UserView = () => {
   const classes = useStyles();
   const firebase = useFirebaseApp();
+  const location = useLocation();
+  let docsNumber = 0;
+  if (location.state != null) {
+    docsNumber = location.state.docs;
+  }
   const db = firebase.firestore();
   const [email, setEmail] = useState("");
   const [disable, setDisable] = useState(false);
@@ -129,11 +135,9 @@ const UserView = () => {
     fetchCargos();
   }, []);
 
-  useEffect(() => {}, [reload]);
-
   return (
     <div>
-      <TableView />
+      {reload ? <TableView docsNumber={docsNumber} /> : ""}
       <ToastContainer />
       <div className={classes.userDiv}>
         <div className={classes.card}>

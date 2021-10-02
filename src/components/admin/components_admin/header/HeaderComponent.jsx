@@ -90,7 +90,7 @@ function HeaderComponent() {
     ):
       title = "Overview";
       break;
-    case currentItem === SLUGS.contacts:
+    case currentItem === SLUGS.usuarios:
       title = "Usuarios";
       break;
     case currentItem === SLUGS.editUser:

@@ -15,7 +15,7 @@ function PrivateRoutes() {
     <Suspense fallback={<LoadingComponent loading />}>
       <Switch>
         <Route exact path={SLUGS.dashboard} component={DashboardComponent} />
-        <Route exact path={SLUGS.contacts} render={() => <UserView />} />
+        <Route exact path={SLUGS.usuarios} render={() => <UserView />} />
         <Route exact path={SLUGS.editUser} render={() => <EditUser />} />
         <Route exact path={SLUGS.settings} render={() => <AjustesAdmin />} />
         <Route exact path={SLUGS.alertas} render={() => <AlertasPagina />} />

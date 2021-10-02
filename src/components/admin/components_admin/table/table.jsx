@@ -7,6 +7,7 @@
 /* eslint-disable quotes */
 import React, { useEffect } from "react";
 import { createUseStyles } from "react-jss";
+import { useHistory } from "react-router-dom";
 import { useTable, usePagination, useGlobalFilter } from "react-table";
 import { FaSearch, FaAngleRight, FaAngleLeft } from "react-icons/fa";
 
@@ -53,8 +54,9 @@ const useStyles = createUseStyles({
   },
 });
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, docNumber }) => {
   const classes = useStyles();
+  const history = useHistory();
   const props = useTable(
     {
       columns,
@@ -88,6 +90,14 @@ const Table = ({ columns, data }) => {
   } = props;
 
   useEffect(() => {}, [globalFilter]);
+
+  useEffect(() => {
+    console.log(docNumber);
+    if (docNumber && docNumber > 0) {
+      setGlobalFilter(docNumber);
+    }
+    history.replace({ state: {} });
+  }, []);
 
   return (
     <div className={classes.card}>
