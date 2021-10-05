@@ -150,6 +150,7 @@ const seguriSignController = new SegurisignController();
 
 const Segurisign = () => {
   const passwordRef = useRef(null);
+  const emailRef = useRef(null);
   const toaster = new CustomToasts();
   const [logged, setLogged] = useState(false);
   const global = globalTheme();
@@ -161,7 +162,7 @@ const Segurisign = () => {
     setLoading(true);
     e.preventDefault();
     seguriSignController
-      .loginUser(passwordRef.current.value)
+      .loginUser(emailRef.current.value, passwordRef.current.value)
       .then((value) => {
         setLogged(value);
         localStorage.setItem(
@@ -210,6 +211,12 @@ const Segurisign = () => {
           </h5>
           <Card.Text>
             <div>
+              <input
+                className={classes.inputStyle}
+                ref={emailRef}
+                type="email"
+              />
+
               <input
                 className={classes.inputStyle}
                 ref={passwordRef}

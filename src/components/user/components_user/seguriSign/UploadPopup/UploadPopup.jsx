@@ -74,6 +74,7 @@ const UploadPopup = (props) => {
   const { seguriSignController } = props;
   const [loader, setLoader] = useState(false);
   const [requiresFM, setRequiresFM] = useState(false);
+  const [signType, setSignType] = useState('fab');
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
     hasSelected: false,
@@ -82,6 +83,42 @@ const UploadPopup = (props) => {
   const userController = new UserController();
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
+  const addDocumentServer = () => {
+    if (signers.arr.length === 0) {
+      toaster.warningToast("Necesitas agregar por lo menos un firmante");
+      return;
+    }
+    if (!selectedFile.hasSelected) {
+      toaster.warningToast("Selecciona un archivo");
+      return;
+    }
+
+    setLoader(true);
+    seguriSignController
+      .addDocumentForParticipantsServer(signers.arr, selectedFile.selectedFile)
+      .then(async (response) => {
+        const succeed = response[0];
+        if (succeed) {
+          const document = response[1];
+          console.log(signers.arr);
+          await userController.addNewDocToFirebase(
+            signers.arr,
+            document,
+            requiresFM
+          );
+          props.toaster.successToast("Documento subido con éxito");
+        } else {
+          props.toaster.errorToast(
+            "Error al subir documento, intenta de nuevo"
+          );
+        }
+        setLoader(false);
+      })
+      .catch((error) => {
+        setLoader(false);
+        props.toaster.errorToast(error);
+      });
+  };
   const addDocument = () => {
     if (signers.arr.length === 0) {
       toaster.warningToast("Necesitas agregar por lo menos un firmante");
@@ -157,6 +194,24 @@ const UploadPopup = (props) => {
           <CustomLoader />
         ) : (
           <div className="newDocContent">
+            <Row>
+              <Form.Check
+                type="radio"
+                label="Server Side"
+                value="server"
+                name="sign-type"
+                className={classes.spaceCheckbox}
+                onChange={(event) => setSignType(event.target.value)}
+              />
+              <Form.Check
+                type="radio"
+                label="FAB"
+                value="fab"
+                name="sign-type"
+                className={classes.spaceCheckbox}
+                onChange={(event) => setSignType(event.target.value)}
+              />
+            </Row>
             <input
               className={classes.inputStyle}
               type="text"
@@ -230,7 +285,11 @@ const UploadPopup = (props) => {
                 }}
                 className={classes.subirBt}
                 onClick={async () => {
-                  await addDocument();
+                  if (signType === 'fab') {
+                    await addDocument();
+                  } else {
+                    await addDocumentServer();
+                  }
                   onClose();
                 }}
               >
