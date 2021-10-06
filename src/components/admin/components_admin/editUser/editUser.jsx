@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
+import Completados from "./completados";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
@@ -75,6 +76,10 @@ const useStyles = createUseStyles(() => ({
     minWidth: "33.3333%",
     padding: 10,
   },
+  max3: {
+    maxWidth: "33.3333%",
+    minWidth: "33.3333%",
+  },
   "@media screen and (max-width:768px)": {
     col: {
       marginTop: "20px",
@@ -111,6 +116,7 @@ const EditUser = () => {
   const [cargoBt, setCargoBt] = useState(true);
   const [reload, setReload] = useState(false);
   const [cargos, setCargos] = useState([]);
+  const functions = firebase.functions();
 
   function reloadFinal() {
     setReload((prev) => !prev);
@@ -190,7 +196,7 @@ const EditUser = () => {
         reloadFinal();
       })
       .catch((e) => {
-        toast(`Ocurrió un error.${e}`);
+        toast(`Ocurrió un error.${e.message}`);
       });
   }
 
@@ -213,10 +219,25 @@ const EditUser = () => {
     query.get().then((querySnapshot) => updateCargo(querySnapshot));
   }
 
+  function testEmail() {
+    const val = functions.httpsCallable("uploadNewDoc");
+    val({
+      text: "Tienes nuevo documento pediente que firmar",
+      email: locData.email,
+    })
+      .then(() => {
+        console.log("ok");
+      })
+      .catch((error) => {
+        console.log(`error: ${JSON.stringify(error)}`);
+      });
+  }
+
   function updatePendientes() {
     setDisabled(true);
     docFunctions.setPendientes(db, docsToUpdate, locData).then((res) => {
       if (res === "listo") {
+        testEmail();
         reloadFinal();
       } else {
         setDisabled(false);
@@ -256,6 +277,7 @@ const EditUser = () => {
   }
 
   function getURLS(docArray) {
+    console.log(docArray);
     docFunctions
       .getDownloadURLS(storage, docArray, locData)
       .then((arrayUrls) => {
@@ -296,23 +318,13 @@ const EditUser = () => {
           <p>
             <b>Documentos Completados</b>
           </p>
-          {urlsCompleted.length && (
-            <div>
-              <Row className={classes.rowDocs}>
-                {urlsCompleted.map((url) => (
-                  <Col className={classes.col} key={uuidv4()}>
-                    <div
-                      className={`${classes.container} ${classes.pointer}`}
-                      onKeyPress={() => handleShow(url, "completados")}
-                      key={uuidv4()}
-                      onClick={() => handleShow(url, "completados")}
-                    >
-                      <p className={classes.center}>{url.title}</p>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
-            </div>
+          {urlsCompleted.length > 0 ? (
+            <Completados
+              urlsCompleted={urlsCompleted}
+              handleShow={handleShow}
+            />
+          ) : (
+            "Cargando..."
           )}
           <p className={classes.mt20}>
             <b>Documentos Pendientes</b>
@@ -347,15 +359,19 @@ const EditUser = () => {
           <p>Selecciona los documentos requeridos para el usuario</p>
           {cboxes.length > 0 ? (
             <div>
-              {cboxes.map((cbox) => (
-                <label className={classes.checkbox}>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => handleOnChange(e, cbox)}
-                  />
-                  {cbox.nombre}
-                </label>
-              ))}
+              <Row>
+                {cboxes.map((cbox) => (
+                  <Col className={classes.max3}>
+                    <label className={classes.checkbox}>
+                      <input
+                        type="checkbox"
+                        onChange={(e) => handleOnChange(e, cbox)}
+                      />
+                      <p>{cbox.nombre}</p>
+                    </label>
+                  </Col>
+                ))}
+              </Row>
             </div>
           ) : (
             <div>Ya se solicitaron todos los documentos disponibles</div>
@@ -464,3 +480,5 @@ const EditUser = () => {
 };
 
 export default EditUser;
+
+// handleShow(url, "completados")}

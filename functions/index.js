@@ -15,7 +15,9 @@ const TEMPLATE_ID = functions.config().sendgrid.template;
 sgMail.setApiKey(API_KEY);
 
 exports.uploadNewDoc = functions.https.onCall(async (data, context) => {
-  if (!context.auth && !context.auth.token.email) {
+  const text = data.text;
+  const mail = data.email;
+  if (!context.auth) {
     throw new functions.https.HttpsError(
       "failed-precondition",
       "Must be logged in"
@@ -23,12 +25,12 @@ exports.uploadNewDoc = functions.https.onCall(async (data, context) => {
   }
 
   const msg = {
-    to: context.auth.token.email,
+    to: mail,
     from: "devops@seguridata.com",
     template_id: TEMPLATE_ID,
     dynamic_template_data: {
       subject: context.auth.token.email,
-      text: "Sube un nuevo documento",
+      text: text,
     },
   };
   await sgMail.send(msg);

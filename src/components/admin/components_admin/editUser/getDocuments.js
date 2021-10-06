@@ -45,6 +45,7 @@ async function getDownloadURLS(storage, docArray, locData) {
                 imageName: doc.imageName,
                 email,
               };
+              console.log("pushed to pendientes");
               pendientes.push(pendientesFormat);
             } else {
               const completedFormat = {
@@ -56,6 +57,7 @@ async function getDownloadURLS(storage, docArray, locData) {
             }
           })
           .catch(() => {
+            console.log("error");
             const missingFormat = {
               url: "404",
               title: doc.name,

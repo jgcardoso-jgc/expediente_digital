@@ -10,6 +10,7 @@ import { useHistory, Link } from "react-router-dom";
 import { createUseStyles, useTheme } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
 import Div100vh from "react-div-100vh";
+import loadingGif from "../../../assets/loading.gif";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../waves/waves";
@@ -81,6 +82,8 @@ const RegisterNormal = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rfc, setRfc] = useState("");
+  const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const rfcText = useRef();
   const passText = useRef();
 
@@ -163,87 +166,102 @@ const RegisterNormal = () => {
   }
 
   const submit = async () => {
+    setDisabled(true);
+    setLoading(true);
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((res) => uploadData(res))
       .catch((error) => {
+        setLoading(false);
+        setDisabled(false);
         toast(error.message);
       });
   };
   return (
     <Div100vh>
-      <NavBarMainPage className={classes.navmain} />
-      <ToastContainer />
-      <div className={classes.container}>
+      {loading ? (
+        <img src={loadingGif} className="loadgif" alt="loading..." />
+      ) : (
         <div>
-          <h2 className={`${classes.regText} ${classes.left}`}>
-            <b>Regístrate</b>
-          </h2>
-          <p className={classes.left}>
-            <b>Ingresa tus datos</b>
-          </p>
+          <NavBarMainPage className={classes.navmain} />
+          <ToastContainer />
+          <div className={classes.container}>
+            <div>
+              <h2 className={`${classes.regText} ${classes.left}`}>
+                <b>Regístrate</b>
+              </h2>
+              <p className={classes.left}>
+                <b>Ingresa tus datos</b>
+              </p>
+            </div>
+            <div className={classes.left}>
+              <label htmlFor="email" className="block pb4">
+                Nombre Completo
+              </label>
+              <input
+                type="text"
+                id="name"
+                className={classes.inputStyle}
+                onChange={(event) => setName(event.target.value)}
+              />
+            </div>
+            <div className={`${classes.left} ${classes.pt10}`}>
+              <label htmlFor="email" className="block pb4">
+                Correo electrónico
+              </label>
+              <input
+                type="email"
+                id="email"
+                className={classes.inputStyle}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </div>
+            <div className={`${classes.left} ${classes.pt10}`}>
+              <label htmlFor="email" className="block pb4">
+                RFC
+              </label>
+              <input
+                type="text"
+                id="rfc"
+                className={classes.inputStyle}
+                onChange={(event) => rfcValido(event.target.value)}
+              />
+              <p className={classes.rfcText} ref={rfcText} />
+            </div>
+            <div className={`${classes.left} ${classes.pt10}`}>
+              <label htmlFor="password" className="block pb10 pt4">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                className={classes.inputStyle}
+                onChange={(event) => passwordValida(event.target.value)}
+              />
+              <p className={classes.rfcText} ref={passText} />
+            </div>
+            <button
+              type="button"
+              className={classes.regBt}
+              disabled={disabled}
+              onClick={submit}
+            >
+              Registrarse
+            </button>
+            <div className={classes.right}>
+              <Link
+                className={classes.link}
+                style={{ display: "inline-block" }}
+                to="./loginNormal"
+              >
+                ¿Ya tienes una cuenta?
+              </Link>
+            </div>
+          </div>
+          <Waves />
         </div>
-        <div className={classes.left}>
-          <label htmlFor="email" className="block pb4">
-            Nombre Completo
-          </label>
-          <input
-            type="text"
-            id="name"
-            className={classes.inputStyle}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </div>
-        <div className={`${classes.left} ${classes.pt10}`}>
-          <label htmlFor="email" className="block pb4">
-            Correo electrónico
-          </label>
-          <input
-            type="email"
-            id="email"
-            className={classes.inputStyle}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <div className={`${classes.left} ${classes.pt10}`}>
-          <label htmlFor="email" className="block pb4">
-            RFC
-          </label>
-          <input
-            type="text"
-            id="rfc"
-            className={classes.inputStyle}
-            onChange={(event) => rfcValido(event.target.value)}
-          />
-          <p className={classes.rfcText} ref={rfcText} />
-        </div>
-        <div className={`${classes.left} ${classes.pt10}`}>
-          <label htmlFor="password" className="block pb10 pt4">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            id="password"
-            className={classes.inputStyle}
-            onChange={(event) => passwordValida(event.target.value)}
-          />
-          <p className={classes.rfcText} ref={passText} />
-        </div>
-        <button type="button" className={classes.regBt} onClick={submit}>
-          Registrarse
-        </button>
-        <div className={classes.right}>
-          <Link
-            className={classes.link}
-            style={{ display: "inline-block" }}
-            to="./loginNormal"
-          >
-            ¿Ya tienes una cuenta?
-          </Link>
-        </div>
-      </div>
-      <Waves />
+      )}
     </Div100vh>
   );
 };

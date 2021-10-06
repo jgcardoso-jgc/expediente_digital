@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-alert */
 /* eslint-disable quotes */
@@ -8,8 +7,9 @@ import { Link } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { ToastContainer, toast } from "react-toastify";
 import { createUseStyles, useTheme } from "react-jss";
-import "react-toastify/dist/ReactToastify.css";
 import Container from "react-bootstrap/Container";
+import loadingGif from "../../../assets/loading.gif";
+import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import Waves from "../waves/waves";
 
@@ -66,10 +66,11 @@ const LoginNormal = () => {
   const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function submit() {
     try {
-      console.log(`email:${email}`);
+      setLoading(true);
       if (email !== "" && password !== "") {
         setDisable(true);
         await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -77,6 +78,7 @@ const LoginNormal = () => {
     } catch (e) {
       toast(e.message);
       setDisable(false);
+      setLoading(false);
     }
   }
 
@@ -94,62 +96,68 @@ const LoginNormal = () => {
   }, [email, password]);
   return (
     <div className={classes.center}>
-      <NavBarMainPage />
-      <ToastContainer />
-      <Container className={classes.containerLogin}>
+      {loading ? (
+        <img src={loadingGif} className="loadgif" alt="loading..." />
+      ) : (
         <div>
-          <h2 className="mb4">
-            <b>Login</b>
-          </h2>
-          <p className="expText">Accede a tu cuenta</p>
+          <NavBarMainPage />
+          <ToastContainer />
+          <Container className={classes.containerLogin}>
+            <div>
+              <h2 className="mb4">
+                <b>Login</b>
+              </h2>
+              <p className="expText">Accede a tu cuenta</p>
+            </div>
+            <div className={classes.mb20}>
+              <label htmlFor="email">Correo electrónico</label>
+              <input
+                type="email"
+                id="email"
+                className={classes.inputStyle}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block pb10 pt20">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                className={classes.inputStyle}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </div>
+            <button
+              type="button"
+              className={classes.loginBt}
+              disabled={disable}
+              onClick={() => submit()}
+            >
+              Iniciar Sesión
+            </button>
+            <div className={classes.tright}>
+              <Link
+                style={{ display: "inline-block", marginTop: "14px" }}
+                to="./registerNormal"
+              >
+                <p className={(classes.qa, classes.right)}>
+                  ¿Aun no tienes una cuenta?
+                </p>
+              </Link>
+            </div>
+            <div className={classes.tright}>
+              <Link style={{ display: "inline-block" }} to="./recoverPassword">
+                <p className={(classes.qa, classes.right)}>
+                  ¿Olvidaste tu contraseña?
+                </p>
+              </Link>
+            </div>
+          </Container>
+          <Waves />
         </div>
-        <div className={classes.mb20}>
-          <label htmlFor="email">Correo electrónico</label>
-          <input
-            type="email"
-            id="email"
-            className={classes.inputStyle}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block pb10 pt20">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            id="password"
-            className={classes.inputStyle}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <button
-          type="button"
-          className={classes.loginBt}
-          disabled={disable}
-          onClick={() => submit()}
-        >
-          Iniciar Sesión
-        </button>
-        <div className={classes.tright}>
-          <Link
-            style={{ display: "inline-block", marginTop: "14px" }}
-            to="./registerNormal"
-          >
-            <p className={(classes.qa, classes.right)}>
-              ¿Aun no tienes una cuenta?
-            </p>
-          </Link>
-        </div>
-        <div className={classes.tright}>
-          <Link style={{ display: "inline-block" }} to="./recoverPassword">
-            <p className={(classes.qa, classes.right)}>
-              ¿Olvidaste tu contraseña?
-            </p>
-          </Link>
-        </div>
-      </Container>
-      <Waves />
+      )}
     </div>
   );
 };
