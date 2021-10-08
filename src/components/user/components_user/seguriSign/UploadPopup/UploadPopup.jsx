@@ -15,6 +15,7 @@ import { createUseStyles } from "react-jss";
 import PropTypes from "prop-types";
 import CustomLoader from "../CustomLoader/CustomLoader";
 import UserController from "../controller/user_controller";
+import SoapController from "../controller/soap_controller";
 
 const useStyles = createUseStyles(() => ({
   subirBt: {
@@ -72,6 +73,7 @@ const UploadPopup = (props) => {
   const { toaster } = props;
   const classes = useStyles();
   const { seguriSignController } = props;
+  const soapController = new SoapController(seguriSignController.segurisignUser);
   const [loader, setLoader] = useState(false);
   const [requiresFM, setRequiresFM] = useState(false);
   const [signType, setSignType] = useState('fab');
@@ -94,21 +96,22 @@ const UploadPopup = (props) => {
     }
 
     setLoader(true);
-    seguriSignController
-      .addDocumentForParticipantsServer(signers.arr, selectedFile.selectedFile)
+    soapController.addDocumentString(signers.arr, selectedFile.selectedFile)
       .then(async (response) => {
-        const succeed = response[0];
-        if (succeed) {
-          const document = response[1];
+        const parser = new DOMParser();
+        const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
+        const multilateralId = docResponse.getElementsByTagName('multilateralId')[0].childNodes[0].nodeValue;
+        const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+        if (resultado) {
           console.log(signers.arr);
           await userController.addNewDocToFirebase(
             signers.arr,
-            document,
+            { multilateralId, },
             requiresFM
           );
-          props.toaster.successToast("Documento subido con éxito");
+          toaster.successToast("Documento subido con éxito");
         } else {
-          props.toaster.errorToast(
+          toaster.errorToast(
             "Error al subir documento, intenta de nuevo"
           );
         }
@@ -116,9 +119,10 @@ const UploadPopup = (props) => {
       })
       .catch((error) => {
         setLoader(false);
-        props.toaster.errorToast(error);
+        toaster.errorToast(error);
       });
   };
+
   const addDocument = () => {
     if (signers.arr.length === 0) {
       toaster.warningToast("Necesitas agregar por lo menos un firmante");
@@ -165,7 +169,7 @@ const UploadPopup = (props) => {
     setLoader(true);
     const isValid = await seguriSignController.getSignersList(signerMail);
     setLoader(false);
-    if (isValid) {
+    if (isValid || signType === 'server') {
       if (signers.arr.includes(signerMail)) {
         props.toaster.warningToast("Firmante ya agregado");
       } else {
@@ -286,9 +290,10 @@ const UploadPopup = (props) => {
                 className={classes.subirBt}
                 onClick={async () => {
                   if (signType === 'fab') {
-                    await addDocument();
+                    addDocument();
                   } else {
-                    await addDocumentServer();
+                    console.log('add doc');
+                    addDocumentServer();
                   }
                   onClose();
                 }}

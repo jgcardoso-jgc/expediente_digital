@@ -311,6 +311,7 @@ class SegurisignController {
       .then((res) => {
         this.segurisignUser.idPerson = res.data.idPerson;
         this.signUserEmail = email;
+        this.segurisignUser.email = email;
         this.segurisignUser.token = res.data.token;
         this.segurisignUser.idEmployeeProfile = res.data.idEmployeeProfile;
         return this.authUser(password).then((value) => value);
