@@ -48,7 +48,6 @@ const useStyles = createUseStyles(() => ({
 const SegurisignDocuments = (props) => {
   const { seguriSignController } = props;
   const userController = new UserController(seguriSignController.segurisignUser.email);
-  console.log(seguriSignController.segurisignUser.email);
   const global = globalTheme();
   const [show, setShow] = useState(false);
   const [location, setLocation] = useState({

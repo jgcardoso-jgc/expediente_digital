@@ -74,6 +74,7 @@ const UploadPopup = (props) => {
   const classes = useStyles();
   const { seguriSignController } = props;
   const soapController = new SoapController(seguriSignController.segurisignUser);
+  const userController = new UserController(seguriSignController.segurisignUser.email);
   const [loader, setLoader] = useState(false);
   const [requiresFM, setRequiresFM] = useState(false);
   const [signType, setSignType] = useState('fab');
@@ -82,7 +83,6 @@ const UploadPopup = (props) => {
     hasSelected: false,
   });
   const [signers, setSigners] = useState({ arr: [] });
-  const userController = new UserController(seguriSignController.segurisignUser.email);
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
   const addDocumentServer = () => {

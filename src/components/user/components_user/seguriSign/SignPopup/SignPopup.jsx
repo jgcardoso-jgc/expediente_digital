@@ -18,6 +18,7 @@ import UserController from "../controller/user_controller";
 import HelloInitSign from "../../hello-sign/hello";
 import signGif from "../../../../../assets/sign.gif";
 import loadingGif from "../../../../../assets/loading.gif";
+import SoapController from "../controller/soap_controller";
 
 const useStyles = createUseStyles(() => ({
   border: { border: "3px solid black", marginBottom: 14 },
@@ -63,10 +64,10 @@ const SignPopUP = (props) => {
   const { long } = props;
   const { toaster } = props;
   const { requiresFaceMatch } = props;
-  const userController = new UserController();
+  const userController = new UserController(seguriSignController.segurisignUser.email);
+  const soapController = new SoapController(seguriSignController.segurisignUser);
   const [loading, setLoading] = useState(false);
   const [signType, setSignType] = useState('');
-  const [docHash, setDocHash] = useState('');
   const [faceMatched, setFaceMatched] = useState(false);
   const clear = () => sigCanvas.current.clear();
   const sign = async () => {
@@ -85,7 +86,7 @@ const SignPopUP = (props) => {
   };
 
   const signPkcs7 = async () => {
-    const signedSuccessfully = await seguriSignController.pkcs7(
+    const signedSuccessfully = await soapController.sign(
       multilateralId,
       passwordRef.current.value
     );
@@ -210,19 +211,6 @@ const SignPopUP = (props) => {
                     <img className={classes.signImg} src={signGif} alt="sign" />
                     <Col className={classes.border}>
                       <Row>
-                        <Button onClick={async () => {
-                          setLoading(true);
-                          const hash = await seguriSignController.getHash(props.multilateralId);
-                          setDocHash(hash);
-                          setLoading(false);
-                          close();
-                        }}
-                        >
-                          Conseguir Hash
-                        </Button>
-                      </Row>
-                      <Row>
-                        <Form.Control type="text" placeholder="Hash" readOnly value={docHash} />
                         <Form.Control type="password" placeholder="Hash" ref={passwordRef} />
                       </Row>
                     </Col>

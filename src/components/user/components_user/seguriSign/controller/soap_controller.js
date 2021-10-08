@@ -73,7 +73,6 @@ class SoapController {
 		const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
 		const multilateralId = docResponse.getElementsByTagName('multilateralId')[0].childNodes[0].nodeValue;
 		const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
-		console.log(resultado);
 		return [resultado, { multilateralId, docType, fileName: file.name }];
 	}
 
@@ -101,16 +100,17 @@ class SoapController {
 </soapenv:Envelope>`,
 		};
 
-		return $.ajax(settings).done((response) => {
-			const parser = new DOMParser();
-			const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
-			const hashHex = docResponse.getElementsByTagName('hashHex')[0].childNodes[0].nodeValue;
-			const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
-			return resultado === 1 ? hashHex : '';
-		});
+		const response = await $.ajax(settings).done();
+		const parser = new DOMParser();
+		const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
+		const hashHex = docResponse.getElementsByTagName('hashHex')[0].childNodes[0].nodeValue;
+		const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+		console.log(hashHex, resultado);
+		return hashHex;
 	}
 
 	async establishHashAndPkcs7(multilateralId, hashHex, password) {
+		console.log(hashHex);
 		const settings = {
 			url: 'https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV',
 			method: 'POST',
@@ -136,12 +136,18 @@ class SoapController {
 </soapenv:Envelope>`,
 		};
 
-		return $.ajax(settings).done((response) => {
-			const parser = new DOMParser();
-			const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
-			const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
-			return resultado === 1;
-		});
+		const response = await $.ajax(settings).done();
+		const parser = new DOMParser();
+		const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
+		console.log(docResponse);
+		const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+		return resultado === '1';
+	}
+
+	async sign(multilateralId, password) {
+		const hash = await this.getHashToSign(multilateralId);
+		console.log(hash);
+		return this.establishHashAndPkcs7(multilateralId, hash, password);
 	}
 }
 
