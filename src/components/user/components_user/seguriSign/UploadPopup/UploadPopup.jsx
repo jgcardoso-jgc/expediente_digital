@@ -82,7 +82,7 @@ const UploadPopup = (props) => {
     hasSelected: false,
   });
   const [signers, setSigners] = useState({ arr: [] });
-  const userController = new UserController();
+  const userController = new UserController(seguriSignController.segurisignUser.email);
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
   const addDocumentServer = () => {
@@ -98,15 +98,12 @@ const UploadPopup = (props) => {
     setLoader(true);
     soapController.addDocumentString(signers.arr, selectedFile.selectedFile)
       .then(async (response) => {
-        const parser = new DOMParser();
-        const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
-        const multilateralId = docResponse.getElementsByTagName('multilateralId')[0].childNodes[0].nodeValue;
-        const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
-        if (resultado) {
+        console.log(response);
+        if (response[0]) {
           console.log(signers.arr);
           await userController.addNewDocToFirebase(
             signers.arr,
-            { multilateralId, },
+            response[1],
             requiresFM
           );
           toaster.successToast("Documento subido con éxito");

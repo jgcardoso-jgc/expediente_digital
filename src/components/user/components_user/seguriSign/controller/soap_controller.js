@@ -26,6 +26,7 @@ class SoapController {
 		const b64 = await this.toBase64(file);
 		const b64Str = b64.substr(b64.indexOf(',') + 1);
 		let signersJSON = '';
+		const docType = 'CONTRATOS';
 		signers.forEach((signer) => {
 			signersJSON = signersJSON.concat(
 				`<lstParticipant>
@@ -50,7 +51,7 @@ class SoapController {
       <ser:addDocumentConfigurationParticipantsHRV>
          <docListParticipantsRequest>
 			${signersJSON}
-            <docType>CONTRATOS</docType>
+            <docType>${docType}</docType>
             <document>${b64Str}</document>
             <userDomain>${this.userDomain}</userDomain>
             <passwordDomain>${this.passwordDomain}</passwordDomain>
@@ -67,13 +68,13 @@ class SoapController {
 </soapenv:Envelope>`,
 		};
 
-		return $.ajax(settings).done((response) => {
-			const parser = new DOMParser();
-			const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
-			const multilateralId = docResponse.getElementsByTagName('multilateralId')[0].childNodes[0].nodeValue;
-			const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
-			return [resultado, { multilateralId }];
-		});
+		const response = await $.ajax(settings).done();
+		const parser = new DOMParser();
+		const docResponse = parser.parseFromString(response.documentElement.innerHTML, 'application/xhtml+xml');
+		const multilateralId = docResponse.getElementsByTagName('multilateralId')[0].childNodes[0].nodeValue;
+		const resultado = docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+		console.log(resultado);
+		return [resultado, { multilateralId, docType, fileName: file.name }];
 	}
 
 	async getHashToSign(multilateralId) {
