@@ -6,26 +6,23 @@
 import { auth, db, functions } from "./firebase_controller";
 
 class UserController {
+  constructor(email) { this.email = email; }
+
   userCollection = db.collection("users");
 
   signDocCollection = db.collection("sign-docs");
 
-  async addNewDocToFirebase(emailList, document, requiresFaceMatch) {
-    const users = await this.getUIDsFromEmails(emailList);
-    console.log(users);
+  addNewDocToFirebase = async (emailList, document, requiresFaceMatch) => {
     const docRef = db.collection("sign-docs").doc();
-
-    const uids = users.map((u) => ({ uid: u.uid }));
     const body = {
       multilateralId: document.multilateralId,
       fileName: document.fileName,
       firmados: [],
-      numeroFirmas: users.length,
+      numeroFirmas: emailList.length,
       docType: document.docType,
-      usuarios: users,
+      usuarios: emailList,
       requiresFaceMatch: requiresFaceMatch === 'on',
       status: 'PENDIENTE',
-      uids,
     };
     console.log(body);
     docRef
@@ -42,23 +39,6 @@ class UserController {
       return snapshot.docs[0].data();
     }
     return "404";
-  }
-
-  async getUIDsFromEmails(emailList) {
-    const users = [];
-    await Promise.all(emailList.map(async (email) => {
-      const snapshot = await this.userCollection.where("email", "==", email).get();
-      snapshot.forEach((doc) => {
-        const docData = doc.data();
-        users.push({
-          uid: docData.uid,
-          email: docData.email,
-          name: docData.fullname,
-          firmo: false,
-        });
-      });
-    }));
-    return users;
   }
 
   async compareCustomerId(customerId) {
@@ -93,9 +73,8 @@ class UserController {
 
   getUserDocs = (status) => {
     const docs = [];
-    const { uid } = auth.currentUser;
     db.collection("sign-docs")
-      .where("uids", "array-contains", { uid })
+      .where("usuarios", "array-contains", this.email)
       .where("status", "==", status)
       .get()
       .then((snapshot) => {
@@ -136,6 +115,7 @@ class UserController {
           };
         }
       });
+      this.testEmail();
       await doc.ref.update(docData);
     }
   }

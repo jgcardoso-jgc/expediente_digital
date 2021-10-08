@@ -6,13 +6,16 @@
 /* eslint-disable quotes */
 import axios from "axios";
 import SegurisignDocument from "../model/segurisign_document";
-import { auth } from "./firebase_controller";
 import SegurisignUser from "../model/segurisign_user";
 
 class SegurisignController {
   iDDomain = "1";
 
-  apiUrl = "https://200.66.66.212:8088/ws-rest-hrv-4.7.0";
+  apiUrl = "https://feb.seguridata.com/ws-rest-hrv-4.7.0";
+
+  userDomain = "ws_test";
+
+  passwordDomain = "HZAOT0hG50ZFkji3vTb47RjK3WOxHUExxIwII3zp6TY=";
 
   header = {
     "Content-Type": "application/json; charset=UTF-8",
@@ -20,6 +23,8 @@ class SegurisignController {
   };
 
   segurisignUser;
+
+  signUserEmail;
 
   constructor() {
     this.segurisignUser = new SegurisignUser();
@@ -70,7 +75,7 @@ class SegurisignController {
       blSendEmail: true,
       canvasHeight: 200,
       canvasWidth: 500,
-      emailToSend: auth.currentUser.email,
+      emailToSend: this.signUserEmail,
       geolocationData: {
         geoLatitud: lat,
         geoLongitud: long,
@@ -126,6 +131,56 @@ class SegurisignController {
       return data.resultado === 1;
     }
     return [];
+  }
+
+  async pkcs7(multilateralId, passPrivateKey, hashHex) {
+    console.log(this.segurisignUser.idRh);
+    const documentRequest = {
+      idDomain: this.iDDomain,
+      idRhEmp: this.segurisignUser.idRh,
+      multilateralId,
+      passwordDomain: this.passwordDomain,
+      userDomain: this.userDomain,
+    };
+
+    const body = {
+      documentRequest,
+      hashHex,
+      passPrivateKey
+    };
+
+    const response = await fetch(
+      `${this.apiUrl}/getHash`,
+      this.getSecureRequestOptions(body)
+    );
+
+    if (response.status === 200) {
+      const data = await response.json();
+      return data.hashHex;
+    }
+    return '';
+  }
+
+  async getHash(multilateralId) {
+    console.log(this.segurisignUser.idRh);
+    const body = {
+      idDomain: this.iDDomain,
+      idRhEmp: this.segurisignUser.idRh,
+      multilateralId,
+      passwordDomain: "HZAOT0hG50ZFkji3vTb47RjK3WOxHUExxIwII3zp6TY=",
+      userDomain: "ws_test",
+    };
+
+    const response = await fetch(
+      `${this.apiUrl}/getHash`,
+      this.getSecureRequestOptions(body)
+    );
+
+    if (response.status === 200) {
+      const data = await response.json();
+      return data.hashHex;
+    }
+    return '';
   }
 
   async getDocument(multilateralId) {
@@ -247,14 +302,16 @@ class SegurisignController {
     return false;
   }
 
-  async loginUser(password) {
+  async loginUser(email, password) {
     const formData = new FormData();
-    formData.append("strlogin", auth.currentUser.email);
+    formData.append("strlogin", email);
 
     return axios
       .post(`${this.apiUrl}/login`, formData)
       .then((res) => {
         this.segurisignUser.idPerson = res.data.idPerson;
+        this.signUserEmail = email;
+        this.segurisignUser.email = email;
         this.segurisignUser.token = res.data.token;
         this.segurisignUser.idEmployeeProfile = res.data.idEmployeeProfile;
         return this.authUser(password).then((value) => value);
@@ -267,7 +324,7 @@ class SegurisignController {
 
   async authUser(password) {
     const body = {
-      strlogin: auth.currentUser.email,
+      strlogin: this.signUserEmail,
       autType: "USUARIO_PASSWORD",
       idDomain: this.iDDomain,
       idPerson: this.segurisignUser.idPerson,
@@ -279,7 +336,7 @@ class SegurisignController {
       headers: this.header,
       body: JSON.stringify(body),
     };
-
+    console.log('auth, ', this.segurisignUser.idPerson);
     return fetch(`${this.apiUrl}/user`, requestOptions).then((res) => {
       if (res.status === 200) {
         return res.json().then((data) => {
@@ -297,7 +354,7 @@ class SegurisignController {
       certificate: "",
       idEmployeeProfile: this.segurisignUser.idEmployeeProfile,
       idRhEmp: this.segurisignUser.idRh,
-      login: auth.currentUser.email,
+      login: this.signUserEmail,
       message: "",
       newPasswordAut: newPassword,
       idDomain: this.iDDomain,
