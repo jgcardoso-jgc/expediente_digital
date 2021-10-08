@@ -24,8 +24,6 @@ class SegurisignController {
 
   segurisignUser;
 
-  signUserEmail;
-
   constructor() {
     this.segurisignUser = new SegurisignUser();
   }
@@ -75,7 +73,7 @@ class SegurisignController {
       blSendEmail: true,
       canvasHeight: 200,
       canvasWidth: 500,
-      emailToSend: this.signUserEmail,
+      emailToSend: this.segurisignUser.email,
       geolocationData: {
         geoLatitud: lat,
         geoLongitud: long,
@@ -310,7 +308,6 @@ class SegurisignController {
       .post(`${this.apiUrl}/login`, formData)
       .then((res) => {
         this.segurisignUser.idPerson = res.data.idPerson;
-        this.signUserEmail = email;
         this.segurisignUser.email = email;
         this.segurisignUser.token = res.data.token;
         this.segurisignUser.idEmployeeProfile = res.data.idEmployeeProfile;
@@ -324,7 +321,7 @@ class SegurisignController {
 
   async authUser(password) {
     const body = {
-      strlogin: this.signUserEmail,
+      strlogin: this.segurisignUser.email,
       autType: "USUARIO_PASSWORD",
       idDomain: this.iDDomain,
       idPerson: this.segurisignUser.idPerson,
@@ -354,7 +351,7 @@ class SegurisignController {
       certificate: "",
       idEmployeeProfile: this.segurisignUser.idEmployeeProfile,
       idRhEmp: this.segurisignUser.idRh,
-      login: this.signUserEmail,
+      login: this.segurisignUser.email,
       message: "",
       newPasswordAut: newPassword,
       idDomain: this.iDDomain,
