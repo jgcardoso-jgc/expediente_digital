@@ -74,6 +74,8 @@ const LoginNormal = () => {
       if (email !== "" && password !== "") {
         setDisable(true);
         await firebase.auth().signInWithEmailAndPassword(email, password);
+      } else {
+        setLoading(false);
       }
     } catch (e) {
       toast(e.message);

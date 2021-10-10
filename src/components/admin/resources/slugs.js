@@ -5,5 +5,6 @@ export default {
   usuarios: "/usuarios",
   editUser: "/contacts/editUser",
   settings: "/settings",
+  sign: "/segurisign",
   alertas: "/alertas",
 };

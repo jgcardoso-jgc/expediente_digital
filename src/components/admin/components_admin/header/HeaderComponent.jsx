@@ -99,6 +99,9 @@ function HeaderComponent() {
     case currentItem === SLUGS.settings:
       title = "Ajustes";
       break;
+    case currentItem === SLUGS.sign:
+      title = "Segurisign";
+      break;
     case currentItem === SLUGS.alertas:
       title = "Alertas";
       break;

@@ -2,7 +2,7 @@
 import React from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory, Link } from "react-router-dom";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaSignature } from "react-icons/fa";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
@@ -58,6 +58,12 @@ function SidebarComponent() {
         title="Alertas"
         icon={FaBell}
         onClick={() => onClick(SLUGS.alertas)}
+      />
+      <MenuItem
+        id={SLUGS.sign}
+        title="SeguriSign"
+        icon={FaSignature}
+        onClick={() => onClick(SLUGS.sign)}
       />
       <div className={classes.separator} />
       <MenuItem
