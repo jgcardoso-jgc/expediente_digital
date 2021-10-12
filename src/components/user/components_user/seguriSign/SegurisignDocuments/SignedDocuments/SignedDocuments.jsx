@@ -20,6 +20,15 @@ const SignedDocuments = (props) => {
     signedDocuments = [];
   }
   const { seguriSignController } = props;
+
+  function downloadBase64File(fileName, docUrl) {
+    const linkSource = `data:application/pdf;base64,${docUrl}`;
+    const downloadLink = document.createElement("a");
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  }
+
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
       <Accordion.Header>
@@ -50,9 +59,7 @@ const SignedDocuments = (props) => {
                           seguriSignController
                             .getDocument(item.multilateralId)
                             .then((docUrl) => {
-                              window.open(
-                                `data:application/pdf;base64,${docUrl}`
-                              );
+                              downloadBase64File(item.fileName, docUrl);
                             })
                         }
                       >

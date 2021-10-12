@@ -219,7 +219,7 @@ const SignPopUP = (props) => {
                       <Row>
                         <Form.Control
                           type="password"
-                          placeholder="Hash"
+                          placeholder="Contraseña"
                           ref={passwordRef}
                         />
                       </Row>

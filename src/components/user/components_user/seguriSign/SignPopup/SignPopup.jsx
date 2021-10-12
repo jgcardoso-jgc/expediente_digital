@@ -56,7 +56,7 @@ const useStyles = createUseStyles(() => ({
 
 const SignPopUP = (props) => {
   const sigCanvas = useRef({});
-  const passwordRef = useRef('');
+  const passwordRef = useRef("");
   const { seguriSignController } = props;
   const classes = useStyles();
   const { multilateralId } = props;
@@ -64,10 +64,14 @@ const SignPopUP = (props) => {
   const { long } = props;
   const { toaster } = props;
   const { requiresFaceMatch } = props;
-  const userController = new UserController(seguriSignController.segurisignUser.email);
-  const soapController = new SoapController(seguriSignController.segurisignUser);
+  const userController = new UserController(
+    seguriSignController.segurisignUser.email
+  );
+  const soapController = new SoapController(
+    seguriSignController.segurisignUser
+  );
   const [loading, setLoading] = useState(false);
-  const [signType, setSignType] = useState('');
+  const [signType, setSignType] = useState("");
   const [faceMatched, setFaceMatched] = useState(false);
   const clear = () => sigCanvas.current.clear();
   const sign = async () => {
@@ -99,7 +103,7 @@ const SignPopUP = (props) => {
   };
 
   if (!requiresFaceMatch || faceMatched) {
-    if (signType === 'fab') {
+    if (signType === "fab") {
       return (
         <div>
           <Popup
@@ -158,7 +162,9 @@ const SignPopUP = (props) => {
                             );
                             toaster.successToast("Documento firmado con éxito");
                           } else {
-                            props.toaster.errorToast("Error al firmar documento");
+                            props.toaster.errorToast(
+                              "Error al firmar documento"
+                            );
                           }
                           setLoading(false);
                           close();
@@ -186,7 +192,7 @@ const SignPopUP = (props) => {
         </div>
       );
     }
-    if (signType === 'server') {
+    if (signType === "server") {
       return (
         <div>
           <Popup
@@ -211,7 +217,11 @@ const SignPopUP = (props) => {
                     <img className={classes.signImg} src={signGif} alt="sign" />
                     <Col className={classes.border}>
                       <Row>
-                        <Form.Control type="password" placeholder="Hash" ref={passwordRef} />
+                        <Form.Control
+                          type="password"
+                          placeholder="Contraseña"
+                          ref={passwordRef}
+                        />
                       </Row>
                     </Col>
                     <p> Firma Avanzada</p>
@@ -232,7 +242,9 @@ const SignPopUP = (props) => {
                             );
                             toaster.successToast("Documento firmado con éxito");
                           } else {
-                            props.toaster.errorToast("Error al firmar documento");
+                            props.toaster.errorToast(
+                              "Error al firmar documento"
+                            );
                           }
                           setLoading(false);
                           close();
@@ -260,7 +272,7 @@ const SignPopUP = (props) => {
         </div>
       );
     }
-    if (signType === '') {
+    if (signType === "") {
       return (
         <div>
           <Popup
@@ -290,7 +302,7 @@ const SignPopUP = (props) => {
                       <Button
                         variant="outline-dark"
                         onClick={() => {
-                          setSignType('server');
+                          setSignType("server");
                         }}
                       >
                         Firma Avanzada
@@ -298,7 +310,7 @@ const SignPopUP = (props) => {
                       <Button
                         variant="outline-dark"
                         onClick={() => {
-                          setSignType('fab');
+                          setSignType("fab");
                         }}
                       >
                         Firma Autógrafa Biométrica
