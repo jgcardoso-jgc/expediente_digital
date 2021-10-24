@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Card from "react-bootstrap/Card";
 import { createUseStyles } from "react-jss";
 import { ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
 import SegurisignController from "./controller/segurisign_controller";
 import SegurisignDocuments from "./SegurisignDocuments/SegurisignDocuments";
 import CustomToasts from "../Toasts/CustomToasts";
@@ -24,6 +25,11 @@ const useStyles = createUseStyles(() => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  registerLink: {
+    fontSize: 12,
+    marginTop: 8,
+    textAlign: "center",
   },
   btnSeguridata: {
     backgroundColor: "#83bb04",
@@ -118,6 +124,9 @@ const useStyles = createUseStyles(() => ({
     boxShadow:
       "0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19)",
   },
+  passTxt: {
+    marginBottom: 16,
+  },
   inputCancel: {
     width: "20rem",
     height: "15rem",
@@ -165,11 +174,20 @@ const Segurisign = () => {
     seguriSignController
       .loginUser(emailRef.current.value, passwordRef.current.value)
       .then((value) => {
-        setLogged(value);
-        localStorage.setItem(
-          "sign-user",
-          JSON.stringify(seguriSignController.segurisignUser)
+        const responseJSON = JSON.stringify(
+          seguriSignController.segurisignUser
         );
+        if (responseJSON.token == null) {
+          toaster.errorToast("No estás registrado en Segurisign.");
+          setLogged(false);
+          setLoading(false);
+        } else {
+          setLogged(value);
+          localStorage.setItem(
+            "sign-user",
+            JSON.stringify(seguriSignController.segurisignUser)
+          );
+        }
       })
       .catch((error) => {
         toaster.errorToast(error);
@@ -207,8 +225,8 @@ const Segurisign = () => {
       <div>
         <Card className={classes.card} style={{ width: "20rem" }}>
           <img src={locked} className={classes.lockedImg} alt="locked" />
-          <h5>
-            <b>Ingresa tu contraseña</b>
+          <h5 className={classes.passTxt}>
+            <b>Ingresa tus datos</b>
           </h5>
           <Card.Text>
             <div>
@@ -230,6 +248,9 @@ const Segurisign = () => {
           <button type="button" className={global.initBt} onClick={signIn}>
             Entrar
           </button>
+          <Link to="registerSign" className={classes.registerLink}>
+            ¿Aun no estás registrado?
+          </Link>
         </Card>
       </div>
     </div>

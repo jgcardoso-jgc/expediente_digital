@@ -4,6 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles } from "react-jss";
 import { useFirebaseApp } from "reactfire";
+import {
+  IoIosCheckmarkCircleOutline,
+  IoIosCloseCircleOutline,
+} from "react-icons/io";
 import Donut from "./donutComponent";
 import MiniCardComponent from "./MiniCardComponent";
 
@@ -50,6 +54,59 @@ const useStyles = createUseStyles({
     borderRadius: "10px",
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
+  },
+  col3: {
+    maxWidth: "33.3333%",
+    "@media (max-width: 768px)": {
+      maxWidth: "100%",
+    },
+  },
+  title: {
+    color: "#9fa2b4",
+    marginBottom: 12,
+    minWidth: 102,
+    textAlign: "center",
+  },
+  value: {
+    color: "#373a47",
+    fontWeight: "bold",
+    fontSize: 40,
+    letterSpacing: "1px",
+    lineHeight: "50px",
+    textAlign: "center",
+  },
+  container: {
+    backgroundColor: "#f5f5f5",
+    border: `1px solid #f5f5f5`,
+    borderRadius: 4,
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    cursor: "pointer",
+    maxWidth: 350,
+    padding: "16px 32px 16px 32px",
+    marginLeft: 30,
+    maxHeight: "50%",
+    "@media (max-width: 768px)": {
+      marginTop: 30,
+      marginLeft: 0,
+      maxWidth: "none",
+    },
+    "&:hover": {
+      borderColor: "#3751FF",
+      "&:nth-child(n) > span": {
+        color: "#3751FF",
+      },
+    },
+  },
+  statusContainer: {
+    flexGrow: 1,
+    maxHeight: "50%",
+    marginLeft: 30,
+    "@media (max-width: 768px)": {
+      marginTop: 30,
+      marginLeft: 0,
+      maxWidth: "none",
+    },
   },
   tasks: {
     marginTop: 0,
@@ -140,14 +197,47 @@ function DashboardComponent() {
           </Row>
         </Row>
       </Column>
-      <Row className={classes.mt30}>
+      <Row
+        className={classes.mt30}
+        wrap
+        flexGrow={1}
+        horizontal="space-between"
+        breakpoints={{ 768: "column" }}
+      >
         {data.length > 0 && (
-          <Column>
+          <Column className={classes.col3}>
             <div className={classes.card}>
               <Donut dataFetched={data} />
             </div>
           </Column>
         )}
+        <Column>
+          <Row
+            wrap
+            flexGrow={1}
+            horizontal="space-between"
+            breakpoints={{ 384: "column" }}
+          >
+            <Column
+              flexGrow={1}
+              className={classes.container}
+              horizontal="center"
+              vertical="center"
+            >
+              <span className={classes.title}>Onboarding</span>
+              <IoIosCheckmarkCircleOutline className={classes.value} />
+            </Column>
+            <Column
+              flexGrow={1}
+              className={classes.container}
+              horizontal="center"
+              vertical="center"
+            >
+              <span className={classes.title}>Segurisign</span>
+              <IoIosCloseCircleOutline className={classes.value} />
+            </Column>
+          </Row>
+        </Column>
       </Row>
     </div>
   );

@@ -41,6 +41,11 @@ const useStyles = createUseStyles(() => ({
   mt20: {
     marginTop: 20,
   },
+  cardTitle: {
+    marginTop: 0,
+    marginBottom: 0,
+    fontWeight: "bold",
+  },
   textCard: {
     marginBottom: 4,
   },
@@ -49,6 +54,9 @@ const useStyles = createUseStyles(() => ({
   },
   img: {
     borderRadius: 10,
+  },
+  title: {
+    paddingBottom: 4,
   },
 }));
 
@@ -68,6 +76,8 @@ const MyProfile = () => {
   const name = user.fullName;
   const { email } = user;
   const { rfc } = user;
+  const { cargo } = user;
+  const { curp } = user;
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(false);
   const [toFaceMatch, setFaceMatch] = useState(false);
@@ -165,31 +175,23 @@ const MyProfile = () => {
                 <img src={urlProfile} className={classes.img} alt="profile" />
               </div>
               <div className="col">
-                <p className="mb0">
+                <h5 className={classes.title}>
                   <b>{name}</b>
-                </p>
-                <p className={classes.textCard}>Desarrollador Frontend</p>
+                </h5>
+                <p className={classes.cardTitle}>Cargo</p>
+                <p className={classes.textCard}>{cargo}</p>
+                <p className={classes.cardTitle}>Email</p>
                 <p className={classes.textCard}>{email}</p>
+                <p className={classes.cardTitle}>RFC</p>
                 <p className={classes.textCard}>{rfc}</p>
+                <p className={classes.cardTitle}>CURP</p>
+                <p className={classes.textCard}>
+                  {curp != null ? curp : "Pendiente"}
+                </p>
               </div>
             </div>
           </div>
         )}
-      </div>
-      <div className={classes.container}>
-        <div className={`${classes.cardDashboard} ${classes.mt20}`}>
-          <p>
-            <b>Editar Información</b>
-          </p>
-          <p className={classes.mb0}>
-            <b>RFC</b>
-          </p>
-          <p>{rfc}</p>
-          <p className={classes.mb0}>
-            <b>Ocupación</b>
-          </p>
-          <p>Desarrollador Frontend</p>
-        </div>
       </div>
     </div>
   );

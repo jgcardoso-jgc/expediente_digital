@@ -23,6 +23,9 @@ const useStyles = createUseStyles(() => ({
     paddingLeft: "20px",
     paddingRight: "20px",
   },
+  mb0: {
+    marginBottom: 0,
+  },
   ayudaText: {
     textAlign: "center",
     marginTop: 30,
@@ -36,9 +39,27 @@ const useStyles = createUseStyles(() => ({
 const AjustesUser = () => {
   const global = globalTheme();
   const classes = useStyles();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const { rfc } = user;
+  const { cargo } = user;
   return (
     <div>
       <div className={classes.container}>
+        <div className={classes.container}>
+          <div className={`${classes.cardDashboard} ${classes.mt20}`}>
+            <p>
+              <b>Editar Información</b>
+            </p>
+            <p className={classes.mb0}>
+              <b>RFC</b>
+            </p>
+            <p>{rfc}</p>
+            <p className={classes.mb0}>
+              <b>Cargo</b>
+            </p>
+            <p>{cargo}</p>
+          </div>
+        </div>
         <div>
           <button type="button" className={`${global.initBt} ${classes.mr}`}>
             Cambiar contraseña

@@ -55,11 +55,16 @@ function App() {
               localStorage.setItem("admin", true);
               resolve("isAdmin");
             } else {
+              let cargo = "";
+              if (data.cargo != null) {
+                cargo = data.cargo;
+              }
               const userData = {
                 fullName: data.fullname,
                 email: data.email,
                 rfc: data.rfc,
                 onboarding: data.onboarding,
+                cargo,
                 token: "",
               };
               localStorage.setItem("user", JSON.stringify(userData));

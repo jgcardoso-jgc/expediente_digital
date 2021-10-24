@@ -165,11 +165,20 @@ const Segurisign = () => {
     seguriSignController
       .loginUser(emailRef.current.value, passwordRef.current.value)
       .then((value) => {
-        setLogged(value);
-        localStorage.setItem(
-          "sign-user",
-          JSON.stringify(seguriSignController.segurisignUser)
+        const responseJSON = JSON.stringify(
+          seguriSignController.segurisignUser
         );
+        if (responseJSON.token == null) {
+          toaster.errorToast("No estás registrado en Segurisign.");
+          setLogged(false);
+          setLoading(false);
+        } else {
+          setLogged(value);
+          localStorage.setItem(
+            "sign-user",
+            JSON.stringify(seguriSignController.segurisignUser)
+          );
+        }
       })
       .catch((error) => {
         toaster.errorToast(error);
@@ -208,7 +217,7 @@ const Segurisign = () => {
         <Card className={classes.card} style={{ width: "20rem" }}>
           <img src={locked} className={classes.lockedImg} alt="locked" />
           <h5>
-            <b>Ingresa tu contraseña</b>
+            <b>Ingresa tus datos</b>
           </h5>
           <Card.Text>
             <div>
