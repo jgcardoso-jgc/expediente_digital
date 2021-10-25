@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import { FaEdit } from "react-icons/fa";
 import { Row, Col } from "react-bootstrap";
@@ -57,9 +57,12 @@ const AjustesUser = () => {
   const global = globalTheme();
   const classes = useStyles();
   const firebase = useFirebaseApp();
-  const db = firebase.database();
+  const db = firebase.firestore();
   const user = JSON.parse(localStorage.getItem("user"));
+  const [newCurp, setCurp] = useState("");
   const [hidden, setHidden] = useState(true);
+  const [reload, setReload] = useState(false);
+  const { uid } = firebase.auth().currentUser;
   const { rfc } = user;
   const { cargo } = user;
   const { curp } = user;
@@ -68,9 +71,28 @@ const AjustesUser = () => {
     setHidden((prev) => !prev);
   }
   function updateCURP() {
-    const query = db.collection("users").where("fullname", "==", "");
-    query.get().then((querySnapshot) => console.log(querySnapshot));
+    const collection = db.collection("users");
+    const query = collection.where("uid", "==", uid);
+    query.get().then((querySnapshot) => {
+      let id = "";
+      if (querySnapshot.size > 0) {
+        querySnapshot.forEach((doc) => {
+          id = doc.id;
+        });
+        collection
+          .doc(id)
+          .update({ curp: newCurp })
+          .then(() => {
+            setReload((prev) => !prev);
+          })
+          .catch((e) => {
+            console.log(e.message);
+          });
+      }
+    });
   }
+
+  useEffect(() => {}, [reload]);
 
   return (
     <div>
@@ -78,8 +100,12 @@ const AjustesUser = () => {
         <div className={classes.container}>
           <div className={`${classes.cardDashboard} ${classes.mt20}`}>
             <p>
-              <b>Editar Información</b>
+              <b>Información</b>
             </p>
+            <p className={classes.mb0}>
+              <b>UID</b>
+            </p>
+            <p>{uid}</p>
             <p className={classes.mb0}>
               <b>RFC</b>
             </p>
@@ -110,6 +136,7 @@ const AjustesUser = () => {
                 placeholder="Ingresa el nuevo CURP"
                 type="text"
                 hidden={hidden}
+                onChange={(e) => setCurp(e.target.value)}
               />
               <button
                 type="button"

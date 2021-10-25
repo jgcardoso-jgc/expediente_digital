@@ -1,6 +1,5 @@
 /* eslint-disable consistent-return */
 /* eslint-disable comma-dangle */
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 const submit = async (auth, db, name, rfc, email, password) => {
   try {
@@ -9,7 +8,6 @@ const submit = async (auth, db, name, rfc, email, password) => {
       .createUserWithEmailAndPassword(email, password)
       .then((res) => {
         const id = res.user.uid;
-        console.log(id);
         try {
           db.collection("users")
             .add({

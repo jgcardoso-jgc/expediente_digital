@@ -89,6 +89,7 @@ const useStyles = createUseStyles({
     "@media (max-width: 768px)": {
       marginTop: 30,
       marginLeft: 0,
+      minWidth: "100%",
       maxWidth: "none",
     },
     "&:hover": {
