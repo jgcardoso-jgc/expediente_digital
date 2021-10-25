@@ -66,7 +66,7 @@ const useStyles = createUseStyles(() => ({
     fontSize: "14px",
   },
   alertTitle: {
-    background: "#4e73df",
+    background: "rgb(68 71 85)",
     minWidth: "100%",
     color: "white",
     padding: "10px 0px 4px 10px",
@@ -80,7 +80,7 @@ const useStyles = createUseStyles(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "#4e73df",
+    background: "rgb(129 132 150)",
     color: "white",
   },
   dropdownItem: {

@@ -56,7 +56,7 @@ const useStyles = createUseStyles({
     boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   col3: {
-    maxWidth: "33.3333%",
+    maxWidth: "25%",
     "@media (max-width: 768px)": {
       maxWidth: "100%",
     },
@@ -123,11 +123,27 @@ function DashboardComponent() {
   const [completados, setCompletados] = useState(0);
   const [revision, setRevision] = useState(0);
   const [faltantes, setFaltantes] = useState(0);
+  const [verified, setVerified] = useState(false);
+  const [onboard, setOnboard] = useState(false);
+  const [sign, setSign] = useState(false);
   const [data, setData] = useState([]);
 
   function setDocs(querySnapshot) {
     querySnapshot.forEach((doc) => {
-      const gotDoc = doc.data().documents;
+      const dataGot = doc.data();
+      const gotDoc = dataGot.documents;
+      const { onboarding } = dataGot;
+      const { segurisign } = dataGot;
+      if (segurisign == null) {
+        setSign(false);
+      } else {
+        setSign(true);
+      }
+      if (onboarding) {
+        setOnboard(true);
+      } else {
+        setOnboard(false);
+      }
       let docsCompletados = 0;
       let docsRevision = 0;
       let docsFaltantes = 0;
@@ -154,8 +170,17 @@ function DashboardComponent() {
     query.get().then((querySnapshot) => setDocs(querySnapshot));
   }
 
+  function checkMail() {
+    if (firebase.auth().currentUser.emailVerified) {
+      setVerified(true);
+    } else {
+      setVerified(false);
+    }
+  }
+
   useEffect(() => {
     getStatusDocuments();
+    checkMail();
   }, []);
 
   const classes = useStyles();
@@ -224,8 +249,25 @@ function DashboardComponent() {
               horizontal="center"
               vertical="center"
             >
+              <span className={classes.title}>Correo</span>
+              {verified ? (
+                <IoIosCheckmarkCircleOutline className={classes.value} />
+              ) : (
+                <IoIosCloseCircleOutline className={classes.value} />
+              )}
+            </Column>
+            <Column
+              flexGrow={1}
+              className={classes.container}
+              horizontal="center"
+              vertical="center"
+            >
               <span className={classes.title}>Onboarding</span>
-              <IoIosCheckmarkCircleOutline className={classes.value} />
+              {onboard ? (
+                <IoIosCheckmarkCircleOutline className={classes.value} />
+              ) : (
+                <IoIosCloseCircleOutline className={classes.value} />
+              )}
             </Column>
             <Column
               flexGrow={1}
@@ -234,7 +276,11 @@ function DashboardComponent() {
               vertical="center"
             >
               <span className={classes.title}>Segurisign</span>
-              <IoIosCloseCircleOutline className={classes.value} />
+              {sign ? (
+                <IoIosCheckmarkCircleOutline className={classes.value} />
+              ) : (
+                <IoIosCloseCircleOutline className={classes.value} />
+              )}
             </Column>
           </Row>
         </Column>

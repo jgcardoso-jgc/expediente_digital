@@ -114,6 +114,9 @@ function HeaderComponent() {
     case currentItem === SLUGS.verificar:
       title = "Verificar Correo";
       break;
+    case currentItem === SLUGS.registerSign:
+      title = "Regístrate en Segurisign";
+      break;
     default:
       title = "";
   }

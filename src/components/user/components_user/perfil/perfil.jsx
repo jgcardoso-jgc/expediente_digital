@@ -19,6 +19,12 @@ const useStyles = createUseStyles(() => ({
     display: "block",
     marginRight: "auto",
   },
+  editLink: {
+    display: "block",
+    textAlign: "right",
+    paddingTop: 16,
+    fontSize: 14,
+  },
   cardDashboard: {
     background: "#f5f5f5",
     borderRadius: "10px",
@@ -169,27 +175,32 @@ const MyProfile = () => {
             )}
           </div>
         ) : (
-          <div className={classes.cardDashboard}>
-            <div className="row">
-              <div className="col">
-                <img src={urlProfile} className={classes.img} alt="profile" />
-              </div>
-              <div className="col">
-                <h5 className={classes.title}>
-                  <b>{name}</b>
-                </h5>
-                <p className={classes.cardTitle}>Cargo</p>
-                <p className={classes.textCard}>{cargo}</p>
-                <p className={classes.cardTitle}>Email</p>
-                <p className={classes.textCard}>{email}</p>
-                <p className={classes.cardTitle}>RFC</p>
-                <p className={classes.textCard}>{rfc}</p>
-                <p className={classes.cardTitle}>CURP</p>
-                <p className={classes.textCard}>
-                  {curp != null ? curp : "Pendiente"}
-                </p>
+          <div>
+            <div className={classes.cardDashboard}>
+              <div className="row">
+                <div className="col">
+                  <img src={urlProfile} className={classes.img} alt="profile" />
+                </div>
+                <div className="col">
+                  <h5 className={classes.title}>
+                    <b>{name}</b>
+                  </h5>
+                  <p className={classes.cardTitle}>Cargo</p>
+                  <p className={classes.textCard}>{cargo}</p>
+                  <p className={classes.cardTitle}>Email</p>
+                  <p className={classes.textCard}>{email}</p>
+                  <p className={classes.cardTitle}>RFC</p>
+                  <p className={classes.textCard}>{rfc}</p>
+                  <p className={classes.cardTitle}>CURP</p>
+                  <p className={classes.textCard}>
+                    {curp != null ? curp : "Pendiente"}
+                  </p>
+                </div>
               </div>
             </div>
+            <Link className={classes.editLink} to="/ajustes">
+              Editar información
+            </Link>
           </div>
         )}
       </div>

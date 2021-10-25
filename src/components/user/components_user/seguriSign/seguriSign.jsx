@@ -248,7 +248,7 @@ const Segurisign = () => {
           <button type="button" className={global.initBt} onClick={signIn}>
             Entrar
           </button>
-          <Link to="registerSign" className={classes.registerLink}>
+          <Link to="/registerSign" className={classes.registerLink}>
             ¿Aun no estás registrado?
           </Link>
         </Card>
