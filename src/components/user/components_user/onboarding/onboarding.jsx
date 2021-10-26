@@ -1,19 +1,20 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-// check public/index.html
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import PropTypes from "prop-types";
+// eslint-disable-next-line no-unused-vars
 import { toast } from "react-toastify";
 import Steps from "./Steps";
 import loading from "../../../../assets/loading.gif";
 import ContinuePhone from "../continuePhone/continuePhone";
-import settings from "./settings";
+import settings from "../../../../config/settings";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles.css";
 import onboardingSDK from "../../../../config/onboarding-config";
@@ -180,12 +181,30 @@ function Onboarding() {
     }
   }
 
-  function updateDocs(snapshot, clientID) {
+  async function getCURP() {
+    return new Promise((resolve, reject) => {
+      const { token } = session;
+      incode
+        .ocrData({ token })
+        .then((res) => {
+          resolve(res.curp);
+        })
+        .catch((res) => reject(res));
+    });
+  }
+
+  async function updateDocs(snapshot, clientID) {
+    let curp = "";
+    await getCURP()
+      .then((res) => {
+        curp = res;
+      })
+      .catch((curp = "error"));
     snapshot.docs.forEach(async (document) => {
       const doc = await db.collection("users").doc(document.id).get();
-      const { documents } = doc.data();
-      documents.push(
-        {
+      let { documents } = doc.data();
+      documents =
+        ({
           name: "ID Frontal",
           imageName: "croppedFrontID",
           state: true,
@@ -196,13 +215,13 @@ function Onboarding() {
           imageName: "croppedBackID",
           uploaded: true,
           state: true,
-        }
-      );
+        });
       db.collection("users")
         .doc(document.id)
         .update({
           onboarding: true,
           documents,
+          curp,
           token: clientID,
         })
         .then(() => {
@@ -253,33 +272,3 @@ function Onboarding() {
   );
 }
 export default Onboarding;
-/* render login es para hello para facematch
-/* function Conference({ session, onSuccess, showError }) {
-  const [status, setStatus] = useState();
-  const containerRef = useRef();
-
-  useEffect(() => {
-    incode.renderConference(
-      containerRef.current,
-      {
-        token: session
-      },
-      {
-        onSuccess: (status) => {
-          setStatus(status);
-        },
-        onError: (error) => {
-          console.log("error", error);
-          setStatus(error);
-        },
-        onLog: (...params) => console.log("onLog", ...params)
-      }
-    );
-  }, [onSuccess, showError, session]);
-
-  if (status) {
-    return <p>Finished with status {status}</p>;
-  }
-
-  return <div ref={containerRef}></div>;
-} */
