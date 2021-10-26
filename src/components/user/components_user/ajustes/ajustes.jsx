@@ -83,6 +83,10 @@ const AjustesUser = () => {
           .doc(id)
           .update({ curp: newCurp })
           .then(() => {
+            user.curp = newCurp;
+            localStorage.setItem("user", JSON.stringify(user));
+            setCurp("");
+            setHidden((prev) => !prev);
             setReload((prev) => !prev);
           })
           .catch((e) => {

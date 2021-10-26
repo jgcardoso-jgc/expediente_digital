@@ -63,6 +63,7 @@ function App() {
                 fullName: data.fullname,
                 email: data.email,
                 rfc: data.rfc,
+                curp: data.curp,
                 onboarding: data.onboarding,
                 cargo,
                 token: "",

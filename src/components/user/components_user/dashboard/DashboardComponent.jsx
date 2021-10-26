@@ -56,7 +56,7 @@ const useStyles = createUseStyles({
     boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   col3: {
-    maxWidth: "25%",
+    maxWidth: "33.333%",
     "@media (max-width: 768px)": {
       maxWidth: "100%",
     },
@@ -74,6 +74,11 @@ const useStyles = createUseStyles({
     letterSpacing: "1px",
     lineHeight: "50px",
     textAlign: "center",
+  },
+  max75: {
+    "@media (min-width: 768px)": {
+      maxWidth: "75%",
+    },
   },
   container: {
     backgroundColor: "#f5f5f5",
@@ -100,12 +105,20 @@ const useStyles = createUseStyles({
     },
   },
   statusContainer: {
+    backgroundColor: "#f5f5f5",
+    border: `1px solid #f5f5f5`,
+    borderRadius: 4,
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
     flexGrow: 1,
     maxHeight: "50%",
-    marginLeft: 30,
+    marginLeft: 10,
     "@media (max-width: 768px)": {
       marginTop: 30,
       marginLeft: 0,
+      paddingTop: 10,
+      paddingBottom: 10,
+      minWidth: "100%",
       maxWidth: "none",
     },
   },
@@ -237,7 +250,7 @@ function DashboardComponent() {
             </div>
           </Column>
         )}
-        <Column>
+        <Column className={classes.max75}>
           <Row
             wrap
             flexGrow={1}
@@ -246,7 +259,7 @@ function DashboardComponent() {
           >
             <Column
               flexGrow={1}
-              className={classes.container}
+              className={classes.statusContainer}
               horizontal="center"
               vertical="center"
             >
@@ -259,7 +272,7 @@ function DashboardComponent() {
             </Column>
             <Column
               flexGrow={1}
-              className={classes.container}
+              className={classes.statusContainer}
               horizontal="center"
               vertical="center"
             >
@@ -272,7 +285,7 @@ function DashboardComponent() {
             </Column>
             <Column
               flexGrow={1}
-              className={classes.container}
+              className={classes.statusContainer}
               horizontal="center"
               vertical="center"
             >
