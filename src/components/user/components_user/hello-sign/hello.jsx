@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-import "./hello.css";
 import React, { useRef, useEffect } from "react";
+import "./hello.css";
 import PropTypes from "prop-types";
 import UserController from "../seguriSign/controller/user_controller";
 import CustomToasts from "../Toasts/CustomToasts";

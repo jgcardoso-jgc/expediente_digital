@@ -161,26 +161,6 @@ function Onboarding() {
     setStep(step + 1);
   }
 
-  function checkAuth(id) {
-    let uid = "";
-    const clientID = id;
-    {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          uid = user.uid;
-        }
-      });
-      const user = firebase.auth().currentUser;
-      if (user) {
-        uid = user.uid;
-      }
-      db.collection("users")
-        .where("uid", "==", uid)
-        .get()
-        .then((snapshot) => updateDocs(snapshot, clientID));
-    }
-  }
-
   async function getCURP() {
     return new Promise((resolve, reject) => {
       const { token } = session;
@@ -191,6 +171,13 @@ function Onboarding() {
         })
         .catch((res) => reject(res));
     });
+  }
+
+  function save() {
+    const saved = JSON.parse(localStorage.getItem("user"));
+    saved.onboarding = true;
+    localStorage.setItem("user", JSON.stringify(saved));
+    history.push("/finalStep");
   }
 
   async function updateDocs(snapshot, clientID) {
@@ -230,11 +217,24 @@ function Onboarding() {
     });
   }
 
-  function save() {
-    const saved = JSON.parse(localStorage.getItem("user"));
-    saved.onboarding = true;
-    localStorage.setItem("user", JSON.stringify(saved));
-    history.push("/finalStep");
+  function checkAuth(id) {
+    let uid = "";
+    const clientID = id;
+    {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          uid = user.uid;
+        }
+      });
+      const user = firebase.auth().currentUser;
+      if (user) {
+        uid = user.uid;
+      }
+      db.collection("users")
+        .where("uid", "==", uid)
+        .get()
+        .then((snapshot) => updateDocs(snapshot, clientID));
+    }
   }
 
   function toFinal() {

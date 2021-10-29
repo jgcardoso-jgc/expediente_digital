@@ -9,6 +9,7 @@ import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import TableView from "../table/tableView";
+import { User } from "../../../../types/user";
 
 const useStyles = createUseStyles({
   editButton: {
@@ -60,7 +61,8 @@ const UserView = () => {
   const location = useLocation();
   let docsNumber = 0;
   if (location.state != null) {
-    docsNumber = location.state.docs;
+    const state = location.state as docs;
+    docsNumber = state.docs;
   }
   const db = firebase.firestore();
   const [email, setEmail] = useState("");
@@ -68,14 +70,14 @@ const UserView = () => {
   const [name, setName] = useState("");
   const [reload, setReload] = useState(false);
   const [selectedOption, setSelected] = useState("");
-  const [cargos, setCargos] = useState([]);
+  const [cargos, setCargos] = useState({});
 
   function fetchCargos() {
     const query = db.collection("cargos");
     query.get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const dataLista = doc.data().lista;
-        const cargosLista = [];
+        const cargosLista : cargosLista[] = [];
         dataLista.forEach((c) => {
           cargosLista.push({
             value: c.nombre,
@@ -88,39 +90,45 @@ const UserView = () => {
     });
   }
 
+  function createUser() {
+    setDisable(true);
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, "test123")
+      .then((res) => {
+        const id = res.user?.uid;
+        const jsonRegister: User = {
+          uid: id,
+          fullname: name,
+          email,
+          rfc: "",
+          token: "",
+          onboarding: false,
+          cargo: "",
+          docsAdmin: [],
+          documents: [],
+        };
+        try {
+          db.collection("users")
+            .add(jsonRegister)
+            .then(() => {
+              setReload((prev) => !prev);
+            });
+        } catch (error) {
+          const msg = (error as Error).message;
+          toast(msg);
+        }
+      })
+      .catch((error) => {
+        const msg = (error as Error).message;
+        toast(msg);
+      });
+  }
+
   async function submit() {
     try {
       if (email !== "") {
-        setDisable(true);
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, "test123")
-          .then((res) => {
-            const id = res.user.uid;
-            const jsonRegister = {
-              uid: id,
-              fullname: name,
-              email,
-              rfc: "",
-              token: "",
-              onboarding: false,
-              cargo: "",
-              docsAdmin: [],
-              documents: [],
-            };
-            try {
-              db.collection("users")
-                .add(jsonRegister)
-                .then(() => {
-                  setReload((prev) => !prev);
-                });
-            } catch (error) {
-              toast(error.message);
-            }
-          })
-          .catch((error) => {
-            toast(error.message);
-          });
+        createUser();
       }
     } catch (e) {
       setDisable(false);
@@ -192,3 +200,12 @@ const UserView = () => {
 };
 
 export default UserView;
+
+interface docs {
+  docs: number;
+}
+
+interface cargosLista {
+  value: string;
+  label: string;
+}
