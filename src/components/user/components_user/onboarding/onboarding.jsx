@@ -157,9 +157,9 @@ function Onboarding() {
       });
   }, []);
 
-  function goNext() {
+  const goNext = () => {
     setStep(step + 1);
-  }
+  };
 
   async function getCURP() {
     return new Promise((resolve, reject) => {
@@ -237,7 +237,7 @@ function Onboarding() {
     }
   }
 
-  function toFinal() {
+  const toFinal = () => {
     // console.log(`interviewId:${session.interviewId}`);
     // console.log(`token:${session.token}`);
     const { interviewId } = session;
@@ -247,11 +247,11 @@ function Onboarding() {
       .catch((e) => {
         toast(e);
       });
-  }
+  };
 
-  function showError() {
+  const showError = () => {
     setError(true);
-  }
+  };
 
   if (!session) {
     return (

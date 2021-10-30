@@ -168,14 +168,14 @@ const EditUser = () => {
     }
   }
 
-  function handleShow(url, typeModal) {
+  const handleShow = (url, typeModal) => {
     setUrl(url.url);
     setTitle(url.title);
     setImageName(url.imageName);
     setType(typeModal);
     setEmail(url.email);
     setShow(true);
-  }
+  };
 
   function updateCargo(querySnapshot) {
     querySnapshot.forEach((doc) => {

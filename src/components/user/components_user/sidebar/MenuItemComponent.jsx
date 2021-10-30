@@ -63,12 +63,12 @@ function MenuItemComponent({
   ].join(" ");
   const iconColor = isActive ? "#DDE2FF" : "#9fa2b4";
 
-  function onItemClicked(e) {
+  const onItemClicked = (e) => {
     if (onClick) {
       onClick(e);
     }
     onItemClick();
-  }
+  };
 
   return (
     <Column key={id} className={classNameColumn}>
