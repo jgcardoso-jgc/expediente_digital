@@ -90,6 +90,7 @@ const UserView = () => {
     });
   }
 
+  // eslint-disable-next-line no-unused-vars
   function createUser() {
     setDisable(true);
     firebase
@@ -125,10 +126,23 @@ const UserView = () => {
       });
   }
 
+  async function sendWelcomeEmail() {
+    const response = await fetch('http//localhost:5000/express_backend');
+    const body = await response;
+
+    if (response.status !== 200) {
+      console.log("error");
+    } else {
+      console.log(`ok:${body}`);
+    }
+  }
+
   async function submit() {
     try {
       if (email !== "") {
-        createUser();
+        sendWelcomeEmail();
+        // createUser();
+        // probar nodemailer aqui
       }
     } catch (e) {
       setDisable(false);
@@ -141,6 +155,7 @@ const UserView = () => {
 
   useEffect(() => {
     fetchCargos();
+    sendWelcomeEmail();
   }, []);
 
   return (
