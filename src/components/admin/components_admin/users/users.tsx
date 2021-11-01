@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
@@ -9,10 +8,8 @@ import { useLocation } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { stringify } from "querystring";
-import fetchCargos from "./usersController";
+import { fetchCargos, createUser, sendWelcomeEmail } from "./usersController";
 import TableView from "../table/tableView";
-import { User } from "../../../../types/user";
 import { docs, cargosLista } from "./usersModel";
 
 const useStyles = createUseStyles({
@@ -73,6 +70,7 @@ const UserView = () => {
     docsNumber = state.docs;
   }
   const db = firebase.firestore();
+  const auth = firebase.auth();
   const [email, setEmail] = useState("");
   const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
@@ -80,64 +78,12 @@ const UserView = () => {
   const [selectedOption, setSelected] = useState("");
   const [cargos, setCargos] = useState({});
 
-  function uploadUser(res) {
-    const id = res.user?.uid;
-    const jsonRegister: User = {
-      uid: id,
-      fullname: name,
-      email,
-      rfc: "",
-      token: "",
-      onboarding: false,
-      cargo: "",
-      docsAdmin: [],
-      documents: [],
-    };
-    try {
-      db.collection("users")
-        .add(jsonRegister)
-        .then(() => {
-          setReload((prev) => !prev);
-        });
-    } catch (error) {
-      const msg = (error as Error).message;
-      toast(msg);
-    }
-  }
-
-  function createUser() {
-    setDisable(true);
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, "OneSeguridata2021")
-      .then((res) => uploadUser(res))
-      .catch((error) => {
-        const msg = (error as Error).message;
-        toast(msg);
-      });
-  }
-
-  async function sendWelcomeEmail() {
-    const data = {
-      email: "chava.lt@hotmail.com",
-    };
-    axios({
-      method: 'post',
-      url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendMail",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: stringify(data),
-    })
-      .then((res) => console.log(`sended:${res.status}`))
-      .catch((res) => console.log(`error:${res}`));
-  }
-
-  async function submit() {
+  function submit() {
     try {
       if (email !== "") {
-        sendWelcomeEmail();
-        createUser();
+        sendWelcomeEmail(email);
+        setDisable(true);
+        createUser(auth, email, db, name).then((res) => { if (res === "200") setReload((prev) => !prev); }).catch((err) => toast(err));
       }
     } catch (e) {
       setDisable(false);
