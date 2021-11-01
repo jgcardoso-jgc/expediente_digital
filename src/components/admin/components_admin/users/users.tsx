@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
@@ -8,8 +9,11 @@ import { useLocation } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
+import { stringify } from "querystring";
+import fetchCargos from "./usersController";
 import TableView from "../table/tableView";
 import { User } from "../../../../types/user";
+import { docs, cargosLista } from "./usersModel";
 
 const useStyles = createUseStyles({
   editButton: {
@@ -53,6 +57,10 @@ const useStyles = createUseStyles({
   pb10: {
     paddingBottom: 10,
   },
+  textDefecto: {
+    marginBottom: 0,
+    marginTop: 16,
+  },
 });
 
 const UserView = () => {
@@ -72,54 +80,37 @@ const UserView = () => {
   const [selectedOption, setSelected] = useState("");
   const [cargos, setCargos] = useState({});
 
-  function fetchCargos() {
-    const query = db.collection("cargos");
-    query.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const dataLista = doc.data().lista;
-        const cargosLista : cargosLista[] = [];
-        dataLista.forEach((c) => {
-          cargosLista.push({
-            value: c.nombre,
-            label: c.nombre,
-          });
+  function uploadUser(res) {
+    const id = res.user?.uid;
+    const jsonRegister: User = {
+      uid: id,
+      fullname: name,
+      email,
+      rfc: "",
+      token: "",
+      onboarding: false,
+      cargo: "",
+      docsAdmin: [],
+      documents: [],
+    };
+    try {
+      db.collection("users")
+        .add(jsonRegister)
+        .then(() => {
+          setReload((prev) => !prev);
         });
-        setCargos(cargosLista);
-        setReload((prev) => !prev);
-      });
-    });
+    } catch (error) {
+      const msg = (error as Error).message;
+      toast(msg);
+    }
   }
 
-  // eslint-disable-next-line no-unused-vars
   function createUser() {
     setDisable(true);
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, "test123")
-      .then((res) => {
-        const id = res.user?.uid;
-        const jsonRegister: User = {
-          uid: id,
-          fullname: name,
-          email,
-          rfc: "",
-          token: "",
-          onboarding: false,
-          cargo: "",
-          docsAdmin: [],
-          documents: [],
-        };
-        try {
-          db.collection("users")
-            .add(jsonRegister)
-            .then(() => {
-              setReload((prev) => !prev);
-            });
-        } catch (error) {
-          const msg = (error as Error).message;
-          toast(msg);
-        }
-      })
+      .createUserWithEmailAndPassword(email, "OneSeguridata2021")
+      .then((res) => uploadUser(res))
       .catch((error) => {
         const msg = (error as Error).message;
         toast(msg);
@@ -127,22 +118,26 @@ const UserView = () => {
   }
 
   async function sendWelcomeEmail() {
-    const response = await fetch('http//localhost:5000/express_backend');
-    const body = await response;
-
-    if (response.status !== 200) {
-      console.log("error");
-    } else {
-      console.log(`ok:${body}`);
-    }
+    const data = {
+      email: "chava.lt@hotmail.com",
+    };
+    axios({
+      method: 'post',
+      url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendMail",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: stringify(data),
+    })
+      .then((res) => console.log(`sended:${res.status}`))
+      .catch((res) => console.log(`error:${res}`));
   }
 
   async function submit() {
     try {
       if (email !== "") {
         sendWelcomeEmail();
-        // createUser();
-        // probar nodemailer aqui
+        createUser();
       }
     } catch (e) {
       setDisable(false);
@@ -154,8 +149,11 @@ const UserView = () => {
   };
 
   useEffect(() => {
-    fetchCargos();
-    sendWelcomeEmail();
+    fetchCargos(db).then((res) => {
+      const lista : cargosLista[] = res;
+      setCargos(lista);
+      setReload((prev) => !prev);
+    });
   }, []);
 
   return (
@@ -200,14 +198,21 @@ const UserView = () => {
             onChange={handleChange}
             options={cargos}
           />
-          <button
-            type="button"
-            className={classes.addBt}
-            disabled={disable}
-            onClick={() => submit()}
-          >
-            Agregar Usuario
-          </button>
+          <Row>
+            <Col>
+              <p className={classes.textDefecto}>Contraseña por defecto: OneSeguridata2021</p>
+            </Col>
+            <Col>
+              <button
+                type="button"
+                className={classes.addBt}
+                disabled={disable}
+                onClick={() => submit()}
+              >
+                Agregar Usuario
+              </button>
+            </Col>
+          </Row>
         </div>
       </div>
     </div>
@@ -216,11 +221,11 @@ const UserView = () => {
 
 export default UserView;
 
-interface docs {
-  docs: number;
-}
+/* const response = await fetch('http//localhost:5000/express_backend');
+    const body = await response;
 
-interface cargosLista {
-  value: string;
-  label: string;
-}
+    if (response.status !== 200) {
+      console.log("error");
+    } else {
+      console.log(`ok:${body}`);
+    } */
