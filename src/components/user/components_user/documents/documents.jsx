@@ -4,7 +4,6 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable prefer-template */
 /* eslint-disable comma-dangle */
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
@@ -128,7 +127,6 @@ function Documents() {
   const [reload, setReload] = useState(false);
 
   async function getDocs() {
-    console.log("here");
     docFunctions.getState(db, storage, user).then((res) => {
       if (Array.isArray(res)) {
         // es array cuando ya se hizo onboarding y facematch
@@ -139,7 +137,6 @@ function Documents() {
             // call this function only in case the missing docs are incode docs
             docFunctions.notExists(storage, user).then((resFinal) => {
               if (resFinal === "all done") {
-                console.log("toreload");
                 setReload(!reload);
               } else {
                 toast(resFinal);
@@ -148,7 +145,6 @@ function Documents() {
             });
             return;
           }
-          console.log("herethis:" + docArray);
           // docs exists
           setSize(docArray[0].length + docArray[1].length + docArray[2].length);
           setCompletados(docArray[0]);
