@@ -33,6 +33,7 @@ const useStyles = createUseStyles(() => ({
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     height: "100%",
+    position: "relative",
   },
   pointer: {
     cursor: "pointer",
@@ -41,7 +42,7 @@ const useStyles = createUseStyles(() => ({
     maxWidth: "400px",
   },
   titleCard: {
-    padding: 10,
+    padding: "10px 10px 80px",
   },
   ".idFront": { maxWidth: "200px" },
   ".imgCard": { borderTopLeftRadius: "14px", borderTopRightRadius: "14px" },
@@ -86,11 +87,22 @@ const useStyles = createUseStyles(() => ({
   wave: {
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
+    position: "absolute",
+    bottom: 0,
   },
   ".cardText": {
     paddingTop: "4px",
     paddingLeft: "10px",
     paddingBottom: "20px",
+  },
+  "@media (max-width: 768px)": {
+    col: {
+      maxWidth: "50%",
+      minWidth: "50%",
+    },
+    titleCard: {
+      padding: "10px 10px 30px",
+    },
   },
 }));
 
@@ -113,8 +125,10 @@ function Documents() {
   const [urlView, setUrl] = useState("");
   const [titleModal, setTitle] = useState("");
   const [size, setSize] = useState(0);
+  const [reload, setReload] = useState(false);
 
   async function getDocs() {
+    console.log("here");
     docFunctions.getState(db, storage, user).then((res) => {
       if (Array.isArray(res)) {
         // es array cuando ya se hizo onboarding y facematch
@@ -125,7 +139,8 @@ function Documents() {
             // call this function only in case the missing docs are incode docs
             docFunctions.notExists(storage, user).then((resFinal) => {
               if (resFinal === "all done") {
-                console.log("done!");
+                console.log("toreload");
+                setReload(!reload);
               } else {
                 toast(resFinal);
               }
@@ -133,6 +148,7 @@ function Documents() {
             });
             return;
           }
+          console.log("herethis:" + docArray);
           // docs exists
           setSize(docArray[0].length + docArray[1].length + docArray[2].length);
           setCompletados(docArray[0]);
@@ -153,7 +169,7 @@ function Documents() {
 
   useEffect(() => {
     getDocs();
-  }, []);
+  }, [reload]);
 
   function handleShow(url) {
     setUrl(url.url);

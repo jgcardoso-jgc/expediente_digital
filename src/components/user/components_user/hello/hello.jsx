@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-import "./hello.css";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import loading from "../../../../assets/loading.gif";
@@ -23,38 +22,41 @@ function HelloInit() {
   const containerRef = useRef();
   const helloRef = useRef();
   const history = useHistory();
+  const [reload, setReload] = useState(false);
 
-  function toLoginNormal() {
-    history.push({ pathname: "/loginNormal", state: { reload: true } });
+  function load() {
+    const { Hello } = window;
+    helloRef.current = Hello.create({
+      apiKey,
+      apiURL,
+      language: "es",
+    });
+    const instance = helloRef.current;
+    instance.renderLogin(containerRef.current, {
+      onSuccess: (r) => {
+        console.log("onSuccess", r);
+        const saved = JSON.parse(localStorage.getItem("user"));
+        saved.token = r.token;
+        localStorage.setItem("user", JSON.stringify(saved));
+        history.push("/documentos");
+      },
+      onError: (r) => {
+        console.log("on error", r);
+        history.push({ pathname: "/toOnboarding", state: { reload: true } });
+      },
+    });
   }
+
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://sdk-js.s3.amazonaws.com/sdk/hello-1.1.0.js";
-    document.body.appendChild(script);
-    script.onload = () => {
-      console.log("loaded");
-      const { Hello } = window;
-      helloRef.current = Hello.create({
-        apiKey,
-        apiURL,
-        language: "es",
-      });
-      const instance = helloRef.current;
-      instance.renderLogin(containerRef.current, {
-        onSuccess: (r) => {
-          console.log("onSuccess", r);
-          const saved = JSON.parse(localStorage.getItem("user"));
-          saved.token = r.token;
-          localStorage.setItem("user", JSON.stringify(saved));
-          history.push("/documentos");
-        },
-        onError: (r) => {
-          console.log("on error", r);
-          history.push({ pathname: "/toOnboarding", state: { reload: true } });
-        },
-      });
-    };
-  });
+    if (reload) {
+      load();
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://sdk-js.s3.amazonaws.com/sdk/hello-1.1.0.js";
+      document.body.appendChild(script);
+      script.onload = () => setReload(true);
+    }
+  }, [reload]);
   return (
     <div className="App">
       <h2 className="faceTitle">Facematch</h2>
@@ -63,7 +65,7 @@ function HelloInit() {
       </div>
       <button
         type="button"
-        onClick={() => toLoginNormal()}
+        onClick={() => window.location.reload(true)}
         className={`${global.initBt} ${classes.mrAuto}`}
       >
         ¿Tienes problemas?
@@ -73,3 +75,24 @@ function HelloInit() {
 }
 
 export default HelloInit;
+
+/*
+function RenderLogin({ onSuccess, onError }) {
+  const containerRef = useRef();
+
+  useEffect(() => {
+    incode.renderLogin(containerRef.current, {
+      // token: session,
+      onSuccess,
+      onError,
+    });
+  }, [onSuccess, onError]);
+
+  return <div ref={containerRef} />;
+}
+
+      <RenderLogin
+        session={session}
+        onSuccess={goNext}
+        onError={(e) => console.log(e)}
+      /> */

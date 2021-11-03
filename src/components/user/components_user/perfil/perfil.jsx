@@ -6,7 +6,7 @@ import { useFirebaseApp } from "reactfire";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createUseStyles, useTheme } from "react-jss";
+import { createUseStyles } from "react-jss";
 import onBoardingConfig from "../documents/onBoardingConfig";
 import styles from "../../../../resources/theme";
 
@@ -18,6 +18,12 @@ const useStyles = createUseStyles(() => ({
   toMatch: {
     display: "block",
     marginRight: "auto",
+  },
+  editLink: {
+    display: "block",
+    textAlign: "right",
+    paddingTop: 16,
+    fontSize: 14,
   },
   cardDashboard: {
     background: "#f5f5f5",
@@ -31,8 +37,6 @@ const useStyles = createUseStyles(() => ({
     marginLeft: "auto",
     marginRight: "auto",
     textAlign: "left",
-    paddingLeft: "20px",
-    paddingRight: "20px",
   },
   inputStyle: {
     width: "100%",
@@ -42,6 +46,23 @@ const useStyles = createUseStyles(() => ({
   },
   mt20: {
     marginTop: 20,
+  },
+  cardTitle: {
+    marginTop: 0,
+    marginBottom: 0,
+    fontWeight: "bold",
+  },
+  textCard: {
+    marginBottom: 4,
+  },
+  mb0: {
+    marginBottom: 0,
+  },
+  img: {
+    borderRadius: 10,
+  },
+  title: {
+    paddingBottom: 4,
   },
 }));
 
@@ -54,30 +75,26 @@ function start() {
 const MyProfile = () => {
   const firebase = useFirebaseApp();
   const db = firebase.storage();
-  const theme = useTheme();
-  const global = globalTheme({ theme });
-  const classes = useStyles({ theme });
+  const global = globalTheme();
+  const classes = useStyles();
+  const [urlProfile, setUrlProfile] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user.fullName;
   const { email } = user;
   const { rfc } = user;
+  const { cargo } = user;
+  const { curp } = user;
   const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(false);
   const [toFaceMatch, setFaceMatch] = useState(false);
   const metadata = {
     contentType: "image/jpeg",
   };
 
   function exists(response) {
-    if (response.includes("404", 0)) {
-      notExists();
-    } else {
-      const frontId = new Image();
-      frontId.src = response;
-      frontId.style.width = "100%";
-      frontId.style.borderRadius = "7px";
-      setLoading(false);
-      document.getElementById("pic").appendChild(frontId);
-    }
+    setLoading(false);
+    setUrlProfile(response);
+    localStorage.setItem("profilepic", response);
   }
 
   function notExists() {
@@ -100,18 +117,11 @@ const MyProfile = () => {
               token: user.token,
               body: { images: ["croppedFace"] },
             });
-            const frontId = new Image();
-            frontId.src = `data:image/png;base64,${imgs.croppedFace}`;
-            frontId.style.width = "100%";
-            frontId.style.borderTopLeftRadius = "14px";
-            frontId.style.borderTopRightRadius = "14px";
             db.ref("users")
               .child(`/${user.email}/croppedFace`)
               .putString(imgs.croppedFace, "base64", metadata)
               .then(() => {
-                console.log("uploaded");
-                setLoading(false);
-                document.getElementById("pic").appendChild(frontId);
+                setReload(true);
               });
           } catch (e) {
             toast(`Ocurrió un error.${e}`);
@@ -121,23 +131,25 @@ const MyProfile = () => {
   }
 
   function getState() {
-    console.log(user.token);
-    const route = `users/${user.email}/croppedFace`;
-    db.ref(route)
-      .getDownloadURL()
-      .then((response) => {
-        console.log("founded");
-        exists(response);
-      })
-      .catch(() => {
-        console.log("not founded");
-        notExists();
-      });
+    if (localStorage.getItem("profilepic") === null) {
+      const route = `users/${user.email}/croppedFace`;
+      db.ref(route)
+        .getDownloadURL()
+        .then((response) => {
+          exists(response);
+        })
+        .catch(() => {
+          notExists();
+        });
+    } else {
+      const url = localStorage.getItem("profilepic");
+      exists(url);
+    }
   }
 
   useEffect(() => {
     getState();
-  }, []);
+  }, [reload]);
 
   return (
     <div>
@@ -163,29 +175,34 @@ const MyProfile = () => {
             )}
           </div>
         ) : (
-          <div className={classes.cardDashboard}>
-            <div className="row">
-              <div className="col max40">
-                <div id="pic" />
-              </div>
-              <div className="col min50">
-                <p className="mb0">
-                  <b>{name}</b>
-                </p>
-                <p className="mt4 mb0">Frontend Developer</p>
-                <p className="mt4 mb0">{email}</p>
-                <p className="mt4">{rfc}</p>
+          <div>
+            <div className={classes.cardDashboard}>
+              <div className="row">
+                <div className="col">
+                  <img src={urlProfile} className={classes.img} alt="profile" />
+                </div>
+                <div className="col">
+                  <h5 className={classes.title}>
+                    <b>{name}</b>
+                  </h5>
+                  <p className={classes.cardTitle}>Cargo</p>
+                  <p className={classes.textCard}>{cargo}</p>
+                  <p className={classes.cardTitle}>Email</p>
+                  <p className={classes.textCard}>{email}</p>
+                  <p className={classes.cardTitle}>RFC</p>
+                  <p className={classes.textCard}>{rfc}</p>
+                  <p className={classes.cardTitle}>CURP</p>
+                  <p className={classes.textCard}>
+                    {curp != null ? curp : "Pendiente"}
+                  </p>
+                </div>
               </div>
             </div>
+            <Link className={classes.editLink} to="/ajustes">
+              Editar información
+            </Link>
           </div>
         )}
-      </div>
-      <div className={classes.container}>
-        <div className={`${classes.cardDashboard} ${classes.mt20}`}>
-          <b>Editar Información</b>
-          <p>RFC</p>
-          <p>Ocupación</p>
-        </div>
       </div>
     </div>
   );

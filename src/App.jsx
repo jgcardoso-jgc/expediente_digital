@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -26,6 +25,7 @@ const useStyles = createUseStyles({
       border: "1px solid black",
       display: "block",
       marginLeft: "auto",
+      marginRight: "auto",
       minWidth: "150px",
       paddingTop: "10px",
       marginTop: "20px",
@@ -55,11 +55,17 @@ function App() {
               localStorage.setItem("admin", true);
               resolve("isAdmin");
             } else {
+              let cargo = "";
+              if (data.cargo != null) {
+                cargo = data.cargo;
+              }
               const userData = {
                 fullName: data.fullname,
                 email: data.email,
                 rfc: data.rfc,
+                curp: data.curp,
                 onboarding: data.onboarding,
+                cargo,
                 token: "",
               };
               localStorage.setItem("user", JSON.stringify(userData));
@@ -76,7 +82,6 @@ function App() {
   async function authState() {
     firebase.auth().onAuthStateChanged(async (res) => {
       if (res) {
-        console.log(res.uid);
         const { uid } = res;
         const isAdmin = localStorage.getItem("admin");
         const isUser = localStorage.getItem("user");
@@ -84,25 +89,21 @@ function App() {
           await checkAdmin(uid).then((adminRes) => {
             if (adminRes === "isAdmin") {
               setAdmin(true);
-              setLoading(false);
             }
             if (adminRes === "isUser") {
               setUser(true);
-              setLoading(false);
             }
           });
         } else if (isAdmin) {
           setAdmin(true);
-          setLoading(false);
         } else {
           setUser(true);
-          setLoading(false);
         }
       } else {
         setUser(false);
         setAdmin(false);
-        setLoading(false);
       }
+      setLoading(false);
     });
   }
 

@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import { number, shape } from "prop-types";
 import { Column } from "simple-flexbox";
 import uuid from "react-uuid";
-import { createUseStyles, useTheme } from "react-jss";
+import { createUseStyles } from "react-jss";
 import { FaFileAlt } from "react-icons/fa";
 
 const useStyles = createUseStyles(() => ({
@@ -44,6 +44,7 @@ const useStyles = createUseStyles(() => ({
     borderRadius: 7,
     minWidth: 250,
     padding: 0,
+    zIndex: 99,
     WebkitBoxShadow: "0px 14px 28px 3px #CACACA",
     boxShadow: "0px 14px 28px 3px #CACACA",
     position: "absolute",
@@ -65,7 +66,7 @@ const useStyles = createUseStyles(() => ({
     fontSize: "14px",
   },
   alertTitle: {
-    background: "#4e73df",
+    background: "rgb(68 71 85)",
     minWidth: "100%",
     color: "white",
     padding: "10px 0px 4px 10px",
@@ -79,7 +80,7 @@ const useStyles = createUseStyles(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "#4e73df",
+    background: "rgb(129 132 150)",
     color: "white",
   },
   dropdownItem: {
@@ -113,8 +114,7 @@ function AlertComponent({ position, label }) {
   const ref = useRef();
   const firebase = useFirebaseApp();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const theme = useTheme();
-  const classes = useStyles({ theme, position });
+  const classes = useStyles({ position });
   const db = firebase.firestore();
   const [alerts, setAlerts] = useState([]);
 
@@ -124,19 +124,13 @@ function AlertComponent({ position, label }) {
 
   async function appendAlerts() {
     const al = [];
-    if (firebase.auth().currentUser.emailVerified) {
-      console.log("verified");
-    } else {
-      console.log("not verified");
-      al.push({ message: "No has confirmado tu correo", doc: "" });
-    }
     const user = firebase.auth().currentUser;
-    let uid = "";
-    if (user) {
-      uid = user.uid;
+    const { uid } = user;
+    if (!user.emailVerified) {
+      al.push({ message: "No has confirmado tu correo", doc: "mail" });
     }
     const query = db.collection("users").where("uid", "==", uid);
-    await query.get().then((querySnapshot) => {
+    query.get().then((querySnapshot) => {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
           const docs = doc.data().documents;
@@ -156,10 +150,8 @@ function AlertComponent({ position, label }) {
 
   const handleClick = (e) => {
     if (ref.current.contains(e.target)) {
-      // inside click
       return;
     }
-    // outside click
     setUserMenuOpen(false);
   };
 
@@ -169,10 +161,14 @@ function AlertComponent({ position, label }) {
   }
 
   function onItemClick(doc) {
-    history.push({
-      pathname: "/subir",
-      state: { doc },
-    });
+    if (doc === "mail") {
+      window.open("https://hotmail.com");
+    } else {
+      history.push({
+        pathname: "/subir",
+        state: { doc },
+      });
+    }
     setUserMenuOpen(false);
   }
 
@@ -184,10 +180,6 @@ function AlertComponent({ position, label }) {
       document.removeEventListener("mousedown", handleClick);
     };
   }, []);
-
-  useEffect(() => {
-    console.log("reload");
-  }, [alerts]);
 
   return (
     <div ref={ref}>

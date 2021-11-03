@@ -2,10 +2,10 @@
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
+import { Link, useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import uuid from "react-uuid";
 import { FaFileAlt } from "react-icons/fa";
-import { useHistory } from "react-router-dom";
 
 const useStyles = createUseStyles(() => ({
   dropdownItemsContainer: {
@@ -21,7 +21,7 @@ const useStyles = createUseStyles(() => ({
   },
   flex: {
     display: "flex",
-    justifyContent: "center",
+    marginBottom: 10,
   },
   verTodas: {
     minWidth: "100%",
@@ -45,6 +45,28 @@ const useStyles = createUseStyles(() => ({
     borderRadius: 10,
     border: "1px solid transparent",
     marginLeft: 10,
+    minWidth: "85%",
+    maxWidth: "85%",
+    textAlign: "left",
+    paddingLeft: 10,
+  },
+  cardDashboard: {
+    background: "#f5f5f5",
+    borderRadius: "10px",
+    padding: "10px",
+    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1",
+  },
+  container: {
+    maxWidth: "400px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "left",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+  },
+  noMailText: {
+    marginTop: 20,
   },
 }));
 
@@ -54,29 +76,30 @@ const AlertasPagina = () => {
   const db = firebase.firestore();
   const [alerts, setAlerts] = useState([]);
   const classes = useStyles();
+  const [mailVerified, setVerified] = useState(false);
 
   function onItemClick(doc) {
-    history.push({
-      pathname: "/subir",
-      state: { doc },
-    });
+    if (doc === "mail") {
+      window.open("https://hotmail.com");
+    } else {
+      history.push({
+        pathname: "/subir",
+        state: { doc },
+      });
+    }
   }
 
   async function appendAlerts() {
     const al = [];
-    if (firebase.auth().currentUser.emailVerified) {
-      console.log("verified");
-    } else {
-      console.log("not verified");
-      al.push({ message: "No has confirmado tu correo", doc: "" });
-    }
     const user = firebase.auth().currentUser;
-    let uid = "";
-    if (user) {
-      uid = user.uid;
+    const { uid } = user;
+    if (!user.emailVerified) {
+      al.push({ message: "No has confirmado tu correo", doc: "mail" });
+    } else {
+      setVerified(true);
     }
     const query = db.collection("users").where("uid", "==", uid);
-    await query.get().then((querySnapshot) => {
+    query.get().then((querySnapshot) => {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
           const docs = doc.data().documents;
@@ -99,9 +122,9 @@ const AlertasPagina = () => {
   }, []);
   return (
     <div>
-      <div className="container max500">
+      <div className={classes.container}>
         {alerts.length > 0 && (
-          <div>
+          <div className={classes.cardDashboard}>
             {alerts.map((projName) => (
               <div className={classes.flex}>
                 <div className={classes.circle}>
@@ -118,6 +141,15 @@ const AlertasPagina = () => {
               </div>
             ))}
           </div>
+        )}
+        {mailVerified ? (
+          ""
+        ) : (
+          <Link to="/verificar">
+            <p className={classes.noMailText}>
+              ¿No has recibido el correo de confirmación?
+            </p>
+          </Link>
         )}
       </div>
     </div>

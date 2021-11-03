@@ -1,15 +1,13 @@
 /* eslint-disable quotes */
-import React from "react";
+import React, { useState } from "react";
 import { createUseStyles, useTheme } from "react-jss";
 import { useHistory } from "react-router-dom";
-import { useFirebaseApp } from "reactfire";
 import { BiUserCircle } from "react-icons/bi";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaSignature } from "react-icons/fa";
 import convertSlugToUrl from "../../resources/utilities";
 import SLUGS from "../../resources/slugs";
 import {
   IconContacts,
-  IconLogout,
   IconSettings,
   IconSubscription,
 } from "../../assets/icons";
@@ -27,28 +25,19 @@ const useStyles = createUseStyles({
 });
 
 function SidebarComponent() {
-  const firebase = useFirebaseApp();
   const { push } = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
-  const isMobile = window.innerWidth <= 1080;
-
-  function logOut() {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        localStorage.removeItem("admin");
-        localStorage.removeItem("user");
-      });
-  }
+  const [open, setOpen] = useState(false);
+  const isMobile = window.innerWidth <= 768;
 
   function onClick(slug, parameters = {}) {
+    setOpen(false);
     push(convertSlugToUrl(slug, parameters));
   }
 
   return (
-    <Menu isMobile={isMobile}>
+    <Menu open={open} isMobile={isMobile}>
       <div style={{ paddingTop: 30, paddingBottom: 30 }}>
         <LogoComponent />
       </div>
@@ -66,9 +55,15 @@ function SidebarComponent() {
       />
       <MenuItem
         id={SLUGS.documentos}
-        title="Documentos"
+        title="Expediente"
         icon={IconContacts}
         onClick={() => onClick(SLUGS.documentos)}
+      />
+      <MenuItem
+        id={SLUGS.sign}
+        title="SeguriSign"
+        icon={FaSignature}
+        onClick={() => onClick(SLUGS.sign)}
       />
       <div className={classes.separator} />
       <MenuItem
@@ -82,13 +77,6 @@ function SidebarComponent() {
         title="Ajustes"
         icon={IconSettings}
         onClick={() => onClick(SLUGS.settings)}
-      />
-
-      <MenuItem
-        id="logout"
-        title="Logout"
-        icon={IconLogout}
-        onClick={() => logOut()}
       />
     </Menu>
   );

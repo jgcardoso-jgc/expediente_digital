@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 const styles = {
   initBt: {
-    backgroundColor: "rgb(75, 75, 75)",
+    backgroundColor: "black",
     color: "white",
     border: "1px solid black",
     display: "block",
@@ -10,6 +10,7 @@ const styles = {
     paddingTop: "10px",
     marginTop: "20px",
     paddingBottom: "10px",
+    marginRight: "auto",
     fontSize: "15px",
     borderRadius: "10px",
   },

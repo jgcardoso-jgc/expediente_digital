@@ -7,6 +7,7 @@
 /* eslint-disable quotes */
 import React, { useEffect } from "react";
 import { createUseStyles } from "react-jss";
+import { useHistory } from "react-router-dom";
 import { useTable, usePagination, useGlobalFilter } from "react-table";
 import { FaSearch, FaAngleRight, FaAngleLeft } from "react-icons/fa";
 
@@ -53,13 +54,14 @@ const useStyles = createUseStyles({
   },
 });
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, docNumber }) => {
   const classes = useStyles();
-  console.log(`heredata:${data}`);
+  const history = useHistory();
   const props = useTable(
     {
       columns,
       data,
+      initialState: { pageSize: 20 },
     },
     useGlobalFilter, // useGlobalFilter!
     usePagination
@@ -86,15 +88,19 @@ const Table = ({ columns, data }) => {
     setPageSize,
     state: { pageIndex, pageSize, globalFilter },
   } = props;
-  console.log(props);
+
+  useEffect(() => {}, [globalFilter]);
 
   useEffect(() => {
-    console.log(globalFilter);
-  }, [globalFilter]);
+    console.log(docNumber);
+    if (docNumber && docNumber > 0) {
+      setGlobalFilter(docNumber);
+    }
+    history.replace({ state: {} });
+  }, []);
 
   return (
     <div className={classes.card}>
-      {console.log(globalFilter)}
       <div className={classes.containerSearch}>
         <span className={classes.searchIcon}>
           <FaSearch />
@@ -190,7 +196,7 @@ const Table = ({ columns, data }) => {
             setPageSize(Number(e.target.value));
           }}
         >
-          {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+          {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Mostrar {pageSize}
             </option>
@@ -200,7 +206,7 @@ const Table = ({ columns, data }) => {
 
       <br />
       <div>
-        Mostrando {rows.length} de {pageSize} resultados
+        Mostrando {pageSize} de {rows.length} resultados
       </div>
       <div>
         <pre>

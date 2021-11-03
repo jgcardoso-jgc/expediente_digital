@@ -23,7 +23,6 @@ const useStyles = createUseStyles(() => ({
     minWidth: 35,
     borderRadius: 50,
     marginLeft: 14,
-    border: "1px solid #9fa2b4",
     "@media (max-width: 768px)": {
       marginLeft: 14,
     },
@@ -91,7 +90,7 @@ function HeaderComponent() {
     ):
       title = "Overview";
       break;
-    case currentItem === SLUGS.contacts:
+    case currentItem === SLUGS.usuarios:
       title = "Usuarios";
       break;
     case currentItem === SLUGS.editUser:
@@ -99,6 +98,9 @@ function HeaderComponent() {
       break;
     case currentItem === SLUGS.settings:
       title = "Ajustes";
+      break;
+    case currentItem === SLUGS.sign:
+      title = "Segurisign";
       break;
     case currentItem === SLUGS.alertas:
       title = "Alertas";
@@ -138,7 +140,7 @@ function HeaderComponent() {
             <>
               <span className={classes.name}>Admin</span>
               <img
-                src="https://avatars.githubusercontent.com/sofseguridata"
+                src="https://cdn.iconscout.com/icon/free/png-256/user-1648810-1401302.png"
                 alt="avatar"
                 className={classes.avatar}
               />

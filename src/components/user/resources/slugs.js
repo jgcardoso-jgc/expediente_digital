@@ -7,4 +7,7 @@ export default {
   settings: "/ajustes",
   alerts: "/alertas",
   subirDocumentos: "/subir",
+  sign: "/segurisign",
+  verificar: "/verificar",
+  registerSign: "/registerSign",
 };

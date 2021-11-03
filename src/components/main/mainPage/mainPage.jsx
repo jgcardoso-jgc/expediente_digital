@@ -77,7 +77,7 @@ function Login() {
       <NavBarMainPage className={classes.navmain} />
       <div>
         <h1 className={classes.segTitle}>
-          <b>Seguridata</b> | Expediente
+          <b>ONE</b> Seguridata
         </h1>
         <Row className={classes.rowMax400}>
           <div className={classes.first}>
@@ -86,7 +86,7 @@ function Login() {
               Se te solicitará un medio de identificación y se almacenará tu
               rostro.
             </p>
-            <Link to="registerNormal" type="button" className={classes.dBlock}>
+            <Link to="registerNormal" role="button" className={classes.dBlock}>
               <button
                 type="button"
                 className={`${classes.logBt} ${classes.bgWhite}`}
@@ -100,10 +100,10 @@ function Login() {
           <div className={classes.second}>
             <h4 className={classes.title}>Accede ahora</h4>
             <p className={classes.text}>
-              Si ya te has registrado previamente, puedes acceder con tus
-              credenciales.
+              Si ya te has registrado previamente, puedes acceder
+              <br /> con tus credenciales.
             </p>
-            <Link to="/loginNormal" type="button" className={classes.dBlock}>
+            <Link to="/loginNormal" role="button" className={classes.dBlock}>
               <button
                 type="button"
                 className={`${classes.logBt} ${classes.bgBlack}`}

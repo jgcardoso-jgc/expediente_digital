@@ -8,8 +8,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
-import { createUseStyles, useTheme } from "react-jss";
-import firebase from "firebase";
+import { createUseStyles } from "react-jss";
+import { useFirebaseApp } from "reactfire";
 import SLUGS from "../../resources/slugs";
 import { SidebarContext } from "../../hooks/useSidebar";
 import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
@@ -66,21 +66,27 @@ const useStyles = createUseStyles(() => ({
 }));
 
 function HeaderComponent() {
+  const firebase = useFirebaseApp();
+  const db = firebase.storage();
+  const [urlProfile, setUrlProfile] = useState(
+    "https://cdn.iconscout.com/icon/free/png-256/user-1648810-1401302.png"
+  );
   function logOut() {
     firebase
       .auth()
       .signOut()
       .then(() => {
-        console.log("logged out");
         localStorage.removeItem("admin");
         localStorage.removeItem("user");
+        localStorage.removeItem("profilepic");
+        localStorage.removeItem("sign-user");
+        localStorage.removeItem("reload");
       });
   }
   const { push } = useHistory();
   const { currentItem } = useContext(SidebarContext);
-  const theme = useTheme();
   const [user, setUser] = useState("");
-  const classes = useStyles({ theme });
+  const classes = useStyles();
 
   let title;
   switch (true) {
@@ -91,7 +97,7 @@ function HeaderComponent() {
       title = "Perfil";
       break;
     case currentItem === SLUGS.documentos:
-      title = "Documentos";
+      title = "Expediente";
       break;
     case currentItem === SLUGS.settings:
       title = "Ajustes";
@@ -99,8 +105,17 @@ function HeaderComponent() {
     case currentItem === SLUGS.alerts:
       title = "Alertas";
       break;
+    case currentItem === SLUGS.sign:
+      title = "SeguriSign";
+      break;
     case currentItem === SLUGS.subirDocumentos:
       title = "Subir Documento";
+      break;
+    case currentItem === SLUGS.verificar:
+      title = "Verificar Correo";
+      break;
+    case currentItem === SLUGS.registerSign:
+      title = "Regístrate en Segurisign";
       break;
     default:
       title = "";
@@ -110,9 +125,37 @@ function HeaderComponent() {
     push(SLUGS.settings);
   }
 
+  function exists(response) {
+    setUrlProfile(response);
+    localStorage.setItem("profilepic", response);
+  }
+
+  function notExists() {
+    console.log("not exists");
+  }
+
+  function getState() {
+    const userInfo = JSON.parse(localStorage.getItem("user"));
+    if (localStorage.getItem("profilepic") === null) {
+      const route = `users/${userInfo.email}/croppedFace`;
+      db.ref(route)
+        .getDownloadURL()
+        .then((response) => {
+          exists(response);
+        })
+        .catch(() => {
+          notExists();
+        });
+    } else {
+      const url = localStorage.getItem("profilepic");
+      exists(url);
+    }
+  }
+
   useEffect(() => {
     const userGet = localStorage.getItem("user");
     setUser(JSON.parse(userGet));
+    getState();
   }, []);
 
   return (
@@ -142,11 +185,7 @@ function HeaderComponent() {
           label={
             <>
               <span className={classes.name}>{user.fullName}</span>
-              <img
-                src="https://avatars.githubusercontent.com/sofseguridata"
-                alt="avatar"
-                className={classes.avatar}
-              />
+              <img src={urlProfile} alt="avatar" className={classes.avatar} />
             </>
           }
           options={[

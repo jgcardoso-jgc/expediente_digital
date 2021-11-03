@@ -13,6 +13,7 @@ const useStyles = createUseStyles(() => ({
     color: "#A4A6B3",
     opacity: 0.7,
     marginLeft: 12,
+    fontSize: 18,
   },
   logo: {
     width: "20px",

@@ -13,6 +13,28 @@ ol[class] {
   padding: 0;
 }
 
+.accordion-button {
+  background: #ebebeb !important;
+  border-radius: 10px !important;
+  margin-top: 17px !important;
+  -webkit-box-shadow: 0px 6px 10px 0px#d3d3d3 !important;
+  box-shadow: 0px 6px 10px 0px #d3d3d3 !important;
+}
+
+.popup-overlay {
+  background: #00000080 !important;
+}
+
+.accordion-body {
+  background: #f5f5f5 !important;
+}
+
+.react-pdf__Page__canvas {
+  max-width: 100% !important;
+  -webkit-box-shadow: 0px 6px 10px 0px#d3d3d3 !important;
+  box-shadow: 0px 6px 10px 0px #d3d3d3 !important;
+  border-radius: 10px !important;
+}
 /* Remove default margin */
 body,
 h1,

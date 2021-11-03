@@ -3,8 +3,8 @@
 /* eslint-disable quotes */
 import React from "react";
 import { Column } from "simple-flexbox";
-import { useHistory } from "react-router-dom";
 import { createUseStyles, useTheme } from "react-jss";
+import { useHistory } from "react-router-dom";
 
 const useStyles = createUseStyles(() => ({
   container: {
@@ -39,15 +39,13 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-function MiniCardComponent({ className = "", title, value, url }) {
+function MiniCardComponent({ className = "", title, value }) {
   const theme = useTheme();
-  const history = useHistory();
   const classes = useStyles({ theme });
+  const history = useHistory();
   const composedClassName = [classes.container, className].join(" ");
   function toDocuments() {
-    if (url !== "undefined") {
-      history.push(url);
-    }
+    history.push({ pathname: "/usuarios", state: { docs: value } });
   }
   return (
     <Column
