@@ -94,7 +94,7 @@ const BackId = ({ session, onSuccess, showError }) => {
     });
   }, [onSuccess, showError, session]);
 
-  return <div ref={containerRef} />;
+  return <div className="fit" ref={containerRef} />;
 };
 
 BackId.propTypes = {
@@ -109,7 +109,7 @@ function ProcessId({ session, onSuccess }) {
     });
   }, [onSuccess, session]);
 
-  return <p>Processing...</p>;
+  return <p>Procesando tu información...</p>;
 }
 
 ProcessId.propTypes = {
@@ -128,7 +128,7 @@ function Selfie({ session, onSuccess, showError }) {
     });
   }, [onSuccess, showError, session]);
 
-  return <div ref={containerRef} />;
+  return <div className="fit" ref={containerRef} />;
 }
 
 Selfie.propTypes = {
@@ -189,20 +189,24 @@ function Onboarding() {
       .catch((curp = "error"));
     snapshot.docs.forEach(async (document) => {
       const doc = await db.collection("users").doc(document.id).get();
-      let { documents } = doc.data();
-      documents =
-        ({
+      const { documents } = doc.data();
+      const docsFilter = documents.filter(
+        (d) => d.name === "ID Reverso" || d.name === "ID Frontal"
+      );
+      if (docsFilter.length === 0) {
+        documents.push({
           name: "ID Frontal",
           imageName: "croppedFrontID",
-          state: true,
           uploaded: true,
-        },
-        {
+          state: true,
+        });
+        documents.push({
           name: "ID Reverso",
           imageName: "croppedBackID",
           uploaded: true,
           state: true,
         });
+      }
       db.collection("users")
         .doc(document.id)
         .update({
