@@ -122,7 +122,6 @@ class SoapController {
       docResponse.getElementsByTagName("hashHex")[0].childNodes[0].nodeValue;
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    console.log(hashHex, resultado);
     return hashHex;
   }
 
@@ -170,6 +169,76 @@ class SoapController {
     console.log(hash);
     return this.establishHashAndPkcs7(multilateralId, hash, password);
   }
+
+  async verifyLogin(email) {
+    const settings = {
+      url: "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV",
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+   <soapenv:Header/>
+   <soapenv:Body>
+   <ser:verifyLogin>
+            <login>${email}</login>
+        </ser:verifyLogin>
+   </soapenv:Body>
+</soapenv:Envelope>`,
+    };
+
+    const response = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      response.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    const idPerson =
+      docResponse.getElementsByTagName("idPerson")[0].childNodes[0].nodeValue;
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    if (resultado !== 1) {
+      alert('Error, correo no válido o no registrado');
+    }
+    return idPerson;
+  }
+
+  async authenticateUser(idPerson, password) {
+    const settings = {
+      url: "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV",
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+   <soapenv:Header/>
+   <soapenv:Body>
+   <idDomain>${this.idDomain}</idDomain>
+            <idPerson>${idPerson}</idPerson>
+            <autType>USUARIO_PASSWORD</autType>
+            <password>${password}</password>
+   </soapenv:Body>
+</soapenv:Envelope>`,
+    };
+
+    const response = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      response.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    return resultado === '1';
+  }
+
+  async loginUser(email, password) {
+    const idPerson = await this.verifyLogin(email);
+    return this.authenticateUser(idPerson, password);
+  }
+
 }
 
 export default SoapController;
