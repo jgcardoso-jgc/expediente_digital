@@ -12,6 +12,7 @@ import loadingGif from "../../../assets/loading.gif";
 import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import Waves from "../waves/waves";
+import SoapController from "../../admin/components_admin/seguriSign/controller/soap_controller";
 
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
@@ -67,13 +68,15 @@ const LoginNormal = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const soapController = new SoapController();
   async function submit() {
     try {
       setLoading(true);
       if (email !== "" && password !== "") {
         setDisable(true);
         await firebase.auth().signInWithEmailAndPassword(email, password);
+        const resultado = await soapController.loginUser(email, password);
+        alert(resultado);
       } else {
         setLoading(false);
       }

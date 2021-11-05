@@ -18,6 +18,7 @@ class SoapController {
     this.passwordDomain = "HZAOT0hG50ZFkji3vTb47RjK3WOxHUExxIwII3zp6TY=";
     this.userDomain = "ws_test";
     this.idDomain = "1";
+    this.url = "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV";
   }
 
   toBase64 = (file) =>
@@ -45,7 +46,7 @@ class SoapController {
     });
     console.log(signersJSON);
     const settings = {
-      url: "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV",
+      url: this.url,
       method: "POST",
       timeout: 0,
       headers: {
@@ -90,7 +91,7 @@ class SoapController {
 
   async getHashToSign(multilateralId) {
     const settings = {
-      url: "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV",
+      url: this.url,
       method: "POST",
       timeout: 0,
       headers: {
@@ -126,9 +127,8 @@ class SoapController {
   }
 
   async establishHashAndPkcs7(multilateralId, hashHex, password) {
-    console.log(hashHex);
     const settings = {
-      url: "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV",
+      url: this.url,
       method: "POST",
       timeout: 0,
       headers: {
@@ -172,7 +172,7 @@ class SoapController {
 
   async verifyLogin(email) {
     const settings = {
-      url: "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV",
+      url: this.url,
       method: "POST",
       timeout: 0,
       headers: {
@@ -206,7 +206,7 @@ class SoapController {
 
   async authenticateUser(idPerson, password) {
     const settings = {
-      url: "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV",
+      url: this.url,
       method: "POST",
       timeout: 0,
       headers: {
@@ -234,10 +234,93 @@ class SoapController {
     return resultado === '1';
   }
 
+
+  async updateUserPassword(email, password) {
+    const settings = {
+      url: this.url,
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+   <soapenv:Header/>
+   <soapenv:Body>
+   		<ser:doUpdateUserPasswords xmlns:ser="http://service.rne.operations.seguridata/">
+   <request>
+				<resultado>0</resultado>
+				<idDomain>${this.idDomain}</idDomain>
+				<idRhEmp>${this.segurisignUser.idRh}</idRhEmp>
+				<userDomain>${this.userDomain}</userDomain>
+				<passwordDomain>${this.passwordDomain}</passwordDomain>
+				<login>${email}</login>
+				<password>${password}<password>
+				<idEmployeeProfile>${this.segurisignUser.idEmployeeProfile}</idEmployeeProfile>
+				<updateCert>false</updateCert>
+				<flexUser>false</flexUser>
+				<onlyVerify>false</onlyVerify>
+				<noVerifyCert>false</noVerifyCert>
+				<autType>USUARIO_PASSWORD</autType>
+				<newPasswordAut>${password}</newPasswordAut>
+				<newPasswordPrivateKey>${password}</newPasswordPrivateKey>
+				<agentDefinedPassw>${password}</agentDefinedPassw>
+			</request>
+      		</ser:doUpdateUserPasswords>
+   </soapenv:Body>
+</soapenv:Envelope>`,
+    };
+
+    const response = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      response.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    return resultado === '1';
+  }
+
   async loginUser(email, password) {
     const idPerson = await this.verifyLogin(email);
     return this.authenticateUser(idPerson, password);
   }
+
+
+  async createUser(email, password) {
+    const settings = {
+      url: this.url,
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+   <soapenv:Header/>
+   <soapenv:Body>
+   <ser:readFileEmployees xmlns:ser="http://service.rne.adminreportes.seguridata/">
+			<idDomain>1</idDomain>
+			<idRh>6</idRh>
+			<inputFile>Tk9NQlJFfExPR0lOfEVNQUlMfEVTVEFUVVNfVVNVQVJJT3xJREVOVElGSUNBRE9SX1JIfERJUkVDQ0lPTnxMT0NBTElEQUR8RVNUQURPfENPRElHT19QT1NUQUx8UkZDfENVUlB8VEVMRUZPTk98RkFYfENMQVZFX1BBSVN8Q0xBVkVfRE9NSU5JT3xUSVRVTE9fVVNVQVJJT3xBUkVBfENMQVZFX1BFUkZJTHxQQVNTV09SRHxQRVJNSVNPUw0KVXNlciBBRElBWiA1fHVzdWFyaW9hZGlhejAwNUBzZWd1cmlkYXRhLmNvbXx1c3VhcmlvYWRpYXowMDVAc2VndXJpZGF0YS5jb218MXx8fHx8fERJQ0U5MjAxMDFMUzF8RElDRTkyMDEwMUhWWlpSTDAxfHx8fDF8fERFU0FSUk9MTE98NHwxMjEyMTIxMlF3LnwxDQo=</inputFile>
+			<userDomain>Empresa 2</userDomain>
+			<passwordDomain>B9a7pZke6n+gmakDHOOnbLMzgVL7BtumODHfgLXZIRA=</passwordDomain>
+		</ser:readFileEmployees>
+ </soapenv:Body>
+</soapenv:Envelope>`,
+    };
+
+    const response = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      response.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    return resultado === '1';
+  }
+
+
 
 }
 
