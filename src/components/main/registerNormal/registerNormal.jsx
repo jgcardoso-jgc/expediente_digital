@@ -87,7 +87,6 @@ const RegisterNormal = () => {
   const [loading, setLoading] = useState(false);
   const rfcText = useRef();
   const passText = useRef();
-  const soapController = new SoapController();
 
   function rfcValido(rfcPassed) {
     const rfcpm =
@@ -168,9 +167,13 @@ const RegisterNormal = () => {
   }
 
   const submit = async () => {
+    const soapController = new SoapController();
     setDisabled(true);
     setLoading(true);
-    await soapController.createUser({ email, password, name });
+    console.log(soapController);
+    console.log(soapController.createUser);
+    const resultado = await soapController.createUser({ email, password, name });
+    console.log(resultado);
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)

@@ -76,7 +76,7 @@ const LoginNormal = () => {
         setDisable(true);
         await firebase.auth().signInWithEmailAndPassword(email, password);
         const resultado = await soapController.loginUser(email, password);
-        alert(resultado);
+        console.log(resultado);
       } else {
         setLoading(false);
       }
