@@ -121,8 +121,6 @@ class SoapController {
     );
     const hashHex =
       docResponse.getElementsByTagName("hashHex")[0].childNodes[0].nodeValue;
-    const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
     return hashHex;
   }
 
@@ -234,7 +232,6 @@ class SoapController {
     return resultado === '1';
   }
 
-
   async updateUserPassword(email, password) {
     const settings = {
       url: this.url,
@@ -286,8 +283,12 @@ class SoapController {
     return this.authenticateUser(idPerson, password);
   }
 
-
-  async createUser(email, password) {
+  async createUser(user) {
+    const rand = 1 + Math.random() * (10000 - 1);
+    const header = 'NOMBRE|LOGIN|EMAIL|ESTATUS_USUARIO|IDENTIFICADOR_RH|DIRECCION|LOCALIDAD|ESTADO|CODIGO_POSTAL|RFC|CURP|TELEFONO|FAX|CLAVE_PAIS|CLAVE_DOMINIO|TITULO_USUARIO|AREA|CLAVE_PERFIL|PASSWORD|PERMISOS';
+    const userString = `${user.name}|${user.email}|${user.email}|1||||||DICE920101LS1|DICE920101HVZZRL01||||${this.idDomain}|||4|${user.password}|1`;
+    const b64Str = btoa(header + userString);
+    console.log(b64Str);
     const settings = {
       url: this.url,
       method: "POST",
@@ -299,11 +300,11 @@ class SoapController {
    <soapenv:Header/>
    <soapenv:Body>
    <ser:readFileEmployees xmlns:ser="http://service.rne.adminreportes.seguridata/">
-			<idDomain>1</idDomain>
-			<idRh>6</idRh>
-			<inputFile>Tk9NQlJFfExPR0lOfEVNQUlMfEVTVEFUVVNfVVNVQVJJT3xJREVOVElGSUNBRE9SX1JIfERJUkVDQ0lPTnxMT0NBTElEQUR8RVNUQURPfENPRElHT19QT1NUQUx8UkZDfENVUlB8VEVMRUZPTk98RkFYfENMQVZFX1BBSVN8Q0xBVkVfRE9NSU5JT3xUSVRVTE9fVVNVQVJJT3xBUkVBfENMQVZFX1BFUkZJTHxQQVNTV09SRHxQRVJNSVNPUw0KVXNlciBBRElBWiA1fHVzdWFyaW9hZGlhejAwNUBzZWd1cmlkYXRhLmNvbXx1c3VhcmlvYWRpYXowMDVAc2VndXJpZGF0YS5jb218MXx8fHx8fERJQ0U5MjAxMDFMUzF8RElDRTkyMDEwMUhWWlpSTDAxfHx8fDF8fERFU0FSUk9MTE98NHwxMjEyMTIxMlF3LnwxDQo=</inputFile>
-			<userDomain>Empresa 2</userDomain>
-			<passwordDomain>B9a7pZke6n+gmakDHOOnbLMzgVL7BtumODHfgLXZIRA=</passwordDomain>
+			<idDomain>${this.idDomain}</idDomain>
+			<idRh>${rand}</idRh>
+			<inputFile>${b64Str}</inputFile>
+			<userDomain>${this.userDomain}</userDomain>
+			<passwordDomain>${this.passwordDomain}</passwordDomain>
 		</ser:readFileEmployees>
  </soapenv:Body>
 </soapenv:Envelope>`,
@@ -317,11 +318,9 @@ class SoapController {
     );
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    console.log(docResponse);
     return resultado === '1';
   }
-
-
-
 }
 
 export default SoapController;

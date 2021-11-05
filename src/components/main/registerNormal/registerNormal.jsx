@@ -14,6 +14,7 @@ import loadingGif from "../../../assets/loading.gif";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../waves/waves";
+import SoapController from "../../admin/components_admin/seguriSign/controller/soap_controller";
 
 const useStyles = createUseStyles(() => ({
   block: { display: "block" },
@@ -86,6 +87,7 @@ const RegisterNormal = () => {
   const [loading, setLoading] = useState(false);
   const rfcText = useRef();
   const passText = useRef();
+  const soapController = new SoapController();
 
   function rfcValido(rfcPassed) {
     const rfcpm =
@@ -168,6 +170,7 @@ const RegisterNormal = () => {
   const submit = async () => {
     setDisabled(true);
     setLoading(true);
+    await soapController.createUser({ email, password, name });
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)

@@ -21,10 +21,8 @@
         "@typescript-eslint"
     ],
     "rules": {
-<<<<<<< HEAD
-        "linebreak-style": 0
-=======
         "no-use-before-define": "off",
+        "linebreak-style": 0,
   "@typescript-eslint/no-use-before-define": ["error"],
   "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
   "import/extensions": [
@@ -45,6 +43,5 @@
                 "moduleDirectory": ["node_modules", "src/"]
             }
         }
->>>>>>> 8d66e587727a9734fe8d26c205e61351f47c04c9
     }
 }
