@@ -1,3 +1,4 @@
+/* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable quotes */
 import axios from "axios";
 import { stringify } from "querystring";
@@ -24,19 +25,23 @@ function fetchCargos(db) {
 }
 
 async function sendWelcomeEmail(email) {
-  const data = {
-    email,
-  };
-  axios({
-    method: 'post',
-    url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendMail",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    data: stringify(data),
-  })
-    .then((res) => console.log(`sended:${res.status}`))
-    .catch((res) => console.log(`error:${res}`));
+  return new Promise((resolve, reject) => {
+    const msg = "Bienvenido a Seguridata | Expediente";
+    const data = {
+      email,
+      msg,
+    };
+    axios({
+      method: 'post',
+      url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendWelcome",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: stringify(data),
+    })
+      .then((res) => resolve(`sended:${res.status}`))
+      .catch((res) => reject(`error:${res}`));
+  });
 }
 
 function createUser(auth, email, db, name) {

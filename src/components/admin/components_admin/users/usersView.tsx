@@ -79,14 +79,15 @@ const UserView = () => {
   const [cargos, setCargos] = useState({});
 
   function submit() {
-    try {
-      if (email !== "") {
-        sendWelcomeEmail(email);
-        setDisable(true);
+    if (email !== "") {
+      setDisable(true);
+      sendWelcomeEmail(email).then(() => {
         createUser(auth, email, db, name).then((res) => { if (res === "200") setReload((prev) => !prev); }).catch((err) => toast(err));
-      }
-    } catch (e) {
-      setDisable(false);
+      })
+        .catch((e) => {
+          setDisable(false);
+          toast(e);
+        });
     }
   }
 
