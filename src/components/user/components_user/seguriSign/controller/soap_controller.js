@@ -290,24 +290,25 @@ class SoapController {
     const b64Str = btoa(header + userString);
     console.log(b64Str);
     const settings = {
-      url: this.url,
+      url: 'https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV',
       method: "POST",
       timeout: 0,
       headers: {
         "Content-Type": "text/xml",
       },
-      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
-   <soapenv:Header/>
-   <soapenv:Body>
-   <ser:readFileEmployees xmlns:ser="http://service.rne.adminreportes.seguridata/">
+      data: `
+      <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+	<S:Body>
+		<ns2:readFileEmployees xmlns:ns2="http://service.rne.adminreportes.seguridata/">
 			<idDomain>${this.idDomain}</idDomain>
 			<idRh>${rand}</idRh>
 			<inputFile>${b64Str}</inputFile>
 			<userDomain>${this.userDomain}</userDomain>
 			<passwordDomain>${this.passwordDomain}</passwordDomain>
-		</ser:readFileEmployees>
- </soapenv:Body>
-</soapenv:Envelope>`,
+		</ns2:readFileEmployees>
+	</S:Body>
+</S:Envelope>
+      `,
     };
 
     const response = await $.ajax(settings).done();
@@ -318,6 +319,7 @@ class SoapController {
     );
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    console.log(response);
     console.log(docResponse);
     return resultado === '1';
   }
