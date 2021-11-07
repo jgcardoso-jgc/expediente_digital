@@ -284,8 +284,8 @@ class SoapController {
   }
 
   async createUser(user) {
-    const rand = 1 + Math.random() * (10000 - 1);
-    const header = 'NOMBRE|LOGIN|EMAIL|ESTATUS_USUARIO|IDENTIFICADOR_RH|DIRECCION|LOCALIDAD|ESTADO|CODIGO_POSTAL|RFC|CURP|TELEFONO|FAX|CLAVE_PAIS|CLAVE_DOMINIO|TITULO_USUARIO|AREA|CLAVE_PERFIL|PASSWORD|PERMISOS';
+    const rand = Math.floor(1 + Math.random() * (10000 - 1));
+    const header = 'NOMBRE|LOGIN|EMAIL|ESTATUS_USUARIO|IDENTIFICADOR_RH|DIRECCION|LOCALIDAD|ESTADO|CODIGO_POSTAL|RFC|CURP|TELEFONO|FAX|CLAVE_PAIS|CLAVE_DOMINIO|TITULO_USUARIO|AREA|CLAVE_PERFIL|PASSWORD|PERMISOS|';
     const userString = `${user.name}|${user.email}|${user.email}|1||||||DICE920101LS1|DICE920101HVZZRL01||||${this.idDomain}|||4|${user.password}|1`;
     const b64Str = btoa(header + userString);
     console.log(b64Str);
@@ -319,7 +319,6 @@ class SoapController {
     );
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    console.log(response);
     console.log(docResponse);
     return resultado === '1';
   }
