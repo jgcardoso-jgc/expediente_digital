@@ -82,7 +82,7 @@ const UserView = () => {
     if (email !== "") {
       setDisable(true);
       sendWelcomeEmail(email).then(() => {
-        createUser(auth, email, db, name).then((res) => { if (res === "200") setReload((prev) => !prev); }).catch((err) => toast(err));
+        createUser(auth, email, db, name).then((res) => { if (res === "200") window.location.reload(); }).catch((err) => toast(err));
       })
         .catch((e) => {
           setDisable(false);
