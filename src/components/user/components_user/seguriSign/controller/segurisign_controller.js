@@ -338,6 +338,7 @@ class SegurisignController {
       if (res.status === 200) {
         return res.json().then((data) => {
           this.segurisignUser.idRh = data.idRh;
+          console.log(data);
           return data.resultado === 1;
         });
       }

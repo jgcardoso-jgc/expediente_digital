@@ -119,6 +119,7 @@ class SoapController {
       response.documentElement.innerHTML,
       "application/xhtml+xml"
     );
+    console.log(docResponse);
     const hashHex =
       docResponse.getElementsByTagName("hashHex")[0].childNodes[0].nodeValue;
     return hashHex;
@@ -200,6 +201,40 @@ class SoapController {
       alert('Error, correo no válido o no registrado');
     }
     return idPerson;
+  }
+
+  verifyLoginAdmin = async () => {
+    const settings = {
+      url: 'https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV',
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ser:verifyLogin>
+            <login>agente@seguridata.com</login>
+        </ser:verifyLogin>
+    </soapenv:Body>
+</soapenv:Envelope>`,
+    };
+
+    const response = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      response.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    console.log(docResponse);
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    if (resultado !== '1') {
+      alert('Error, correo no válido o no registrado');
+    }
+    return resultado === '1';
   }
 
   async authenticateUser(idPerson, password) {
@@ -284,9 +319,9 @@ class SoapController {
   }
 
   async createUser(user) {
-    const rand = Math.floor(1 + Math.random() * (10000 - 1));
+    await this.verifyLoginAdmin();
     const header = 'NOMBRE|LOGIN|EMAIL|ESTATUS_USUARIO|IDENTIFICADOR_RH|DIRECCION|LOCALIDAD|ESTADO|CODIGO_POSTAL|RFC|CURP|TELEFONO|FAX|CLAVE_PAIS|CLAVE_DOMINIO|TITULO_USUARIO|AREA|CLAVE_PERFIL|PASSWORD|PERMISOS|';
-    const userString = `${user.name}|${user.email}|${user.email}|1||||||DICE920101LS1|DICE920101HVZZRL01||||${this.idDomain}|||4|${user.password}|1`;
+    const userString = `${user.name}|${user.email}|${user.email}|1||||||DICE920101LS1|DICE920101HVZZRL01||||${this.idDomain}||DESARROLLO|4|${user.password}|1`;
     const b64Str = btoa(header + userString);
     console.log(b64Str);
     const settings = {
@@ -297,17 +332,59 @@ class SoapController {
         "Content-Type": "text/xml",
       },
       data: `
-      <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
-	<S:Body>
-		<ns2:readFileEmployees xmlns:ns2="http://service.rne.adminreportes.seguridata/">
-			<idDomain>${this.idDomain}</idDomain>
-			<idRh>${rand}</idRh>
-			<inputFile>${b64Str}</inputFile>
-			<userDomain>${this.userDomain}</userDomain>
-			<passwordDomain>${this.passwordDomain}</passwordDomain>
-		</ns2:readFileEmployees>
-	</S:Body>
-</S:Envelope>
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ser:addEmployee>
+            <employeeData>
+                <autType>USUARIO_PASSWORD</autType>
+                <blPermissionAddDocument>true</blPermissionAddDocument>
+                <blPreCert>true</blPreCert>
+                <employee>
+                    <addressEmployee></addressEmployee>
+                    <area>INTEGRACIONES POSTMAN</area>
+                    <country>MX</country>
+                    <curp></curp>
+                    <descriptionDomain></descriptionDomain>
+                    <email>${user.email}</email>
+                    <fax></fax>
+                    <idDomain>${this.idDomain}</idDomain>
+                    <idEmp></idEmp>
+                    <idEmployeeProfile>5</idEmployeeProfile>
+                    <idPerson></idPerson>
+                    <idRh></idRh>
+                    <keyMakerStorageType>KEYMAKER_DB</keyMakerStorageType>
+                    <locality></locality>
+                    <login>${user.email}</login>
+                    <nameEmployee>${user.name}</nameEmployee>
+                    <phone></phone>
+                    <receiveNotification>1</receiveNotification>
+                    <rfcEmployee></rfcEmployee>
+                    <state></state>
+                    <statusCertificate></statusCertificate>
+                    <storageType>1</storageType>
+                    <title></title>
+                    <totSignaturesPending></totSignaturesPending>
+                    <zipCode></zipCode>
+                    <idDomainFrom></idDomainFrom>
+                    <idProfile>5</idProfile>
+                    <keyTypeValue></keyTypeValue>
+                    <lockDateUser></lockDateUser>
+                    <postalCode></postalCode>
+                    <statusDomainTo></statusDomainTo>
+                    <unLockDateUser></unLockDateUser>
+                    <userExternalKeys>false</userExternalKeys>
+                    <userImportKeys>false</userImportKeys>
+                    <userService>false</userService>
+                </employee>
+                <idDomainTo>1</idDomainTo>
+                <password>${user.password}</password>
+                <passwordDomain>${this.passwordDomain}</passwordDomain>
+                <userDomain>${this.userDomain}</userDomain>
+            </employeeData>
+        </ser:addEmployee>
+    </soapenv:Body>
+</soapenv:Envelope>
       `,
     };
 

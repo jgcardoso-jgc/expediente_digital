@@ -177,7 +177,8 @@ const Segurisign = () => {
         const responseJSON = JSON.stringify(
           seguriSignController.segurisignUser
         );
-        if (responseJSON.token == null) {
+        console.log(responseJSON);
+        if (responseJSON.token === null) {
           toaster.errorToast("No estás registrado en Segurisign.");
           setLogged(false);
           setLoading(false);
