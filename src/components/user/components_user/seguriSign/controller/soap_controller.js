@@ -5,20 +5,23 @@
 /* eslint-disable quotes */
 /* eslint-disable no-tabs */
 /* eslint-disable indent */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-param-reassign */
 /* eslint-disable object-shorthand */
 import "jquery";
 import "jquery.soap";
+import SegurisignUser from "../segurisign_user";
 
 const $ = require("jquery");
 require("jquery.soap");
 
 class SoapController {
-  constructor(segurisignUser) {
-    this.segurisignUser = segurisignUser;
+  constructor() {
     this.passwordDomain = "HZAOT0hG50ZFkji3vTb47RjK3WOxHUExxIwII3zp6TY=";
     this.userDomain = "ws_test";
     this.idDomain = "1";
     this.url = "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV";
+    this.segurisignUser = new SegurisignUser();
   }
 
   toBase64 = (file) =>
@@ -193,8 +196,11 @@ class SoapController {
       response.documentElement.innerHTML,
       "application/xhtml+xml"
     );
+    console.log(docResponse);
     const idPerson =
       docResponse.getElementsByTagName("idPerson")[0].childNodes[0].nodeValue;
+
+    this.segurisignUser.idPerson = idPerson;
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
     if (resultado !== 1) {
@@ -228,13 +234,9 @@ class SoapController {
       response.documentElement.innerHTML,
       "application/xhtml+xml"
     );
-    console.log(docResponse);
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    if (resultado !== '1') {
-      alert('Error, correo no válido o no registrado');
-    }
-    return resultado === '1';
+    return resultado === 1;
   }
 
   async authenticateUser(idPerson, password) {
@@ -248,56 +250,12 @@ class SoapController {
       data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
    <soapenv:Header/>
    <soapenv:Body>
+           <ser:authenticateUser>
    <idDomain>${this.idDomain}</idDomain>
             <idPerson>${idPerson}</idPerson>
             <autType>USUARIO_PASSWORD</autType>
             <password>${password}</password>
-   </soapenv:Body>
-</soapenv:Envelope>`,
-    };
-
-    const response = await $.ajax(settings).done();
-    const parser = new DOMParser();
-    const docResponse = parser.parseFromString(
-      response.documentElement.innerHTML,
-      "application/xhtml+xml"
-    );
-    const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === '1';
-  }
-
-  async updateUserPassword(email, password) {
-    const settings = {
-      url: this.url,
-      method: "POST",
-      timeout: 0,
-      headers: {
-        "Content-Type": "text/xml",
-      },
-      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
-   <soapenv:Header/>
-   <soapenv:Body>
-   		<ser:doUpdateUserPasswords xmlns:ser="http://service.rne.operations.seguridata/">
-   <request>
-				<resultado>0</resultado>
-				<idDomain>${this.idDomain}</idDomain>
-				<idRhEmp>${this.segurisignUser.idRh}</idRhEmp>
-				<userDomain>${this.userDomain}</userDomain>
-				<passwordDomain>${this.passwordDomain}</passwordDomain>
-				<login>${email}</login>
-				<password>${password}<password>
-				<idEmployeeProfile>${this.segurisignUser.idEmployeeProfile}</idEmployeeProfile>
-				<updateCert>false</updateCert>
-				<flexUser>false</flexUser>
-				<onlyVerify>false</onlyVerify>
-				<noVerifyCert>false</noVerifyCert>
-				<autType>USUARIO_PASSWORD</autType>
-				<newPasswordAut>${password}</newPasswordAut>
-				<newPasswordPrivateKey>${password}</newPasswordPrivateKey>
-				<agentDefinedPassw>${password}</agentDefinedPassw>
-			</request>
-      		</ser:doUpdateUserPasswords>
+           </ser:authenticateUser>
    </soapenv:Body>
 </soapenv:Envelope>`,
     };
@@ -315,15 +273,56 @@ class SoapController {
 
   async loginUser(email, password) {
     const idPerson = await this.verifyLogin(email);
-    return this.authenticateUser(idPerson, password);
+    const result = await this.authenticateUser(idPerson, password);
+    return [result, idPerson];
+  }
+
+  async updateUserPassword(user) {
+    const settings = {
+      url: this.url,
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:doUpdateUserPasswords>
+         <request>
+            <idDomain>${this.idDomain}</idDomain>
+            <idRhEmp>${user.idRh}</idRhEmp>
+            <userDomain>${this.userDomain}</userDomain>
+            <passwordDomain>${this.passwordDomain}</passwordDomain>
+            <login>${user.email}</login>
+            <password>${user.password}</password>
+            <idEmployeeProfile>4</idEmployeeProfile>
+            <autType>USUARIO_PASSWORD</autType>
+            <newPasswordAut>${user.password}</newPasswordAut>
+            <newPasswordPrivateKey>${user.password}</newPasswordPrivateKey>
+         </request>
+      </ser:doUpdateUserPasswords>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+`,
+    };
+
+    const response = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      response.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    console.log(docResponse);
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    return resultado === '1';
   }
 
   async createUser(user) {
     await this.verifyLoginAdmin();
-    const header = 'NOMBRE|LOGIN|EMAIL|ESTATUS_USUARIO|IDENTIFICADOR_RH|DIRECCION|LOCALIDAD|ESTADO|CODIGO_POSTAL|RFC|CURP|TELEFONO|FAX|CLAVE_PAIS|CLAVE_DOMINIO|TITULO_USUARIO|AREA|CLAVE_PERFIL|PASSWORD|PERMISOS|';
-    const userString = `${user.name}|${user.email}|${user.email}|1||||||DICE920101LS1|DICE920101HVZZRL01||||${this.idDomain}||DESARROLLO|4|${user.password}|1`;
-    const b64Str = btoa(header + userString);
-    console.log(b64Str);
     const settings = {
       url: 'https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV',
       method: "POST",
@@ -350,7 +349,7 @@ class SoapController {
                     <fax></fax>
                     <idDomain>${this.idDomain}</idDomain>
                     <idEmp></idEmp>
-                    <idEmployeeProfile>5</idEmployeeProfile>
+                    <idEmployeeProfile>4</idEmployeeProfile>
                     <idPerson></idPerson>
                     <idRh></idRh>
                     <keyMakerStorageType>KEYMAKER_DB</keyMakerStorageType>
@@ -359,7 +358,7 @@ class SoapController {
                     <nameEmployee>${user.name}</nameEmployee>
                     <phone></phone>
                     <receiveNotification>1</receiveNotification>
-                    <rfcEmployee></rfcEmployee>
+                    <rfcEmployee>${user.rfc}</rfcEmployee>
                     <state></state>
                     <statusCertificate></statusCertificate>
                     <storageType>1</storageType>
@@ -367,7 +366,7 @@ class SoapController {
                     <totSignaturesPending></totSignaturesPending>
                     <zipCode></zipCode>
                     <idDomainFrom></idDomainFrom>
-                    <idProfile>5</idProfile>
+                    <idProfile>4</idProfile>
                     <keyTypeValue></keyTypeValue>
                     <lockDateUser></lockDateUser>
                     <postalCode></postalCode>
@@ -398,6 +397,16 @@ class SoapController {
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
     console.log(docResponse);
     return resultado === '1';
+  }
+
+  async createNewUser(user) {
+    await this.createUser(user);
+    const resultado = await this.loginUser(user.email, user.password);
+    if (resultado[0]) {
+      user.idRh = resultado[1];
+      console.log(user.idRh);
+    }
+    return this.updateUserPassword(user);
   }
 }
 
