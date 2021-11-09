@@ -14,7 +14,7 @@ import loadingGif from "../../../assets/loading.gif";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../waves/waves";
-import SoapController from "../../admin/components_admin/seguriSign/controller/soap_controller";
+import SoapController from "../../user/components_user/seguriSign/controller/soap_controller";
 
 const useStyles = createUseStyles(() => ({
   block: { display: "block" },
@@ -170,9 +170,9 @@ const RegisterNormal = () => {
     const soapController = new SoapController();
     setDisabled(true);
     setLoading(true);
-    console.log(soapController);
-    console.log(soapController.createUser);
-    const resultado = await soapController.createUser({ email, password, name });
+    const resultado = await soapController.createNewUser({
+      email, password, name, rfc
+    });
     console.log(resultado);
     await firebase
       .auth()
