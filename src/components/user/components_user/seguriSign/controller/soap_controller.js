@@ -1,3 +1,4 @@
+/* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-console */
 /* eslint-disable operator-linebreak */
@@ -20,7 +21,8 @@ class SoapController {
     this.passwordDomain = "HZAOT0hG50ZFkji3vTb47RjK3WOxHUExxIwII3zp6TY=";
     this.userDomain = "ws_test";
     this.idDomain = "1";
-    this.url = "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV";
+    this.url =
+      "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV";
     this.segurisignUser = new SegurisignUser();
   }
 
@@ -173,71 +175,81 @@ class SoapController {
   }
 
   async verifyLogin(email) {
-    const settings = {
-      url: this.url,
-      method: "POST",
-      timeout: 0,
-      headers: {
-        "Content-Type": "text/xml",
-      },
-      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
-   <soapenv:Header/>
-   <soapenv:Body>
-   <ser:verifyLogin>
-            <login>${email}</login>
-        </ser:verifyLogin>
-   </soapenv:Body>
-</soapenv:Envelope>`,
-    };
+    return new Promise((resolve, reject) => {
+      const settings = {
+        url: this.url,
+        method: "POST",
+        timeout: 0,
+        headers: {
+          "Content-Type": "text/xml",
+        },
+        data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+     <soapenv:Header/>
+     <soapenv:Body>
+     <ser:verifyLogin>
+              <login>${email}</login>
+          </ser:verifyLogin>
+     </soapenv:Body>
+  </soapenv:Envelope>`,
+      };
 
-    const response = await $.ajax(settings).done();
-    const parser = new DOMParser();
-    const docResponse = parser.parseFromString(
-      response.documentElement.innerHTML,
-      "application/xhtml+xml"
-    );
-    console.log(docResponse);
-    const idPerson =
-      docResponse.getElementsByTagName("idPerson")[0].childNodes[0].nodeValue;
-
-    this.segurisignUser.idPerson = idPerson;
-    const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    if (resultado !== 1) {
-      alert('Error, correo no válido o no registrado');
-    }
-    return idPerson;
+      $.ajax(settings).done((data) => {
+        const parser = new DOMParser();
+        const docResponse = parser.parseFromString(
+          data.documentElement.innerHTML,
+          "application/xhtml+xml"
+        );
+        console.log(docResponse);
+        const idPerson =
+          docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
+            .nodeValue;
+        this.segurisignUser.idPerson = idPerson;
+        const resultado =
+          docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+            .nodeValue;
+        if (resultado !== "1") {
+          reject("Error, correo no válido o no registrado");
+        }
+        resolve(idPerson);
+      });
+    });
   }
 
-  verifyLoginAdmin = async () => {
-    const settings = {
-      url: 'https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV',
-      method: "POST",
-      timeout: 0,
-      headers: {
-        "Content-Type": "text/xml",
-      },
-      data: `
-      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <ser:verifyLogin>
-            <login>agente@seguridata.com</login>
-        </ser:verifyLogin>
-    </soapenv:Body>
-</soapenv:Envelope>`,
-    };
-
-    const response = await $.ajax(settings).done();
-    const parser = new DOMParser();
-    const docResponse = parser.parseFromString(
-      response.documentElement.innerHTML,
-      "application/xhtml+xml"
-    );
-    const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === 1;
-  }
+  verifyLoginAdmin = async () =>
+    new Promise((resolve, reject) => {
+      const settings = {
+        url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
+        method: "POST",
+        timeout: 0,
+        headers: {
+          "Content-Type": "text/xml",
+        },
+        data: `
+        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
+      <soapenv:Header/>
+      <soapenv:Body>
+          <ser:verifyLogin>
+              <login>agente@seguridata.com</login>
+          </ser:verifyLogin>
+      </soapenv:Body>
+  </soapenv:Envelope>`,
+      };
+      $.ajax(settings)
+        .done((data) => {
+          const parser = new DOMParser();
+          const docResponse = parser.parseFromString(
+            data.documentElement.innerHTML,
+            "application/xhtml+xml"
+          );
+          const resultado =
+            docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+              .nodeValue;
+          resolve(resultado === 1);
+        })
+        .fail(() => {
+          reject("error");
+        });
+    });
 
   async authenticateUser(idPerson, password) {
     const settings = {
@@ -268,7 +280,7 @@ class SoapController {
     );
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === '1';
+    return resultado === "1";
   }
 
   async loginUser(email, password) {
@@ -318,95 +330,113 @@ class SoapController {
     console.log(docResponse);
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === '1';
+    return resultado === "1";
   }
 
   async createUser(user) {
-    await this.verifyLoginAdmin();
-    const settings = {
-      url: 'https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV',
-      method: "POST",
-      timeout: 0,
-      headers: {
-        "Content-Type": "text/xml",
-      },
-      data: `
-      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <ser:addEmployee>
-            <employeeData>
-                <autType>USUARIO_PASSWORD</autType>
-                <blPermissionAddDocument>true</blPermissionAddDocument>
-                <blPreCert>true</blPreCert>
-                <employee>
-                    <addressEmployee></addressEmployee>
-                    <area>INTEGRACIONES POSTMAN</area>
-                    <country>MX</country>
-                    <curp></curp>
-                    <descriptionDomain></descriptionDomain>
-                    <email>${user.email}</email>
-                    <fax></fax>
-                    <idDomain>${this.idDomain}</idDomain>
-                    <idEmp></idEmp>
-                    <idEmployeeProfile>4</idEmployeeProfile>
-                    <idPerson></idPerson>
-                    <idRh></idRh>
-                    <keyMakerStorageType>KEYMAKER_DB</keyMakerStorageType>
-                    <locality></locality>
-                    <login>${user.email}</login>
-                    <nameEmployee>${user.name}</nameEmployee>
-                    <phone></phone>
-                    <receiveNotification>1</receiveNotification>
-                    <rfcEmployee>${user.rfc}</rfcEmployee>
-                    <state></state>
-                    <statusCertificate></statusCertificate>
-                    <storageType>1</storageType>
-                    <title></title>
-                    <totSignaturesPending></totSignaturesPending>
-                    <zipCode></zipCode>
-                    <idDomainFrom></idDomainFrom>
-                    <idProfile>4</idProfile>
-                    <keyTypeValue></keyTypeValue>
-                    <lockDateUser></lockDateUser>
-                    <postalCode></postalCode>
-                    <statusDomainTo></statusDomainTo>
-                    <unLockDateUser></unLockDateUser>
-                    <userExternalKeys>false</userExternalKeys>
-                    <userImportKeys>false</userImportKeys>
-                    <userService>false</userService>
-                </employee>
-                <idDomainTo>1</idDomainTo>
-                <password>${user.password}</password>
-                <passwordDomain>${this.passwordDomain}</passwordDomain>
-                <userDomain>${this.userDomain}</userDomain>
-            </employeeData>
-        </ser:addEmployee>
-    </soapenv:Body>
-</soapenv:Envelope>
-      `,
-    };
+    return new Promise((resolve, reject) => {
+      this.verifyLoginAdmin().then(() => {
+        const settings = {
+          url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
+          method: "POST",
+          timeout: 0,
+          headers: {
+            "Content-Type": "text/xml",
+          },
+          data: `
+          <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
+        <soapenv:Header/>
+        <soapenv:Body>
+            <ser:addEmployee>
+                <employeeData>
+                    <autType>USUARIO_PASSWORD</autType>
+                    <blPermissionAddDocument>true</blPermissionAddDocument>
+                    <blPreCert>true</blPreCert>
+                    <employee>
+                        <addressEmployee></addressEmployee>
+                        <area>INTEGRACIONES POSTMAN</area>
+                        <country>MX</country>
+                        <curp></curp>
+                        <descriptionDomain></descriptionDomain>
+                        <email>${user.email}</email>
+                        <fax></fax>
+                        <idDomain>${this.idDomain}</idDomain>
+                        <idEmp></idEmp>
+                        <idEmployeeProfile>4</idEmployeeProfile>
+                        <idPerson></idPerson>
+                        <idRh></idRh>
+                        <keyMakerStorageType>KEYMAKER_DB</keyMakerStorageType>
+                        <locality></locality>
+                        <login>${user.email}</login>
+                        <nameEmployee>${user.name}</nameEmployee>
+                        <phone></phone>
+                        <receiveNotification>1</receiveNotification>
+                        <rfcEmployee>${user.rfc}</rfcEmployee>
+                        <state></state>
+                        <statusCertificate></statusCertificate>
+                        <storageType>1</storageType>
+                        <title></title>
+                        <totSignaturesPending></totSignaturesPending>
+                        <zipCode></zipCode>
+                        <idDomainFrom></idDomainFrom>
+                        <idProfile>4</idProfile>
+                        <keyTypeValue></keyTypeValue>
+                        <lockDateUser></lockDateUser>
+                        <postalCode></postalCode>
+                        <statusDomainTo></statusDomainTo>
+                        <unLockDateUser></unLockDateUser>
+                        <userExternalKeys>false</userExternalKeys>
+                        <userImportKeys>false</userImportKeys>
+                        <userService>false</userService>
+                    </employee>
+                    <idDomainTo>1</idDomainTo>
+                    <password>${user.password}</password>
+                    <passwordDomain>${this.passwordDomain}</passwordDomain>
+                    <userDomain>${this.userDomain}</userDomain>
+                </employeeData>
+            </ser:addEmployee>
+        </soapenv:Body>
+    </soapenv:Envelope>
+          `,
+        };
 
-    const response = await $.ajax(settings).done();
-    const parser = new DOMParser();
-    const docResponse = parser.parseFromString(
-      response.documentElement.innerHTML,
-      "application/xhtml+xml"
-    );
-    const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    console.log(docResponse);
-    return resultado === '1';
+        $.ajax(settings)
+          .done((data) => {
+            const parser = new DOMParser();
+            const docResponse = parser.parseFromString(
+              data.documentElement.innerHTML,
+              "application/xhtml+xml"
+            );
+            const resultado =
+              docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+                .nodeValue;
+            console.log(`final:${docResponse}`);
+            resolve(resultado === "1");
+          })
+          .fail((e) => {
+            reject(e);
+          });
+      });
+    });
   }
 
   async createNewUser(user) {
-    await this.createUser(user);
-    const resultado = await this.loginUser(user.email, user.password);
-    if (resultado[0]) {
-      user.idRh = resultado[1];
-      console.log(user.idRh);
-    }
-    return this.updateUserPassword(user);
+    return new Promise((resolve, reject) => {
+      this.createUser(user)
+        .then(async () => {
+          const resultado = await this.loginUser(user.email, user.password);
+          if (resultado[0]) {
+            user.idRh = resultado[1];
+            console.log(user.idRh);
+          } else {
+            reject("error");
+          }
+          resolve(this.updateUserPassword(user));
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
   }
 }
 

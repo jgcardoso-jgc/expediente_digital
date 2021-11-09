@@ -66,6 +66,7 @@ const AjustesUser = () => {
   const { rfc } = user;
   const { cargo } = user;
   const { curp } = user;
+  const { email } = user;
 
   function showInputCURP() {
     setHidden((prev) => !prev);
@@ -114,6 +115,10 @@ const AjustesUser = () => {
               <b>RFC</b>
             </p>
             <p>{rfc}</p>
+            <p className={classes.mb0}>
+              <b>Email</b>
+            </p>
+            <p>{email}</p>
             <p className={classes.mb0}>
               <b>Cargo</b>
             </p>

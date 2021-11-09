@@ -7,7 +7,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import { useFirebaseApp } from "reactfire";
 import { useHistory, Link } from "react-router-dom";
-import { createUseStyles, useTheme } from "react-jss";
+import { createUseStyles } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
 import Div100vh from "react-div-100vh";
 import loadingGif from "../../../assets/loading.gif";
@@ -76,8 +76,7 @@ const useStyles = createUseStyles(() => ({
 const RegisterNormal = () => {
   const firebase = useFirebaseApp();
   const history = useHistory();
-  const theme = useTheme();
-  const classes = useStyles({ theme });
+  const classes = useStyles();
   const db = firebase.firestore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -166,15 +165,8 @@ const RegisterNormal = () => {
     }
   }
 
-  const submit = async () => {
-    const soapController = new SoapController();
-    setDisabled(true);
-    setLoading(true);
-    const resultado = await soapController.createNewUser({
-      email, password, name, rfc
-    });
-    console.log(resultado);
-    await firebase
+  function submitFirebase() {
+    firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((res) => uploadData(res))
@@ -183,7 +175,40 @@ const RegisterNormal = () => {
         setDisabled(false);
         toast(error.message);
       });
+  }
+
+  const showError = (e) => {
+    setLoading(false);
+    setDisabled(false);
+    const parser = new DOMParser();
+    const errorResponse = parser.parseFromString(
+      e.responseText,
+      "application/xhtml+xml"
+    );
+    const resultado =
+      errorResponse.getElementsByTagName("message")[0].childNodes[0].nodeValue;
+    toast(resultado);
   };
+
+  const submit = async () => {
+    const soapController = new SoapController();
+    setDisabled(true);
+    setLoading(true);
+    soapController
+      .createNewUser({
+        email,
+        password,
+        name,
+        rfc,
+      })
+      .then(() => {
+        submitFirebase();
+      })
+      .catch((e) => {
+        showError(e);
+      });
+  };
+
   return (
     <Div100vh>
       {loading ? (
