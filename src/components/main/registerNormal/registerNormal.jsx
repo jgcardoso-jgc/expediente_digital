@@ -15,6 +15,7 @@ import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../waves/waves";
 import SoapController from "../../user/components_user/seguriSign/controller/soap_controller";
+import SegurisignController from "../../user/components_user/seguriSign/controller/segurisign_controller";
 
 const useStyles = createUseStyles(() => ({
   block: { display: "block" },
@@ -85,6 +86,7 @@ const RegisterNormal = () => {
   const [disabled, setDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const rfcText = useRef();
+  const seguriSignController = new SegurisignController();
   const passText = useRef();
 
   function rfcValido(rfcPassed) {
@@ -202,6 +204,26 @@ const RegisterNormal = () => {
         rfc,
       })
       .then(() => {
+        seguriSignController
+          .loginUser(email, password)
+          .then(() => {
+            const responseJSON = JSON.stringify(
+              seguriSignController.segurisignUser
+            );
+            console.log(responseJSON);
+            if (responseJSON.token === null) {
+              alert("No estás registrado en Segurisign.");
+            } else {
+              localStorage.setItem(
+                "sign-user",
+                JSON.stringify(seguriSignController.segurisignUser)
+              );
+            }
+          })
+          .catch((error) => {
+            alert(error);
+          });
+
         submitFirebase();
       })
       .catch((e) => {

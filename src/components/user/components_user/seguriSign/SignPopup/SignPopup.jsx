@@ -67,12 +67,11 @@ const SignPopUP = (props) => {
   const userController = new UserController(
     seguriSignController.segurisignUser.email
   );
-  const soapController = new SoapController(
-    seguriSignController.segurisignUser
-  );
+  const soapController = new SoapController();
   const [loading, setLoading] = useState(false);
   const [signType, setSignType] = useState("");
   const [faceMatched, setFaceMatched] = useState(false);
+  soapController.segurisignUser = seguriSignController.segurisignUser;
   const clear = () => sigCanvas.current.clear();
   const sign = async () => {
     const signedSuccessfully = await seguriSignController.biometricSignature(

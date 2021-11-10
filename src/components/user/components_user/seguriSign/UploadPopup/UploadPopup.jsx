@@ -73,7 +73,7 @@ const UploadPopup = (props) => {
   const { toaster } = props;
   const classes = useStyles();
   const { seguriSignController } = props;
-  const soapController = new SoapController(seguriSignController.segurisignUser);
+  const soapController = new SoapController();
   const userController = new UserController(seguriSignController.segurisignUser.email);
   const [loader, setLoader] = useState(false);
   const [requiresFM, setRequiresFM] = useState(false);
@@ -84,7 +84,7 @@ const UploadPopup = (props) => {
   });
   const [signers, setSigners] = useState({ arr: [] });
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
+  soapController.segurisignUser = seguriSignController.segurisignUser;
   const addDocumentServer = () => {
     if (signers.arr.length === 0) {
       toaster.warningToast("Necesitas agregar por lo menos un firmante");

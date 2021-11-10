@@ -86,6 +86,7 @@ class SoapController {
       response.documentElement.innerHTML,
       "application/xhtml+xml"
     );
+    console.log(docResponse);
     const multilateralId =
       docResponse.getElementsByTagName("multilateralId")[0].childNodes[0]
         .nodeValue;

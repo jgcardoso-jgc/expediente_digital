@@ -12,7 +12,8 @@ import loadingGif from "../../../assets/loading.gif";
 import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import Waves from "../waves/waves";
-import SoapController from "../../admin/components_admin/seguriSign/controller/soap_controller";
+import SoapController from "../../user/components_user/seguriSign/controller/soap_controller";
+import SegurisignController from "../../user/components_user/seguriSign/controller/segurisign_controller";
 
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
@@ -68,6 +69,7 @@ const LoginNormal = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const seguriSignController = new SegurisignController();
   const soapController = new SoapController();
   async function submit() {
     try {
@@ -76,6 +78,26 @@ const LoginNormal = () => {
         setDisable(true);
         await firebase.auth().signInWithEmailAndPassword(email, password);
         const resultado = await soapController.loginUser(email, password);
+
+        seguriSignController
+          .loginUser(email, password)
+          .then(() => {
+            const responseJSON = JSON.stringify(
+              seguriSignController.segurisignUser,
+            );
+            console.log(responseJSON);
+            if (responseJSON.token === null) {
+              alert("No estás registrado en Segurisign.");
+            } else {
+              localStorage.setItem(
+                "sign-user",
+                JSON.stringify(seguriSignController.segurisignUser),
+              );
+            }
+          })
+          .catch((error) => {
+            alert(error);
+          });
         console.log(resultado);
       } else {
         setLoading(false);
