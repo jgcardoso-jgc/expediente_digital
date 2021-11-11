@@ -9,7 +9,7 @@ import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
 import PropTypes from "prop-types";
 import { createUseStyles } from "react-jss";
-import styles from "../../../../../../resources/theme";
+import styles from "../../../../../resources/theme";
 
 const globalTheme = createUseStyles(styles);
 

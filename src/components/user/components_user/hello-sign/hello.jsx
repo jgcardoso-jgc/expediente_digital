@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import "./hello.css";
 import PropTypes from "prop-types";
-import UserController from "../seguriSign/controller/user_controller";
+import UserController from "../../../shared/seguriSign/controller/user_controller";
 import CustomToasts from "../Toasts/CustomToasts";
 
 const apiURL = "https://demo-api.incodesmile.com/";

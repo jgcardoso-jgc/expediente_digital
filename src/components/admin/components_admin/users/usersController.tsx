@@ -30,6 +30,7 @@ function fetchCargos(db) {
 async function sendWelcomeEmail(email) {
   return new Promise((resolve, reject) => {
     const msg = "Bienvenido a Seguridata | Expediente <br> Para registrarte haz click en el siguiente link: <br> <a href='https://expediente-digital.vercel.app/loginNormal'> Inicia ahora </a> <br> Tu contraseña es: <br> <b>OneSeguridata2021</b>";
+    // agregar mensaje de bienvenida a estudiante
     const data = {
       email,
       msg,

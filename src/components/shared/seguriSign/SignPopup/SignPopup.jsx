@@ -15,9 +15,9 @@ import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import { createUseStyles } from "react-jss";
 import UserController from "../controller/user_controller";
-import HelloInitSign from "../../hello-sign/hello";
-import signGif from "../../../../../assets/sign.gif";
-import loadingGif from "../../../../../assets/loading.gif";
+import HelloInitSign from "../../../user/components_user/hello-sign/hello";
+import signGif from "../../../../assets/sign.gif";
+import loadingGif from "../../../../assets/loading.gif";
 import SoapController from "../controller/soap_controller";
 
 const useStyles = createUseStyles(() => ({
@@ -67,12 +67,11 @@ const SignPopUP = (props) => {
   const userController = new UserController(
     seguriSignController.segurisignUser.email
   );
-  const soapController = new SoapController(
-    seguriSignController.segurisignUser
-  );
+  const soapController = new SoapController();
   const [loading, setLoading] = useState(false);
   const [signType, setSignType] = useState("");
   const [faceMatched, setFaceMatched] = useState(false);
+  soapController.segurisignUser = seguriSignController.segurisignUser;
   const clear = () => sigCanvas.current.clear();
   const sign = async () => {
     const signedSuccessfully = await seguriSignController.biometricSignature(

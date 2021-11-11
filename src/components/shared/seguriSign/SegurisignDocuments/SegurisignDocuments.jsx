@@ -7,16 +7,16 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import PropTypes from "prop-types";
 import { createUseStyles } from "react-jss";
-import CustomToasts from "../../Toasts/CustomToasts";
+import CustomToasts from "../../../user/components_user/Toasts/CustomToasts";
 import UploadPopup from "../UploadPopup/UploadPopup";
 import SignedDocuments from "./SignedDocuments/SignedDocuments";
 import UnsignedDocuments from "./UnsignedDocuments/UnsignedDocuments";
 import CancelledDocuments from "./CancelledDocuments/CancelledDocuments";
 import CancelledThirdsDocuments from "./CancelledThirdsDocuments/CancelledThirdsDocuments";
 import ExpiredDocuments from "./ExpiredDocuments/ExpiredDocuments";
-import styles from "../../../../../resources/theme";
+import styles from "../../../../resources/theme";
 import UserController from "../controller/user_controller";
-import loading from "../../../../../assets/loading.gif";
+import loading from "../../../../assets/loading.gif";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -47,7 +47,9 @@ const useStyles = createUseStyles(() => ({
 
 const SegurisignDocuments = (props) => {
   const { seguriSignController } = props;
-  const userController = new UserController(seguriSignController.segurisignUser.email);
+  const userController = new UserController(
+    seguriSignController.segurisignUser.email
+  );
   const global = globalTheme();
   const [show, setShow] = useState(false);
   const [location, setLocation] = useState({

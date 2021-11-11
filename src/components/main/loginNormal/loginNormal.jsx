@@ -1,5 +1,5 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-alert */
 /* eslint-disable quotes */
 import React, { useState, useEffect } from "react";
 import "firebase/auth";
@@ -12,8 +12,8 @@ import loadingGif from "../../../assets/loading.gif";
 import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import Waves from "../waves/waves";
-import SoapController from "../../user/components_user/seguriSign/controller/soap_controller";
-import SegurisignController from "../../user/components_user/seguriSign/controller/segurisign_controller";
+import SoapController from "../../shared/seguriSign/controller/soap_controller";
+import SegurisignController from "../../shared/seguriSign/controller/segurisign_controller";
 
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
@@ -83,15 +83,15 @@ const LoginNormal = () => {
           .loginUser(email, password)
           .then(() => {
             const responseJSON = JSON.stringify(
-              seguriSignController.segurisignUser,
+              seguriSignController.segurisignUser
             );
-            console.log(responseJSON);
+            // console.log(responseJSON);
             if (responseJSON.token === null) {
               alert("No estás registrado en Segurisign.");
             } else {
               localStorage.setItem(
                 "sign-user",
-                JSON.stringify(seguriSignController.segurisignUser),
+                JSON.stringify(seguriSignController.segurisignUser)
               );
             }
           })

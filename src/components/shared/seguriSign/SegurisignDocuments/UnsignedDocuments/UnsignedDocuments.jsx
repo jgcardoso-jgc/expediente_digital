@@ -23,7 +23,7 @@ import { createUseStyles } from "react-jss";
 import SignPopUP from "../../SignPopup/SignPopup";
 import CancelPopup from "../../CancelPopup/CancelPopup";
 import CustomLoader from "../../CustomLoader/CustomLoader";
-import faceid from "../../../../../../assets/faceid.gif";
+import faceid from "../../../../../assets/faceid.gif";
 
 const useStyles = createUseStyles(() => ({
   recordarBt: {

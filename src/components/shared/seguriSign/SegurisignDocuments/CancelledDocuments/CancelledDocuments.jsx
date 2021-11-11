@@ -1,26 +1,29 @@
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
 import { Accordion } from "react-bootstrap";
 import React from "react";
 import PropTypes from "prop-types";
+import { createUseStyles } from "react-jss";
+import styles from "../../../../../resources/theme";
 
-const CancelledThirdsDocuments = (props) => {
-  let { cancelledByThirds } = props;
+const globalTheme = createUseStyles(styles);
+
+const CancelledDocuments = (props) => {
+  const global = globalTheme();
+  let { cancelledDoc } = props;
   const { seguriSignController } = props;
-
-  if (cancelledByThirds === "404") {
-    cancelledByThirds = [];
+  if (cancelledDoc === "404") {
+    cancelledDoc = [];
   }
-
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
-      <Accordion.Header>Cancelados Por Terceros</Accordion.Header>
+      <Accordion.Header>Cancelados</Accordion.Header>
       <Accordion.Body bsPrefix="seguridata-btn">
         <Accordion flush>
-          {cancelledByThirds.map((item, index) => (
+          {cancelledDoc.map((item, index) => (
             <Accordion.Item eventKey={index + 1}>
               <Accordion.Header>{item.fileName}</Accordion.Header>
               <Accordion.Body>
@@ -28,13 +31,12 @@ const CancelledThirdsDocuments = (props) => {
                   <div style={{ "margin-left": "2rem" }} align="left">
                     <li>Tipo de documento: {item.docType}</li>
                     <li>Fecha de cancelación: {item.dateCancel}</li>
-                    <li>Cancelado por: {item.canceledBy}</li>
                     <li>Motivo de cancelación: {item.reasonCancelDocument}</li>
                   </div>
                   <br />
                   <button
                     type="button"
-                    className="btn-seguridata-lg"
+                    className={global.initBt}
                     onClick={() =>
                       seguriSignController
                         .getDocument(item.multilateralId)
@@ -55,9 +57,8 @@ const CancelledThirdsDocuments = (props) => {
   );
 };
 
-CancelledThirdsDocuments.propTypes = {
-  cancelledByThirds: PropTypes.any.isRequired,
+CancelledDocuments.propTypes = {
+  cancelledDoc: PropTypes.any.isRequired,
   seguriSignController: PropTypes.any.isRequired,
 };
-
-export default CancelledThirdsDocuments;
+export default CancelledDocuments;

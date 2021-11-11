@@ -14,8 +14,8 @@ import loadingGif from "../../../assets/loading.gif";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../waves/waves";
-import SoapController from "../../user/components_user/seguriSign/controller/soap_controller";
-import SegurisignController from "../../user/components_user/seguriSign/controller/segurisign_controller";
+import SoapController from "../../shared/seguriSign/controller/soap_controller";
+import SegurisignController from "../../shared/seguriSign/controller/segurisign_controller";
 
 const useStyles = createUseStyles(() => ({
   block: { display: "block" },

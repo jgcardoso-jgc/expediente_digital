@@ -7,10 +7,10 @@ import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import SegurisignController from "./controller/segurisign_controller";
 import SegurisignDocuments from "./SegurisignDocuments/SegurisignDocuments";
-import CustomToasts from "../Toasts/CustomToasts";
-import locked from "../../../../assets/locked.png";
-import styles from "../../../../resources/theme";
-import loading from "../../../../assets/loading.gif";
+import CustomToasts from "../../user/components_user/Toasts/CustomToasts";
+import locked from "../../../assets/locked.png";
+import styles from "../../../resources/theme";
+import loading from "../../../assets/loading.gif";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -161,10 +161,10 @@ const seguriSignController = new SegurisignController();
 const Segurisign = () => {
   const passwordRef = useRef(null);
   const emailRef = useRef(null);
+  const cookie = localStorage.getItem("sign-user");
   const toaster = new CustomToasts();
   const [logged, setLogged] = useState(false);
   const global = globalTheme();
-  const [loadedCache, setLoadedCache] = useState(false);
   const [load, setLoading] = useState(true);
   const classes = useStyles();
 
@@ -198,61 +198,57 @@ const Segurisign = () => {
   };
 
   useEffect(() => {
-    if (!loadedCache) {
-      const cookie = localStorage.getItem("sign-user");
-      if (cookie) {
-        seguriSignController.segurisignUser = JSON.parse(cookie);
-        setLogged(true);
-      }
-      setLoadedCache(true);
-      setLoading(false);
+    if (cookie) {
+      seguriSignController.segurisignUser = JSON.parse(cookie);
+      setLogged(true);
     }
-  }, [loadedCache]);
-
-  if (logged) {
-    return <SegurisignDocuments seguriSignController={seguriSignController} />;
-  }
-  if (load) {
-    return (
-      <div className={classes.center}>
-        <img className={classes.imgLoading} alt="load" src={loading} />
-      </div>
-    );
-  }
+    setLoading(false);
+  }, []);
 
   return (
     <div>
       <ToastContainer />
       <div>
-        <Card className={classes.card} style={{ width: "20rem" }}>
-          <img src={locked} className={classes.lockedImg} alt="locked" />
-          <h5 className={classes.passTxt}>
-            <b>Ingresa tus datos</b>
-          </h5>
-          <Card.Text>
-            <div>
-              <input
-                className={classes.inputStyle}
-                ref={emailRef}
-                type="email"
-                placeholder="Correo electrónico"
-              />
+        {load ? (
+          <div className={classes.center}>
+            <img className={classes.imgLoading} alt="load" src={loading} />
+          </div>
+        ) : (
+          ""
+        )}
+        {logged ? (
+          <SegurisignDocuments seguriSignController={seguriSignController} />
+        ) : (
+          <Card className={classes.card} style={{ width: "20rem" }}>
+            <img src={locked} className={classes.lockedImg} alt="locked" />
+            <h5 className={classes.passTxt}>
+              <b>Ingresa tus datos</b>
+            </h5>
+            <Card.Text>
+              <div>
+                <input
+                  className={classes.inputStyle}
+                  ref={emailRef}
+                  type="email"
+                  placeholder="Correo electrónico"
+                />
 
-              <input
-                className={classes.inputStyle}
-                ref={passwordRef}
-                type="password"
-                placeholder="Contraseña"
-              />
-            </div>
-          </Card.Text>
-          <button type="button" className={global.initBt} onClick={signIn}>
-            Entrar
-          </button>
-          <Link to="/registerSign" className={classes.registerLink}>
-            ¿Aun no estás registrado?
-          </Link>
-        </Card>
+                <input
+                  className={classes.inputStyle}
+                  ref={passwordRef}
+                  type="password"
+                  placeholder="Contraseña"
+                />
+              </div>
+            </Card.Text>
+            <button type="button" className={global.initBt} onClick={signIn}>
+              Entrar
+            </button>
+            <Link to="/registerSign" className={classes.registerLink}>
+              ¿Aun no estás registrado?
+            </Link>
+          </Card>
+        )}
       </div>
     </div>
   );

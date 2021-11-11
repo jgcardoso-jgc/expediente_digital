@@ -13,10 +13,10 @@ import ToOnBoarding from "../components_user/toOnboarding/toOnboarding";
 import FinalStep from "../components_user/finalSteps/finalStep";
 import AjustesUser from "../components_user/ajustes/ajustes";
 import SubirDocumentos from "../components_user/subirDocumento/subirDocumento";
-import Segurisign from "../components_user/seguriSign/seguriSign";
+import Segurisign from "../../shared/seguriSign/seguriSign";
 import RecoverPassword from "../components_user/resetPassword/resetPassword";
 import VerificationSended from "../components_user/verificationSended/verificationSended";
-import RegisterSign from "../components_user/seguriSign/registerSign/registerSign";
+import RegisterSign from "../../shared/seguriSign/registerSign/registerSign";
 
 const DashboardComponent = lazy(() => import("../components_user/dashboard"));
 
