@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
 import React from "react";
@@ -7,6 +8,7 @@ import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import Waves from "../waves/waves";
+import easy_logo from "../../../assets/easy_logo.svg";
 
 const useStyles = createUseStyles(() => ({
   navmain: { top: "0px", position: "absolute !important", width: "100%" },
@@ -38,6 +40,13 @@ const useStyles = createUseStyles(() => ({
   bgBlack: {
     backgroundColor: "rgb(0, 0, 0)",
     color: "white",
+  },
+  easyLogo: {
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+    maxWidth: 300,
+    marginTop: 80,
   },
   rowMax400: {
     maxWidth: "440px",
@@ -76,9 +85,7 @@ function Login() {
     <Div100vh>
       <NavBarMainPage className={classes.navmain} />
       <div>
-        <h1 className={classes.segTitle}>
-          <b>ONE</b> Seguridata
-        </h1>
+        <img alt="logo" className={classes.easyLogo} src={easy_logo} />
         <Row className={classes.rowMax400}>
           <div className={classes.first}>
             <h4 className={classes.title}>Regístrate</h4>

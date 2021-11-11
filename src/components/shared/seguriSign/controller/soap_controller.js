@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-console */
@@ -11,6 +12,8 @@
 /* eslint-disable object-shorthand */
 import "jquery";
 import "jquery.soap";
+import axios from "axios";
+import { stringify } from "querystring";
 import SegurisignUser from "../segurisign_user";
 
 const $ = require("jquery");
@@ -439,6 +442,26 @@ class SoapController {
         });
     });
   }
+
+  sendWelcomeEmail = async (email) =>
+    new Promise((resolve, reject) => {
+      const msg = "Tienes que subir un nuevo documento.";
+      // agregar mensaje de bienvenida a estudiante
+      const data = {
+        email,
+        msg,
+      };
+      axios({
+        method: "post",
+        url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendWelcome",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: stringify(data),
+      })
+        .then((res) => resolve(`sended:${res.status}`))
+        .catch((res) => reject(`error:${res}`));
+    });
 }
 
 export default SoapController;

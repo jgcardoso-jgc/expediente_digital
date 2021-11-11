@@ -74,10 +74,13 @@ const UploadPopup = (props) => {
   const classes = useStyles();
   const { seguriSignController } = props;
   const soapController = new SoapController();
-  const userController = new UserController(seguriSignController.segurisignUser.email);
+  const userController = new UserController(
+    seguriSignController.segurisignUser.email
+  );
+  const { email } = seguriSignController.segurisignUser;
   const [loader, setLoader] = useState(false);
   const [requiresFM, setRequiresFM] = useState(false);
-  const [signType, setSignType] = useState('fab');
+  const [signType, setSignType] = useState("fab");
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
     hasSelected: false,
@@ -96,7 +99,8 @@ const UploadPopup = (props) => {
     }
 
     setLoader(true);
-    soapController.addDocumentString(signers.arr, selectedFile.selectedFile)
+    soapController
+      .addDocumentString(signers.arr, selectedFile.selectedFile)
       .then(async (response) => {
         console.log(response);
         if (response[0]) {
@@ -107,10 +111,12 @@ const UploadPopup = (props) => {
             requiresFM
           );
           toaster.successToast("Documento subido con éxito");
+          soapController.sendWelcomeEmail(email).then(() => {
+            toaster.successToast("Email enviado con éxito");
+          });
+          // aqui enviar correo
         } else {
-          toaster.errorToast(
-            "Error al subir documento, intenta de nuevo"
-          );
+          toaster.errorToast("Error al subir documento, intenta de nuevo");
         }
         setLoader(false);
       })
@@ -166,7 +172,7 @@ const UploadPopup = (props) => {
     setLoader(true);
     const isValid = await seguriSignController.getSignersList(signerMail);
     setLoader(false);
-    if (isValid || signType === 'server') {
+    if (isValid || signType === "server") {
       if (signers.arr.includes(signerMail)) {
         props.toaster.warningToast("Firmante ya agregado");
       } else {
@@ -286,10 +292,10 @@ const UploadPopup = (props) => {
                 }}
                 className={classes.subirBt}
                 onClick={async () => {
-                  if (signType === 'fab') {
+                  if (signType === "fab") {
                     addDocument();
                   } else {
-                    console.log('add doc');
+                    // console.log('add doc');
                     addDocumentServer();
                   }
                   onClose();
