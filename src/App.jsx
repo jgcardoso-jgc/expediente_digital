@@ -40,7 +40,6 @@ function App() {
   useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  const [isLoading, setLoading] = useState(true);
   const [user, setUser] = useState(false);
   const [admin, setAdmin] = useState(false);
 
@@ -103,7 +102,6 @@ function App() {
         setUser(false);
         setAdmin(false);
       }
-      setLoading(false);
     });
   }
 
@@ -121,10 +119,6 @@ function App() {
       setUser(false);
     }
   }, [firebase]);
-
-  if (isLoading) {
-    return <div className="App">Cargando...</div>;
-  }
 
   return (
     <Router>

@@ -212,7 +212,7 @@ const RegisterNormal = () => {
             );
             console.log(responseJSON);
             if (responseJSON.token === null) {
-              alert("No estás registrado en Segurisign.");
+              toast("No estás registrado en Segurisign.");
             } else {
               localStorage.setItem(
                 "sign-user",

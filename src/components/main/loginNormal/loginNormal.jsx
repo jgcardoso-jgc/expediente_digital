@@ -11,8 +11,8 @@ import Container from "react-bootstrap/Container";
 import loadingGif from "../../../assets/loading.gif";
 import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
-import Waves from "../waves/waves";
 import SoapController from "../../shared/seguriSign/controller/soap_controller";
+import waves from "../../../assets/waves.svg";
 import SegurisignController from "../../shared/seguriSign/controller/segurisign_controller";
 
 const useStyles = createUseStyles(() => ({
@@ -37,15 +37,22 @@ const useStyles = createUseStyles(() => ({
   },
   inputStyle: {
     width: "100%",
-    border: "0",
-    borderBottom: "1px solid rgb(194, 194, 194)",
+    border: "1px solid #f1f1f1",
     fontSize: "16px",
+    background: "#f1f1f1",
+    marginTop: 8,
   },
   tright: {
     textAlign: "right",
   },
   mb20: {
     marginBottom: 20,
+  },
+  wave: {
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    position: "absolute",
+    bottom: 0,
   },
   expText: { marginTop: "4px" },
   pt20: { paddingTop: "20px" },
@@ -87,7 +94,7 @@ const LoginNormal = () => {
             );
             // console.log(responseJSON);
             if (responseJSON.token === null) {
-              alert("No estás registrado en Segurisign.");
+              toast("No estás registrado en Segurisign.");
             } else {
               localStorage.setItem(
                 "sign-user",
@@ -182,7 +189,7 @@ const LoginNormal = () => {
               </Link>
             </div>
           </Container>
-          <Waves />
+          <img src={waves} className={classes.wave} alt="waves" />
         </div>
       )}
     </div>
