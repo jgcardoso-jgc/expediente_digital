@@ -1,74 +1,35 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useFirebaseApp } from "reactfire";
-import { createUseStyles } from "react-jss";
 import Row from "react-bootstrap/Row";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import { fetchCargos, createUser, sendWelcomeEmail } from "./usersController";
 import TableView from "../table/tableView";
 import { docs, cargosLista } from "./usersModel";
-
-const useStyles = createUseStyles({
-  editButton: {
-    border: "1px solid transparent",
-    background: "#d0d0d0",
-    borderRadius: "4px",
-  },
-  inputStyle: {
-    width: "100%",
-    border: "0",
-    borderBottom: "1px solid rgb(194, 194, 194)",
-    fontSize: "16px",
-    background: "transparent",
-  },
-  addBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
-    border: "1px solid black",
-    display: "block",
-    marginLeft: "auto",
-    minWidth: "150px",
-    paddingTop: "10px",
-    marginTop: "20px",
-    paddingBottom: "10px",
-    fontSize: "15px",
-    borderRadius: "10px",
-  },
-  card: {
-    background: "#f5f5f5",
-    padding: "10px",
-    borderRadius: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
-  },
-  userDiv: {
-    marginTop: "40px",
-  },
-  mt20: {
-    marginTop: 20,
-  },
-  pb10: {
-    paddingBottom: 10,
-  },
-  textDefecto: {
-    marginBottom: 0,
-    marginTop: 16,
-  },
-});
+import {
+  rfcValido, passwordValida, submit, loginUser, uploadData,
+} from "./register/registerController";
+import useStyles from "./usersStyles";
 
 const UserView = () => {
+  const history = useHistory();
   const classes = useStyles();
   const firebase = useFirebaseApp();
   const location = useLocation();
+  const [rfc, setRfc] = useState("");
+  const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const rfcText = useRef<HTMLElement>();
   let docsNumber = 0;
   if (location.state != null) {
     const state = location.state as docs;
     docsNumber = state.docs;
   }
+  const password = "OneSeguridata2021!";
   const db = firebase.firestore();
   const auth = firebase.auth();
   const [email, setEmail] = useState("");
@@ -77,6 +38,51 @@ const UserView = () => {
   const [reload, setReload] = useState(false);
   const [selectedOption, setSelected] = useState("");
   const [cargos, setCargos] = useState({});
+
+  function navigate(jsonRegister) {
+    localStorage.setItem("user", JSON.stringify(jsonRegister));
+    history.push("/dashboard");
+  }
+
+  const upload = (res) => {
+    uploadData(res, email, name, rfc, password).then((json) => {
+      navigate(json);
+    });
+  };
+
+  const login = () => {
+    loginUser(email, password).then((res) => {
+      upload(res);
+    }).catch((e) => {
+      toast(e);
+    });
+  };
+
+  const submitUser = () => {
+    setDisabled(true);
+    setLoading(true);
+    submit(email, password, name, rfc).then(() => {
+      login();
+    }).catch((e) => {
+      toast(e);
+      setLoading(false);
+      setDisabled(false);
+    });
+  };
+
+  function testRFC(value) {
+    if (rfcText.current) {
+      if (rfcValido(value)) {
+        rfcText.current.innerHTML = 'Válido';
+        rfcText.current.style.color = 'green';
+        setRfc(value);
+      } else {
+        rfcText.current.innerHTML = 'No válido';
+        rfcText.current.style.color = 'red';
+        setRfc('');
+      }
+    }
+  }
 
   function submit() {
     if (email !== "") {
@@ -145,16 +151,28 @@ const UserView = () => {
             onChange={handleChange}
             options={cargos}
           />
+          <div className={`${classes.left} ${classes.pt10}`}>
+            <label htmlFor="email" className="block pb4">
+              RFC
+            </label>
+            <input
+              type="text"
+              id="rfc"
+              className={classes.inputStyle}
+              onChange={(event) => testRFC(event.target.value)}
+            />
+            <p className={classes.rfcText} ref={rfcText as React.RefObject<HTMLDivElement>} />
+          </div>
           <Row>
             <Col>
-              <p className={classes.textDefecto}>Contraseña por defecto: OneSeguridata2021</p>
+              <p className={classes.textDefecto}>Contraseña por defecto: OneSeguridata2021!</p>
             </Col>
             <Col>
               <button
                 type="button"
                 className={classes.addBt}
                 disabled={disable}
-                onClick={() => submit()}
+                onClick={() => submit}
               >
                 Agregar Usuario
               </button>

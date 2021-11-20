@@ -9,7 +9,7 @@ import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Login from "./components/main/mainPage/mainPage";
 import LoginNormal from "./components/main/loginNormal/loginNormal";
-import RegisterNormal from "./components/admin/components_admin/register/register";
+import RegisterNormal from "./components/admin/components_admin/users/register/register";
 import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
 import AdminInit from "./components/admin/admin_init";
 import PrivacidadView from "./components/main/privacidad/privacidad";

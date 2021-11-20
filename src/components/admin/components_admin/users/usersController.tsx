@@ -51,7 +51,7 @@ async function sendWelcomeEmail(email) {
 function createUser(auth, email, db, name) {
   return new Promise((resolve, reject) => {
     auth
-      .createUserWithEmailAndPassword(email, "OneSeguridata2021")
+      .createUserWithEmailAndPassword(email, "OneSeguridata2021!")
       .then((userCredential) => {
         userCredential.user.sendEmailVerification().then(() => {
           const id = userCredential.user?.uid;

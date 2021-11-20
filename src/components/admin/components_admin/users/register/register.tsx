@@ -8,10 +8,10 @@ import "firebase/firestore";
 import { useHistory, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Div100vh from "react-div-100vh";
-import loadingGif from "../../../../assets/loading.gif";
-import NavBarMainPage from "../../../main/navBarMainPage/navBarMainPage";
+import loadingGif from "../../../../../assets/loading.gif";
+import NavBarMainPage from "../../../../main/navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
-import Waves from "../../../main/waves/waves";
+import Waves from "../../../../main/waves/waves";
 import {
   rfcValido, passwordValida, submit, loginUser, uploadData
 } from "./registerController";
