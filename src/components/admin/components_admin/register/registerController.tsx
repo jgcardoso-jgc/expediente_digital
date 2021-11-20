@@ -1,5 +1,10 @@
+import { useFirebaseApp } from 'reactfire';
 import SoapController from '../../../shared/seguriSign/controller/soap_controller';
 import SegurisignController from '../../../shared/seguriSign/controller/segurisign_controller';
+import { User } from '../../../../types/user';
+
+const firebase = useFirebaseApp();
+const db = firebase.firestore();
 
 const rfcpm = '^(([A-ZÑ&]{3})([0-9]{2})([0][13578]|[1][02])(([0][1-9]|[12][\\d])|[3][01])([A-Z0-9]{3}))|'
     + '(([A-ZÑ&]{3})([0-9]{2})([0][13456789]|[1][012])(([0][1-9]|[12][\\d])|[3][0])([A-Z0-9]{3}))|'
@@ -30,98 +35,99 @@ function passwordValida(pass): Boolean {
   return false;
 }
 
-function uploadData(res) {
-  if (checkForm()) {
-    const id = res.user.uid;
-    const jsonRegister = {
-      uid: id,
-      fullname: name,
-      email,
-      rfc,
-      token: '',
-      onboarding: false,
-      cargo: '',
-      docsAdmin: [],
-      documents: [],
-    };
-    try {
-      db.collection('users')
-        .add(jsonRegister)
-        .then(() => navigate(jsonRegister));
-    } catch (error) {
-      if (error instanceof Error) {
-        toast(error.message);
-      }
-    }
-  }
-}
-
-function checkForm() {
+function checkForm(rfc, password) {
   if (rfc !== '' && password !== '') {
     return true;
   }
   return false;
 }
 
-function submitFirebase() {
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then((res) => uploadData(res))
-    .catch((error) => {
-      setLoading(false);
-      setDisabled(false);
-      toast(error.message);
-    });
+function uploadData(res, email, name, rfc, password) {
+  return new Promise((resolve, reject) => {
+    if (checkForm(rfc, password)) {
+      const id = res.user.uid;
+      const jsonRegister : User = {
+        uid: id,
+        fullname: name,
+        email,
+        rfc,
+        token: '',
+        onboarding: false,
+        cargo: '',
+        docsAdmin: [],
+        documents: [],
+      };
+      try {
+        db.collection('users')
+          .add(jsonRegister)
+          .then(() => resolve(jsonRegister));
+      } catch (error) {
+        if (error instanceof Error) {
+          reject(error.message);
+        }
+      }
+    }
+  });
 }
 
-const submit = async () => {
+function submitFirebase(email, password) {
+  return new Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((res) => resolve(res))
+      .catch((error) => {
+        reject(error.message);
+      });
+  });
+}
+
+const loginUser = (email, password) => new Promise((resolve, reject) => {
+  seguriSignController
+    .loginUser(email, password)
+    .then(() => {
+      const responseJSON = seguriSignController.segurisignUser;
+      // console.log(responseJSON);
+      if (responseJSON.token === null) {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject('No estás registrado en Segurisign.');
+      } else {
+        localStorage.setItem(
+          'sign-user',
+          JSON.stringify(seguriSignController.segurisignUser),
+        );
+      }
+    })
+    .catch((error) => {
+      reject(error);
+    });
+  submitFirebase(email, password).then((res) => {
+    resolve(res);
+  }).catch((e) => {
+    reject(e);
+  });
+});
+
+const submit = async (email, password, name, rfc) => new Promise((resolve, reject) => {
   const soapController = new SoapController();
-  setDisabled(true);
-  setLoading(true);
   soapController
     .createNewUser({
       email,
       password,
       name,
       rfc,
-    })
-    .then(() => {
-      seguriSignController
-        .loginUser(email, password)
-        .then(() => {
-          const responseJSON = JSON.stringify(
-            seguriSignController.segurisignUser,
-          );
-          console.log(responseJSON);
-          if (responseJSON.token === null) {
-            toast('No estás registrado en Segurisign.');
-          } else {
-            localStorage.setItem(
-              'sign-user',
-              JSON.stringify(seguriSignController.segurisignUser),
-            );
-          }
-        })
-        .catch((error) => {
-          alert(error);
-        });
-
-      submitFirebase();
-    })
+    }).then(() => resolve(200))
     .catch((e) => {
-      setLoading(false);
-      setDisabled(false);
       const parser = new DOMParser();
       const errorResponse = parser.parseFromString(
         e.responseText,
         'application/xhtml+xml',
       );
       const resultado = errorResponse.getElementsByTagName('message')[0].childNodes[0].nodeValue;
-      toast(resultado);
+      reject(resultado);
     });
-};
+});
 
 export {
-  rfcValido, passwordValida, uploadData, submitFirebase, submit,
+  rfcValido, passwordValida, uploadData, submitFirebase, submit, loginUser,
 };

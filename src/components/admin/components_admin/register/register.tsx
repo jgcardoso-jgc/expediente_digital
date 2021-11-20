@@ -5,7 +5,6 @@
 import React, { useState, useRef } from "react";
 import "firebase/auth";
 import "firebase/firestore";
-import { useFirebaseApp } from "reactfire";
 import { useHistory, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Div100vh from "react-div-100vh";
@@ -13,14 +12,14 @@ import loadingGif from "../../../../assets/loading.gif";
 import NavBarMainPage from "../../../main/navBarMainPage/navBarMainPage";
 import "react-toastify/dist/ReactToastify.css";
 import Waves from "../../../main/waves/waves";
-import { rfcValido, passwordValida } from "./registerController";
+import {
+  rfcValido, passwordValida, submit, loginUser, uploadData
+} from "./registerController";
 import useStyles from "./registerStyles";
 
 const RegisterNormal = () => {
-  const firebase = useFirebaseApp();
   const history = useHistory();
   const classes = useStyles();
-  const db = firebase.firestore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,14 +29,36 @@ const RegisterNormal = () => {
   const rfcText = useRef<HTMLElement>();
   const passText = useRef<HTMLElement>(null);
 
-  const submit = () => {
-
-  };
-
   function navigate(jsonRegister) {
     localStorage.setItem("user", JSON.stringify(jsonRegister));
     history.push("/dashboard");
   }
+
+  const upload = (res) => {
+    uploadData(res, email, name, rfc, password).then((json) => {
+      navigate(json);
+    });
+  };
+
+  const login = () => {
+    loginUser(email, password).then((res) => {
+      upload(res);
+    }).catch((e) => {
+      toast(e);
+    });
+  };
+
+  const submitUser = () => {
+    setDisabled(true);
+    setLoading(true);
+    submit(email, password, name, rfc).then(() => {
+      login();
+    }).catch((e) => {
+      toast(e);
+      setLoading(false);
+      setDisabled(false);
+    });
+  };
 
   function testRFC(value) {
     if (rfcText.current) {
@@ -134,7 +155,7 @@ const RegisterNormal = () => {
               type="button"
               className={classes.regBt}
               disabled={disabled}
-              onClick={submit}
+              onClick={submitUser}
             >
               Registrarse
             </button>
