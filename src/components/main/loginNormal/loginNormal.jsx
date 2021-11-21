@@ -70,7 +70,7 @@ const useStyles = createUseStyles(() => ({
   "@media (min-width: 768px)": { segTitle: { paddingTop: "30vh" } },
 }));
 
-const LoginNormal = ({ isLogged }) => {
+const LoginNormal = ({ setLog }) => {
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const theme = useTheme();
@@ -88,10 +88,10 @@ const LoginNormal = ({ isLogged }) => {
       JSON.stringify(seguriSignController.segurisignUser)
     );
     checkUser(uid, db)
-      .then(() => isLogged(true))
+      .then(() => setLog(true))
       .catch((e) => {
         console.log(`error:${e}`);
-        isLogged(false);
+        setLog(false);
       });
   }
 

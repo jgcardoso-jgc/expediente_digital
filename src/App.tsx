@@ -3,7 +3,7 @@
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable quotes */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
@@ -70,6 +70,8 @@ function App() {
           setLoading(false);
         }
         if (state === "logout") {
+          console.log("logged out");
+          //prevent logout before query
           auth.signOut().then(() => {
             setLoading(false);
           });
@@ -80,6 +82,10 @@ function App() {
       }
     });
   };
+
+  const setLog = useCallback((log) => {
+    setLogged(log);
+  }, []);
 
   useEffect(() => {
     afterInit();
@@ -115,7 +121,7 @@ function App() {
             if (admin) {
               return <AdminInit />;
             }
-            return <LoginNormal isLogged={setLogged} />;
+            return <LoginNormal setLog={setLog} />;
           }}
         />
         <Route path="/recoverPassword">
@@ -136,7 +142,7 @@ function App() {
             if (admin) {
               return <AdminInit />;
             }
-            return <LoginNormal isLogged={{ setLogged }} />;
+            return <LoginNormal setLog={setLog} />;
           }}
         />
       </Switch>
