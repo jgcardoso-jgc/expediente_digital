@@ -1,10 +1,6 @@
-import { useFirebaseApp } from 'reactfire';
 import SoapController from '../../../shared/seguriSign/controller/soap_controller';
 import SegurisignController from '../../../shared/seguriSign/controller/segurisign_controller';
 import { User } from '../../../../types/user';
-
-const firebase = useFirebaseApp();
-const db = firebase.firestore();
 
 const rfcpm = '^(([A-ZÑ&]{3})([0-9]{2})([0][13578]|[1][02])(([0][1-9]|[12][\\d])|[3][01])([A-Z0-9]{3}))|'
     + '(([A-ZÑ&]{3})([0-9]{2})([0][13456789]|[1][012])(([0][1-9]|[12][\\d])|[3][0])([A-Z0-9]{3}))|'
@@ -42,7 +38,7 @@ function checkForm(rfc, password) {
   return false;
 }
 
-function uploadData(res, email, name, rfc, password) {
+function uploadData(res, email, name, rfc, password, db) {
   return new Promise((resolve, reject) => {
     if (checkForm(rfc, password)) {
       const id = res.user.uid;
@@ -70,10 +66,9 @@ function uploadData(res, email, name, rfc, password) {
   });
 }
 
-function submitFirebase(email, password) {
+function submitFirebase(email, password, auth) {
   return new Promise((resolve, reject) => {
-    firebase
-      .auth()
+    auth
       .createUserWithEmailAndPassword(email, password)
       .then((res) => resolve(res))
       .catch((error) => {
@@ -82,7 +77,7 @@ function submitFirebase(email, password) {
   });
 }
 
-const loginUser = (email, password) => new Promise((resolve, reject) => {
+const loginUser = (email, password, auth) => new Promise((resolve, reject) => {
   seguriSignController
     .loginUser(email, password)
     .then(() => {
@@ -101,7 +96,7 @@ const loginUser = (email, password) => new Promise((resolve, reject) => {
     .catch((error) => {
       reject(error);
     });
-  submitFirebase(email, password).then((res) => {
+  submitFirebase(email, password, auth).then((res) => {
     resolve(res);
   }).catch((e) => {
     reject(e);

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable comma-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
@@ -14,6 +15,7 @@ import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import SoapController from "../../shared/seguriSign/controller/soap_controller";
 import waves from "../../../assets/waves.svg";
 import SegurisignController from "../../shared/seguriSign/controller/segurisign_controller";
+import checkUser from "./authController";
 
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
@@ -68,8 +70,9 @@ const useStyles = createUseStyles(() => ({
   "@media (min-width: 768px)": { segTitle: { paddingTop: "30vh" } },
 }));
 
-const LoginNormal = () => {
+const LoginNormal = ({ isLogged }) => {
   const firebase = useFirebaseApp();
+  const db = firebase.firestore();
   const theme = useTheme();
   const classes = useStyles({ theme });
   const [disable, setDisable] = useState(false);
@@ -78,14 +81,33 @@ const LoginNormal = () => {
   const [loading, setLoading] = useState(false);
   const seguriSignController = new SegurisignController();
   const soapController = new SoapController();
+
+  function login(uid) {
+    localStorage.setItem(
+      "sign-user",
+      JSON.stringify(seguriSignController.segurisignUser)
+    );
+    checkUser(uid, db)
+      .then(() => isLogged(true))
+      .catch((e) => {
+        console.log(`error:${e}`);
+        isLogged(false);
+      });
+  }
+
   async function submit() {
     try {
       setLoading(true);
       if (email !== "" && password !== "") {
         setDisable(true);
-        await firebase.auth().signInWithEmailAndPassword(email, password);
+        const credential = await firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password);
+        const { uid } = credential.user;
         const resultado = await soapController.loginUser(email, password);
-
+        if (resultado instanceof Error) {
+          throw resultado;
+        }
         seguriSignController
           .loginUser(email, password)
           .then(() => {
@@ -96,14 +118,11 @@ const LoginNormal = () => {
             if (responseJSON.token === null) {
               toast("No estás registrado en Segurisign.");
             } else {
-              localStorage.setItem(
-                "sign-user",
-                JSON.stringify(seguriSignController.segurisignUser)
-              );
+              login(uid);
             }
           })
           .catch((error) => {
-            alert(error);
+            toast(error);
           });
         console.log(resultado);
       } else {
@@ -128,6 +147,7 @@ const LoginNormal = () => {
       document.removeEventListener("keydown", listener);
     };
   }, [email, password]);
+
   return (
     <div className={classes.center}>
       {loading ? (

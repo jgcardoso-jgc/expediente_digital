@@ -7,18 +7,20 @@ import { useLocation, useHistory } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { fetchCargos, createUser, sendWelcomeEmail } from "./usersController";
+import { fetchCargos, sendWelcomeEmail } from "./usersController";
 import TableView from "../table/tableView";
 import { docs, cargosLista } from "./usersModel";
 import {
-  rfcValido, passwordValida, submit, loginUser, uploadData,
-} from "./register/registerController";
+  rfcValido, submit, loginUser, uploadData,
+} from "./registerController";
 import useStyles from "./usersStyles";
 
 const UserView = () => {
   const history = useHistory();
   const classes = useStyles();
   const firebase = useFirebaseApp();
+  const db = firebase.firestore();
+  const auth = firebase.auth();
   const location = useLocation();
   const [rfc, setRfc] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -30,10 +32,7 @@ const UserView = () => {
     docsNumber = state.docs;
   }
   const password = "OneSeguridata2021!";
-  const db = firebase.firestore();
-  const auth = firebase.auth();
   const [email, setEmail] = useState("");
-  const [disable, setDisable] = useState(false);
   const [name, setName] = useState("");
   const [reload, setReload] = useState(false);
   const [selectedOption, setSelected] = useState("");
@@ -43,32 +42,6 @@ const UserView = () => {
     localStorage.setItem("user", JSON.stringify(jsonRegister));
     history.push("/dashboard");
   }
-
-  const upload = (res) => {
-    uploadData(res, email, name, rfc, password).then((json) => {
-      navigate(json);
-    });
-  };
-
-  const login = () => {
-    loginUser(email, password).then((res) => {
-      upload(res);
-    }).catch((e) => {
-      toast(e);
-    });
-  };
-
-  const submitUser = () => {
-    setDisabled(true);
-    setLoading(true);
-    submit(email, password, name, rfc).then(() => {
-      login();
-    }).catch((e) => {
-      toast(e);
-      setLoading(false);
-      setDisabled(false);
-    });
-  };
 
   function testRFC(value) {
     if (rfcText.current) {
@@ -84,18 +57,42 @@ const UserView = () => {
     }
   }
 
-  function submit() {
-    if (email !== "") {
-      setDisable(true);
+  const upload = (res) => {
+    uploadData(res, email, name, rfc, password, db).then((json) => {
       sendWelcomeEmail(email).then(() => {
-        createUser(auth, email, db, name).then((res) => { if (res === "200") window.location.reload(); }).catch((err) => toast(err));
+        toast("Usuario registrado");
+        navigate(json);
       })
         .catch((e) => {
-          setDisable(false);
+          setDisabled(false);
           toast(e);
         });
+    });
+  };
+
+  const login = () => {
+    loginUser(email, password, auth).then((res) => {
+      upload(res);
+    }).catch((e) => {
+      toast(e);
+    });
+  };
+
+  const submitUser = () => {
+    if (email !== "") {
+      setDisabled(true);
+      setLoading(true);
+      // submit to SOAP
+      submit(email, password, name, rfc).then(() => {
+        // submit firebase
+        login();
+      }).catch((e) => {
+        toast(e);
+        setLoading(false);
+        setDisabled(false);
+      });
     }
-  }
+  };
 
   const handleChange = (selected) => {
     setSelected(selected);
@@ -171,12 +168,13 @@ const UserView = () => {
               <button
                 type="button"
                 className={classes.addBt}
-                disabled={disable}
-                onClick={() => submit}
+                disabled={disabled}
+                onClick={submitUser}
               >
                 Agregar Usuario
               </button>
             </Col>
+            <p>{loading ? "Cargando..." : ""}</p>
           </Row>
         </div>
       </div>

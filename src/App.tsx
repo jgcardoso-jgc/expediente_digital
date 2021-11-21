@@ -9,7 +9,6 @@ import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Login from "./components/main/mainPage/mainPage";
 import LoginNormal from "./components/main/loginNormal/loginNormal";
-import RegisterNormal from "./components/admin/components_admin/users/register/register";
 import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
 import AdminInit from "./components/admin/admin_init";
 import PrivacidadView from "./components/main/privacidad/privacidad";
@@ -39,86 +38,56 @@ const useStyles = createUseStyles({
 function App() {
   useStyles();
   const firebase = useFirebaseApp();
-  const db = firebase.firestore();
+  const auth = firebase.auth();
   const [user, setUser] = useState(false);
   const [admin, setAdmin] = useState(false);
+  const [logged, setLogged] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  async function checkAdmin(uid) {
-    return new Promise((resolve) => {
-      const query = db.collection("users").where("uid", "==", uid);
-      query.get().then((querySnapshot) => {
-        if (querySnapshot.size > 0) {
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            if (data.admin) {
-              localStorage.setItem("admin", true);
-              resolve("isAdmin");
-            } else {
-              let cargo = "";
-              if (data.cargo != null) {
-                cargo = data.cargo;
-              }
-              const userData = {
-                fullName: data.fullname,
-                email: data.email,
-                rfc: data.rfc,
-                curp: data.curp,
-                onboarding: data.onboarding,
-                cargo,
-                token: "",
-              };
-              localStorage.setItem("user", JSON.stringify(userData));
-              resolve("isUser");
-            }
-          });
-        } else {
-          resolve("404");
-        }
-      });
-    });
+  function authState() {
+    const isAdmin = localStorage.getItem("admin");
+    const isUser = localStorage.getItem("user");
+    if (isAdmin) {
+      return "admin";
+    }
+    if (isUser) {
+      return "user";
+    }
+    return "logout";
   }
 
-  async function authState() {
-    firebase.auth().onAuthStateChanged(async (res) => {
-      if (res) {
-        const { uid } = res;
-        const isAdmin = localStorage.getItem("admin");
-        const isUser = localStorage.getItem("user");
-        if (isAdmin === null && isUser === null) {
-          await checkAdmin(uid).then((adminRes) => {
-            if (adminRes === "isAdmin") {
-              setAdmin(true);
-            }
-            if (adminRes === "isUser") {
-              setUser(true);
-            }
-          });
-        } else if (isAdmin) {
-          setAdmin(true);
-        } else {
+  const afterInit = () => {
+    auth.onAuthStateChanged((userState) => {
+      if (userState) {
+        //detect type of user
+        const state = authState();
+        if (state === "user") {
           setUser(true);
+          setLoading(false);
+        }
+        if (state === "admin") {
+          setAdmin(true);
+          setLoading(false);
+        }
+        if (state === "logout") {
+          auth.signOut().then(() => {
+            setLoading(false);
+          });
         }
       } else {
-        setUser(false);
-        setAdmin(false);
+        //destroy all user data
+        setLoading(false);
       }
     });
-  }
+  };
 
   useEffect(() => {
-    authState();
-    /* después del estado inicial */
-    const userAuth = firebase.auth().currentUser;
-    if (userAuth) {
-      if (localStorage.getItem("admin")) {
-        setAdmin(true);
-      } else {
-        setUser(true);
-      }
-    } else {
-      setUser(false);
-    }
-  }, [firebase]);
+    afterInit();
+  }, [logged]);
+
+  if (loading) {
+    return "";
+  }
 
   return (
     <Router>
@@ -146,12 +115,9 @@ function App() {
             if (admin) {
               return <AdminInit />;
             }
-            return <LoginNormal />;
+            return <LoginNormal isLogged={setLogged} />;
           }}
         />
-        <Route path="/registerNormal">
-          <RegisterNormal />
-        </Route>
         <Route path="/recoverPassword">
           <RecoverPassword />
         </Route>
@@ -170,7 +136,7 @@ function App() {
             if (admin) {
               return <AdminInit />;
             }
-            return <LoginNormal />;
+            return <LoginNormal isLogged={{ setLogged }} />;
           }}
         />
       </Switch>

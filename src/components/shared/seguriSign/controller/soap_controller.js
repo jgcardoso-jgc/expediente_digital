@@ -188,32 +188,32 @@ class SoapController {
           "Content-Type": "text/xml",
         },
         data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
-     <soapenv:Header/>
-     <soapenv:Body>
-     <ser:verifyLogin>
-              <login>${email}</login>
-          </ser:verifyLogin>
-     </soapenv:Body>
-  </soapenv:Envelope>`,
+       <soapenv:Header/>
+       <soapenv:Body>
+       <ser:verifyLogin>
+                <login>${email}</login>
+            </ser:verifyLogin>
+       </soapenv:Body>
+    </soapenv:Envelope>`,
       };
 
-      $.ajax(settings).done((data) => {
+      $.ajax(settings).then((data) => {
         const parser = new DOMParser();
         const docResponse = parser.parseFromString(
           data.documentElement.innerHTML,
           "application/xhtml+xml"
         );
         console.log(docResponse);
-        const idPerson =
-          docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
-            .nodeValue;
-        this.segurisignUser.idPerson = idPerson;
         const resultado =
           docResponse.getElementsByTagName("resultado")[0].childNodes[0]
             .nodeValue;
         if (resultado !== "1") {
           reject("Error, correo no válido o no registrado");
         }
+        const idPerson =
+          docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
+            .nodeValue;
+        this.segurisignUser.idPerson = idPerson;
         resolve(idPerson);
       });
     });
@@ -239,7 +239,7 @@ class SoapController {
   </soapenv:Envelope>`,
       };
       $.ajax(settings)
-        .done((data) => {
+        .then((data) => {
           const parser = new DOMParser();
           const docResponse = parser.parseFromString(
             data.documentElement.innerHTML,
@@ -288,9 +288,16 @@ class SoapController {
   }
 
   async loginUser(email, password) {
-    const idPerson = await this.verifyLogin(email);
-    const result = await this.authenticateUser(idPerson, password);
-    return [result, idPerson];
+    try {
+      const idPerson = await this.verifyLogin(email);
+      if (idPerson === "Error, correo no válido o no registrado") {
+        throw idPerson;
+      }
+      const result = await this.authenticateUser(idPerson, password);
+      return [result, idPerson];
+    } catch (e) {
+      return new Error(e);
+    }
   }
 
   async updateUserPassword(user) {
