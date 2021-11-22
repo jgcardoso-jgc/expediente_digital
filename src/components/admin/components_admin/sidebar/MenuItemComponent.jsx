@@ -9,7 +9,7 @@ import React from "react";
 import { any, arrayOf, func, string } from "prop-types";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
-import { useSidebar } from "../../hooks/useSidebar";
+import { useSidebar } from "../../../shared/hooks/useSidebar";
 import CollapsibleContent from "../collapsible/CollapsibleContent";
 
 const useStyles = createUseStyles({

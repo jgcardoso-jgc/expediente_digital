@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import useWindowSize from "../hooks/useWindowSize";
+import useWindowSize from "../../shared/hooks/useWindowSize";
 import PrivateSection from "./PrivateSection";
 
 function Routes() {

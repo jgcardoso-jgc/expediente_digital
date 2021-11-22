@@ -19,7 +19,7 @@ const useStyles = createUseStyles(() => ({
   },
   logo: { marginTop: "10%", width: "100px" },
   first: { marginBottom: "24px" },
-  second: { marginBottom: "20px" },
+  second: { marginBottom: "20px", minHeight: "100%" },
   mainDiv: { textAlign: "center" },
   dBlock: { display: "block" },
   wave: {
@@ -89,7 +89,7 @@ function Login() {
   return (
     <Div100vh>
       <NavBarMainPage className={classes.navmain} />
-      <div>
+      <div className={classes.second}>
         <img alt="logo" className={classes.easyLogo} src={easy_logo} />
         <Row className={classes.rowMax400}>
           <div className={classes.second}>
@@ -108,7 +108,9 @@ function Login() {
             </Link>
           </div>
         </Row>
-        <img src={waves} className={classes.wave} alt="waves" />
+      </div>
+      <div className={classes.wave}>
+        <img src={waves} alt="waves" />
       </div>
     </Div100vh>
   );

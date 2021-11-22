@@ -58,26 +58,23 @@ function App() {
 
   const afterInit = () => {
     auth.onAuthStateChanged((userState) => {
+      const state = authState();
       if (userState) {
         //detect type of user
-        const state = authState();
         if (state === "user") {
           setUser(true);
-          setLoading(false);
         }
         if (state === "admin") {
           setAdmin(true);
-          setLoading(false);
         }
-        if (state === "logout") {
-          console.log("logged out");
-          //prevent logout before query
-          auth.signOut().then(() => {
-            setLoading(false);
-          });
-        }
+        setLoading(false);
       } else {
         //destroy all user data
+        if (state === "logout") {
+          console.log("logout");
+          setUser(false);
+          setAdmin(false);
+        }
         setLoading(false);
       }
     });

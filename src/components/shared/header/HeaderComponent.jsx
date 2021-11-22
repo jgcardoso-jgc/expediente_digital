@@ -8,13 +8,13 @@ import React, { useContext } from "react";
 import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
+import { useFirebaseApp } from "reactfire";
 import { createUseStyles, useTheme } from "react-jss";
-import firebase from "firebase";
-import SLUGS from "../../resources/slugs";
-import AlertComponent from "../alerts/AlertComponent";
-import { SidebarContext } from "../../hooks/useSidebar";
-import DropdownComponent from "../../../shared/dropdown/DropdownComponent";
-import { IconBell } from "../../assets/icons";
+import SLUGS from "../../admin/resources/slugs";
+import AlertComponent from "../../admin/components_admin/alerts/AlertComponent";
+import { SidebarContext } from "../hooks/useSidebar";
+import DropdownComponent from "../dropdown/DropdownComponent";
+import { IconBell } from "../../admin/assets/icons";
 
 const useStyles = createUseStyles(() => ({
   avatar: {
@@ -64,21 +64,19 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-function logOut() {
-  firebase
-    .auth()
-    .signOut()
-    .then(() => {
-      console.log("logged out");
-      localStorage.removeItem("admin");
-    });
-}
-
 function HeaderComponent() {
   const { push } = useHistory();
   const { currentItem } = useContext(SidebarContext);
   const theme = useTheme();
   const classes = useStyles({ theme });
+  const firebase = useFirebaseApp();
+  const auth = firebase.auth();
+
+  function logOut() {
+    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
+    auth.signOut();
+  }
 
   let title;
   switch (true) {
