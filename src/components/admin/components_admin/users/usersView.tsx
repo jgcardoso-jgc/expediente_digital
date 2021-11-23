@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useFirebaseApp } from "reactfire";
 import Row from "react-bootstrap/Row";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
@@ -16,7 +16,6 @@ import {
 import useStyles from "./usersStyles";
 
 const UserView = () => {
-  const history = useHistory();
   const classes = useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
@@ -38,11 +37,6 @@ const UserView = () => {
   const [selectedOption, setSelected] = useState("");
   const [cargos, setCargos] = useState({});
 
-  function navigate(jsonRegister) {
-    localStorage.setItem("user", JSON.stringify(jsonRegister));
-    history.push("/dashboard");
-  }
-
   function testRFC(value) {
     if (rfcText.current) {
       if (rfcValido(value)) {
@@ -61,7 +55,8 @@ const UserView = () => {
     uploadData(res, email, name, rfc, password, db).then((json) => {
       sendWelcomeEmail(email).then(() => {
         toast("Usuario registrado");
-        navigate(json);
+        localStorage.setItem("user", JSON.stringify(json));
+        // history.push("/dashboard");
       })
         .catch((e) => {
           setDisabled(false);
