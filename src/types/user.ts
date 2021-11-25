@@ -4,6 +4,7 @@ export interface User {
   email: string;
   rfc: string;
   token: string;
+  registradoSign: boolean;
   onboarding: boolean;
   cargo: string;
   docsAdmin: [];

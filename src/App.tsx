@@ -15,6 +15,7 @@ import PrivacidadView from "./components/main/privacidad/privacidad";
 import TerminosView from "./components/main/terminos/terminos";
 import "./App.css";
 import UserInit from "./components/user/user_init";
+import UpdatePassword from "./components/main/updatePassword/updatePassword";
 
 const useStyles = createUseStyles({
   "@global": {
@@ -129,6 +130,9 @@ function App() {
         </Route>
         <Route path="/privacidad">
           <PrivacidadView />
+        </Route>
+        <Route path="/updatePassword">
+          <UpdatePassword />
         </Route>
         <Route
           path="/"

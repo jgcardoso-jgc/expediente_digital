@@ -12,8 +12,6 @@
 /* eslint-disable object-shorthand */
 import "jquery";
 import "jquery.soap";
-import axios from "axios";
-import { stringify } from "querystring";
 import SegurisignUser from "../segurisign_user";
 
 const $ = require("jquery");
@@ -345,16 +343,15 @@ class SoapController {
   }
 
   async createUser(user) {
-    return new Promise((resolve, reject) => {
-      this.verifyLoginAdmin().then(() => {
-        const settings = {
-          url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
-          method: "POST",
-          timeout: 0,
-          headers: {
-            "Content-Type": "text/xml",
-          },
-          data: `
+    await this.verifyLoginAdmin();
+    const settings = {
+      url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `
           <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
         <soapenv:Header/>
         <soapenv:Body>
@@ -409,26 +406,26 @@ class SoapController {
         </soapenv:Body>
     </soapenv:Envelope>
           `,
-        };
-
-        $.ajax(settings)
-          .done((data) => {
-            const parser = new DOMParser();
-            const docResponse = parser.parseFromString(
-              data.documentElement.innerHTML,
-              "application/xhtml+xml"
-            );
-            const resultado =
-              docResponse.getElementsByTagName("resultado")[0].childNodes[0]
-                .nodeValue;
-            console.log(`final:${docResponse}`);
-            resolve(resultado === "1");
-          })
-          .fail((e) => {
-            reject(e);
-          });
-      });
-    });
+    };
+    try {
+      const response = await $.ajax(settings).done();
+      const parser = new DOMParser();
+      const docResponse = parser.parseFromString(
+        response.documentElement.innerHTML,
+        "application/xhtml+xml"
+      );
+      const resultado =
+        docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+      console.log(docResponse);
+      return resultado === '1' ? 1 : false;
+    } catch (e) {
+      console.log(e);
+      console.log(e.responseText.includes('[E0550]'));
+      if (e.responseText.includes('[E0550]')) {
+        return 2;
+      }
+      return false;
+    }
   }
 
   async createNewUser(user) {
@@ -450,25 +447,6 @@ class SoapController {
     });
   }
 
-  sendWelcomeEmail = async (email) =>
-    new Promise((resolve, reject) => {
-      const msg = "Tienes que subir un nuevo documento.";
-      // agregar mensaje de bienvenida a estudiante
-      const data = {
-        email,
-        msg,
-      };
-      axios({
-        method: "post",
-        url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendWelcome",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        data: stringify(data),
-      })
-        .then((res) => resolve(`sended:${res.status}`))
-        .catch((res) => reject(`error:${res}`));
-    });
 }
 
 export default SoapController;
