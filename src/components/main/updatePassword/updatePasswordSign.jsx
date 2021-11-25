@@ -67,12 +67,13 @@ const useStyles = createUseStyles(() => ({
   "@media (min-width: 768px)": { segTitle: { paddingTop: "30vh" } },
 }));
 
-const UpdatePassword = () => {
+const UpdatePasswordSign = () => {
   const theme = useTheme();
   const classes = useStyles({ theme });
   const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordSign, setPasswordSign] = useState("");
   const [passwordOld, setPasswordOld] = useState("");
   const [loading, setLoading] = useState(false);
   const updateController = new UpdatePasswordController();
@@ -84,7 +85,7 @@ const UpdatePassword = () => {
       const user = {
         email, passwordOld
       };
-      const success = await updateController.updatePassword(user, password);
+      const success = await updateController.updatePasswordSign(user, password, passwordSign);
 
       if (success) {
         toast('Cambio de contraseña exitoso');
@@ -108,7 +109,7 @@ const UpdatePassword = () => {
     return () => {
       document.removeEventListener("keydown", listener);
     };
-  }, [email, password, passwordOld]);
+  }, [email, password, passwordOld, passwordSign]);
 
   return (
     <div className={classes.center}>
@@ -146,8 +147,19 @@ const UpdatePassword = () => {
               />
             </div>
             <div>
+              <label htmlFor="passwordSign" className="block pb10 pt20">
+                Contraseña de Sign
+              </label>
+              <input
+                type="password"
+                id="passwordSign"
+                className={classes.inputStyle}
+                onChange={(event) => setPasswordSign(event.target.value)}
+              />
+            </div>
+            <div>
               <label htmlFor="password" className="block pb10 pt20">
-                Nueva Contraseña
+                Contraseña Nueva
               </label>
               <input
                 type="password"
@@ -178,4 +190,4 @@ const UpdatePassword = () => {
     </div>
   );
 };
-export default UpdatePassword;
+export default UpdatePasswordSign;

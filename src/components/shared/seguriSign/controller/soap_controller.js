@@ -298,7 +298,7 @@ class SoapController {
     }
   }
 
-  async updateUserPassword(user) {
+  async updateUserPassword(user, newPassword) {
     const settings = {
       url: this.url,
       method: "POST",
@@ -320,14 +320,12 @@ class SoapController {
             <password>${user.password}</password>
             <idEmployeeProfile>4</idEmployeeProfile>
             <autType>USUARIO_PASSWORD</autType>
-            <newPasswordAut>${user.password}</newPasswordAut>
-            <newPasswordPrivateKey>${user.password}</newPasswordPrivateKey>
+            <newPasswordAut>${newPassword}</newPasswordAut>
+            <newPasswordPrivateKey>${newPassword}</newPasswordPrivateKey>
          </request>
       </ser:doUpdateUserPasswords>
    </soapenv:Body>
-</soapenv:Envelope>
-
-`,
+</soapenv:Envelope>`,
     };
 
     const response = await $.ajax(settings).done();
@@ -428,25 +426,14 @@ class SoapController {
     }
   }
 
-  async createNewUser(user) {
-    return new Promise((resolve, reject) => {
-      this.createUser(user)
-        .then(async () => {
-          const resultado = await this.loginUser(user.email, user.password);
-          if (resultado[0]) {
-            user.idRh = resultado[1];
-            console.log(user.idRh);
-          } else {
-            reject("error");
-          }
-          resolve(this.updateUserPassword(user));
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    });
+  async loginAndUpdatePassword(user, newPassword) {
+    const resultado = await this.loginUser(user.email, user.password);
+    if (resultado[0]) {
+      user.idRh = resultado[1];
+      return this.updateUserPassword(user, newPassword);
+    }
+    return false;
   }
-
 }
 
 export default SoapController;

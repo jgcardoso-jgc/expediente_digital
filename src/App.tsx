@@ -16,6 +16,7 @@ import TerminosView from "./components/main/terminos/terminos";
 import "./App.css";
 import UserInit from "./components/user/user_init";
 import UpdatePassword from "./components/main/updatePassword/updatePassword";
+import UpdatePasswordSign from "./components/main/updatePassword/updatePasswordSign";
 
 const useStyles = createUseStyles({
   "@global": {
@@ -133,6 +134,9 @@ function App() {
         </Route>
         <Route path="/updatePassword">
           <UpdatePassword />
+        </Route>
+        <Route path="/updatePasswordSign">
+          <UpdatePasswordSign />
         </Route>
         <Route
           path="/"
