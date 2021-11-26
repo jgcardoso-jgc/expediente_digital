@@ -82,7 +82,7 @@ const UpdatePassword = () => {
     setLoading(true);
     try {
       const user = {
-        email, passwordOld
+        email, password: passwordOld
       };
       const success = await updateController.updatePassword(user, password);
 
@@ -92,8 +92,8 @@ const UpdatePassword = () => {
     } catch (error) {
       toast(error);
     } finally {
-      setDisable(true);
-      setLoading(true);
+      setDisable(false);
+      setLoading(false);
     }
   }
 

@@ -12,6 +12,7 @@
 /* eslint-disable object-shorthand */
 import "jquery";
 import "jquery.soap";
+import { toast } from "react-toastify";
 import SegurisignUser from "../segurisign_user";
 
 const $ = require("jquery");
@@ -177,15 +178,14 @@ class SoapController {
   }
 
   async verifyLogin(email) {
-    return new Promise((resolve, reject) => {
-      const settings = {
-        url: this.url,
-        method: "POST",
-        timeout: 0,
-        headers: {
-          "Content-Type": "text/xml",
-        },
-        data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+    const settings = {
+      url: this.url,
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
        <soapenv:Header/>
        <soapenv:Body>
        <ser:verifyLogin>
@@ -193,28 +193,27 @@ class SoapController {
             </ser:verifyLogin>
        </soapenv:Body>
     </soapenv:Envelope>`,
-      };
+    };
 
-      $.ajax(settings).then((data) => {
-        const parser = new DOMParser();
-        const docResponse = parser.parseFromString(
-          data.documentElement.innerHTML,
-          "application/xhtml+xml"
-        );
-        console.log(docResponse);
-        const resultado =
-          docResponse.getElementsByTagName("resultado")[0].childNodes[0]
-            .nodeValue;
-        if (resultado !== "1") {
-          reject("Error, correo no válido o no registrado");
-        }
-        const idPerson =
-          docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
-            .nodeValue;
-        this.segurisignUser.idPerson = idPerson;
-        resolve(idPerson);
-      });
-    });
+    const data = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      data.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    console.log(docResponse);
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+        .nodeValue;
+    if (resultado !== "1") {
+      alert("Error, correo no válido o no registrado");
+      return false;
+    }
+    const idPerson =
+      docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
+        .nodeValue;
+    this.segurisignUser.idPerson = idPerson;
+    return idPerson;
   }
 
   verifyLoginAdmin = async () =>
@@ -282,20 +281,17 @@ class SoapController {
     );
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    console.log(docResponse);
     return resultado === "1";
   }
 
   async loginUser(email, password) {
-    try {
-      const idPerson = await this.verifyLogin(email);
-      if (idPerson === "Error, correo no válido o no registrado") {
-        throw idPerson;
-      }
-      const result = await this.authenticateUser(idPerson, password);
-      return [result, idPerson];
-    } catch (e) {
-      return new Error(e);
+    const idPerson = await this.verifyLogin(email);
+    if (idPerson === "Error, correo no válido o no registrado") {
+      return false;
     }
+    const result = await this.authenticateUser(idPerson, password);
+    return [result, idPerson];
   }
 
   async updateUserPassword(user, newPassword) {
@@ -337,7 +333,7 @@ class SoapController {
     console.log(docResponse);
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === "1";
+    return resultado === '1';
   }
 
   async createUser(user) {
@@ -428,10 +424,13 @@ class SoapController {
 
   async loginAndUpdatePassword(user, newPassword) {
     const resultado = await this.loginUser(user.email, user.password);
+    console.log(resultado);
     if (resultado[0]) {
       user.idRh = resultado[1];
+      console.log(resultado, newPassword, user);
       return this.updateUserPassword(user, newPassword);
     }
+    toast('Contraseña de Sign inválida');
     return false;
   }
 }

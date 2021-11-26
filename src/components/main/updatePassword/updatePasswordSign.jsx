@@ -81,21 +81,17 @@ const UpdatePasswordSign = () => {
   async function updateUserPassword() {
     setDisable(true);
     setLoading(true);
-    try {
-      const user = {
-        email, passwordOld
-      };
-      const success = await updateController.updatePasswordSign(user, password, passwordSign);
+    const user = {
+      email, password: passwordOld
+    };
+    const success = await updateController.updatePasswordSign(user, password, passwordSign);
+    console.log('success', success);
 
-      if (success) {
-        toast('Cambio de contraseña exitoso');
-      }
-    } catch (error) {
-      toast(error);
-    } finally {
-      setDisable(true);
-      setLoading(true);
+    if (success) {
+      toast('Cambio de contraseña exitoso');
     }
+    setDisable(false);
+    setLoading(false);
   }
 
   useEffect(() => {

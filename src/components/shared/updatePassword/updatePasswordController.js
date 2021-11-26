@@ -15,6 +15,7 @@ class UpdatePasswordController {
             await user.updatePassword(newPassword);
             return true;
         } catch (error) {
+            toast(error);
             return false;
         }
     };
@@ -23,7 +24,9 @@ class UpdatePasswordController {
         try {
             const resultSign = await this.soapController.loginAndUpdatePassword(user, newPassword);
             if (resultSign) {
+                console.log('resultSIgn', resultSign);
                 const fUser = await this.auth.signInWithEmailAndPassword(user.email, user.password);
+                console.log(fUser);
                 return this.updateFirebasePassword(fUser.user, newPassword);
             }
             return false;
@@ -40,10 +43,12 @@ class UpdatePasswordController {
             const signUser = { email: user.email, password: signPassword };
             const resultSign = await this.soapController
                 .loginAndUpdatePassword(signUser, newPassword);
+            console.log(resultSign);
             if (resultSign) {
                 const fUser = await this.auth.signInWithEmailAndPassword(user.email, user.password);
                 return this.updateFirebasePassword(fUser.user, newPassword);
             }
+            toast('Error');
             return false;
         } catch (error) {
             if (error instanceof Error) {
