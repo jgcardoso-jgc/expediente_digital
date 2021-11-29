@@ -72,7 +72,6 @@ const UpdatePasswordSign = () => {
   const classes = useStyles({ theme });
   const [disable, setDisable] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [passwordSign, setPasswordSign] = useState("");
   const [passwordOld, setPasswordOld] = useState("");
   const [loading, setLoading] = useState(false);
@@ -84,7 +83,7 @@ const UpdatePasswordSign = () => {
     const user = {
       email, password: passwordOld
     };
-    const success = await updateController.updatePasswordSign(user, password, passwordSign);
+    const success = await updateController.updatePassword(user, passwordSign);
     console.log('success', success);
 
     if (success) {
@@ -105,7 +104,7 @@ const UpdatePasswordSign = () => {
     return () => {
       document.removeEventListener("keydown", listener);
     };
-  }, [email, password, passwordOld, passwordSign]);
+  }, [email, passwordOld, passwordSign]);
 
   return (
     <div className={classes.center}>
@@ -120,7 +119,7 @@ const UpdatePasswordSign = () => {
               <h2 className="mb4">
                 <b>Termino de registro</b>
               </h2>
-              <p className="expText">Escoge una nueva contraseña</p>
+              <p className="expText">Accede con tu contraseña de Sign</p>
             </div>
             <div className={classes.mb20}>
               <label htmlFor="email">Correo electrónico</label>
@@ -133,7 +132,7 @@ const UpdatePasswordSign = () => {
             </div>
             <div>
               <label htmlFor="passwordOld" className="block pb10 pt20">
-                Contraseña Default
+                Contraseña que te envíamos por correo
               </label>
               <input
                 type="password"
@@ -144,24 +143,13 @@ const UpdatePasswordSign = () => {
             </div>
             <div>
               <label htmlFor="passwordSign" className="block pb10 pt20">
-                Contraseña de Sign
+                Contraseña de acceso a Sign
               </label>
               <input
                 type="password"
                 id="passwordSign"
                 className={classes.inputStyle}
                 onChange={(event) => setPasswordSign(event.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block pb10 pt20">
-                Contraseña Nueva
-              </label>
-              <input
-                type="password"
-                id="password"
-                className={classes.inputStyle}
-                onChange={(event) => setPassword(event.target.value)}
               />
             </div>
             <button

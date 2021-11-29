@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import waves from "../../../assets/waves.svg";
 import UpdatePasswordController from "../../shared/updatePassword/updatePasswordController";
+import passwordIsValid from "./passwordValidator";
 
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
@@ -78,6 +79,10 @@ const UpdatePassword = () => {
   const updateController = new UpdatePasswordController();
 
   async function updateUserPassword() {
+    if (!passwordIsValid(password)) {
+      toast('La contraseña debe de llevar un mínimo de 10 caracteres, incluyendo mayúsculas, minusculas, número y caracter especial.');
+      return;
+    }
     setDisable(true);
     setLoading(true);
     try {
@@ -123,7 +128,7 @@ const UpdatePassword = () => {
               <h2 className="mb4">
                 <b>Termino de registro</b>
               </h2>
-              <p className="expText">Escoge una nueva contraseña</p>
+              <p className="expText">Escoge una nueva contraseña de acceso</p>
             </div>
             <div className={classes.mb20}>
               <label htmlFor="email">Correo electrónico</label>
@@ -136,7 +141,7 @@ const UpdatePassword = () => {
             </div>
             <div>
               <label htmlFor="passwordOld" className="block pb10 pt20">
-                Contraseña Default
+                Contraseña que enviamos a tu correo
               </label>
               <input
                 type="password"
@@ -147,12 +152,13 @@ const UpdatePassword = () => {
             </div>
             <div>
               <label htmlFor="password" className="block pb10 pt20">
-                Nueva Contraseña
+                Nueva Contraseña de acceso
               </label>
               <input
                 type="password"
                 id="password"
                 className={classes.inputStyle}
+                placeholder="La contraseña debe de llevar un mínimo de 10 caracteres, incluyendo mayúsculas, minusculas, número y caracter especial."
                 onChange={(event) => setPassword(event.target.value)}
               />
             </div>
