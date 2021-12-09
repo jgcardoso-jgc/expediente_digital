@@ -93,6 +93,7 @@ const EditUser = () => {
   const global = globalTheme();
   const location = useLocation();
   const locData = location.state.objUser;
+  const [cargo, setCargo] = useState(locData.cargo);
   const [urlsCompleted, setCompleted] = useState([]);
   const [pendientes, setPendientes] = useState([]);
   const [administrativos, setAdministrativos] = useState([]);
@@ -120,6 +121,7 @@ const EditUser = () => {
 
   function reloadFinal() {
     setReload((prev) => !prev);
+    console.log("Reload");
   }
 
   function setCargosData(querySnapshot) {
@@ -183,6 +185,7 @@ const EditUser = () => {
         .doc(doc.id)
         .update({ cargo: selectedOption.label })
         .then(() => {
+          setCargo(cargo);
           reloadFinal();
         });
     });
@@ -212,12 +215,13 @@ const EditUser = () => {
       });
   }
 
-  function editCargo() {
+  const editCargo = () => {
+    setCargoBt(true);
     const query = db
       .collection("users")
       .where("fullname", "==", locData.fullname);
     query.get().then((querySnapshot) => updateCargo(querySnapshot));
-  }
+  };
 
   function testEmail() {
     const val = functions.httpsCallable("uploadNewDoc");
@@ -311,7 +315,7 @@ const EditUser = () => {
           <b>Email</b>
           <p>{locData.email}</p>
           <b>Cargo</b>
-          <p>{locData.cargo}</p>
+          <p>{cargo !== "" ? cargo : "Sin especificar"}</p>
           <b>Onboarding</b>
           {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
           <p />
@@ -324,8 +328,9 @@ const EditUser = () => {
               handleShow={handleShow}
             />
           ) : (
-            "Cargando..."
+            ""
           )}
+          {urlsCompleted.length === 0 ? "Ninguno" : ""}
           <p className={classes.mt20}>
             <b>Documentos Pendientes</b>
           </p>
@@ -467,7 +472,7 @@ const EditUser = () => {
           />
           <button
             type="button"
-            onClick={() => editCargo()}
+            onClick={editCargo}
             className={cargoBt ? global.initBtDisabled : global.initBt}
             disabled={cargoBt}
           >
