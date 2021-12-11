@@ -207,8 +207,9 @@ class SoapController {
         const resultado =
           docResponse.getElementsByTagName("resultado")[0].childNodes[0]
             .nodeValue;
+        console.log(`res:${resultado}`);
         if (resultado !== "1") {
-          reject("Error, correo no válido o no registrado");
+          reject("Correo no válido o no registrado");
         }
         const idPerson =
           docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
@@ -290,12 +291,15 @@ class SoapController {
   async loginUser(email, password) {
     try {
       const idPerson = await this.verifyLogin(email);
-      if (idPerson === "Error, correo no válido o no registrado") {
+      console.log(`idPerson:${idPerson}`);
+      if (idPerson === "Correo no válido o no registrado") {
+        console.log("throw");
         throw idPerson;
       }
       const result = await this.authenticateUser(idPerson, password);
       return [result, idPerson];
     } catch (e) {
+      console.log("catched");
       return new Error(e);
     }
   }

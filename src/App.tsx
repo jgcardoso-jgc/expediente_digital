@@ -71,7 +71,6 @@ function App() {
       } else {
         //destroy all user data
         if (state === "logout") {
-          console.log("logout");
           setUser(false);
           setAdmin(false);
         }

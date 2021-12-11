@@ -75,6 +75,9 @@ function HeaderComponent() {
   function logOut() {
     localStorage.removeItem("admin");
     localStorage.removeItem("user");
+    localStorage.removeItem("date");
+    localStorage.removeItem("position");
+    localStorage.removeItem("sign-user");
     auth.signOut();
   }
 

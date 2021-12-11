@@ -46,13 +46,12 @@ const useStyles = createUseStyles(() => ({
   },
   tright: {
     textAlign: "right",
+    marginTop: 16,
   },
   mb20: {
     marginBottom: 20,
   },
   wave: {
-    borderBottomRightRadius: 10,
-    borderBottomLeftRadius: 10,
     position: "absolute",
     bottom: 0,
   },
@@ -106,6 +105,7 @@ const LoginNormal = ({ setLog }) => {
         const { uid } = credential.user;
         const resultado = await soapController.loginUser(email, password);
         if (resultado instanceof Error) {
+          console.log(`error:${resultado}`);
           throw resultado;
         }
         seguriSignController
@@ -129,9 +129,9 @@ const LoginNormal = ({ setLog }) => {
         setLoading(false);
       }
     } catch (e) {
-      toast(e.message);
       setDisable(false);
       setLoading(false);
+      toast(e.toString());
     }
   }
 
@@ -149,69 +149,64 @@ const LoginNormal = ({ setLog }) => {
   }, [email, password]);
 
   return (
-    <div className={classes.center}>
-      {loading ? (
-        <img src={loadingGif} className="loadgif" alt="loading..." />
-      ) : (
-        <div>
-          <NavBarMainPage />
-          <ToastContainer />
-          <Container className={classes.containerLogin}>
-            <div>
-              <h2 className="mb4">
-                <b>Login</b>
-              </h2>
-              <p className="expText">Accede a tu cuenta</p>
-            </div>
-            <div className={classes.mb20}>
-              <label htmlFor="email">Correo electrónico</label>
-              <input
-                type="email"
-                id="email"
-                className={classes.inputStyle}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block pb10 pt20">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                id="password"
-                className={classes.inputStyle}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </div>
-            <button
-              type="button"
-              className={classes.loginBt}
-              disabled={disable}
-              onClick={() => submit()}
-            >
-              Iniciar Sesión
-            </button>
-            <div className={classes.tright}>
-              <Link
-                style={{ display: "inline-block", marginTop: "14px" }}
-                to="./registerNormal"
+    <div>
+      <div className={classes.center}>
+        {loading ? (
+          <img src={loadingGif} className="loadgif" alt="loading..." />
+        ) : (
+          <div>
+            <ToastContainer />
+            <NavBarMainPage />
+            <Container className={classes.containerLogin}>
+              <div>
+                <h2 className="mb4">
+                  <b>Login</b>
+                </h2>
+                <p className="expText">Accede a tu cuenta</p>
+              </div>
+              <div className={classes.mb20}>
+                <label htmlFor="email">Correo electrónico</label>
+                <input
+                  type="email"
+                  id="email"
+                  className={classes.inputStyle}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block pb10 pt20">
+                  Contraseña
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  className={classes.inputStyle}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                className={classes.loginBt}
+                disabled={disable}
+                onClick={() => submit()}
               >
-                <p className={(classes.qa, classes.right)}>
-                  ¿Aun no tienes una cuenta?
-                </p>
-              </Link>
-            </div>
-            <div className={classes.tright}>
-              <Link style={{ display: "inline-block" }} to="./recoverPassword">
-                <p className={(classes.qa, classes.right)}>
-                  ¿Olvidaste tu contraseña?
-                </p>
-              </Link>
-            </div>
-          </Container>
-          <img src={waves} className={classes.wave} alt="waves" />
-        </div>
-      )}
+                Iniciar Sesión
+              </button>
+              <div className={classes.tright}>
+                <Link
+                  style={{ display: "inline-block" }}
+                  to="./recoverPassword"
+                >
+                  <p className={(classes.qa, classes.right)}>
+                    ¿Olvidaste tu contraseña?
+                  </p>
+                </Link>
+              </div>
+            </Container>
+            <img src={waves} className={classes.wave} alt="waves" />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
