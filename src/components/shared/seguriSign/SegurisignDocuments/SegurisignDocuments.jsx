@@ -16,16 +16,15 @@ import UnsignedDocuments from "./UnsignedDocuments/UnsignedDocuments";
 import CancelledDocuments from "./CancelledDocuments/CancelledDocuments";
 import CancelledThirdsDocuments from "./CancelledThirdsDocuments/CancelledThirdsDocuments";
 import ExpiredDocuments from "./ExpiredDocuments/ExpiredDocuments";
-import styles from "../../../../resources/theme";
 import UserController from "../controller/user_controller";
 import loading from "../../../../assets/loading.gif";
 
-const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   card: {
     backgroundColor: "#f5f5f5",
     border: `1px solid #f5f5f5`,
     borderRadius: 10,
+    marginBottom: 24,
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     height: "100%",
@@ -52,8 +51,6 @@ const SegurisignDocuments = (props) => {
   const userController = new UserController(
     seguriSignController.segurisignUser.email
   );
-  const global = globalTheme();
-  const [show, setShow] = useState(false);
   const [location, setLocation] = useState({
     loading: true,
     isEnabled: false,
@@ -193,51 +190,46 @@ const SegurisignDocuments = (props) => {
   if (location.isEnabled) {
     if (loaded.hasLoaded) {
       return (
-        <div className={classes.card}>
-          <ToastContainer />
-          <h5 className={classes.title}>
-            <b>Mis Documentos</b>
-          </h5>
-          <UnsignedDocuments
-            lat={location.lat}
-            long={location.long}
-            toaster={toaster}
-            unsignedDocuments={loaded.unsignedDocuments}
-            seguriSignController={props.seguriSignController}
-          />
+        <div>
+          <div className={classes.card}>
+            <ToastContainer />
+            <h5 className={classes.title}>
+              <b>Mis Documentos</b>
+            </h5>
+            <UnsignedDocuments
+              lat={location.lat}
+              long={location.long}
+              toaster={toaster}
+              unsignedDocuments={loaded.unsignedDocuments}
+              seguriSignController={props.seguriSignController}
+            />
 
-          <SignedDocuments
-            seguriSignController={props.seguriSignController}
-            signedDocuments={loaded.signedDocuments}
-          />
+            <SignedDocuments
+              seguriSignController={props.seguriSignController}
+              signedDocuments={loaded.signedDocuments}
+            />
 
-          <CancelledDocuments
-            cancelledDoc={loaded.cancelledDoc}
-            seguriSignController={props.seguriSignController}
-          />
+            <CancelledDocuments
+              cancelledDoc={loaded.cancelledDoc}
+              seguriSignController={props.seguriSignController}
+            />
 
-          <CancelledThirdsDocuments
-            cancelledByThirds={loaded.cancelledByThirds}
-            seguriSignController={props.seguriSignController}
-          />
+            <CancelledThirdsDocuments
+              cancelledByThirds={loaded.cancelledByThirds}
+              seguriSignController={props.seguriSignController}
+            />
 
-          <ExpiredDocuments
-            expiredDoc={loaded.expiredDoc}
-            seguriSignController={props.seguriSignController}
-          />
-          <UploadPopup
-            seguriSignController={props.seguriSignController}
-            toaster={toaster}
-            state={show}
-            onClose={() => setShow(false)}
-          />
-          <button
-            type="button"
-            className={`${global.initBt} ${classes.mr}`}
-            onClick={() => setShow(true)}
-          >
-            Subir Documentos
-          </button>
+            <ExpiredDocuments
+              expiredDoc={loaded.expiredDoc}
+              seguriSignController={props.seguriSignController}
+            />
+          </div>
+          <div className={classes.card}>
+            <UploadPopup
+              seguriSignController={props.seguriSignController}
+              toaster={toaster}
+            />
+          </div>
         </div>
       );
     }

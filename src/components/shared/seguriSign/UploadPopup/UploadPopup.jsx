@@ -7,7 +7,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable quotes */
 import { FiDelete } from "react-icons/all";
-import { ButtonGroup, Col, Dropdown, Form, Row, Modal } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import Button from "react-bootstrap/Button";
 import React, { useRef, useState } from "react";
@@ -36,6 +36,10 @@ const useStyles = createUseStyles(() => ({
     display: "flex",
     marginTop: 20,
   },
+  delBt: {
+    border: "1px solid transparent",
+    background: "transparent",
+  },
   firmanteBt: {
     color: "white",
     border: "1px solid black",
@@ -43,9 +47,9 @@ const useStyles = createUseStyles(() => ({
     fontSize: 15,
     minWidth: 150,
     paddingTop: 10,
+    marginTop: 8,
     paddingBottom: 10,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+    borderRadius: 10,
     backgroundColor: "rgb(75, 75, 75)",
   },
   inputStyle: {
@@ -63,12 +67,6 @@ const useStyles = createUseStyles(() => ({
 }));
 
 const UploadPopup = (props) => {
-  const { onClose } = props;
-  const { state } = props;
-  if (!state) {
-    return null;
-  }
-
   const signerInput = useRef(null);
   const { toaster } = props;
   const classes = useStyles();
@@ -192,11 +190,11 @@ const UploadPopup = (props) => {
     setSigners({ arr: signers.arr.filter((sig) => sig !== signer) });
   };
   return (
-    <Modal show={state}>
-      <Modal.Header onClick={onClose} closeButton>
-        <Modal.Title>Subir Documento</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <div>
+      <h5>
+        <b>Subir Documento</b>
+      </h5>
+      <div>
         {loader ? (
           <CustomLoader />
         ) : (
@@ -225,40 +223,28 @@ const UploadPopup = (props) => {
               ref={signerInput}
               placeholder="Ingresa el correo de los firmantes"
             />
-            <Dropdown className={classes.mt14} as={ButtonGroup}>
-              <Button
-                bsPrefix="btn-seguridata-lg"
-                onClick={addSigner}
-                variant="success"
-                className={classes.firmanteBt}
-              >
-                Agregar firmante
-              </Button>
-              <Dropdown.Toggle
-                style={{
-                  "background-color": "#88be0f",
-                }}
-                split
-                variant="success"
-                id="dropdown-split-basic"
-              />
-              <Dropdown.Menu>
-                {signers.arr.map((signer) => (
-                  <Dropdown.Item key={signer}>
-                    {signer}
-                    <button
-                      type="button"
-                      className="btn-del-signer"
-                      onClick={() => {
-                        deleteSigner(signer);
-                      }}
-                    >
-                      <FiDelete />
-                    </button>
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            <Button
+              bsPrefix="btn-seguridata-lg"
+              onClick={addSigner}
+              variant="success"
+              className={classes.firmanteBt}
+            >
+              Agregar firmante
+            </Button>
+            {signers.arr.map((signer) => (
+              <div>
+                {signer}
+                <button
+                  type="button"
+                  className={classes.delBt}
+                  onClick={() => {
+                    deleteSigner(signer);
+                  }}
+                >
+                  <FiDelete />
+                </button>
+              </div>
+            ))}
             <Form.Group as={Row} className={classes.mt14}>
               <Col>
                 <Form.Control type="file" size="sm" onChange={onFileChange} />
@@ -281,9 +267,6 @@ const UploadPopup = (props) => {
               </Document>
             </Row>
             <div className={classes.flex}>
-              <Button variant="outline-dark" onClick={onClose}>
-                Cerrar
-              </Button>
               <button
                 type="button"
                 style={{
@@ -298,7 +281,6 @@ const UploadPopup = (props) => {
                     // console.log('add doc');
                     addDocumentServer();
                   }
-                  onClose();
                 }}
               >
                 Enviar Documento
@@ -306,16 +288,14 @@ const UploadPopup = (props) => {
             </div>
           </div>
         )}
-      </Modal.Body>
-    </Modal>
+      </div>
+    </div>
   );
 };
 
 UploadPopup.propTypes = {
   toaster: PropTypes.func,
   seguriSignController: PropTypes.any,
-  onClose: PropTypes.any.isRequired,
-  state: PropTypes.any.isRequired,
 };
 
 UploadPopup.defaultProps = {
