@@ -56,7 +56,7 @@ function SidebarComponent() {
       />
       <MenuItem
         id={SLUGS.sign}
-        title="SeguriSign"
+        title="Mi SeguriSign"
         icon={FaSignature}
         onClick={() => onClick(SLUGS.sign)}
       />

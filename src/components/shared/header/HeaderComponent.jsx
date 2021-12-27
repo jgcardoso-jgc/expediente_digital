@@ -97,6 +97,9 @@ function HeaderComponent() {
     case currentItem === SLUGS.editUser:
       title = "Editar Usuario";
       break;
+    case currentItem === SLUGS.templates:
+      title = "Plantillas";
+      break;
     case currentItem === SLUGS.settings:
       title = "Ajustes";
       break;
