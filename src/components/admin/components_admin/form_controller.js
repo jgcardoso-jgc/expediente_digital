@@ -6,7 +6,7 @@ class FormController{
 
   async getDocumentList() {
     const requestOptions = {
-      method: "POST",
+      method: "GET",
       headers: this.header,
       body: JSON.stringify(),
     };
@@ -19,7 +19,6 @@ class FormController{
       const data = await response.json();
       const documents= data.documents;
       return documents;
-      // handle data
     }
     return false;
   }
