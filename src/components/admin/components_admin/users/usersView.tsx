@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
+/* eslint-disable object-curly-newline */
 import React, { useState, useEffect, useRef } from "react";
 import { useFirebaseApp } from "reactfire";
 import Row from "react-bootstrap/Row";
@@ -7,11 +8,11 @@ import { useLocation } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { fetchCargos, sendWelcomeEmail } from "./usersController";
+import { fetchCargos, sendWelcomeEmail, sendWelcomeEmailSign } from "./usersController";
 import TableView from "../table/tableView";
 import { docs, cargosLista } from "./usersModel";
 import {
-  rfcValido, submit, loginUser, uploadData,
+  rfcValido, createUserExpediente,
 } from "./registerController";
 import useStyles from "./usersStyles";
 
@@ -51,41 +52,34 @@ const UserView = () => {
     }
   }
 
-  const upload = (res) => {
-    uploadData(res, email, name, rfc, password, db).then((json) => {
-      sendWelcomeEmail(email).then(() => {
-        toast("Usuario registrado");
-        localStorage.setItem("user", JSON.stringify(json));
-        // history.push("/dashboard");
-      })
-        .catch((e) => {
-          setDisabled(false);
-          toast(e);
-        });
-    });
-  };
-
-  const login = () => {
-    loginUser(email, password, auth).then((res) => {
-      upload(res);
-    }).catch((e) => {
-      toast(e);
-    });
-  };
-
-  const submitUser = () => {
-    if (email !== "") {
-      setDisabled(true);
-      setLoading(true);
-      // submit to SOAP
-      submit(email, password, name, rfc).then(() => {
-        // submit firebase
-        login();
-      }).catch((e) => {
-        toast(e);
+  const createNewUser = async () => {
+    try {
+      if (email !== "") {
+        setDisabled(true);
+        setLoading(true);
+        const json: any = await createUserExpediente({ db, auth }, { email, name, rfc, password });
+        console.log('createUserExpediente: \n', json);
+        if (json) {
+          if (json.registradoSign) {
+            sendWelcomeEmailSign(email).then(() => {
+              toast("Usuario registrado");
+              localStorage.setItem("user", JSON.stringify(json));
+              // history.push("/dashboard");
+            });
+          } else {
+            sendWelcomeEmail(email).then(() => {
+              toast("Usuario registrado");
+              localStorage.setItem("user", JSON.stringify(json));
+              // history.push("/dashboard");
+            });
+          }
+        }
         setLoading(false);
         setDisabled(false);
-      });
+      }
+    } catch (e) {
+      toast((e as Error).message);
+      setDisabled(false);
     }
   };
 
@@ -95,7 +89,7 @@ const UserView = () => {
 
   useEffect(() => {
     fetchCargos(db).then((res) => {
-      const lista : cargosLista[] = res;
+      const lista: cargosLista[] = res;
       setCargos(lista);
       setReload((prev) => !prev);
     });
@@ -164,7 +158,7 @@ const UserView = () => {
                 type="button"
                 className={classes.addBt}
                 disabled={disabled}
-                onClick={submitUser}
+                onClick={createNewUser}
               >
                 Agregar Usuario
               </button>

@@ -81,31 +81,39 @@ const LoginNormal = ({ setLog }) => {
   const seguriSignController = new SegurisignController();
   const soapController = new SoapController();
 
-  function login(uid) {
-    localStorage.setItem(
-      "sign-user",
-      JSON.stringify(seguriSignController.segurisignUser)
-    );
-    checkUser(uid, db)
-      .then(() => setLog(true))
-      .catch((e) => {
-        console.log(`error:${e}`);
-        setLog(false);
-      });
-  }
+  const login = async () => {
+    try {
+      const credential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      const { uid } = credential.user;
+      localStorage.setItem(
+        "sign-user",
+        JSON.stringify(seguriSignController.segurisignUser)
+      );
+      checkUser(uid, db)
+        .then((response) => {
+          setLoading(false);
+          setLog(response, true);
+        })
+        .catch((e) => {
+          setLoading(false);
+          toast(e.message);
+          setLog(e.message, false);
+        });
+    } catch (e) {
+      setLoading(false);
+      toast(e.message);
+    }
+  };
 
   async function submit() {
     try {
       setLoading(true);
       if (email !== "" && password !== "") {
         setDisable(true);
-        const credential = await firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password);
-        const { uid } = credential.user;
         const resultado = await soapController.loginUser(email, password);
         if (resultado instanceof Error) {
-          console.log(`error:${resultado}`);
           throw resultado;
         }
         seguriSignController
@@ -118,13 +126,12 @@ const LoginNormal = ({ setLog }) => {
             if (responseJSON.token === null) {
               toast("No estás registrado en Segurisign.");
             } else {
-              login(uid);
+              login();
             }
           })
           .catch((error) => {
             toast(error);
           });
-        console.log(resultado);
       } else {
         setLoading(false);
       }

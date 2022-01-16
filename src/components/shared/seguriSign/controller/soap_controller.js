@@ -12,8 +12,7 @@
 /* eslint-disable object-shorthand */
 import "jquery";
 import "jquery.soap";
-import axios from "axios";
-import { stringify } from "querystring";
+import { toast } from "react-toastify";
 import SegurisignUser from "../segurisign_user";
 
 const $ = require("jquery");
@@ -179,15 +178,14 @@ class SoapController {
   }
 
   async verifyLogin(email) {
-    return new Promise((resolve, reject) => {
-      const settings = {
-        url: this.url,
-        method: "POST",
-        timeout: 0,
-        headers: {
-          "Content-Type": "text/xml",
-        },
-        data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+    const settings = {
+      url: this.url,
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
        <soapenv:Header/>
        <soapenv:Body>
        <ser:verifyLogin>
@@ -195,29 +193,25 @@ class SoapController {
             </ser:verifyLogin>
        </soapenv:Body>
     </soapenv:Envelope>`,
-      };
+    };
 
-      $.ajax(settings).then((data) => {
-        const parser = new DOMParser();
-        const docResponse = parser.parseFromString(
-          data.documentElement.innerHTML,
-          "application/xhtml+xml"
-        );
-        console.log(docResponse);
-        const resultado =
-          docResponse.getElementsByTagName("resultado")[0].childNodes[0]
-            .nodeValue;
-        console.log(`res:${resultado}`);
-        if (resultado !== "1") {
-          reject("Correo no válido o no registrado");
-        }
-        const idPerson =
-          docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
-            .nodeValue;
-        this.segurisignUser.idPerson = idPerson;
-        resolve(idPerson);
-      });
-    });
+    const data = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      data.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    console.log(docResponse);
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    if (resultado !== "1") {
+      console.log("Error, correo no válido o no registrado");
+      return false;
+    }
+    const idPerson =
+      docResponse.getElementsByTagName("idPerson")[0].childNodes[0].nodeValue;
+    this.segurisignUser.idPerson = idPerson;
+    return idPerson;
   }
 
   verifyLoginAdmin = async () =>
@@ -285,26 +279,20 @@ class SoapController {
     );
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+    console.log(docResponse);
     return resultado === "1";
   }
 
   async loginUser(email, password) {
-    try {
-      const idPerson = await this.verifyLogin(email);
-      console.log(`idPerson:${idPerson}`);
-      if (idPerson === "Correo no válido o no registrado") {
-        console.log("throw");
-        throw idPerson;
-      }
-      const result = await this.authenticateUser(idPerson, password);
-      return [result, idPerson];
-    } catch (e) {
-      console.log("catched");
-      return new Error(e);
+    const idPerson = await this.verifyLogin(email);
+    if (idPerson === "Error, correo no válido o no registrado") {
+      return false;
     }
+    const result = await this.authenticateUser(idPerson, password);
+    return [result, idPerson];
   }
 
-  async updateUserPassword(user) {
+  async updateUserPassword(user, newPassword) {
     const settings = {
       url: this.url,
       method: "POST",
@@ -326,14 +314,12 @@ class SoapController {
             <password>${user.password}</password>
             <idEmployeeProfile>4</idEmployeeProfile>
             <autType>USUARIO_PASSWORD</autType>
-            <newPasswordAut>${user.password}</newPasswordAut>
-            <newPasswordPrivateKey>${user.password}</newPasswordPrivateKey>
+            <newPasswordAut>${newPassword}</newPasswordAut>
+            <newPasswordPrivateKey>${newPassword}</newPasswordPrivateKey>
          </request>
       </ser:doUpdateUserPasswords>
    </soapenv:Body>
-</soapenv:Envelope>
-
-`,
+</soapenv:Envelope>`,
     };
 
     const response = await $.ajax(settings).done();
@@ -349,16 +335,15 @@ class SoapController {
   }
 
   async createUser(user) {
-    return new Promise((resolve, reject) => {
-      this.verifyLoginAdmin().then(() => {
-        const settings = {
-          url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
-          method: "POST",
-          timeout: 0,
-          headers: {
-            "Content-Type": "text/xml",
-          },
-          data: `
+    await this.verifyLoginAdmin();
+    const settings = {
+      url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `
           <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
         <soapenv:Header/>
         <soapenv:Body>
@@ -413,66 +398,40 @@ class SoapController {
         </soapenv:Body>
     </soapenv:Envelope>
           `,
-        };
-
-        $.ajax(settings)
-          .done((data) => {
-            const parser = new DOMParser();
-            const docResponse = parser.parseFromString(
-              data.documentElement.innerHTML,
-              "application/xhtml+xml"
-            );
-            const resultado =
-              docResponse.getElementsByTagName("resultado")[0].childNodes[0]
-                .nodeValue;
-            console.log(`final:${docResponse}`);
-            resolve(resultado === "1");
-          })
-          .fail((e) => {
-            reject(e);
-          });
-      });
-    });
+    };
+    try {
+      const response = await $.ajax(settings).done();
+      const parser = new DOMParser();
+      const docResponse = parser.parseFromString(
+        response.documentElement.innerHTML,
+        "application/xhtml+xml"
+      );
+      const resultado =
+        docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+          .nodeValue;
+      console.log(docResponse);
+      return resultado === "1" ? 1 : false;
+    } catch (e) {
+      console.log(e);
+      console.log(e.responseText.includes("[E0550]"));
+      if (e.responseText.includes("[E0550]")) {
+        return 2;
+      }
+      return false;
+    }
   }
 
-  async createNewUser(user) {
-    return new Promise((resolve, reject) => {
-      this.createUser(user)
-        .then(async () => {
-          const resultado = await this.loginUser(user.email, user.password);
-          if (resultado[0]) {
-            user.idRh = resultado[1];
-            console.log(user.idRh);
-          } else {
-            reject("error");
-          }
-          resolve(this.updateUserPassword(user));
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    });
+  async loginAndUpdatePassword(user, newPassword) {
+    const resultado = await this.loginUser(user.email, user.password);
+    console.log(resultado);
+    if (resultado[0]) {
+      user.idRh = resultado[1];
+      console.log(resultado, newPassword, user);
+      return this.updateUserPassword(user, newPassword);
+    }
+    toast("Contraseña de Sign inválida");
+    return false;
   }
-
-  sendWelcomeEmail = async (email) =>
-    new Promise((resolve, reject) => {
-      const msg = "Tienes que subir un nuevo documento.";
-      // agregar mensaje de bienvenida a estudiante
-      const data = {
-        email,
-        msg,
-      };
-      axios({
-        method: "post",
-        url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendWelcome",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        data: stringify(data),
-      })
-        .then((res) => resolve(`sended:${res.status}`))
-        .catch((res) => reject(`error:${res}`));
-    });
 }
 
 export default SoapController;

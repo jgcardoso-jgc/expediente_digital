@@ -3,7 +3,7 @@
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable quotes */
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
@@ -15,6 +15,8 @@ import PrivacidadView from "./components/main/privacidad/privacidad";
 import TerminosView from "./components/main/terminos/terminos";
 import "./App.css";
 import UserInit from "./components/user/user_init";
+import UpdatePassword from "./components/main/updatePassword/updatePassword";
+import UpdatePasswordSign from "./components/main/updatePassword/updatePasswordSign";
 
 const useStyles = createUseStyles({
   "@global": {
@@ -41,7 +43,6 @@ function App() {
   const auth = firebase.auth();
   const [user, setUser] = useState(false);
   const [admin, setAdmin] = useState(false);
-  const [logged, setLogged] = useState(false);
   const [loading, setLoading] = useState(true);
 
   function authState() {
@@ -56,36 +57,43 @@ function App() {
     return "logout";
   }
 
-  const afterInit = () => {
-    auth.onAuthStateChanged((userState) => {
-      const state = authState();
-      if (userState) {
-        //detect type of user
-        if (state === "user") {
-          setUser(true);
-        }
-        if (state === "admin") {
-          setAdmin(true);
-        }
-        setLoading(false);
-      } else {
-        //destroy all user data
-        if (state === "logout") {
-          setUser(false);
-          setAdmin(false);
-        }
-        setLoading(false);
+  auth.onAuthStateChanged((userState) => {
+    const state = authState();
+    if (userState) {
+      //detect type of user
+      if (state === "user") {
+        setUser(true);
       }
-    });
-  };
+      if (state === "admin") {
+        setAdmin(true);
+      }
+      setLoading(false);
+    } else {
+      //destroy all user data
+      if (state === "logout") {
+        setUser(false);
+        setAdmin(false);
+      }
+      setLoading(false);
+    }
+  });
 
-  const setLog = useCallback((log) => {
-    setLogged(log);
+  const setLog = useCallback(() => {
+    const state = authState();
+    if (state === "user") {
+      setUser(true);
+    }
+    if (state === "admin") {
+      setAdmin(true);
+    }
+    if (state === "logout") {
+      setUser(false);
+      setAdmin(false);
+    }
+    setLoading(false);
   }, []);
 
-  useEffect(() => {
-    afterInit();
-  }, [logged]);
+  useEffect(() => {}, [user]);
 
   if (loading) {
     return "";
@@ -128,6 +136,12 @@ function App() {
         </Route>
         <Route path="/privacidad">
           <PrivacidadView />
+        </Route>
+        <Route path="/updatePassword">
+          <UpdatePassword />
+        </Route>
+        <Route path="/updatePasswordSign">
+          <UpdatePasswordSign />
         </Route>
         <Route
           path="/"

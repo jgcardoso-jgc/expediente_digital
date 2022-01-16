@@ -3,7 +3,6 @@
 import axios from "axios";
 import { stringify } from "querystring";
 import { cargosLista } from "./usersModel";
-import { User } from "../../../../types/user";
 
 function fetchCargos(db) {
   return new Promise<cargosLista[]>((resolve, reject) => {
@@ -29,7 +28,7 @@ function fetchCargos(db) {
 
 async function sendWelcomeEmail(email) {
   return new Promise((resolve, reject) => {
-    const msg = "Bienvenido a Seguridata | Expediente <br> Para registrarte haz click en el siguiente link: <br> <a href='https://expediente-digital.vercel.app/loginNormal'> Inicia ahora </a> <br> Tu contraseña es: <br> <b>OneSeguridata2021</b>";
+    const msg = "Bienvenido a Seguridata | Expediente <br> Para terminar tu registro haz click en el siguiente link: <br> <a href='https://expediente-digital.vercel.app/updatePassword'> Inicia ahora </a> <br> Tu contraseña temporal es: <br> <b>OneSeguridata2021</b>";
     // agregar mensaje de bienvenida a estudiante
     const data = {
       email,
@@ -48,36 +47,24 @@ async function sendWelcomeEmail(email) {
   });
 }
 
-function createUser(auth, email, db, name) {
+async function sendWelcomeEmailSign(email) {
   return new Promise((resolve, reject) => {
-    auth
-      .createUserWithEmailAndPassword(email, "OneSeguridata2021!")
-      .then((userCredential) => {
-        userCredential.user.sendEmailVerification().then(() => {
-          const id = userCredential.user?.uid;
-          const jsonRegister: User = {
-            uid: id,
-            fullname: name,
-            email,
-            rfc: "",
-            token: "",
-            onboarding: false,
-            cargo: "",
-            docsAdmin: [],
-            documents: [],
-          };
-          db.collection("users")
-            .add(jsonRegister)
-            .then(() => {
-              resolve("200");
-            });
-        });
-      })
-      .catch((error) => {
-        const msg = (error as Error).message;
-        reject(msg);
-      });
+    const msg = "Bienvenido a Seguridata | Expediente <br> Para registrarte haz click en el siguiente link: <br> <a href='https://expediente-digital.vercel.app/updatePasswordSign'> Inicia ahora </a> <br> Tu contraseña temporal es: <br> <b>OneSeguridata2021</b> Tu contraseña de Sign sigue siendo la misma.";
+    const data = {
+      email,
+      msg,
+    };
+    axios({
+      method: 'post',
+      url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendWelcome",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: stringify(data),
+    })
+      .then((res) => resolve(`sended:${res.status}`))
+      .catch((res) => reject(`error:${res}`));
   });
 }
 
-export { fetchCargos, createUser, sendWelcomeEmail };
+export { fetchCargos, sendWelcomeEmail, sendWelcomeEmailSign };
