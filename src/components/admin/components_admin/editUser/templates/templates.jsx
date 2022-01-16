@@ -3,10 +3,15 @@
 /* eslint-disable quotes */
 import React, { useEffect } from "react";
 import styles from "./templates.module.scss";
+import FormController from "./form_controller";
 
 const Templates = () => {
+  const form = new FormController();
+  const getDocuments = () => {
+    form.getDocumentList();
+  };
   useEffect(() => {
-    console.log(1);
+    getDocuments();
   }, []);
   return (
     <div className={styles.container}>

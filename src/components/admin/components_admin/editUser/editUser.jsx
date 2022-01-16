@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -85,6 +86,10 @@ const useStyles = createUseStyles(() => ({
   max3: {
     maxWidth: "33.3333%",
     minWidth: "33.3333%",
+  },
+  plantillas: {
+    display: "block",
+    textAlign: "right",
   },
   "@media screen and (max-width:768px)": {
     col: {
@@ -400,6 +405,9 @@ const EditUser = () => {
           email={email}
           onClose={() => setShow(false)}
         />
+        <Link className={classes.plantillas} to={slugs.templates}>
+          Ver plantillas de Documentos
+        </Link>
         <button
           type="button"
           onClick={() => updatePendientes()}
@@ -408,7 +416,6 @@ const EditUser = () => {
         >
           Solicitar Documentos
         </button>
-        <Link to={slugs.templates}>Más +</Link>
       </div>
       <div className={classes.container}>
         <p className={classes.mt20}>

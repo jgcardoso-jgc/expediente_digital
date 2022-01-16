@@ -68,11 +68,9 @@ async function uploadData(user, firebaseHandle) {
 const createUserExpediente = async (firebaseHandle, user) => {
   try {
     const soapResponse = await soapController.createUser(user);
-    console.log('soapResponse: \n', soapResponse);
     if (soapResponse) {
       const fbResponse = await firebaseHandle.auth
         .createUserWithEmailAndPassword(user.email, user.password);
-      console.log('fbResponse: \n', fbResponse);
       if (fbResponse) {
         user.uid = fbResponse.user.uid;
         user.registradoSign = soapResponse === 2;
