@@ -6,7 +6,7 @@ class FormController {
 
   async getDocumentList() {
     const requestOptions = {
-      method: "POST",
+      method: "GET",
       headers: this.header,
       body: JSON.stringify(),
     };
