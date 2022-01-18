@@ -4,21 +4,26 @@
 import React, { useState } from "react";
 import Div100vh from "react-div-100vh";
 import { Link, useHistory } from "react-router-dom";
+import waves from "../../../assets/waves.svg";
 import styles from "../../../resources/theme";
 import { ToastContainer, toast } from "react-toastify";
 import { createUseStyles } from "react-jss";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import { useFirebaseApp } from "reactfire";
-import Waves from "../waves/waves";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   navmain: { top: "0px", position: "absolute !important", width: "100%" },
   inputStyle: {
     width: "100%",
-    border: "0",
-    borderBottom: "1px solid rgb(194, 194, 194)",
+    border: "1px solid #f1f1f1",
     fontSize: "16px",
+    background: "#f1f1f1",
+    marginTop: 8,
+  },
+  wave: {
+    position: "absolute",
+    bottom: 0,
   },
   title: {
     textAlign: "left",
@@ -96,7 +101,7 @@ const RecoverPassword = () => {
             </Link>
           </div>
         </div>
-        <Waves />
+        <img src={waves} className={classes.wave} alt="waves" />
       </div>
     </Div100vh>
   );

@@ -1,7 +1,6 @@
 /* eslint-disable quotes */
 function checkUser(uid, db) {
   return new Promise((resolve, reject) => {
-    console.log(`uid:${uid}`);
     const query = db.collection("users").where("uid", "==", uid);
     query
       .get()

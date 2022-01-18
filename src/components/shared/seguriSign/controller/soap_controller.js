@@ -203,15 +203,13 @@ class SoapController {
     );
     console.log(docResponse);
     const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0]
-        .nodeValue;
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
     if (resultado !== "1") {
-      alert("Error, correo no válido o no registrado");
+      console.log("Error, correo no válido o no registrado");
       return false;
     }
     const idPerson =
-      docResponse.getElementsByTagName("idPerson")[0].childNodes[0]
-        .nodeValue;
+      docResponse.getElementsByTagName("idPerson")[0].childNodes[0].nodeValue;
     this.segurisignUser.idPerson = idPerson;
     return idPerson;
   }
@@ -333,7 +331,7 @@ class SoapController {
     console.log(docResponse);
     const resultado =
       docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === '1';
+    return resultado === "1";
   }
 
   async createUser(user) {
@@ -409,13 +407,14 @@ class SoapController {
         "application/xhtml+xml"
       );
       const resultado =
-        docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+        docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+          .nodeValue;
       console.log(docResponse);
-      return resultado === '1' ? 1 : false;
+      return resultado === "1" ? 1 : false;
     } catch (e) {
       console.log(e);
-      console.log(e.responseText.includes('[E0550]'));
-      if (e.responseText.includes('[E0550]')) {
+      console.log(e.responseText.includes("[E0550]"));
+      if (e.responseText.includes("[E0550]")) {
         return 2;
       }
       return false;
@@ -430,7 +429,7 @@ class SoapController {
       console.log(resultado, newPassword, user);
       return this.updateUserPassword(user, newPassword);
     }
-    toast('Contraseña de Sign inválida');
+    toast("Contraseña de Sign inválida");
     return false;
   }
 }

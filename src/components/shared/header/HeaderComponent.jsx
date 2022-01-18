@@ -4,7 +4,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable no-console */
 /* eslint-disable quotes */
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { string } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
@@ -71,12 +71,29 @@ function HeaderComponent() {
   const classes = useStyles({ theme });
   const firebase = useFirebaseApp();
   const auth = firebase.auth();
+  const [user, setUser] = useState("Admin");
 
   function logOut() {
     localStorage.removeItem("admin");
     localStorage.removeItem("user");
+    localStorage.removeItem("date");
+    localStorage.removeItem("position");
+    localStorage.removeItem("sign-user");
     auth.signOut();
   }
+
+  function getUserName() {
+    const isAdmin = localStorage.getItem("admin");
+    if (isAdmin === null) {
+      const userGet = JSON.parse(localStorage.getItem("user"));
+      const userName = userGet.fullName;
+      setUser(userName);
+    }
+  }
+
+  useEffect(() => {
+    getUserName();
+  }, []);
 
   let title;
   switch (true) {
@@ -93,6 +110,9 @@ function HeaderComponent() {
       break;
     case currentItem === SLUGS.editUser:
       title = "Editar Usuario";
+      break;
+    case currentItem === SLUGS.templates:
+      title = "Plantillas";
       break;
     case currentItem === SLUGS.settings:
       title = "Ajustes";
@@ -136,7 +156,7 @@ function HeaderComponent() {
         <DropdownComponent
           label={
             <>
-              <span className={classes.name}>Admin</span>
+              <span className={classes.name}>{user}</span>
               <img
                 src="https://cdn.iconscout.com/icon/free/png-256/user-1648810-1401302.png"
                 alt="avatar"
