@@ -124,9 +124,9 @@ function AlertComponent({ position, label }) {
   async function appendAlerts() {
     const al = [];
     if (firebase.auth().currentUser.emailVerified) {
-      console.log("verified");
+      // console.log("verified");
     } else {
-      console.log("not verified");
+      // console.log("not verified");
       al.push({ message: "No has confirmado tu correo", doc: "" });
     }
     const query = db.collection("users").where("name", "!=", "");
@@ -179,9 +179,7 @@ function AlertComponent({ position, label }) {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("reload");
-  }, [alerts]);
+  useEffect(() => {}, [alerts]);
 
   return (
     <div ref={ref}>
