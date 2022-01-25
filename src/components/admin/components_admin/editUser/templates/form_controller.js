@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 class FormController {
-  apiUrl = "http://200.66.66.214:5001/docs";
+  apiUrl = "https://200.66.66.214:5002/docs";
 
   header = {
     "Content-Type": "application/json",
