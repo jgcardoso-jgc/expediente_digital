@@ -2,13 +2,15 @@
 class FormController {
   apiUrl = "http://200.66.66.214:5001/docs";
 
-  header = { "Content-Type": "application/json" };
+  header = {
+    "Content-Type": "application/json",
+    'Access-Control-Allow-Origin': '*',
+  };
 
   async getDocumentList() {
     const requestOptions = {
       method: "GET",
       headers: this.header,
-      body: JSON.stringify(),
     };
     const response = await fetch(`${this.apiUrl}`, requestOptions);
 
