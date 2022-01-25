@@ -5,6 +5,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
+import { RadioGroup, Radio } from "react-radio-group";
 import styles from "./templates.module.scss";
 import FormController from "./form_controller";
 
@@ -12,19 +13,27 @@ const Templates = () => {
   const form = new FormController();
   const [docs, setDocs] = useState([]);
   const [inputs, setInputs] = useState([]);
-
-  const getDocuments = async () => {
-    const res = await form.getDocumentList();
-    setDocs(res.Documents);
-  };
+  const [selectedValue, setSelectedValue] = useState("apple");
 
   const updateInputs = (e) => {
+    setInputs([]);
     docs.forEach((doc) => {
       if (doc.name === e) {
         console.log(e);
         setInputs(doc.items);
       }
     });
+  };
+
+  const handleChange = (value) => {
+    setSelectedValue(value);
+    updateInputs(value);
+  };
+
+  const getDocuments = async () => {
+    const res = await form.getDocumentList();
+    console.log(res);
+    setDocs(res.documents);
   };
 
   useEffect(() => {
@@ -36,26 +45,27 @@ const Templates = () => {
     <div className={styles.container}>
       <h2>Selecciona Tipo de Documento</h2>
       <div>
-        {docs.length > 0
-          ? docs.map((doc, index) => (
-              <div key={`i${index}`}>
-                <label>
-                  <input
-                    type="checkbox"
-                    onChange={() => updateInputs(doc.name)}
-                  />{" "}
-                  {doc.label}
-                </label>
-              </div>
-            ))
-          : ""}
+        <RadioGroup
+          name="fruit"
+          selectedValue={selectedValue}
+          onChange={handleChange}
+        >
+          {docs.length > 0
+            ? docs.map((doc, index) => (
+                <div key={`i${index}`}>
+                  <Radio value={doc.name} />
+                  {` ${doc.label}`}
+                </div>
+              ))
+            : ""}
+        </RadioGroup>
         {inputs.length > 0
           ? inputs.map((input, index) => (
               <div key={`i${index}`}>
-                <p className={styles.title}>Nombre completo</p>
+                <p className={styles.title}>{input.value}</p>
                 <input
                   className={styles.inputStyle}
-                  placeholder="Nombre completo"
+                  placeholder={`Ingresa ${input.value}`}
                   type="text"
                 />
                 {input.label}
