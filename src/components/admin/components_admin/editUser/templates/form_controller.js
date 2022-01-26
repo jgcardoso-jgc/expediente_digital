@@ -1,10 +1,9 @@
 /* eslint-disable quotes */
 class FormController {
-  apiUrl = "https://200.66.66.214:5002/docs";
+  apiUrl = "https://smtp.seguridata.com:5002/docs";
 
   header = {
     "Content-Type": "application/json",
-    'Access-Control-Allow-Origin': '*',
   };
 
   async getDocumentList() {
