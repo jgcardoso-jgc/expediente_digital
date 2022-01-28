@@ -132,7 +132,6 @@ const EditUser = () => {
 
   function reloadFinal() {
     setReload((prev) => !prev);
-    console.log("Reload");
   }
 
   function setCargosData(querySnapshot) {
