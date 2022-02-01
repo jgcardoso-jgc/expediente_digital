@@ -6,6 +6,7 @@
 /* eslint-disable no-console */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
+/* eslint-disable react/jsx-closing-bracket-location */
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
@@ -310,7 +311,7 @@ const EditUser = () => {
     fetchCargos();
   }, []);
 
-  useEffect(() => {}, [reload]);
+  useEffect(() => { }, [reload]);
 
   return (
     <div>
@@ -404,7 +405,9 @@ const EditUser = () => {
           email={email}
           onClose={() => setShow(false)}
         />
-        <Link className={classes.plantillas} to={slugs.templates}>
+        <Link
+          className={classes.plantillas}
+          to={{ pathname: slugs.templates, state: { userEmail: locData.email } }}>
           Ver plantillas de Documentos
         </Link>
         <button

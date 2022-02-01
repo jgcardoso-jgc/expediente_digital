@@ -36,6 +36,59 @@ class SoapController {
       reader.onerror = (error) => reject(error);
     });
 
+  async addDocument(signer, file) {
+    const docType = "CONTRATOS";
+    const settings = {
+      url: this.url,
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "text/xml",
+      },
+      data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:addDocumentConfigurationParticipantsHRV>
+         <docListParticipantsRequest>
+        <lstParticipant>
+			<infoEmployee>${signer}</infoEmployee>
+			<inputDataType>EMAIL</inputDataType>
+			<participantType>EMPLOYEE</participantType>
+			<role>FIRMANTE</role>
+			</lstParticipant>
+            <docType>${docType}</docType>
+            <document>${file.layoutDocument}</document>
+            <userDomain>${this.userDomain}</userDomain>
+            <passwordDomain>${this.passwordDomain}</passwordDomain>
+            <docNameWithExtension>${file.nameDocument}</docNameWithExtension>
+            <automaticSignatureDomain>false</automaticSignatureDomain>
+            <idDomain>${this.idDomain}</idDomain>
+            <initiatorEmail>${this.segurisignUser.email}</initiatorEmail>
+            <initiatorIdRh>${this.segurisignUser.idRh}</initiatorIdRh>
+            <domainSignatureAtTheEnd>false</domainSignatureAtTheEnd>
+            <concurrentSignature>true</concurrentSignature>
+         </docListParticipantsRequest>
+      </ser:addDocumentConfigurationParticipantsHRV>
+   </soapenv:Body>
+</soapenv:Envelope>`,
+    };
+    console.log(settings);
+    const response = await $.ajax(settings).done();
+    const parser = new DOMParser();
+    const docResponse = parser.parseFromString(
+      response.documentElement.innerHTML,
+      "application/xhtml+xml"
+    );
+    console.log(docResponse);
+    const resultado =
+      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue === '1';
+
+    const multilateralId = resultado ?
+      docResponse.getElementsByTagName("multilateralId")[0].childNodes[0]
+        .nodeValue : 0;
+    return [resultado, { multilateralId, docType, fileName: file.nameDocument }];
+  }
+
   async addDocumentString(signers, file) {
     const b64 = await this.toBase64(file);
     const b64Str = b64.substr(b64.indexOf(",") + 1);
@@ -51,7 +104,6 @@ class SoapController {
 			</lstParticipant>`
       );
     });
-    console.log(signersJSON);
     const settings = {
       url: this.url,
       method: "POST",

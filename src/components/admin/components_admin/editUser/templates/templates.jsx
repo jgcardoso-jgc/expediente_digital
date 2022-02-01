@@ -5,13 +5,25 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
 /* eslint-disable no-shadow */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
+import { useFirebaseApp } from "reactfire";
+import { useLocation } from "react-router-dom";
 import { RadioGroup, Radio } from "react-radio-group";
+import UserController from "../../../../shared/seguriSign/controller/user_controller";
 import styles from "./templates.module.scss";
 import FormController from "./form_controller";
+import SoapController from "../../../../shared/seguriSign/controller/soap_controller";
 
 const Templates = () => {
   const form = new FormController();
+  const soapController = new SoapController();
+  const cookie = localStorage.getItem("sign-user");
+  const location = useLocation();
+  const locData = location.state;
+  const { userEmail } = locData;
+  const firebase = useFirebaseApp();
+  const db = firebase.firestore();
   const [docs, setDocs] = useState([]);
   const [docType, setDocType] = useState("");
   const [inputs, setInputs] = useState([]);
@@ -59,13 +71,53 @@ const Templates = () => {
     setDocs(res);
   };
 
+  const getDocByID = async (id) => {
+    const docRef = db.collection("generatedDocs").doc(id);
+    const doc = await docRef.get();
+    if (doc.exists) {
+      return doc.data();
+    }
+    return false;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const result = await form.submit(formValues, docType);
-    console.log(result);
+    if (!cookie) {
+      alert('No estás loggeado');
+      return;
+    }
+    const docID = await form.submit(formValues, docType);
+    const doc = await getDocByID(docID);
+    const requiresFM = false;
+    if (doc) {
+      soapController.segurisignUser = JSON.parse(cookie);
+      const response = await soapController.addDocument(userEmail, doc);
+      console.log(response);
+      if (response[0]) {
+        const userController = new UserController(
+          soapController.segurisignUser.email,
+        );
+        await userController.addNewDocToFirebase(
+          [userEmail],
+          response[1],
+          requiresFM,
+        );
+        alert('exito');
+      } else {
+        alert('Error al subir doc');
+      }
+    } else {
+      alert('Error al generar doc');
+    }
   };
 
   useEffect(() => {
+    if (cookie) {
+      soapController.segurisignUser = JSON.parse(cookie);
+      console.log(soapController.segurisignUser);
+    } else {
+      alert('Alerta: No estás loggeado en Sign');
+    }
     getDocuments();
   }, []);
 
@@ -114,11 +166,3 @@ const Templates = () => {
 };
 
 export default Templates;
-
-/*
- "items": [{
-                "name": "Area que registra",
-                "value:": "areaContacto"},
-            }],
-
-*/
