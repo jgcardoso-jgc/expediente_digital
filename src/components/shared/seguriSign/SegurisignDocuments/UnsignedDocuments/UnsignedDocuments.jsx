@@ -24,6 +24,7 @@ import SignPopUP from "../../SignPopup/SignPopup";
 import CancelPopup from "../../CancelPopup/CancelPopup";
 import CustomLoader from "../../CustomLoader/CustomLoader";
 import faceid from "../../../../../assets/faceid.gif";
+import TableView from "../../../table/tableView";
 
 const useStyles = createUseStyles(() => ({
   recordarBt: {
@@ -105,11 +106,12 @@ const UnsignedDocuments = (props) => {
       <Accordion.Header>
         Por Firmar
         <Badge style={{ marginLeft: "3rem" }} pill bg="dark">
-          {unsignedDocuments.length}
+          {unsignedDocuments.length > 0 ? unsignedDocuments.length : "0"}
         </Badge>
       </Accordion.Header>
       <Accordion.Body>
         <Accordion flush>
+          <TableView docsNumber={0} data={unsignedDocuments} />
           {unsignedDocuments.map((item, index) => {
             const now = getPercentage(item);
             return (

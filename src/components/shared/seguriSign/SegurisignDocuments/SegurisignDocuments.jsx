@@ -146,7 +146,12 @@ const SegurisignDocuments = (props) => {
     setTime();
   }, []);
 
+  useEffect(() => {
+    console.log(loaded.unsignedDocuments);
+  }, [loaded]);
+
   const getDocuments = async () => {
+    console.log("getting...");
     const [
       signedDoc,
       unsignedDoc,
@@ -160,7 +165,7 @@ const SegurisignDocuments = (props) => {
       props.seguriSignController.getStatus("EXPIRADOS"),
       props.seguriSignController.getStatus("CANCELADOS_TERCEROS"),
     ]);
-    console.log(cancelledDoc);
+    console.log(unsignedDoc);
     setLoaded({
       signedDocuments: signedDoc,
       hasLoaded: true,

@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
@@ -6,7 +7,9 @@
 import { auth, db, functions } from "./firebase_controller";
 
 class UserController {
-  constructor(email) { this.email = email; }
+  constructor(email) {
+    this.email = email;
+  }
 
   userCollection = db.collection("users");
 
@@ -21,8 +24,8 @@ class UserController {
       numeroFirmas: emailList.length,
       docType: document.docType,
       usuarios: emailList,
-      requiresFaceMatch: requiresFaceMatch === 'on',
-      status: 'PENDIENTE',
+      requiresFaceMatch: requiresFaceMatch === "on",
+      status: "PENDIENTE",
     };
     console.log(body);
     docRef
@@ -31,10 +34,12 @@ class UserController {
       .catch((error) => {
         console.error("Error updating document: ", error);
       });
-  }
+  };
 
   async getSignDocData(multilateralId) {
-    const snapshot = await this.signDocCollection.where("multilateralId", "==", multilateralId).get();
+    const snapshot = await this.signDocCollection
+      .where("multilateralId", "==", multilateralId)
+      .get();
     if (snapshot.size > 0) {
       return snapshot.docs[0].data();
     }
@@ -71,22 +76,22 @@ class UserController {
     });
   }
 
-  getUserDocs = (status) => {
-    const docs = [];
-    db.collection("sign-docs")
-      .where("usuarios", "array-contains", this.email)
-      .where("status", "==", status)
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          const docData = doc.data();
-          docs.push(docData);
-        });
-      })
-      .catch((err) => {
-        console.log("Error getting documents", err);
-      });
-    return docs;
+  async getUserDocs(status) {
+    return new Promise((resolve, reject) => {
+      const docs = [];
+      db.collection("sign-docs")
+        .where("usuarios", "array-contains", this.email)
+        .where("status", "==", status)
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((doc) => {
+            const docData = doc.data();
+            docs.push(docData);
+          });
+          resolve(docs);
+        })
+        .catch((err) => reject(err));
+    });
   }
 
   async updateDocSigned(multilateralId, location) {
@@ -97,10 +102,14 @@ class UserController {
       const { uid } = auth.currentUser;
       const doc = snapshot.docs[0];
       const docData = doc.data();
-      const time = new Date().toLocaleString('es').split(' ');
+      const time = new Date().toLocaleString("es").split(" ");
 
       docData.firmados.push(uid);
-      docData.status = docData.firmados.length === docData.numeroFirmas ? 'CONCLUIDO' : 'PENDIENTE';
+      // eslint-disable-next-line operator-linebreak
+      docData.status =
+        docData.firmados.length === docData.numeroFirmas
+          ? "CONCLUIDO"
+          : "PENDIENTE";
       docData.usuarios.forEach((u) => {
         if (u.uid === uid) {
           u.firmo = true;
@@ -109,9 +118,9 @@ class UserController {
             horaFirma: time[1],
             ubicacion: {
               lat: location.lat,
-              long: location.long
+              long: location.long,
             },
-            agente: navigator.userAgent
+            agente: navigator.userAgent,
           };
         }
       });
@@ -127,18 +136,20 @@ class UserController {
     if (snapshot.size > 0) {
       const doc = snapshot.docs[0];
       const docData = doc.data();
-      docData.status = 'CANCELADO';
+      docData.status = "CANCELADO";
       await doc.ref.update(docData);
     }
   }
 
   testEmail = () => {
-    const val = functions.httpsCallable('signedDocEmail');
-    val().then((result) => {
-      console.log(result.data.output);
-    }).catch((error) => {
-      console.log(`error: ${JSON.stringify(error)}`);
-    });
-  }
+    const val = functions.httpsCallable("signedDocEmail");
+    val()
+      .then((result) => {
+        console.log(result.data.output);
+      })
+      .catch((error) => {
+        console.log(`error: ${JSON.stringify(error)}`);
+      });
+  };
 }
 export default UserController;

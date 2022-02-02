@@ -144,7 +144,7 @@ class SegurisignController {
     const body = {
       documentRequest,
       hashHex,
-      passPrivateKey
+      passPrivateKey,
     };
 
     const response = await fetch(
@@ -156,7 +156,7 @@ class SegurisignController {
       const data = await response.json();
       return data.hashHex;
     }
-    return '';
+    return "";
   }
 
   async getHash(multilateralId) {
@@ -178,7 +178,7 @@ class SegurisignController {
       const data = await response.json();
       return data.hashHex;
     }
-    return '';
+    return "";
   }
 
   async getDocument(multilateralId) {
@@ -214,19 +214,19 @@ class SegurisignController {
       userDomain: "",
     };
 
-    const response = await fetch(
-      `${this.apiUrl}/getStatus`,
-      this.getSecureRequestOptions(body)
-    );
-
-    if (response.status === 200) {
+    try {
+      const response = await fetch(
+        `${this.apiUrl}/getStatus`,
+        this.getSecureRequestOptions(body)
+      );
       const data = await response.json();
       Object.keys(data.lstReceipts).forEach((doc) =>
         documents.push(new SegurisignDocument(data.lstReceipts[doc]))
       );
       return documents;
+    } catch {
+      return "404";
     }
-    return "404";
   }
 
   async addDocumentForParticipants(signers, file) {
@@ -333,7 +333,7 @@ class SegurisignController {
       headers: this.header,
       body: JSON.stringify(body),
     };
-    console.log('auth, ', this.segurisignUser.idPerson);
+    console.log("auth, ", this.segurisignUser.idPerson);
     return fetch(`${this.apiUrl}/user`, requestOptions).then((res) => {
       if (res.status === 200) {
         return res.json().then((data) => {
