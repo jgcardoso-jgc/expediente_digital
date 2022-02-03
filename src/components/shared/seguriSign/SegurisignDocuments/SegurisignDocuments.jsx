@@ -76,7 +76,7 @@ const SegurisignDocuments = (props) => {
           .query({ name: "geolocation" })
           .then((PermissionStatus) => {
             if (PermissionStatus.state === "granted") {
-              resolve(true);
+              resolve("granted");
             } else if (PermissionStatus.state === "prompt") {
               reject(new Error("Permiso denegado"));
             } else {
@@ -112,33 +112,39 @@ const SegurisignDocuments = (props) => {
   };
 
   const setTime = async () => {
-    const permission = await getPermissions();
-    if (permission) {
-      const savedDate = localStorage.getItem("date");
-      if (savedDate == null) {
-        localStorage.setItem("date", new Date());
-        getPosition();
-      } else {
-        const now = new Date();
-        const past = new Date(localStorage.getItem("date"));
-        const minutes = Math.floor((now - past) / 1000 / 60);
-        if (minutes > timeOut) {
+    try {
+      const permission = await getPermissions();
+      if (permission === "granted") {
+        const savedDate = localStorage.getItem("date");
+        if (savedDate == null) {
           localStorage.setItem("date", new Date());
           getPosition();
         } else {
-          const position = localStorage.getItem("position");
-          if (position) {
-            setLocation({
-              loading: false,
-              isEnabled: true,
-              lat: position.lat,
-              lng: position.lng,
-            });
+          const now = new Date();
+          const past = new Date(localStorage.getItem("date"));
+          const minutes = Math.floor((now - past) / 1000 / 60);
+          if (minutes > timeOut) {
+            localStorage.setItem("date", new Date());
+            getPosition();
+          } else {
+            const position = localStorage.getItem("position");
+            if (position) {
+              setLocation({
+                loading: false,
+                isEnabled: true,
+                lat: position.lat,
+                lng: position.lng,
+              });
+              console.log("false");
+            }
           }
         }
       }
-    } else {
-      console.log("Posicion denegada");
+    } catch (e) {
+      setLocation({
+        loading: false,
+        isEnabled: false,
+      });
     }
   };
 
