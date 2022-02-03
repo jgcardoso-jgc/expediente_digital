@@ -111,7 +111,14 @@ const UnsignedDocuments = (props) => {
       </Accordion.Header>
       <Accordion.Body>
         <Accordion flush>
-          <TableView docsNumber={0} data={unsignedDocuments} />
+          <TableView
+            docsNumber={0}
+            data={unsignedDocuments}
+            controller={seguriSignController}
+            long={long}
+            lat={lat}
+            toaster={toaster}
+          />
           {unsignedDocuments.map((item, index) => {
             const now = getPercentage(item);
             return (

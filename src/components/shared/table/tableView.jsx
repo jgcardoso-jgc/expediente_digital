@@ -1,13 +1,16 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable spaced-comment */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
-import { FaEdit } from "react-icons/fa";
+import CancelPopup from "../seguriSign/CancelPopup/CancelPopup";
 import Table from "./table";
+import SignPopUP from "../seguriSign/SignPopup/SignPopup";
 
 const useStyles = createUseStyles({
   editButton: {
@@ -17,21 +20,29 @@ const useStyles = createUseStyles({
   },
 });
 
-const TableView = ({ docsNumber, data }: any) => {
+const TableView = ({
+  docsNumber,
+  data,
+  controller,
+  long,
+  lat,
+  toaster,
+}: any) => {
   const classes = useStyles();
-  const history = useHistory();
+  //const history = useHistory();
+  console.log(data);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(false);
   }, [data]);
 
-  function handleClickEditRow(obj) {
+  /*function handleClickEditRow(obj) {
     history.push({
       pathname: "/contacts/editUser",
       state: { objUser: obj.row.original },
     });
-  }
+  }*/
 
   if (loading) {
     return <div>Loading...</div>;
@@ -43,51 +54,75 @@ const TableView = ({ docsNumber, data }: any) => {
         columns={[
           {
             Header: "Nombre",
-            accessor: "fullname",
+            accessor: "fileName",
           },
           {
-            Header: "Cargo",
-            accessor: "cargo",
+            Header: "Firmas",
+            accessor: "numeroFirmas",
           },
           {
-            Header: "Email",
-            accessor: "email",
+            Header: "Tipo",
+            accessor: "docType",
+          },
+          {
+            Header: "Ver",
+            accessor: "revisionDocs",
             Cell: (cellObj) => (
               <div>
-                <a href={`mailto:${cellObj.row.original.email}`} target="blank">
-                  {cellObj.row.original.email}
-                </a>
+                {console.log(cellObj)}
+                <button
+                  type="button"
+                  className={classes.verBt}
+                  style={{ width: "80%" }}
+                  onClick={() => {
+                    setLoading(true);
+                    controller
+                      .getDocument(cellObj.data.multilateralId)
+                      .then((docUrl) => {
+                        window.open(`data:application/pdf;base64,${docUrl}`);
+                        setLoading(false);
+                      })
+                      .catch((e) => {
+                        setLoading(false);
+                        console.log(e);
+                        //toaster.errorToast(e);
+                      });
+                  }}
+                >
+                  Ver
+                </button>
               </div>
             ),
           },
           {
-            Header: "🟢",
-            accessor: "sizeDocuments",
+            Header: "Firmar",
+            accessor: "revision",
+            Cell: (cellObj) => (
+              <div>
+                <SignPopUP
+                  toaster={toaster}
+                  seguriSignController={controller}
+                  long={long}
+                  lat={lat}
+                  requiresFaceMatch={cellObj.data.requiresFaceMatch}
+                  key={cellObj.data.multilateralId}
+                  multilateralId={cellObj.data.multilateralId}
+                  fileName={cellObj.data.fileName}
+                />
+              </div>
+            ),
           },
           {
-            Header: "🟡",
-            accessor: "revisionDocs",
-          },
-          {
-            Header: "🔴",
-            accessor: "pendientesDocs",
-          },
-          {
-            Header: "RFC",
-            accessor: "rfc",
-          },
-          {
-            Header: "Editar",
+            Header: "Cancelar",
             accessor: "fullName",
             Cell: (cellObj) => (
               <div>
-                <button
-                  type="button"
-                  className={classes.editButton}
-                  onClick={() => handleClickEditRow(cellObj)}
-                >
-                  <FaEdit />
-                </button>
+                <CancelPopup
+                  toaster={toaster}
+                  key={cellObj.data.multilateralId}
+                  multilateralId={cellObj.data.multilateralId}
+                  seguriSignController={controller}
+                />
               </div>
             ),
           },

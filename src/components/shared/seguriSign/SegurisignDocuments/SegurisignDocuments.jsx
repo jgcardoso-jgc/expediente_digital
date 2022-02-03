@@ -252,11 +252,14 @@ const SegurisignDocuments = (props) => {
       );
     }
   }
-  return (
-    <div className="centered">
-      <h2>Necesitas activar tu ubicación</h2>
-    </div>
-  );
+  if (!location.loaded && !location.isEnabled) {
+    return (
+      <div className="centered">
+        <h2>Necesitas activar tu ubicación</h2>
+      </div>
+    );
+  }
+  return <div />;
 };
 
 export default SegurisignDocuments;

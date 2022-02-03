@@ -29,7 +29,6 @@ const useStyles = createUseStyles(() => ({
     display: "block",
     marginLeft: "auto",
     marginRight: 0,
-    minWidth: "150px",
     paddingTop: "10px",
     paddingBottom: "10px",
     fontSize: "15px",
