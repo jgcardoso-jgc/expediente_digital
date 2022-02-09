@@ -206,7 +206,8 @@ const Table = ({ columns, data, docNumber }) => {
 
       <br />
       <div>
-        Mostrando {pageSize} de {rows.length} resultados
+        Mostrando {pageSize > rows.length ? rows.length : pageSize} de{" "}
+        {rows.length} resultados
       </div>
       <div>
         <pre>

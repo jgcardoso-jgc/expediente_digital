@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable quotes */
 import Popup from "reactjs-popup";
@@ -6,6 +7,7 @@ import { Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { AiFillDelete } from "react-icons/ai";
 import CustomLoader from "../CustomLoader/CustomLoader";
 import UserController from "../controller/user_controller";
 
@@ -36,7 +38,14 @@ const CancelPopup = (props) => {
   };
   return (
     <div>
-      <Popup modal trigger={<Button variant="outline-dark">Cancelar</Button>}>
+      <Popup
+        modal
+        trigger={
+          <Button variant="outline-dark">
+            <AiFillDelete />
+          </Button>
+        }
+      >
         {(close) => (
           <div align="center">
             {loading ? (

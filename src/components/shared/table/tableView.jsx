@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-console */
@@ -8,15 +9,79 @@
 import React, { useState, useEffect } from "react";
 //import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
+import { AiFillEye } from "react-icons/ai";
 import CancelPopup from "../seguriSign/CancelPopup/CancelPopup";
 import Table from "./table";
 import SignPopUP from "../seguriSign/SignPopup/SignPopup";
+import UnsignedPopUp from "../seguriSign/UnsignedPopUp/UnsignedPopup";
 
 const useStyles = createUseStyles({
   editButton: {
     border: "1px solid transparent",
     background: "#d0d0d0",
     borderRadius: "4px",
+  },
+  biometry: {
+    textAlign: "center",
+  },
+  firmarBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    width: "100%",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+  recordarBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    minWidth: "150px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+  fontTitles: {
+    fontSize: 25,
+  },
+  biometric: { maxWidth: 40 },
+  mt10: {
+    marginTop: 20,
+  },
+  verBt: {
+    backgroundColor: "  rgb(97 137 184)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    minWidth: "150px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
+  recordarMiniBt: {
+    backgroundColor: "rgb(75, 75, 75)",
+    color: "white",
+    border: "1px solid black",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: 0,
+    minWidth: 50,
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontSize: "15px",
+    borderRadius: "10px",
   },
 });
 
@@ -30,7 +95,6 @@ const TableView = ({
 }: any) => {
   const classes = useStyles();
   //const history = useHistory();
-  console.log(data);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,6 +123,16 @@ const TableView = ({
           {
             Header: "Firmas",
             accessor: "numeroFirmas",
+            Cell: (cellObj) => (
+              <div>
+                {console.log(cellObj)}
+                <UnsignedPopUp
+                  usuarios={cellObj.cell.row.original.usuarios}
+                  firmados={cellObj.cell.row.original.firmados}
+                  noFirmas={cellObj.cell.row.original.numeroFirmas}
+                />
+              </div>
+            ),
           },
           {
             Header: "Tipo",
@@ -69,15 +143,13 @@ const TableView = ({
             accessor: "revisionDocs",
             Cell: (cellObj) => (
               <div>
-                {console.log(cellObj)}
                 <button
                   type="button"
-                  className={classes.verBt}
-                  style={{ width: "80%" }}
+                  className={classes.firmarBt}
                   onClick={() => {
                     setLoading(true);
                     controller
-                      .getDocument(cellObj.data.multilateralId)
+                      .getDocument(cellObj.cell.row.original.multilateralId)
                       .then((docUrl) => {
                         window.open(`data:application/pdf;base64,${docUrl}`);
                         setLoading(false);
@@ -89,7 +161,7 @@ const TableView = ({
                       });
                   }}
                 >
-                  Ver
+                  <AiFillEye />
                 </button>
               </div>
             ),
@@ -109,6 +181,17 @@ const TableView = ({
                   multilateralId={cellObj.data.multilateralId}
                   fileName={cellObj.data.fileName}
                 />
+              </div>
+            ),
+          },
+          {
+            Header: "Biometria",
+            accessor: "requiresFaceMatch",
+            Cell: (cellObj) => (
+              <div>
+                <p className={classes.biometry}>
+                  {cellObj.cell.row.original.requiresFaceMatch ? "Sí" : "No"}
+                </p>
               </div>
             ),
           },

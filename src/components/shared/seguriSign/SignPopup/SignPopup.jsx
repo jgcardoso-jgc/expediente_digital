@@ -14,6 +14,7 @@ import SignatureCanvas from "react-signature-canvas";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import { createUseStyles } from "react-jss";
+import { FaPencilAlt } from "react-icons/fa";
 import UserController from "../controller/user_controller";
 import HelloInitSign from "../../../user/components_user/hello-sign/hello";
 import signGif from "../../../../assets/sign.gif";
@@ -112,7 +113,7 @@ const SignPopUP = (props) => {
                 style={{ width: "100%" }}
                 className={classes.firmarBt}
               >
-                Firmar
+                Firma
               </button>
             }
           >
@@ -281,7 +282,7 @@ const SignPopUP = (props) => {
                 style={{ width: "100%" }}
                 className={classes.firmarBt}
               >
-                Firmar
+                <FaPencilAlt />
               </button>
             }
           >
