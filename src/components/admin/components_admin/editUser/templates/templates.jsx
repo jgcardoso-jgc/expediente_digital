@@ -90,6 +90,7 @@ const Templates = () => {
       return;
     }
     const docID = await form.submit(formValues, docType);
+    console.log("docID ", docID);
     const doc = await getDocByID(docID);
     const requiresFM = false;
     if (doc) {

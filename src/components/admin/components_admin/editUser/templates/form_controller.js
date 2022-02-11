@@ -35,8 +35,8 @@ class FormController {
     };
     const response = await fetch(`${this.apiUrl}/${docType}`, requestOptions);
     if (response.status === 200) {
-      const data = await response.text();
-      return data;
+      const data = await response.json();
+      return data.id;
     }
     return false;
   }
