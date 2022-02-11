@@ -4,8 +4,8 @@ import { createUseStyles, useTheme } from "react-jss";
 import { useHistory, Link } from "react-router-dom";
 import { FaSignature } from "react-icons/fa";
 // fabell
-import convertSlugToUrl from "../../resources/utilities";
-import SLUGS from "../../resources/slugs";
+import convertSlugToUrl from "../../../shared/resources/utilities";
+import SLUGS from "../../../shared/resources/slugs";
 import {
   IconContacts,
   IconSettings,
