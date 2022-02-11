@@ -13,11 +13,9 @@ import { FaSearch, FaAngleRight, FaAngleLeft } from "react-icons/fa";
 
 const useStyles = createUseStyles({
   card: {
-    background: "#f5f5f5",
-    padding: "10px",
+    background: "#f1f1f1",
+    padding: "16px",
     borderRadius: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   table: {
     minWidth: "100%",
@@ -32,8 +30,6 @@ const useStyles = createUseStyles({
     display: "flex",
     background: "#cccccc",
     maxWidth: "50%",
-    WebkitBoxShadow: "0px 8px 15px 1px #D1D1D1",
-    boxShadow: "0px 8px 15px 1px #D1D1D1",
     borderRadius: "10px",
     padding: "4px",
     paddingTop: "10px",

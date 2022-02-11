@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 import React, { Suspense, lazy } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import SLUGS from "../resources/slugs";
+import SLUGS from "../../shared/resources/slugs";
 import LoadingComponent from "../../shared/loading/LoadingComponent";
 import UserView from "../components_admin/users/usersView";
 import AjustesAdmin from "../components_admin/ajustes/ajustes";

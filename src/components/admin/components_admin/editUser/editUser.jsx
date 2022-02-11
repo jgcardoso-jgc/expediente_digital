@@ -16,7 +16,7 @@ import Completados from "./completados";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
-import slugs from "../../resources/slugs";
+import slugs from "../../../shared/resources/slugs";
 import "bootstrap/dist/css/bootstrap.css";
 import ModalEdit from "../modal/modal";
 import docFunctions from "./getDocuments";
@@ -28,10 +28,8 @@ const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   container: {
     backgroundColor: "#f5f5f5",
-    border: `1px solid #f5f5f5`,
+    border: `1px solid #f1f1f1`,
     borderRadius: 10,
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
     padding: "24px 32px 0px 32px",
     height: "100%",
     maxWidth: 600,
@@ -52,8 +50,6 @@ const useStyles = createUseStyles(() => ({
     backgroundColor: "#f2bd85",
     border: `1px solid #f5f5f5`,
     borderRadius: 10,
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
     padding: "24px 32px 0px 32px",
     height: "100%",
   },

@@ -101,9 +101,9 @@ const UserView = () => {
       <ToastContainer />
       <div className={classes.userDiv}>
         <div className={classes.card}>
-          <p>
+          <h5>
             <b>Agregar Usuario</b>
-          </p>
+          </h5>
           <Row>
             <Col>
               <div className="formGroup">
