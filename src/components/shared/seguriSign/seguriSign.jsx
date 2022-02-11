@@ -212,7 +212,7 @@ const Segurisign = () => {
             <img className={classes.imgLoading} alt="load" src={loading} />
           </div>
         ) : (
-          ""
+          " "
         )}
         {logged ? (
           <SegurisignDocuments seguriSignController={seguriSignController} />
