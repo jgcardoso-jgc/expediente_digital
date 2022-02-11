@@ -26,11 +26,9 @@ const useStyles = createUseStyles(() => ({
     fontSize: 14,
   },
   cardDashboard: {
-    background: "#f5f5f5",
+    background: "#f1f1f1",
     borderRadius: "10px",
-    padding: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    padding: "16px",
   },
   container: {
     maxWidth: "400px",
@@ -151,6 +149,8 @@ const MyProfile = () => {
     getState();
   }, [reload]);
 
+  useEffect(() => {}, [urlProfile]);
+
   return (
     <div>
       <ToastContainer />
@@ -179,12 +179,22 @@ const MyProfile = () => {
             <div className={classes.cardDashboard}>
               <div className="row">
                 <div className="col">
-                  <img src={urlProfile} className={classes.img} alt="profile" />
-                </div>
-                <div className="col">
                   <h5 className={classes.title}>
                     <b>{name}</b>
                   </h5>
+                  {urlProfile !== "" ? (
+                    <img
+                      src={urlProfile}
+                      className={classes.img}
+                      alt="profile"
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="col">
+                  <br />
+                  <br />
                   <p className={classes.cardTitle}>Cargo</p>
                   <p className={classes.textCard}>{cargo}</p>
                   <p className={classes.cardTitle}>Email</p>
@@ -198,9 +208,6 @@ const MyProfile = () => {
                 </div>
               </div>
             </div>
-            <Link className={classes.editLink} to="/ajustes">
-              Editar información
-            </Link>
           </div>
         )}
       </div>

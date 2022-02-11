@@ -127,7 +127,7 @@ const Templates = () => {
   useEffect(() => {}, [docs, inputs]);
   return (
     <div className={styles.container}>
-      <h2>Selecciona Tipo de Documento</h2>
+      <h4>Selecciona Tipo de Documento</h4>
       <form onSubmit={handleSubmit}>
         <div>
           <RadioGroup

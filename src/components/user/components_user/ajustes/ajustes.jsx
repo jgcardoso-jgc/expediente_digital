@@ -12,11 +12,9 @@ import styles from "../../../../resources/theme";
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   cardDashboard: {
-    background: "#f5f5f5",
+    background: "#f1f1f1",
     borderRadius: "10px",
-    padding: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    padding: "16px",
   },
   min80: {
     minWidth: "80%",

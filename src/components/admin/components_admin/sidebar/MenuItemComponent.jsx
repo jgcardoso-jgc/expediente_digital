@@ -6,7 +6,7 @@
 /* eslint-disable quotes */
 import React from "react";
 // eslint-disable-next-line object-curly-newline
-import { any, arrayOf, func, string } from "prop-types";
+import { any, func, arrayOf, string } from "prop-types";
 import { Column, Row } from "simple-flexbox";
 import { createUseStyles, useTheme } from "react-jss";
 import { useSidebar } from "../../../shared/hooks/useSidebar";
@@ -42,7 +42,7 @@ function MenuItemComponent({
   children,
   icon: Icon,
   id,
-  items = [],
+  subroutes,
   level = 1,
   onClick,
   title,
@@ -52,7 +52,7 @@ function MenuItemComponent({
   const { isExpanded, isActive, onItemClick } = useSidebar({
     isCollapsible,
     item: id,
-    items,
+    subroutes,
   });
   const classes = useStyles({ theme, level, isActive });
   const classNameColumn = isActive ? classes.leftBar : "";
@@ -95,7 +95,7 @@ MenuItemComponent.propTypes = {
   icon: func,
   id: string,
   onClick: func,
-  items: arrayOf(string),
+  subroutes: arrayOf(string),
   title: string,
 };
 

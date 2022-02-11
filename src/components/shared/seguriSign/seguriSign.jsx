@@ -62,8 +62,6 @@ const useStyles = createUseStyles(() => ({
     backgroundColor: "#f5f5f5",
     border: `1px solid #f5f5f5`,
     borderRadius: 10,
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
     height: "100%",
     padding: 20,
     marginLeft: "auto",

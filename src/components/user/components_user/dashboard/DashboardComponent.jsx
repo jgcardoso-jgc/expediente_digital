@@ -49,11 +49,9 @@ const useStyles = createUseStyles({
     },
   },
   card: {
-    background: "#f5f5f5",
+    background: "#f1f1f1",
     padding: "10px",
     borderRadius: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   col3: {
     maxWidth: "33.333%",
@@ -105,11 +103,9 @@ const useStyles = createUseStyles({
     },
   },
   statusContainer: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f1f1f1",
     border: `1px solid #f5f5f5`,
     borderRadius: 4,
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
     flexGrow: 1,
     maxHeight: "50%",
     marginLeft: 10,

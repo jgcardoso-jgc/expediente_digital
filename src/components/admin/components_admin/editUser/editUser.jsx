@@ -22,6 +22,7 @@ import ModalEdit from "../modal/modal";
 import docFunctions from "./getDocuments";
 import { v4 as uuidv4 } from "uuid";
 import Select from "react-select";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
@@ -90,7 +91,9 @@ const useStyles = createUseStyles(() => ({
   },
   plantillas: {
     display: "block",
-    textAlign: "right",
+  },
+  plantillasTitle: {
+    marginTop: 16,
   },
   "@media screen and (max-width:768px)": {
     col: {
@@ -311,7 +314,7 @@ const EditUser = () => {
     fetchCargos();
   }, []);
 
-  useEffect(() => { }, [reload]);
+  useEffect(() => {}, [reload]);
 
   return (
     <div>
@@ -396,6 +399,26 @@ const EditUser = () => {
         ) : (
           <div>Ya se solicitaron todos los documentos disponibles</div>
         )}
+        <button
+          type="button"
+          onClick={() => updatePendientes()}
+          className={disabled ? global.initBtDisabled : global.initBt}
+          disabled={disabled}
+        >
+          Solicitar Documentos
+        </button>
+        <p className={classes.plantillasTitle}>
+          <b>Plantillas de documentos</b>
+        </p>
+        <Link
+          className={classes.plantillas}
+          to={{
+            pathname: slugs.templates,
+            state: { userEmail: locData.email },
+          }}
+        >
+          Ver plantillas de Documentos <AiOutlineArrowRight />
+        </Link>
         <ModalEdit
           state={show}
           url={urlView}
@@ -405,19 +428,6 @@ const EditUser = () => {
           email={email}
           onClose={() => setShow(false)}
         />
-        <Link
-          className={classes.plantillas}
-          to={{ pathname: slugs.templates, state: { userEmail: locData.email } }}>
-          Ver plantillas de Documentos
-        </Link>
-        <button
-          type="button"
-          onClick={() => updatePendientes()}
-          className={disabled ? global.initBtDisabled : global.initBt}
-          disabled={disabled}
-        >
-          Solicitar Documentos
-        </button>
       </div>
       <div className={classes.container}>
         <p className={classes.mt20}>

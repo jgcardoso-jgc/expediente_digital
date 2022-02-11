@@ -51,6 +51,7 @@ function SidebarComponent() {
       <MenuItem
         id={SLUGS.usuarios}
         title="Usuarios"
+        subroutes={["/usuarios/editar", "/usuarios/editar/plantillas"]}
         icon={IconContacts}
         onClick={() => onClick(SLUGS.usuarios)}
       />

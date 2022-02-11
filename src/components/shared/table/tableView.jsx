@@ -101,6 +101,23 @@ const TableView = ({
     setLoading(false);
   }, [data]);
 
+  const viewDocument = (cellObj) => {
+    const id = cellObj.cell.row.original.multilateralId;
+    setLoading(true);
+    controller
+      .getDocument(id)
+      .then((docUrl) => {
+        console.log("url", docUrl);
+        window.open(`data:application/pdf;base64,${docUrl}`);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setLoading(false);
+        console.log(e);
+        //toaster.errorToast(e);
+      });
+  };
+
   /*function handleClickEditRow(obj) {
     history.push({
       pathname: "/contacts/editUser",
@@ -125,7 +142,6 @@ const TableView = ({
             accessor: "numeroFirmas",
             Cell: (cellObj) => (
               <div>
-                {console.log(cellObj)}
                 <UnsignedPopUp
                   usuarios={cellObj.cell.row.original.usuarios}
                   firmados={cellObj.cell.row.original.firmados}
@@ -146,20 +162,7 @@ const TableView = ({
                 <button
                   type="button"
                   className={classes.firmarBt}
-                  onClick={() => {
-                    setLoading(true);
-                    controller
-                      .getDocument(cellObj.cell.row.original.multilateralId)
-                      .then((docUrl) => {
-                        window.open(`data:application/pdf;base64,${docUrl}`);
-                        setLoading(false);
-                      })
-                      .catch((e) => {
-                        setLoading(false);
-                        console.log(e);
-                        //toaster.errorToast(e);
-                      });
-                  }}
+                  onClick={() => viewDocument(cellObj)}
                 >
                   <AiFillEye />
                 </button>

@@ -81,7 +81,7 @@ const TableView = (docsNumber) => {
 
   function handleClickEditRow(obj) {
     history.push({
-      pathname: "/contacts/editUser",
+      pathname: "/usuarios/editar",
       state: { objUser: obj.row.original },
     });
   }

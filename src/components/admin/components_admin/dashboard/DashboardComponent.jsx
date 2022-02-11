@@ -41,11 +41,9 @@ const useStyles = createUseStyles({
     },
   },
   card: {
-    background: "#f5f5f5",
+    background: "#f1f1f1",
     padding: "10px",
     borderRadius: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   mt30: {
     marginTop: 30,

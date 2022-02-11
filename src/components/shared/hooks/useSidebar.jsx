@@ -20,9 +20,23 @@ export function SidebarProvider({ children, defaultItem }) {
   );
 }
 
-export const useSidebar = ({ isCollapsible, item, items = [] } = {}) => {
+export const useSidebar = ({ isCollapsible, item, subroutes } = {}) => {
   const { currentItem, setCurrentItem } = useContext(SidebarContext);
-  const isActive = item === currentItem || items.includes(currentItem);
+  //  const isActive = item === currentItem || subroute?.includes(currentItem);
+  function checkActive(i) {
+    if (i === currentItem) {
+      return true;
+    }
+    if (subroutes) {
+      for (let x = 0; x < subroutes.length; x += 1) {
+        if (subroutes[x].includes(currentItem)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  const isActive = checkActive(item);
   const [isExpanded, setIsExpanded] = useState(isActive);
 
   useEffect(() => {
@@ -41,6 +55,7 @@ export const useSidebar = ({ isCollapsible, item, items = [] } = {}) => {
     setIsExpanded((prev) => !prev);
   };
 
+  console.log(`isactive:${isActive}`);
   return {
     isExpanded,
     isActive,

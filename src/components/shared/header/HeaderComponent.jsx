@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { Row } from "simple-flexbox";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles, useTheme } from "react-jss";
-import SLUGS from "../../admin/resources/slugs";
+import SLUGS from "../resources/slugs";
 import AlertComponent from "../../admin/components_admin/alerts/AlertComponent";
 import { SidebarContext } from "../hooks/useSidebar";
 import DropdownComponent from "../dropdown/DropdownComponent";
@@ -108,8 +108,14 @@ function HeaderComponent() {
     case currentItem === SLUGS.usuarios:
       title = "Usuarios";
       break;
+    case currentItem === SLUGS.perfil:
+      title = "Mi Perfil";
+      break;
     case currentItem === SLUGS.editUser:
       title = "Editar Usuario";
+      break;
+    case currentItem === SLUGS.documentos:
+      title = "Expediente";
       break;
     case currentItem === SLUGS.templates:
       title = "Plantillas";

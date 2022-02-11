@@ -8,11 +8,9 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = createUseStyles(() => ({
   container: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f1f1f1",
     border: `1px solid #f5f5f5`,
-    borderRadius: 4,
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    borderRadius: 8,
     cursor: "pointer",
     maxWidth: 350,
     padding: "16px 32px 16px 32px",

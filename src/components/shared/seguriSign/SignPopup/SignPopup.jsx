@@ -52,6 +52,10 @@ const useStyles = createUseStyles(() => ({
     marginTop: 5,
     marginBottom: 14,
   },
+  fa: {
+    marginLeft: 8,
+    marginRight: 8,
+  },
 }));
 
 const SignPopUP = (props) => {
@@ -101,6 +105,11 @@ const SignPopUP = (props) => {
     return signedSuccessfully;
   };
 
+  const closePopUp = (close) => {
+    setSignType("");
+    close();
+  };
+
   if (!requiresFaceMatch || faceMatched) {
     if (signType === "fab") {
       return (
@@ -112,6 +121,7 @@ const SignPopUP = (props) => {
                 type="button"
                 style={{ width: "100%" }}
                 className={classes.firmarBt}
+                onClick={() => setSignType("")}
               >
                 Firma
               </button>
@@ -138,7 +148,10 @@ const SignPopUP = (props) => {
                     </Col>
                     <p> Firma biométrica</p>
                     <div className={classes.flex}>
-                      <Button variant="outline-dark" onClick={close}>
+                      <Button
+                        variant="outline-dark"
+                        onClick={() => closePopUp(close)}
+                      >
                         Cerrar
                       </Button>
                       <Button
@@ -225,7 +238,10 @@ const SignPopUP = (props) => {
                     </Col>
                     <p> Firma Avanzada</p>
                     <div className={classes.flex}>
-                      <Button variant="outline-dark" onClick={close}>
+                      <Button
+                        variant="outline-dark"
+                        onClick={() => closePopUp(close)}
+                      >
                         Cerrar
                       </Button>
                       <button
@@ -303,6 +319,7 @@ const SignPopUP = (props) => {
                         onClick={() => {
                           setSignType("server");
                         }}
+                        className={classes.fa}
                       >
                         Firma Avanzada
                       </Button>
