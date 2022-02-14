@@ -125,13 +125,13 @@ const SegurisignDocuments = (props) => {
             localStorage.setItem("date", new Date());
             getPosition();
           } else {
-            const position = localStorage.getItem("position");
+            const position = JSON.parse(localStorage.getItem("position"));
             if (position) {
               setLocation({
                 loading: false,
                 isEnabled: true,
-                lat: position.lat,
-                lng: position.lng,
+                lat: position.latitude,
+                lng: position.longitude,
               });
               console.log("false");
             }
@@ -200,18 +200,21 @@ const SegurisignDocuments = (props) => {
     if (loaded.hasLoaded) {
       return (
         <div>
+          {console.log("lat:", location.lat)}
           <div className={classes.card}>
             <ToastContainer />
             <h5 className={classes.title}>
               <b>Mis Documentos</b>
             </h5>
-            <UnsignedDocuments
-              lat={location.lat}
-              long={location.long}
-              toaster={toaster}
-              unsignedDocuments={loaded.unsignedDocuments}
-              seguriSignController={props.seguriSignController}
-            />
+            {location.lat && (
+              <UnsignedDocuments
+                lat={location.lat}
+                long={location.long}
+                toaster={toaster}
+                unsignedDocuments={loaded.unsignedDocuments}
+                seguriSignController={props.seguriSignController}
+              />
+            )}
 
             <SignedDocuments
               seguriSignController={props.seguriSignController}
