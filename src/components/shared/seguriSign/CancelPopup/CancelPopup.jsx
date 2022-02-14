@@ -66,7 +66,7 @@ const CancelPopup = (props) => {
                     <button
                       type="button"
                       className="btn-seguridata-lg"
-                      style={{ "margin-left": "2rem" }}
+                      style={{ marginLeft: "2rem" }}
                       onClick={cancel}
                     >
                       Cancelar

@@ -270,7 +270,7 @@ const UploadPopup = (props) => {
               <button
                 type="button"
                 style={{
-                  "margin-left": "2rem",
+                  marginLeft: "2rem",
                   height: "2.5rem",
                 }}
                 className={classes.subirBt}

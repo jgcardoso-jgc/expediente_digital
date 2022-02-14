@@ -93,6 +93,7 @@ const TableView = ({
   lat,
   toaster,
 }: any) => {
+  console.log(`long:${long}`);
   const classes = useStyles();
   //const history = useHistory();
   const [loading, setLoading] = useState(true);
@@ -174,14 +175,17 @@ const TableView = ({
             accessor: "revision",
             Cell: (cellObj) => (
               <div>
+                {console.log(`id:${cellObj.cell.row.original.multilateralId}`)}
                 <SignPopUP
                   toaster={toaster}
                   seguriSignController={controller}
                   long={long}
                   lat={lat}
-                  requiresFaceMatch={cellObj.data.requiresFaceMatch}
+                  requiresFaceMatch={
+                    cellObj.cell.row.original.requiresFaceMatch
+                  }
                   key={cellObj.data.multilateralId}
-                  multilateralId={cellObj.data.multilateralId}
+                  multilateralId={cellObj.cell.row.original.multilateralId}
                   fileName={cellObj.data.fileName}
                 />
               </div>
@@ -206,7 +210,7 @@ const TableView = ({
                 <CancelPopup
                   toaster={toaster}
                   key={cellObj.data.multilateralId}
-                  multilateralId={cellObj.data.multilateralId}
+                  multilateralId={cellObj.cell.row.original.multilateralId}
                   seguriSignController={controller}
                 />
               </div>

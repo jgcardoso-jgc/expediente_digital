@@ -156,7 +156,7 @@ const SignPopUP = (props) => {
                       </Button>
                       <Button
                         variant="outline-dark"
-                        style={{ "margin-left": "2rem" }}
+                        style={{ marginLeft: "2rem" }}
                         onClick={clear}
                       >
                         Borrar

@@ -25,7 +25,7 @@ const CancelledThirdsDocuments = (props) => {
               <Accordion.Header>{item.fileName}</Accordion.Header>
               <Accordion.Body>
                 <div align="center">
-                  <div style={{ "margin-left": "2rem" }} align="left">
+                  <div style={{ marginLeft: "2rem" }} align="left">
                     <li>Tipo de documento: {item.docType}</li>
                     <li>Fecha de cancelación: {item.dateCancel}</li>
                     <li>Cancelado por: {item.canceledBy}</li>

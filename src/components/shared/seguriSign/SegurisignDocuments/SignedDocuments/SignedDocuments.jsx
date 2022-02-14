@@ -46,7 +46,7 @@ const SignedDocuments = (props) => {
                   <Accordion.Header>{item.fileName}</Accordion.Header>
                   <Accordion.Body>
                     <div align="center">
-                      <div style={{ "margin-left": "2rem" }} align="left">
+                      <div style={{ marginLeft: "2rem" }} align="left">
                         <li>Tipo de documento: {item.docType}</li>
                         <li>Número de firmas: {item.numberSignatures}</li>
                         <li>Fecha de firmado: {item.signDate}</li>
