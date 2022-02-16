@@ -2,15 +2,13 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable indent */
 /* eslint-disable react/jsx-indent */
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
 /* eslint-disable no-shadow */
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
 import { useLocation } from "react-router-dom";
 import { RadioGroup, Radio } from "react-radio-group";
+import { ToastContainer, toast } from "react-toastify";
 import UserController from "../../../../shared/seguriSign/controller/user_controller";
 import styles from "./templates.module.scss";
 import FormController from "./form_controller";
@@ -29,12 +27,13 @@ const Templates = () => {
   const [docType, setDocType] = useState("");
   const [inputs, setInputs] = useState([]);
   const [formValues, setFormValues] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedValue, setSelectedValue] = useState("apple");
 
   const createFormValues = (items) => {
     const temp = [];
     items.forEach((item) => {
-      temp.push({ name: item.name, value: "" });
+      temp.push({ name: item.name, label: item.label, value: "" });
     });
     setFormValues(temp);
   };
@@ -86,17 +85,19 @@ const Templates = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!cookie) {
-      alert("No estás loggeado");
+      toast("No estás loggeado");
       return;
     }
+    setLoading(true);
+    // console.log(`vals:${formValues}`);
     const docID = await form.submit(formValues, docType);
-    console.log("docID ", docID);
+    // console.log("docID ", docID);
     const doc = await getDocByID(docID);
     const requiresFM = false;
     if (doc) {
       soapController.segurisignUser = JSON.parse(cookie);
       const response = await soapController.addDocument(userEmail, doc);
-      console.log(response);
+      // console.log(response);
       if (response[0]) {
         const userController = new UserController(
           soapController.segurisignUser.email
@@ -106,12 +107,15 @@ const Templates = () => {
           response[1],
           requiresFM
         );
-        alert("exito");
+        setLoading(false);
+        toast("Éxito");
       } else {
-        alert("Error al subir doc");
+        setLoading(false);
+        toast("Error al subir documento");
       }
     } else {
-      alert("Error al generar doc");
+      setLoading(false);
+      toast("Error al generar documento");
     }
   };
 
@@ -120,7 +124,7 @@ const Templates = () => {
       soapController.segurisignUser = JSON.parse(cookie);
       console.log(soapController.segurisignUser);
     } else {
-      alert("Alerta: No estás loggeado en Sign");
+      toast("Alerta: No estás loggeado en Sign");
     }
     getDocuments();
   }, []);
@@ -128,6 +132,7 @@ const Templates = () => {
   useEffect(() => {}, [docs, inputs]);
   return (
     <div className={styles.container}>
+      <ToastContainer />
       <h4>Selecciona Tipo de Documento</h4>
       <form onSubmit={handleSubmit}>
         <div>
@@ -148,21 +153,26 @@ const Templates = () => {
           {inputs.length > 0
             ? inputs.map((input, index) => (
                 <div key={`i${index}`}>
-                  <p className={styles.title}>{input.value}</p>
+                  <p className={styles.title}>{input.label}</p>
+                  <input style={{ display: "none" }} value={input.label} />
                   <input
                     className={styles.inputStyle}
                     placeholder=""
-                    type="text"
+                    type={input.type}
                     id={input.name}
                     onChange={(e) => handleFormValueChange(input.name, e)}
                   />
-                  {input.label}
                 </div>
               ))
             : ""}
-          <button className={styles.bt} type="submit">
+          <button
+            className={loading ? styles.btDisabled : styles.bt}
+            type="submit"
+            disabled={loading}
+          >
             Enviar
           </button>
+          <p>{loading ? "Subiendo documento..." : ""}</p>
         </div>
       </form>
     </div>
@@ -170,11 +180,3 @@ const Templates = () => {
 };
 
 export default Templates;
-
-/*
- "items": [{
-                "name": "Area que registra",
-                "value:": "areaContacto"},
-            }],
-
-*/
