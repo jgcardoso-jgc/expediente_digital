@@ -23,6 +23,7 @@ class FormController {
   }
 
   async submit(values, docType) {
+    console.log(values, docType);
     const bodyList = [];
     values.forEach((formValue) => {
       const { name, value } = formValue;

@@ -150,7 +150,7 @@ const Templates = () => {
                   <p className={styles.title}>{input.value}</p>
                   <input
                     className={styles.inputStyle}
-                    placeholder={`Ingresa ${input.value}`}
+                    placeholder=""
                     type="text"
                     id={input.name}
                     onChange={(e) => handleFormValueChange(input.name, e)}

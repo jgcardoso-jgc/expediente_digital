@@ -133,7 +133,6 @@ const SegurisignDocuments = (props) => {
                 lat: position.latitude,
                 lng: position.longitude,
               });
-              console.log("false");
             }
           }
         }
