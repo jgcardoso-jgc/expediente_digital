@@ -133,7 +133,7 @@ const Templates = () => {
   return (
     <div className={styles.container}>
       <ToastContainer />
-      <h4>Selecciona Tipo de Documento</h4>
+      <h4 className={styles.titleCard}>Selecciona Tipo de Documento</h4>
       <form onSubmit={handleSubmit}>
         <div>
           <RadioGroup

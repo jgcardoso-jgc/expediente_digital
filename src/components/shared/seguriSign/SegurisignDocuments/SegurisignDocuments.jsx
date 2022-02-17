@@ -191,7 +191,7 @@ const SegurisignDocuments = (props) => {
     return (
       <div className={classes.center}>
         <img className={classes.imgLoading} alt="load" src={loading} />
-        <p className={classes.center}>Cargando tu ubicación...</p>
+        <p className={classes.center}>Cargando tu ubicación</p>
       </div>
     );
   }

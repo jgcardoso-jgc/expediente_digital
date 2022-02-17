@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createUseStyles } from "react-jss";
+import facematch from "../../../../assets/facematch.png";
 import onBoardingConfig from "../documents/onBoardingConfig";
 import styles from "../../../../resources/theme";
 
@@ -18,6 +19,7 @@ const useStyles = createUseStyles(() => ({
   toMatch: {
     display: "block",
     marginRight: "auto",
+    marginBottom: 24,
   },
   editLink: {
     display: "block",
@@ -119,6 +121,7 @@ const MyProfile = () => {
               .child(`/${user.email}/croppedFace`)
               .putString(imgs.croppedFace, "base64", metadata)
               .then(() => {
+                console.log("not");
                 setReload(true);
               });
           } catch (e) {
@@ -141,6 +144,7 @@ const MyProfile = () => {
         });
     } else {
       const url = localStorage.getItem("profilepic");
+      console.log("here");
       exists(url);
     }
   }
@@ -169,6 +173,7 @@ const MyProfile = () => {
                     Ir al Facematch
                   </button>
                 </Link>
+                <img src={facematch} alt="facematch" />
               </div>
             ) : (
               "Cargando tu perfil..."

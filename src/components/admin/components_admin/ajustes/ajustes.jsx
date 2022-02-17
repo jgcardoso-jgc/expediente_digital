@@ -51,6 +51,17 @@ const useStyles = createUseStyles({
     marginBottom: 30,
     marginTop: 10,
   },
+  editButton: {
+    backgroundColor: "#cccccc",
+    color: "black",
+    border: "0px solid black",
+    display: "block",
+    marginRight: 0,
+    minWidth: 40,
+    padding: 8,
+    fontSize: "15px",
+    borderRadius: "10px",
+  },
 });
 
 const AjustesAdmin = () => {

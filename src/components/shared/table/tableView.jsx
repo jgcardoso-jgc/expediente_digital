@@ -25,10 +25,10 @@ const useStyles = createUseStyles({
     textAlign: "center",
   },
   firmarBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
+    backgroundColor: "#cccccc",
+    color: "black",
     width: "100%",
-    border: "1px solid black",
+    border: "0px solid black",
     display: "block",
     marginLeft: "auto",
     marginRight: 0,

@@ -32,10 +32,10 @@ const SignedDocuments = (props) => {
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
       <Accordion.Header>
-        Firmados
-        <Badge style={{ marginLeft: "3rem" }} pill bg="secondary">
+        <Badge style={{ marginRight: 16 }} pill bg="dark">
           {signedDocuments.length}
         </Badge>
+        Firmados
       </Accordion.Header>
       <Accordion.Body>
         <Accordion flush>

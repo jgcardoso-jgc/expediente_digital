@@ -41,7 +41,7 @@ const CancelPopup = (props) => {
       <Popup
         modal
         trigger={
-          <Button variant="outline-dark">
+          <Button style={{ background: "#cccccc", color: "black", border: 0 }}>
             <AiFillDelete />
           </Button>
         }

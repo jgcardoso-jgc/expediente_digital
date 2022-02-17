@@ -24,9 +24,9 @@ import SoapController from "../controller/soap_controller";
 const useStyles = createUseStyles(() => ({
   border: { border: "3px solid black", marginBottom: 14 },
   firmarBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
-    border: "1px solid black",
+    backgroundColor: "#cccccc",
+    color: "black",
+    border: "0px solid black",
     display: "block",
     marginLeft: "auto",
     marginRight: 0,
@@ -353,7 +353,7 @@ const SignPopUP = (props) => {
             style={{ width: "100%" }}
             className={classes.firmarBt}
           >
-            Firmar
+            <FaPencilAlt />
           </button>
         }
       >

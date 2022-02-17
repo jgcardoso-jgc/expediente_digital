@@ -21,7 +21,11 @@ const useStyles = createUseStyles({
     border: "0",
     borderRadius: 8,
     fontSize: "16px",
-    background: "white",
+    height: 35.97,
+    background: "#dddddd",
+  },
+  mt10: {
+    marginTop: 10,
   },
   addBt: {
     backgroundColor: "rgb(75, 75, 75)",

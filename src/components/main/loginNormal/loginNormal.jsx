@@ -48,6 +48,17 @@ const useStyles = createUseStyles(() => ({
     textAlign: "right",
     marginTop: 16,
   },
+  loadgif: {
+    marginTop: "30vh",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  gif: {
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
   mb20: {
     marginBottom: 20,
   },
@@ -159,7 +170,10 @@ const LoginNormal = ({ setLog }) => {
     <div>
       <div className={classes.center}>
         {loading ? (
-          <img src={loadingGif} className="loadgif" alt="loading..." />
+          <div className={classes.loadgif}>
+            <img src={loadingGif} className={classes.gif} alt="loading..." />
+            <p>Accediendo con tus credenciales</p>
+          </div>
         ) : (
           <div>
             <ToastContainer />

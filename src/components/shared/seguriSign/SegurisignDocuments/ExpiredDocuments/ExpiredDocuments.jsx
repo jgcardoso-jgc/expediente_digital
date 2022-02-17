@@ -3,7 +3,7 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
-import { Accordion } from "react-bootstrap";
+import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
 import PropTypes from "prop-types";
 
@@ -17,7 +17,12 @@ const ExpiredDocuments = (props) => {
 
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
-      <Accordion.Header>Expirados</Accordion.Header>
+      <Accordion.Header>
+        <Badge style={{ marginRight: 16 }} pill bg="dark">
+          {expiredDoc.length}
+        </Badge>
+        Expirados
+      </Accordion.Header>
       <Accordion.Body bsPrefix="seguridata-btn">
         <Accordion flush>
           {expiredDoc.map((item, index) => (

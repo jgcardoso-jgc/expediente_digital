@@ -42,7 +42,7 @@ function PrivateSection() {
             <PrivateRoutes />
           </div>
           <div className={classes.footer}>
-            <p>Seguridata 2021</p>
+            <p>Seguridata S.A de C.V 2022</p>
           </div>
         </Column>
       </Row>
