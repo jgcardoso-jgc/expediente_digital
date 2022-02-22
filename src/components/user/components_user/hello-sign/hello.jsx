@@ -9,7 +9,7 @@ import CustomToasts from "../Toasts/CustomToasts";
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 
-const HelloInitSign = (props) => {
+const HelloInitSign = ({ toaster, setFaceMatched }) => {
   const containerRef = useRef();
   const userController = new UserController();
   const helloRef = useRef();
@@ -35,19 +35,19 @@ const HelloInitSign = (props) => {
           console.log("onSuccess", r);
           const isUser = await userController.compareCustomerId(r.customerId);
           if (isUser) {
-            props.toaster.successToast(`Identidad confirmada: ${r.fullName}`);
+            toaster.successToast(`Identidad confirmada: ${r.fullName}`);
             const saved = JSON.parse(localStorage.getItem("user"));
             saved.token = r.token;
             localStorage.setItem("user", JSON.stringify(saved));
-            props.setFaceMatched(true);
+            setFaceMatched(true);
           } else {
-            props.toaster.errorToast("Error al confirmar identidad");
-            props.setFaceMatched(false);
+            toaster.errorToast("Error al confirmar identidad");
+            setFaceMatched(false);
           }
         },
         onError: (r) => {
           console.log("on error", r);
-          props.setFaceMatched(false);
+          setFaceMatched(false);
         },
       });
     };

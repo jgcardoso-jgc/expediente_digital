@@ -66,11 +66,9 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-const UploadPopup = (props) => {
+const UploadPopup = ({ seguriSignController, toaster }) => {
   const signerInput = useRef(null);
-  const { toaster } = props;
   const classes = useStyles();
-  const { seguriSignController } = props;
   const soapController = new SoapController();
   const userController = new UserController(
     seguriSignController.segurisignUser.email
@@ -147,17 +145,15 @@ const UploadPopup = (props) => {
             document,
             requiresFM
           );
-          props.toaster.successToast("Documento subido con éxito");
+          toaster.successToast("Documento subido con éxito");
         } else {
-          props.toaster.errorToast(
-            "Error al subir documento, intenta de nuevo"
-          );
+          toaster.errorToast("Error al subir documento, intenta de nuevo");
         }
         setLoader(false);
       })
       .catch((error) => {
         setLoader(false);
-        props.toaster.errorToast(error);
+        toaster.errorToast(error);
       });
   };
 
@@ -172,13 +168,13 @@ const UploadPopup = (props) => {
     setLoader(false);
     if (isValid || signType === "server") {
       if (signers.arr.includes(signerMail)) {
-        props.toaster.warningToast("Firmante ya agregado");
+        toaster.warningToast("Firmante ya agregado");
       } else {
         setSigners({ arr: [...signers.arr, signerMail] }); // simple value
-        props.toaster.shortSuccesToast("Agregado");
+        toaster.shortSuccesToast("Agregado");
       }
     } else {
-      props.toaster.errorToast("Firmante no registrado");
+      toaster.errorToast("Firmante no registrado");
     }
   };
 

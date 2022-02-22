@@ -58,16 +58,17 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-const SignPopUP = (props) => {
+const SignPopUP = ({
+  seguriSignController,
+  multilateralId,
+  requiresFaceMatch,
+  lat,
+  long,
+  toaster,
+}) => {
   const sigCanvas = useRef({});
   const passwordRef = useRef("");
-  const { seguriSignController } = props;
   const classes = useStyles();
-  const { multilateralId } = props;
-  const { lat } = props;
-  const { long } = props;
-  const { toaster } = props;
-  const { requiresFaceMatch } = props;
   const userController = new UserController(
     seguriSignController.segurisignUser.email
   );
@@ -169,14 +170,12 @@ const SignPopUP = (props) => {
                           const status = await sign();
                           if (status) {
                             await userController.updateDocSigned(
-                              props.multilateralId,
-                              { lat: props.lat, long: props.long }
+                              multilateralId,
+                              { lat, long }
                             );
                             toaster.successToast("Documento firmado con éxito");
                           } else {
-                            props.toaster.errorToast(
-                              "Error al firmar documento"
-                            );
+                            toaster.errorToast("Error al firmar documento");
                           }
                           setLoading(false);
                           close();
@@ -252,14 +251,12 @@ const SignPopUP = (props) => {
                           const status = await signPkcs7();
                           if (status) {
                             await userController.updateDocSigned(
-                              props.multilateralId,
-                              { lat: props.lat, long: props.long }
+                              multilateralId,
+                              { lat, long }
                             );
                             toaster.successToast("Documento firmado con éxito");
                           } else {
-                            props.toaster.errorToast(
-                              "Error al firmar documento"
-                            );
+                            toaster.errorToast("Error al firmar documento");
                           }
                           setLoading(false);
                           close();
@@ -364,7 +361,7 @@ const SignPopUP = (props) => {
                 <Card.Title>Firmar documento</Card.Title>
                 <div>
                   <HelloInitSign
-                    toaster={props.toaster}
+                    toaster={toaster}
                     setFaceMatched={setFaceMatched}
                   />
                 </div>

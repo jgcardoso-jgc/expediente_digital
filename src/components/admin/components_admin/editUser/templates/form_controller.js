@@ -15,7 +15,6 @@ class FormController {
 
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data);
       const { documents } = data;
       return documents;
     }
@@ -23,7 +22,6 @@ class FormController {
   }
 
   async submit(values, docType) {
-    console.log(values, docType);
     const bodyList = [];
     values.forEach((formValue) => {
       const { name, value, label } = formValue;
@@ -34,7 +32,6 @@ class FormController {
       headers: this.header,
       body: JSON.stringify(bodyList),
     };
-    console.log(`body:${JSON.stringify(bodyList)}`);
     const response = await fetch(`${this.apiUrl}/${docType}`, requestOptions);
     if (response.status === 200) {
       const data = await response.json();

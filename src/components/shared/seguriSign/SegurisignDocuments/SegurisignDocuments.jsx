@@ -44,8 +44,7 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-const SegurisignDocuments = (props) => {
-  const { seguriSignController } = props;
+const SegurisignDocuments = ({ seguriSignController }) => {
   const userController = new UserController(
     seguriSignController.segurisignUser.email
   );
@@ -165,8 +164,8 @@ const SegurisignDocuments = (props) => {
       userController.getUserDocs("CONCLUIDO"),
       userController.getUserDocs("PENDIENTE"),
       userController.getUserDocs("CANCELADO"),
-      props.seguriSignController.getStatus("EXPIRADOS"),
-      props.seguriSignController.getStatus("CANCELADOS_TERCEROS"),
+      seguriSignController.getStatus("EXPIRADOS"),
+      seguriSignController.getStatus("CANCELADOS_TERCEROS"),
     ]);
     console.log(unsignedDoc);
     setLoaded({
@@ -211,33 +210,33 @@ const SegurisignDocuments = (props) => {
                 long={location.long}
                 toaster={toaster}
                 unsignedDocuments={loaded.unsignedDocuments}
-                seguriSignController={props.seguriSignController}
+                seguriSignController={seguriSignController}
               />
             )}
 
             <SignedDocuments
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
               signedDocuments={loaded.signedDocuments}
             />
 
             <CancelledDocuments
               cancelledDoc={loaded.cancelledDoc}
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
             />
 
             <CancelledThirdsDocuments
               cancelledByThirds={loaded.cancelledByThirds}
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
             />
 
             <ExpiredDocuments
               expiredDoc={loaded.expiredDoc}
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
             />
           </div>
           <div className={classes.card}>
             <UploadPopup
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
               toaster={toaster}
             />
           </div>

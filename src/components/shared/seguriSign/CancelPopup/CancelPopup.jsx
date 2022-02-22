@@ -11,12 +11,9 @@ import { AiFillDelete } from "react-icons/ai";
 import CustomLoader from "../CustomLoader/CustomLoader";
 import UserController from "../controller/user_controller";
 
-const CancelPopup = (props) => {
+const CancelPopup = ({ seguriSignController, toaster, multilateralId }) => {
   const reasonText = useRef(null);
   const [loading, setLoading] = useState(false);
-  const { seguriSignController } = props;
-  const { toaster } = props;
-  const { multilateralId } = props;
   const userController = new UserController();
   const cancel = () => {
     setLoading(true);
@@ -25,7 +22,7 @@ const CancelPopup = (props) => {
       .then(async (result) => {
         setLoading(false);
         if (result) {
-          await userController.updateDocCancelled(props.multilateralId);
+          await userController.updateDocCancelled(multilateralId);
           toaster.successToast("Documento cancelado con éxito");
         } else {
           toaster.errorToast("Error al cancelar documento, intente de nuevo");
