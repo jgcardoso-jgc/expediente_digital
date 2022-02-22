@@ -1,7 +1,7 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
 import { auth, db, functions } from "./firebase_controller";
@@ -27,13 +27,10 @@ class UserController {
       requiresFaceMatch: requiresFaceMatch === "on",
       status: "PENDIENTE",
     };
-    console.log(body);
     docRef
       .set(body)
-      .then((docReference) => console.log(docReference))
-      .catch((error) => {
-        console.error("Error updating document: ", error);
-      });
+      .then((docReference) => {})
+      .catch((error) => {});
   };
 
   async getSignDocData(multilateralId) {
@@ -72,7 +69,7 @@ class UserController {
               });
           });
         })
-        .catch((err) => console.log("Error getting documents", err));
+        .catch((err) => {});
     });
   }
 
@@ -141,7 +138,7 @@ class UserController {
     }
   }
 
-  testEmail = () => {
+  /* testEmail = () => {
     const val = functions.httpsCallable("signedDocEmail");
     val()
       .then((result) => {
@@ -150,6 +147,6 @@ class UserController {
       .catch((error) => {
         console.log(`error: ${JSON.stringify(error)}`);
       });
-  };
+  }; */
 }
 export default UserController;

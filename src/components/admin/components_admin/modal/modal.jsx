@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
@@ -46,7 +45,6 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
       querySnapshot.forEach((doc) => {
         const gotDoc = doc.data().documents;
         const newArray = [];
-        console.log(imageName);
         gotDoc.forEach((filter) => {
           if (filter.imageName !== imageName) {
             newArray.push(filter);

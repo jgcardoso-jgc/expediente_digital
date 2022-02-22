@@ -3,7 +3,7 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 import React, { useRef, useState } from "react";
 import Popup from "reactjs-popup";
@@ -86,9 +86,9 @@ const SignPopUP = ({
       long
     );
     if (signedSuccessfully) {
-      console.log(signedSuccessfully);
+      // console.log(signedSuccessfully);
     } else {
-      console.log("Error al firmar");
+      // console.log("Error al firmar");
     }
     return signedSuccessfully;
   };
@@ -99,9 +99,9 @@ const SignPopUP = ({
       passwordRef.current.value
     );
     if (signedSuccessfully) {
-      console.log(signedSuccessfully);
+      // console.log(signedSuccessfully);
     } else {
-      console.log("Error al firmar");
+      // console.log("Error al firmar");
     }
     return signedSuccessfully;
   };

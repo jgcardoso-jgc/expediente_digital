@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-/* eslint-disable no-console */
+
 /* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -88,7 +88,6 @@ const Table = ({ columns, data, docNumber }) => {
   useEffect(() => {}, [globalFilter]);
 
   useEffect(() => {
-    console.log(docNumber);
     if (docNumber && docNumber > 0) {
       setGlobalFilter(docNumber);
     }

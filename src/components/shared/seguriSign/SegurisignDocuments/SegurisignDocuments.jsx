@@ -1,6 +1,6 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable no-console */
+
 /* eslint-disable comma-dangle */
 /* eslint-disable react/no-typos */
 /* eslint-disable react/forbid-prop-types */
@@ -149,11 +149,11 @@ const SegurisignDocuments = ({ seguriSignController }) => {
   }, []);
 
   useEffect(() => {
-    console.log(loaded.unsignedDocuments);
+    // console.log(loaded.unsignedDocuments);
   }, [loaded]);
 
   const getDocuments = async () => {
-    console.log("getting...");
+    // console.log("getting...");
     const [
       signedDoc,
       unsignedDoc,
@@ -167,7 +167,7 @@ const SegurisignDocuments = ({ seguriSignController }) => {
       seguriSignController.getStatus("EXPIRADOS"),
       seguriSignController.getStatus("CANCELADOS_TERCEROS"),
     ]);
-    console.log(unsignedDoc);
+    // console.log(unsignedDoc);
     setLoaded({
       signedDocuments: signedDoc,
       hasLoaded: true,
@@ -198,7 +198,6 @@ const SegurisignDocuments = ({ seguriSignController }) => {
     if (loaded.hasLoaded) {
       return (
         <div>
-          {console.log("lat:", location.lat)}
           <div className={classes.card}>
             <ToastContainer />
             <h5 className={classes.title}>

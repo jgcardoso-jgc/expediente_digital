@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 import React, { useContext, useEffect, useState } from "react";
 import { string } from "prop-types";

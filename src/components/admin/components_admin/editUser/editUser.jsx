@@ -3,7 +3,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable prefer-destructuring */
-/* eslint-disable no-console */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 /* eslint-disable react/jsx-closing-bracket-location */
@@ -239,12 +238,8 @@ const EditUser = () => {
       text: "Tienes nuevo documento pediente que firmar",
       email: locData.email,
     })
-      .then(() => {
-        console.log("ok");
-      })
-      .catch((error) => {
-        console.log(`error: ${JSON.stringify(error)}`);
-      });
+      .then(() => {})
+      .catch(() => {});
   }
 
   function updatePendientes() {
@@ -291,7 +286,6 @@ const EditUser = () => {
   }
 
   function getURLS(docArray) {
-    console.log(docArray);
     docFunctions
       .getDownloadURLS(storage, docArray, locData)
       .then((arrayUrls) => {

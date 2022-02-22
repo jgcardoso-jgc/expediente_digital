@@ -58,7 +58,6 @@ const UserView = () => {
         setDisabled(true);
         setLoading(true);
         const json: any = await createUserExpediente({ db, auth }, { email, name, rfc, password });
-        console.log('createUserExpediente: \n', json);
         if (json) {
           if (json.registradoSign) {
             sendWelcomeEmailSign(email).then(() => {
@@ -176,12 +175,3 @@ const UserView = () => {
 };
 
 export default UserView;
-
-/* const response = await fetch('http//localhost:5000/express_backend');
-    const body = await response;
-
-    if (response.status !== 200) {
-      console.log("error");
-    } else {
-      console.log(`ok:${body}`);
-    } */

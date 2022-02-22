@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/forbid-prop-types */

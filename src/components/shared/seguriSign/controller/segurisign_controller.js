@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-/* eslint-disable no-console */
+
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable comma-dangle */
@@ -125,14 +125,14 @@ class SegurisignController {
 
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data, multilateralId);
+      // console.log(data, multilateralId);
       return data.resultado === 1;
     }
     return [];
   }
 
   async pkcs7(multilateralId, passPrivateKey, hashHex) {
-    console.log(this.segurisignUser.idRh);
+    // console.log(this.segurisignUser.idRh);
     const documentRequest = {
       idDomain: this.iDDomain,
       idRhEmp: this.segurisignUser.idRh,
@@ -160,7 +160,7 @@ class SegurisignController {
   }
 
   async getHash(multilateralId) {
-    console.log(this.segurisignUser.idRh);
+    /// /console.log(this.segurisignUser.idRh);
     const body = {
       idDomain: this.iDDomain,
       idRhEmp: this.segurisignUser.idRh,
@@ -313,10 +313,11 @@ class SegurisignController {
         this.segurisignUser.idEmployeeProfile = res.data.idEmployeeProfile;
         return this.authUser(password).then((value) => value);
       })
-      .catch((err) => {
-        console.log(err);
-        return false;
-      });
+      .catch(
+        () =>
+          // console.log(err);
+          false
+      );
   }
 
   async authUser(password) {
@@ -333,12 +334,12 @@ class SegurisignController {
       headers: this.header,
       body: JSON.stringify(body),
     };
-    console.log("auth, ", this.segurisignUser.idPerson);
+    /// /console.log("auth, ", this.segurisignUser.idPerson);
     return fetch(`${this.apiUrl}/user`, requestOptions).then((res) => {
       if (res.status === 200) {
         return res.json().then((data) => {
           this.segurisignUser.idRh = data.idRh;
-          console.log(data);
+          /// /console.log(data);
           return data.resultado === 1;
         });
       }

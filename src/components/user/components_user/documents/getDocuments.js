@@ -1,6 +1,6 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-use-before-define */
-/* eslint-disable no-console */
+
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 import onBoardingConfig from "./onBoardingConfig";
@@ -86,10 +86,10 @@ function getState(db, storage, user) {
             );
           });
           Promise.all(promises).then(() => {
-            console.log("all resolved");
-            pendientes.forEach((check) => {
-              console.log(Object.keys(check));
-              console.log(`title:${check.title}`);
+            // console.log("all resolved");
+            pendientes.forEach(() => {
+              // console.log(Object.keys(check));
+              // console.log(`title:${check.title}`);
             });
             resolve([completados, revision, pendientes]);
           });
@@ -132,7 +132,7 @@ function notExists(db, user) {
                   .child(`/${user.email}/${key}`)
                   .putString(imgs[key], "base64", metadata)
                   .then(() => {
-                    console.log("uploaded");
+                    // console.log("uploaded");
                     document.getElementById("ineFront").appendChild(frontId);
                   })
               );

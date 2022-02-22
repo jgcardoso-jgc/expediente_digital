@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable operator-linebreak */
-/* eslint-disable no-console */
+
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-unused-expressions */

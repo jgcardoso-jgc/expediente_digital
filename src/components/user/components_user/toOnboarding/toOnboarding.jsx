@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect } from "react";
 import { useLocation, Link, useHistory } from "react-router-dom";
@@ -35,11 +34,8 @@ const ToOnBoarding = () => {
   useEffect(() => {
     const { state } = location;
     if (state.reload === true) {
-      console.log("toReload");
       history.replace({ pathname: "/toOnboarding", state: {} });
       window.location.reload();
-    } else {
-      console.log("not reload");
     }
   }, [history, location]);
 

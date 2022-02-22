@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
@@ -76,9 +75,7 @@ const AjustesAdmin = () => {
   const classes = useStyles();
   const [reload, setReload] = useState(false);
 
-  function handleClickEditRow() {
-    console.log("e");
-  }
+  function handleClickEditRow() {}
 
   async function getData() {
     const query = db.collection("documentos");
@@ -129,9 +126,7 @@ const AjustesAdmin = () => {
             setDisable(false);
             setReload((prev) => !prev);
           })
-          .catch((e) => {
-            console.log(e.message);
-          });
+          .catch(() => {});
       }
     });
   }
@@ -147,7 +142,6 @@ const AjustesAdmin = () => {
           dataGet = doc.data().lista;
           id = doc.id;
         });
-        console.log(dataGet);
         dataGet.push({ nombre: cargo });
         db.collection("cargos")
           .doc(id)

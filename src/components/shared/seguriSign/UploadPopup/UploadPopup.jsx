@@ -3,7 +3,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable no-console */
+
 /* eslint-disable object-curly-newline */
 /* eslint-disable quotes */
 import { FiDelete } from "react-icons/all";
@@ -98,9 +98,9 @@ const UploadPopup = ({ seguriSignController, toaster }) => {
     soapController
       .addDocumentString(signers.arr, selectedFile.selectedFile)
       .then(async (response) => {
-        console.log(response);
+        // console.log(response);
         if (response[0]) {
-          console.log(signers.arr);
+          // console.log(signers.arr);
           await userController.addNewDocToFirebase(
             signers.arr,
             response[1],
@@ -139,7 +139,7 @@ const UploadPopup = ({ seguriSignController, toaster }) => {
         const succeed = response[0];
         if (succeed) {
           const document = response[1];
-          console.log(signers.arr);
+          // console.log(signers.arr);
           await userController.addNewDocToFirebase(
             signers.arr,
             document,
@@ -255,10 +255,7 @@ const UploadPopup = ({ seguriSignController, toaster }) => {
               />
             </Row>
             <Row>
-              <Document
-                onLoadError={console.error}
-                file={selectedFile.selectedFile}
-              >
+              <Document onLoadError="error" file={selectedFile.selectedFile}>
                 <Page pageNumber={1} />
               </Document>
             </Row>
@@ -274,7 +271,6 @@ const UploadPopup = ({ seguriSignController, toaster }) => {
                   if (signType === "fab") {
                     addDocument();
                   } else {
-                    // console.log('add doc');
                     addDocumentServer();
                   }
                 }}

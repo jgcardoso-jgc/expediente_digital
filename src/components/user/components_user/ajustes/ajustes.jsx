@@ -88,9 +88,7 @@ const AjustesUser = () => {
             setHidden((prev) => !prev);
             setReload((prev) => !prev);
           })
-          .catch((e) => {
-            console.log(e.message);
-          });
+          .catch(() => {});
       }
     });
   }

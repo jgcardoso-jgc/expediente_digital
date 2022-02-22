@@ -1,5 +1,4 @@
 /* eslint-disable no-use-before-define */
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";
@@ -99,7 +98,6 @@ function DashboardComponent() {
   }
 
   function toDocs(value) {
-    console.log("pressed");
     history.push("/usuarios", { search: value });
   }
 

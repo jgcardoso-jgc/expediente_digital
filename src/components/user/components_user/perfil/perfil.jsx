@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { useFirebaseApp } from "reactfire";
@@ -121,7 +121,6 @@ const MyProfile = () => {
               .child(`/${user.email}/croppedFace`)
               .putString(imgs.croppedFace, "base64", metadata)
               .then(() => {
-                console.log("not");
                 setReload(true);
               });
           } catch (e) {
@@ -144,7 +143,6 @@ const MyProfile = () => {
         });
     } else {
       const url = localStorage.getItem("profilepic");
-      console.log("here");
       exists(url);
     }
   }

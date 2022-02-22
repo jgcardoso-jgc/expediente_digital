@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import { Column, Row } from "simple-flexbox";

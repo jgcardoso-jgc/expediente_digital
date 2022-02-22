@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useRef, useEffect } from "react";
 import "./hello.css";
@@ -32,7 +31,6 @@ const HelloInitSign = ({ toaster, setFaceMatched }) => {
       const instance = helloRef.current;
       instance.renderLogin(containerRef.current, {
         onSuccess: async (r) => {
-          console.log("onSuccess", r);
           const isUser = await userController.compareCustomerId(r.customerId);
           if (isUser) {
             toaster.successToast(`Identidad confirmada: ${r.fullName}`);
@@ -45,8 +43,7 @@ const HelloInitSign = ({ toaster, setFaceMatched }) => {
             setFaceMatched(false);
           }
         },
-        onError: (r) => {
-          console.log("on error ", r);
+        onError: () => {
           setFaceMatched(false);
         },
       });

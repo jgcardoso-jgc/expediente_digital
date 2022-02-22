@@ -55,7 +55,6 @@ export const useSidebar = ({ isCollapsible, item, subroutes } = {}) => {
     setIsExpanded((prev) => !prev);
   };
 
-  console.log(`isactive:${isActive}`);
   return {
     isExpanded,
     isActive,

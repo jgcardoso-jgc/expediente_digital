@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-console */
+
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable spaced-comment */
 /* eslint-disable comma-dangle */
@@ -93,9 +93,7 @@ const TableView = ({
   lat,
   toaster,
 }: any) => {
-  console.log(`long:${long}`);
   const classes = useStyles();
-  //const history = useHistory();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -108,14 +106,11 @@ const TableView = ({
     controller
       .getDocument(id)
       .then((docUrl) => {
-        console.log("url", docUrl);
         window.open(`data:application/pdf;base64,${docUrl}`);
         setLoading(false);
       })
-      .catch((e) => {
+      .catch(() => {
         setLoading(false);
-        console.log(e);
-        //toaster.errorToast(e);
       });
   };
 
@@ -175,7 +170,6 @@ const TableView = ({
             accessor: "revision",
             Cell: (cellObj) => (
               <div>
-                {console.log(`id:${cellObj.cell.row.original.multilateralId}`)}
                 <SignPopUP
                   toaster={toaster}
                   seguriSignController={controller}

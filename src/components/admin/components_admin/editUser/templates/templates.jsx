@@ -69,7 +69,6 @@ const Templates = () => {
 
   const getDocuments = async () => {
     const res = await form.getDocumentList();
-    console.log(res);
     setDocs(res);
   };
 
@@ -122,7 +121,6 @@ const Templates = () => {
   useEffect(() => {
     if (cookie) {
       soapController.segurisignUser = JSON.parse(cookie);
-      console.log(soapController.segurisignUser);
     } else {
       toast("Alerta: No estás loggeado en Sign");
     }
