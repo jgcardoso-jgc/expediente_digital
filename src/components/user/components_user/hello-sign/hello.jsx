@@ -46,7 +46,7 @@ const HelloInitSign = ({ toaster, setFaceMatched }) => {
           }
         },
         onError: (r) => {
-          console.log("on error", r);
+          console.log("on error ", r);
           setFaceMatched(false);
         },
       });
