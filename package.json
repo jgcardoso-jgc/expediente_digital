@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.0.0-0",
     "@babel/plugin-transform-react-jsx-source": "^7.16.7",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
