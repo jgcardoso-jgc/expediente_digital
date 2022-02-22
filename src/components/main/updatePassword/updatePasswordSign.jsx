@@ -81,13 +81,13 @@ const UpdatePasswordSign = () => {
     setDisable(true);
     setLoading(true);
     const user = {
-      email, password: passwordOld
+      email,
+      password: passwordOld,
     };
     const success = await updateController.updatePassword(user, passwordSign);
-    console.log('success', success);
 
     if (success) {
-      toast('Cambio de contraseña exitoso');
+      toast("Cambio de contraseña exitoso");
     }
     setDisable(false);
     setLoading(false);
