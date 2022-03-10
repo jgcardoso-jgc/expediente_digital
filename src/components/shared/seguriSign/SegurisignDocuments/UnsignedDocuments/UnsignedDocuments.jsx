@@ -7,7 +7,7 @@ import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
 // import UserController from "../../controller/user_controller";
 import PropTypes from "prop-types";
-import TableView from "../../../table/tableView";
+import TableView from "../Table/tableView";
 import styles from "./UnsignedDocuments.module.scss";
 
 const UnsignedDocuments = (props) => {

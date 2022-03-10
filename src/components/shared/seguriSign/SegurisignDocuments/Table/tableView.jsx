@@ -10,10 +10,10 @@ import React, { useState, useEffect } from "react";
 //import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import { AiFillEye } from "react-icons/ai";
-import CancelPopup from "../seguriSign/CancelPopup/CancelPopup";
-import Table from "./table";
-import SignPopUP from "../seguriSign/SignPopup/SignPopup";
-import UnsignedPopUp from "../seguriSign/UnsignedPopUp/UnsignedPopup";
+import Table from "components/shared/table/table";
+import CancelPopup from "../../CancelPopup/CancelPopup";
+import SignPopUP from "../../SignPopup/SignPopup";
+import UnsignedPopUp from "../../UnsignedPopUp/UnsignedPopup";
 
 const useStyles = createUseStyles({
   editButton: {
