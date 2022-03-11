@@ -9,17 +9,17 @@ import Popup from "reactjs-popup";
 import Card from "react-bootstrap/Card";
 import { Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { useFirebaseApp } from "reactfire";
-import styles from "./templates.module.scss";
+import styles from "./PopupInputs.module.scss";
 import UserController from "../../../../shared/seguriSign/controller/user_controller";
 
 const PopupInputs = ({
   label,
+  docType,
   items,
   soapController,
-  docType,
   userEmail,
   form,
 }) => {
@@ -28,6 +28,16 @@ const PopupInputs = ({
   const db = firebase.firestore();
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState([]);
+
+  const createFormValues = (itemsForm) => {
+    setFormValues([]);
+    const temp = [];
+    itemsForm.forEach((item) => {
+      temp.push({ name: item.name, label: item.label, value: "" });
+    });
+    setFormValues(temp);
+  };
+
   const getDocByID = async (id) => {
     const docRef = db.collection("generatedDocs").doc(id);
     const doc = await docRef.get();
@@ -44,9 +54,7 @@ const PopupInputs = ({
       return;
     }
     setLoading(true);
-    // console.log(`vals:${formValues}`);
     const docID = await form.submit(formValues, docType);
-    // console.log("docID ", docID);
     const doc = await getDocByID(docID);
     const requiresFM = false;
     if (doc) {
@@ -86,26 +94,37 @@ const PopupInputs = ({
     setFormValues(formValuesTemp);
   };
 
+  useEffect(() => {
+    createFormValues(items);
+  }, []);
+
   return (
     <div>
+      <ToastContainer />
       <Popup
         modal
         trigger={
-          <Button style={{ background: "#cccccc", color: "black", border: 0 }}>
+          <Button
+            style={{ background: "transparent", color: "black", border: 0 }}
+          >
             {label}
           </Button>
         }
       >
         {(close) => (
           <div align="center">
-            <Card style={{}}>
-              <Card.Body>
-                <Card.Title>Cancelar documento</Card.Title>
+            <Card>
+              <Card.Body className={styles.popup}>
+                <Card.Title>{label}</Card.Title>
                 <form onSubmit={handleSubmit}>
                   {items.map((input, index) => (
                     <div key={`i${index}`}>
                       <p>{input.label}</p>
-                      <input style={{ display: "none" }} value={input.label} />
+                      <input
+                        style={{ display: "none" }}
+                        value={input.label}
+                        readOnly
+                      />
                       <input
                         placeholder=""
                         type={input.type}
@@ -127,14 +146,6 @@ const PopupInputs = ({
                   <Button variant="outline-dark" onClick={close}>
                     Cerrar
                   </Button>
-                  <button
-                    type="button"
-                    className="btn-seguridata-lg"
-                    style={{ marginLeft: "2rem" }}
-                    onClick={() => console.log("")}
-                  >
-                    Cancelar
-                  </button>
                 </Col>
               </Card.Body>
             </Card>

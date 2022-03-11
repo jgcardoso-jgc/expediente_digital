@@ -12,7 +12,7 @@ const Templates = () => {
   const cookie = localStorage.getItem("sign-user");
   const location = useLocation();
   const locData = location.state;
-  const { userEmail } = locData;
+  const userEmail = locData ? locData.email : "";
   const form = new FormController();
   const soapController = new SoapController();
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,18 @@ const Templates = () => {
         <h4 className={styles.titleCard}>Selecciona Tipo de Documento</h4>
         <p>{userEmail}</p>
         {loading ? "Cargando..." : ""}
-        {docs.length > 0 ? <TableView data={docs} docsNumber={0} /> : ""}
+        <div className={styles.mt}>
+          {docs.length > 0 ? (
+            <TableView
+              data={docs}
+              docsNumber={0}
+              form={form}
+              soapController={soapController}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
       <div className={styles.container}>
         <ToastContainer />

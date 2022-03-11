@@ -1,3 +1,5 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -7,7 +9,7 @@
 /* eslint-disable quotes */
 /* eslint-disable react/jsx-closing-bracket-location */
 import React, { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import { ToastContainer, toast } from "react-toastify";
@@ -15,7 +17,6 @@ import Completados from "./completados";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import styles from "../../../../resources/theme";
-import slugs from "../../../shared/resources/slugs";
 import "bootstrap/dist/css/bootstrap.css";
 import ModalEdit from "../modal/modal";
 import docFunctions from "./getDocuments";
@@ -101,9 +102,19 @@ const useStyles = createUseStyles(() => ({
 const EditUser = () => {
   const classes = useStyles();
   const global = globalTheme();
+  const history = useHistory();
   const location = useLocation();
-  const locData = location.state.objUser;
-  const [cargo, setCargo] = useState(locData.cargo);
+
+  const checkLocation = () => {
+    if (location.state) {
+      return location.state.objUser;
+    }
+    history.push("/usuarios");
+    return null;
+  };
+
+  const locData = checkLocation();
+  const [cargo, setCargo] = useState(locData ? locData.cargo : "");
   const [urlsCompleted, setCompleted] = useState([]);
   const [pendientes, setPendientes] = useState([]);
   const [administrativos, setAdministrativos] = useState([]);
@@ -225,11 +236,13 @@ const EditUser = () => {
   }
 
   const editCargo = () => {
-    setCargoBt(true);
-    const query = db
-      .collection("users")
-      .where("fullname", "==", locData.fullname);
-    query.get().then((querySnapshot) => updateCargo(querySnapshot));
+    if (locData) {
+      setCargoBt(true);
+      const query = db
+        .collection("users")
+        .where("fullname", "==", locData.fullname);
+      query.get().then((querySnapshot) => updateCargo(querySnapshot));
+    }
   };
 
   function testEmail() {
@@ -304,205 +317,221 @@ const EditUser = () => {
     fetchCargos();
   }, []);
 
+  const handleNavigation = () => {
+    history.push({
+      pathname: "/usuarios/editar/plantillas",
+      state: { email: "test@hotmail.com" },
+    });
+  };
+
   useEffect(() => {}, [reload]);
 
   return (
     <div>
-      <ToastContainer />
-      <div className={classes.container}>
-        <div className="row" />
-        <p>
-          <b>Información General</b>
-        </p>
-        <b>Nombre</b>
-        <p>{locData.fullname}</p>
-        <b>RFC</b>
-        <p>{locData.rfc}</p>
-        <b>Email</b>
-        <p>{locData.email}</p>
-        <b>Cargo</b>
-        <p>{cargo !== "" ? cargo : "Sin especificar"}</p>
-        <b>Onboarding</b>
-        {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
-        <p />
-      </div>
-      <div className={classes.container}>
-        <p>
-          <b>Documentos Completados</b>
-        </p>
-        {urlsCompleted.length > 0 ? (
-          <Completados urlsCompleted={urlsCompleted} handleShow={handleShow} />
-        ) : (
-          ""
-        )}
-        {urlsCompleted.length === 0 ? "Ninguno" : ""}
-        <p className={classes.mt20}>
-          <b>Documentos Pendientes</b>
-        </p>
-        {pendientes.length > 0 ? (
-          <div>
-            <Row className={`${classes.rowDocs} ${classes.mb20}`}>
-              {pendientes.map((url) => (
-                <Col className={classes.col} key={uuidv4()}>
-                  <div
-                    className={
-                      url.url !== "404"
-                        ? `${classes.containerPendiente} ${classes.pointer}`
-                        : `${classes.container} ${classes.pointer}`
-                    }
-                    onKeyPress={() => handleShow(url, "pendientes")}
-                    key={uuidv4()}
-                    onClick={() => handleShow(url, "pendientes")}
-                  >
-                    <p className={classes.center}>{url.title}</p>
-                  </div>
-                </Col>
-              ))}
-            </Row>
-          </div>
-        ) : (
-          <div className={classes.mb20}>No hay documentos pendientes</div>
-        )}
-      </div>
-      <div className={classes.container}>
-        <p>
-          <b>Solicitar Documentos</b>
-        </p>
-        <p>Selecciona los documentos requeridos para el usuario</p>
-        {cboxes.length > 0 ? (
-          <div>
-            <Row>
-              {cboxes.map((cbox) => (
-                <Col className={classes.max3}>
-                  <label className={classes.label}>
-                    <input
-                      type="checkbox"
-                      className={classes.checkbox}
-                      onChange={(e) => handleOnChange(e, cbox)}
-                    />
-                    <p>{cbox.nombre}</p>
-                  </label>
-                </Col>
-              ))}
-            </Row>
-          </div>
-        ) : (
-          <div>Ya se solicitaron todos los documentos disponibles</div>
-        )}
-        <button
-          type="button"
-          onClick={() => updatePendientes()}
-          className={disabled ? global.initBtDisabled : global.initBt}
-          disabled={disabled}
-        >
-          Solicitar Documentos
-        </button>
-        <p className={classes.plantillasTitle}>
-          <b>Plantillas de documentos</b>
-        </p>
-        <Link
-          className={classes.plantillas}
-          to={{
-            pathname: slugs.templates,
-            state: { userEmail: locData.email },
-          }}
-        >
-          Ver plantillas de Documentos <AiOutlineArrowRight />
-        </Link>
-        <ModalEdit
-          state={show}
-          url={urlView}
-          title={titleModal}
-          type={type}
-          imageName={imageName}
-          email={email}
-          onClose={() => setShow(false)}
-        />
-      </div>
-      <div className={classes.container}>
-        <p className={classes.mt20}>
-          <b>Documentos Administrativos</b>
-        </p>
+      {locData ? (
         <div>
-          <Row className={classes.rowDocs}>
-            {administrativos.map((url) => (
-              <Col className={classes.col} key={uuidv4()}>
-                <div
-                  className={`${classes.container} ${classes.pointer}`}
-                  onKeyPress={() => handleShow(url, "completados")}
-                  key={uuidv4()}
-                  onClick={() => handleShow(url, "completados")}
-                >
-                  <p className={classes.center}>{url.title}</p>
+          <ToastContainer />
+          <div className={classes.container}>
+            <div className="row" />
+            <p>
+              <b>Información General</b>
+            </p>
+            <b>Nombre</b>
+            <p>{locData.fullname}</p>
+            <b>RFC</b>
+            <p>{locData.rfc}</p>
+            <b>Email</b>
+            <p>{locData.email}</p>
+            <b>Cargo</b>
+            <p>{cargo !== "" ? cargo : "Sin especificar"}</p>
+            <b>Onboarding</b>
+            {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
+            <p />
+          </div>
+          <div className={classes.container}>
+            <p>
+              <b>Documentos Completados</b>
+            </p>
+            {urlsCompleted.length > 0 ? (
+              <Completados
+                urlsCompleted={urlsCompleted}
+                handleShow={handleShow}
+              />
+            ) : (
+              ""
+            )}
+            {urlsCompleted.length === 0 ? "Ninguno" : ""}
+            <p className={classes.mt20}>
+              <b>Documentos Pendientes</b>
+            </p>
+            {pendientes.length > 0 ? (
+              <div>
+                <Row className={`${classes.rowDocs} ${classes.mb20}`}>
+                  {pendientes.map((url) => (
+                    <Col className={classes.col} key={uuidv4()}>
+                      <div
+                        className={
+                          url.url !== "404"
+                            ? `${classes.containerPendiente} ${classes.pointer}`
+                            : `${classes.container} ${classes.pointer}`
+                        }
+                        onKeyPress={() => handleShow(url, "pendientes")}
+                        key={uuidv4()}
+                        onClick={() => handleShow(url, "pendientes")}
+                      >
+                        <p className={classes.center}>{url.title}</p>
+                      </div>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            ) : (
+              <div className={classes.mb20}>No hay documentos pendientes</div>
+            )}
+          </div>
+          <div className={classes.container}>
+            <p>
+              <b>Solicitar Documentos</b>
+            </p>
+            <p>Selecciona los documentos requeridos para el usuario</p>
+            {cboxes.length > 0 ? (
+              <div>
+                <Row>
+                  {cboxes.map((cbox) => (
+                    <Col className={classes.max3}>
+                      <label className={classes.label}>
+                        <input
+                          type="checkbox"
+                          className={classes.checkbox}
+                          onChange={(e) => handleOnChange(e, cbox)}
+                        />
+                        <p>{cbox.nombre}</p>
+                      </label>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            ) : (
+              <div>Ya se solicitaron todos los documentos disponibles</div>
+            )}
+            <button
+              type="button"
+              onClick={() => updatePendientes()}
+              className={disabled ? global.initBtDisabled : global.initBt}
+              disabled={disabled}
+            >
+              Solicitar Documentos
+            </button>
+            <p className={classes.plantillasTitle}>
+              <b>Plantillas de documentos</b>
+            </p>
+            <button
+              className={classes.plantillas}
+              type="button"
+              onClick={handleNavigation}
+            >
+              Ver plantillas de Documentos <AiOutlineArrowRight />
+            </button>
+            <ModalEdit
+              state={show}
+              url={urlView}
+              title={titleModal}
+              type={type}
+              imageName={imageName}
+              email={email}
+              onClose={() => setShow(false)}
+            />
+          </div>
+          <div className={classes.container}>
+            <p className={classes.mt20}>
+              <b>Documentos Administrativos</b>
+            </p>
+            <div>
+              <Row className={classes.rowDocs}>
+                {administrativos.map((url) => (
+                  <Col className={classes.col} key={uuidv4()}>
+                    <div
+                      className={`${classes.container} ${classes.pointer}`}
+                      onKeyPress={() => handleShow(url, "completados")}
+                      key={uuidv4()}
+                      onClick={() => handleShow(url, "completados")}
+                    >
+                      <p className={classes.center}>{url.title}</p>
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+            <Row>
+              <Col>
+                <div className="formGroup">
+                  <label htmlFor="email" className="block pb10">
+                    Nombre del Documento
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    className={classes.inputStyle}
+                    onChange={(event) => setName(event.target.value)}
+                  />
                 </div>
               </Col>
-            ))}
-          </Row>
+              <Col>
+                {" "}
+                <div className="formGroup">
+                  <label htmlFor="email" className="block pb10">
+                    Descripción
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    className={classes.inputStyle}
+                    onChange={(event) => setDescripcion(event.target.value)}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <input
+              type="file"
+              accept="image/png, image/jpeg, application/pdf"
+              className={classes.mt20}
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => uploadFile()}
+              className={
+                disabledAdminDoc ? global.initBtDisabled : global.initBt
+              }
+              disabled={disabledAdminDoc}
+            >
+              Agregar Documento
+            </button>
+          </div>
+          <div className={classes.container}>
+            <p className={classes.mt20}>
+              <b>Editar cargo</b>
+            </p>
+            <Select
+              value={selectedOption}
+              onChange={handleChange}
+              options={cargos}
+            />
+            <button
+              type="button"
+              onClick={editCargo}
+              className={cargoBt ? global.initBtDisabled : global.initBt}
+              disabled={cargoBt}
+            >
+              Cambiar Cargo
+            </button>
+          </div>
         </div>
-        <Row>
-          <Col>
-            <div className="formGroup">
-              <label htmlFor="email" className="block pb10">
-                Nombre del Documento
-              </label>
-              <input
-                type="email"
-                id="email"
-                className={classes.inputStyle}
-                onChange={(event) => setName(event.target.value)}
-              />
-            </div>
-          </Col>
-          <Col>
-            {" "}
-            <div className="formGroup">
-              <label htmlFor="email" className="block pb10">
-                Descripción
-              </label>
-              <input
-                type="text"
-                id="name"
-                className={classes.inputStyle}
-                onChange={(event) => setDescripcion(event.target.value)}
-              />
-            </div>
-          </Col>
-        </Row>
-        <input
-          type="file"
-          accept="image/png, image/jpeg, application/pdf"
-          className={classes.mt20}
-          onChange={(e) => {
-            setImage(e.target.files[0]);
-          }}
-        />
-        <button
-          type="button"
-          onClick={() => uploadFile()}
-          className={disabledAdminDoc ? global.initBtDisabled : global.initBt}
-          disabled={disabledAdminDoc}
-        >
-          Agregar Documento
-        </button>
-      </div>
-      <div className={classes.container}>
-        <p className={classes.mt20}>
-          <b>Editar cargo</b>
-        </p>
-        <Select
-          value={selectedOption}
-          onChange={handleChange}
-          options={cargos}
-        />
-        <button
-          type="button"
-          onClick={editCargo}
-          className={cargoBt ? global.initBtDisabled : global.initBt}
-          disabled={cargoBt}
-        >
-          Cambiar Cargo
-        </button>
-      </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
