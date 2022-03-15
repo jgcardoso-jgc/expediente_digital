@@ -1,3 +1,6 @@
+/* eslint-disable indent */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable operator-linebreak */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable object-curly-spacing */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -16,32 +19,20 @@ import SoapController from "../../../../shared/seguriSign/controller/soap_contro
 const Templates = () => {
   const cookie = localStorage.getItem("sign-user");
 
-  const createInput = ({ name, isFirst }) => ({
+  const createInput = ({ name }) => ({
     name,
     input: (
-      <>
-        <input
-          className={styles.inputStyle}
-          placeholder="Ingresa el nombre de el campo"
-        />
-        {isFirst === false && (
-          <button type="button" onClick={() => eraseInput({ name })}>
-            Eliminar
-          </button>
-        )}
-      </>
+      <input
+        className={styles.inputStyle}
+        placeholder="Ingresa el nombre de el campo"
+      />
     ),
   });
-
-  const [numberInputs, setNumberInputs] = useState([
-    createInput({ name: nanoid(), isFirst: true }),
-  ]);
+  const [numberInputs, setNumberInputs] = useState([]);
 
   const eraseInput = ({ name }) => {
-    console.log(`to erase:${numberInputs}`);
-    const erasedArray = numberInputs.filter((el) => el.name !== name);
-    console.log(`name:${name}`);
-    console.log(erasedArray);
+    const prev = [...numberInputs];
+    const erasedArray = prev.filter((el) => el.name !== name);
     setNumberInputs(erasedArray);
   };
 
@@ -83,7 +74,12 @@ const Templates = () => {
     }
     getDocuments();
     setDoc((prevState) => ({ prevState, name: "" }));
+    setNumberInputs([createInput({ name: nanoid(), isFirst: true })]);
   }, []);
+
+  useEffect(() => {
+    console.log(numberInputs);
+  }, [numberInputs]);
 
   return (
     <div>
@@ -112,12 +108,20 @@ const Templates = () => {
           <p>Ingresa nombre del Documento</p>
           <input className={styles.inputStyle} placeholder="" />
           <p>Ingresa nombre de los campos requeridos</p>
-          {numberInputs.map((item) => (
-            <div key={nanoid()}>
-              <label>Nombre</label>
-              {item.input}
-            </div>
-          ))}
+          {numberInputs.length > 0
+            ? numberInputs.map((item) => (
+                <div key={nanoid()}>
+                  <label>Nombre</label>
+                  {item.input}
+                  <button
+                    type="button"
+                    onClick={() => eraseInput({ name: item.name })}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ))
+            : ""}
           <button type="button" className={styles.addBt} onClick={addInput}>
             + Agregar Campo
           </button>
