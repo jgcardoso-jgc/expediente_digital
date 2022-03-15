@@ -8,22 +8,22 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 /* eslint-disable react/jsx-closing-bracket-location */
-import React, { useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import { useFirebaseApp } from "reactfire";
-import { createUseStyles } from "react-jss";
-import { ToastContainer, toast } from "react-toastify";
-import Completados from "./completados";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import styles from "../../../../resources/theme";
-import "bootstrap/dist/css/bootstrap.css";
-import ModalEdit from "../modal/modal";
-import docFunctions from "./getDocuments";
-import { v4 as uuidv4 } from "uuid";
-import Select from "react-select";
-import classes from "./editUser.module.scss";
-import { AiOutlineArrowRight } from "react-icons/ai";
+import React, { useEffect, useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import { useFirebaseApp } from 'reactfire';
+import { createUseStyles } from 'react-jss';
+import { ToastContainer, toast } from 'react-toastify';
+import Completados from './completados';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import styles from '../../../../resources/theme';
+import 'bootstrap/dist/css/bootstrap.css';
+import ModalEdit from '../modal/modal';
+import docFunctions from './getDocuments';
+import { v4 as uuidv4 } from 'uuid';
+import Select from 'react-select';
+import classes from './editUser.module.scss';
+import { AiOutlineArrowRight } from 'react-icons/ai';
 
 const globalTheme = createUseStyles(styles);
 
@@ -36,12 +36,12 @@ const EditUser = () => {
     if (location.state) {
       return location.state.objUser;
     }
-    history.push("/usuarios");
+    history.push('/usuarios');
     return null;
   };
 
   const locData = checkLocation();
-  const [cargo, setCargo] = useState(locData ? locData.cargo : "");
+  const [cargo, setCargo] = useState(locData ? locData.cargo : '');
   const [urlsCompleted, setCompleted] = useState([]);
   const [pendientes, setPendientes] = useState([]);
   const [administrativos, setAdministrativos] = useState([]);
@@ -49,19 +49,19 @@ const EditUser = () => {
   const db = firebase.firestore();
   const storage = firebase.storage();
   const [show, setShow] = useState(false);
-  const [urlView, setUrl] = useState("");
-  const [titleModal, setTitle] = useState("");
+  const [urlView, setUrl] = useState('');
+  const [titleModal, setTitle] = useState('');
   const [cboxes, setCBoxes] = useState([]);
-  const [type, setType] = useState("");
+  const [type, setType] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [disabledAdminDoc, setDisabledAdminDoc] = useState(true);
   const [docsToUpdate, setDocs] = useState([]);
-  const [imageName, setImageName] = useState("");
-  const [nameDoc, setNameDoc] = useState("");
-  const [descDoc, setDescripcionDoc] = useState("");
-  const [email, setEmail] = useState("");
-  const [file, setFile] = useState("");
-  const [selectedOption, setSelected] = useState("");
+  const [imageName, setImageName] = useState('');
+  const [nameDoc, setNameDoc] = useState('');
+  const [descDoc, setDescripcionDoc] = useState('');
+  const [email, setEmail] = useState('');
+  const [file, setFile] = useState('');
+  const [selectedOption, setSelected] = useState('');
   const [cargoBt, setCargoBt] = useState(true);
   const [reload, setReload] = useState(false);
   const [cargos, setCargos] = useState([]);
@@ -78,7 +78,7 @@ const EditUser = () => {
       dataLista.forEach((c) => {
         cargosLista.push({
           value: c.nombre,
-          label: c.nombre,
+          label: c.nombre
         });
       });
       setCargos(cargosLista);
@@ -87,7 +87,7 @@ const EditUser = () => {
   }
 
   function fetchCargos() {
-    const query = db.collection("cargos");
+    const query = db.collection('cargos');
     query.get().then((querySnapshot) => setCargosData(querySnapshot));
   }
 
@@ -107,7 +107,7 @@ const EditUser = () => {
       setDocs(array);
     }
     const checkedBoxes = document.querySelectorAll(
-      "input[type=checkbox]:checked"
+      'input[type=checkbox]:checked'
     );
     const length = checkedBoxes.length;
     if (length > 0) {
@@ -128,7 +128,7 @@ const EditUser = () => {
 
   function updateCargo(querySnapshot) {
     querySnapshot.forEach((doc) => {
-      db.collection("users")
+      db.collection('users')
         .doc(doc.id)
         .update({ cargo: selectedOption.label })
         .then(() => {
@@ -166,17 +166,17 @@ const EditUser = () => {
     if (locData) {
       setCargoBt(true);
       const query = db
-        .collection("users")
-        .where("fullname", "==", locData.fullname);
+        .collection('users')
+        .where('fullname', '==', locData.fullname);
       query.get().then((querySnapshot) => updateCargo(querySnapshot));
     }
   };
 
   function testEmail() {
-    const val = functions.httpsCallable("uploadNewDoc");
+    const val = functions.httpsCallable('uploadNewDoc');
     val({
-      text: "Tienes nuevo documento pediente que firmar",
-      email: locData.email,
+      text: 'Tienes nuevo documento pediente que firmar',
+      email: locData.email
     })
       .then(() => {})
       .catch(() => {});
@@ -185,7 +185,7 @@ const EditUser = () => {
   function updatePendientes() {
     setDisabled(true);
     docFunctions.setPendientes(db, docsToUpdate, locData).then((res) => {
-      if (res === "listo") {
+      if (res === 'listo') {
         testEmail();
         reloadFinal();
       } else {
@@ -200,7 +200,7 @@ const EditUser = () => {
 
   function setName(e) {
     setNameDoc(e);
-    if (e !== "" && descDoc !== "") {
+    if (e !== '' && descDoc !== '') {
       setDisabledAdminDoc(false);
     } else {
       setDisabledAdminDoc(true);
@@ -209,7 +209,7 @@ const EditUser = () => {
 
   function setDescripcion(e) {
     setDescripcionDoc(e);
-    if (e !== "" && descDoc !== "") {
+    if (e !== '' && descDoc !== '') {
       setDisabledAdminDoc(false);
     } else {
       setDisabledAdminDoc(true);
@@ -246,8 +246,8 @@ const EditUser = () => {
 
   const handleNavigation = () => {
     history.push({
-      pathname: "/usuarios/editar/plantillas",
-      state: { email: "test@hotmail.com" },
+      pathname: '/usuarios/editar/plantillas',
+      state: { email: 'test@hotmail.com' }
     });
   };
 
@@ -270,7 +270,7 @@ const EditUser = () => {
             <b>Email</b>
             <p>{locData.email}</p>
             <b>Cargo</b>
-            <p>{cargo !== "" ? cargo : "Sin especificar"}</p>
+            <p>{cargo !== '' ? cargo : 'Sin especificar'}</p>
             <b>Onboarding</b>
             {locData.onboarding ? <div>Listo</div> : <div>Pendiente</div>}
             <p />
@@ -285,9 +285,9 @@ const EditUser = () => {
                 handleShow={handleShow}
               />
             ) : (
-              ""
+              ''
             )}
-            {urlsCompleted.length === 0 ? "Ninguno" : ""}
+            {urlsCompleted.length === 0 ? 'Ninguno' : ''}
             <p className={classes.mt20}>
               <b>Documentos Pendientes</b>
             </p>
@@ -298,13 +298,13 @@ const EditUser = () => {
                     <Col className={classes.col} key={uuidv4()}>
                       <div
                         className={
-                          url.url !== "404"
+                          url.url !== '404'
                             ? `${classes.containerPendiente} ${classes.pointer}`
                             : `${classes.container} ${classes.pointer}`
                         }
-                        onKeyPress={() => handleShow(url, "pendientes")}
+                        onKeyPress={() => handleShow(url, 'pendientes')}
                         key={uuidv4()}
-                        onClick={() => handleShow(url, "pendientes")}
+                        onClick={() => handleShow(url, 'pendientes')}
                       >
                         <p className={classes.center}>{url.title}</p>
                       </div>
@@ -379,9 +379,9 @@ const EditUser = () => {
                   <Col className={classes.col} key={uuidv4()}>
                     <div
                       className={`${classes.container} ${classes.pointer}`}
-                      onKeyPress={() => handleShow(url, "completados")}
+                      onKeyPress={() => handleShow(url, 'completados')}
                       key={uuidv4()}
-                      onClick={() => handleShow(url, "completados")}
+                      onClick={() => handleShow(url, 'completados')}
                     >
                       <p className={classes.center}>{url.title}</p>
                     </div>
@@ -402,7 +402,7 @@ const EditUser = () => {
                 </div>
               </Col>
               <Col>
-                {" "}
+                {' '}
                 <div className="formGroup">
                   <label htmlFor="email" className="block pb10">
                     Descripción
@@ -455,7 +455,7 @@ const EditUser = () => {
           </div>
         </div>
       ) : (
-        ""
+        ''
       )}
     </div>
   );

@@ -32,9 +32,9 @@ const useStyles = createUseStyles({
       marginTop: "20px",
       paddingBottom: "10px",
       fontSize: "15px",
-      borderRadius: "10px",
-    },
-  },
+      borderRadius: "10px"
+    }
+  }
 });
 
 function App() {

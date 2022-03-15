@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable quotes */
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, useContext, createContext } from 'react';
 
 export const SidebarContext = createContext();
 
@@ -58,6 +58,6 @@ export const useSidebar = ({ isCollapsible, item, subroutes } = {}) => {
   return {
     isExpanded,
     isActive,
-    onItemClick,
+    onItemClick
   };
 };

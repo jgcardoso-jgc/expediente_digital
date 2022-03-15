@@ -1,58 +1,58 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable quotes */
-import React, { useEffect, useState } from "react";
-import { Column, Row } from "simple-flexbox";
-import { createUseStyles } from "react-jss";
-import { useFirebaseApp } from "reactfire";
-import { useHistory } from "react-router-dom";
-import Donut from "./donutComponent";
-import MiniCardComponent from "./MiniCardComponent";
+import React, { useEffect, useState } from 'react';
+import { Column, Row } from 'simple-flexbox';
+import { createUseStyles } from 'react-jss';
+import { useFirebaseApp } from 'reactfire';
+import { useHistory } from 'react-router-dom';
+import Donut from './donutComponent';
+import MiniCardComponent from './MiniCardComponent';
 
 const useStyles = createUseStyles({
   cardsContainer: {
     marginRight: -30,
-    marginTop: -30,
+    marginTop: -30
   },
   cardRow: {
     marginTop: 30,
-    "@media (max-width: 768px)": {
-      marginTop: 0,
-    },
+    '@media (max-width: 768px)': {
+      marginTop: 0
+    }
   },
   miniCardContainer: {
     flexGrow: 1,
     marginRight: 30,
-    "@media (max-width: 768px)": {
+    '@media (max-width: 768px)': {
       marginTop: 30,
-      maxWidth: "none",
-    },
+      maxWidth: 'none'
+    }
   },
   todayTrends: {
-    marginTop: 30,
+    marginTop: 30
   },
   lastRow: {
-    marginTop: 30,
+    marginTop: 30
   },
   unresolvedTickets: {
     marginRight: 30,
-    "@media (max-width: 1024px)": {
-      marginRight: 0,
-    },
+    '@media (max-width: 1024px)': {
+      marginRight: 0
+    }
   },
   card: {
-    background: "#f1f1f1",
-    padding: "10px",
-    borderRadius: "10px",
+    background: '#f1f1f1',
+    padding: '10px',
+    borderRadius: '10px'
   },
   mt30: {
-    marginTop: 30,
+    marginTop: 30
   },
   tasks: {
     marginTop: 0,
-    "@media (max-width: 1024px)": {
-      marginTop: 30,
-    },
-  },
+    '@media (max-width: 1024px)': {
+      marginTop: 30
+    }
+  }
 });
 
 function DashboardComponent() {
@@ -93,12 +93,12 @@ function DashboardComponent() {
   }
 
   async function getData() {
-    const query = db.collection("users").where("rfc", "!=", "");
+    const query = db.collection('users').where('rfc', '!=', '');
     query.get().then((querySnapshot) => setDocs(querySnapshot));
   }
 
   function toDocs(value) {
-    history.push("/usuarios", { search: value });
+    history.push('/usuarios', { search: value });
   }
 
   useEffect(() => {
@@ -113,14 +113,14 @@ function DashboardComponent() {
           wrap
           flexGrow={1}
           horizontal="space-between"
-          breakpoints={{ 768: "column" }}
+          breakpoints={{ 768: 'column' }}
         >
           <Row
             className={classes.cardRow}
             wrap
             flexGrow={1}
             horizontal="space-between"
-            breakpoints={{ 384: "column" }}
+            breakpoints={{ 384: 'column' }}
           >
             <MiniCardComponent
               className={classes.miniCardContainer}

@@ -12,7 +12,7 @@ import { fetchCargos, sendWelcomeEmail, sendWelcomeEmailSign } from "./usersCont
 import TableView from "../table/tableView";
 import { docs, cargosLista } from "./usersModel";
 import {
-  rfcValido, createUserExpediente,
+  rfcValido, createUserExpediente
 } from "./registerController";
 import useStyles from "./usersStyles";
 

@@ -1,28 +1,28 @@
 /* eslint-disable quotes */
-import React from "react";
-import { createUseStyles, useTheme } from "react-jss";
-import { useHistory, Link } from "react-router-dom";
-import { FaSignature } from "react-icons/fa";
+import React from 'react';
+import { createUseStyles, useTheme } from 'react-jss';
+import { useHistory, Link } from 'react-router-dom';
+import { FaSignature } from 'react-icons/fa';
 // fabell
-import convertSlugToUrl from "../../../shared/resources/utilities";
-import SLUGS from "../../../shared/resources/slugs";
+import convertSlugToUrl from '../../../shared/resources/utilities';
+import SLUGS from '../../../shared/resources/slugs';
 import {
   IconContacts,
   IconSettings,
-  IconSubscription,
-} from "../../assets/icons";
-import LogoComponent from "./LogoComponent";
-import Menu from "./MenuComponent";
+  IconSubscription
+} from '../../assets/icons';
+import LogoComponent from './LogoComponent';
+import Menu from './MenuComponent';
 
-import MenuItem from "./MenuItemComponent";
+import MenuItem from './MenuItemComponent';
 
 const useStyles = createUseStyles({
   separator: {
     borderTop: () => `1px solid white`,
     marginTop: 16,
     marginBottom: 16,
-    opacity: 0.06,
-  },
+    opacity: 0.06
+  }
 });
 
 function SidebarComponent() {
@@ -51,7 +51,7 @@ function SidebarComponent() {
       <MenuItem
         id={SLUGS.usuarios}
         title="Usuarios"
-        subroutes={["/usuarios/editar", "/usuarios/editar/plantillas"]}
+        subroutes={['/usuarios/editar', '/usuarios/editar/plantillas']}
         icon={IconContacts}
         onClick={() => onClick(SLUGS.usuarios)}
       />

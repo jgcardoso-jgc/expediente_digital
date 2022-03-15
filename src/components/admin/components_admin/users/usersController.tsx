@@ -1,7 +1,6 @@
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable quotes */
 import axios from "axios";
-import { stringify } from "querystring";
 import { cargosLista } from "./usersModel";
 
 function fetchCargos(db) {
@@ -14,7 +13,7 @@ function fetchCargos(db) {
         dataLista.forEach((c) => {
           cLista.push({
             value: c.nombre,
-            label: c.nombre,
+            label: c.nombre
           });
         });
         resolve(cLista);
@@ -32,15 +31,15 @@ async function sendWelcomeEmail(email) {
     // agregar mensaje de bienvenida a estudiante
     const data = {
       email,
-      msg,
+      msg
     };
     axios({
       method: 'post',
       url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendWelcome",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded"
       },
-      data: stringify(data),
+      data: JSON.stringify(data)
     })
       .then((res) => resolve(`sended:${res.status}`))
       .catch((res) => reject(`error:${res}`));
@@ -52,15 +51,15 @@ async function sendWelcomeEmailSign(email) {
     const msg = "Bienvenido a Seguridata | Expediente <br> Para registrarte haz click en el siguiente link: <br> <a href='https://expediente-digital.vercel.app/updatePasswordSign'> Inicia ahora </a> <br> Tu contraseña temporal es: <br> <b>OneSeguridata2021</b> Tu contraseña de Sign sigue siendo la misma.";
     const data = {
       email,
-      msg,
+      msg
     };
     axios({
       method: 'post',
       url: "https://us-central1-seguridata-in-a-box.cloudfunctions.net/sendWelcome",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded"
       },
-      data: stringify(data),
+      data: JSON.stringify(data)
     })
       .then((res) => resolve(`sended:${res.status}`))
       .catch((res) => reject(`error:${res}`));
