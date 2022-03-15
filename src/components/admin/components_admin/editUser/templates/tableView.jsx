@@ -44,7 +44,6 @@ const TableView = ({ data, docsNumber, form, soapController }) => {
             accessor: "document",
             Cell: (cellObj) => (
               <div>
-                {console.log(cellObj)}
                 <div
                   role="button"
                   className={classes.editButton}

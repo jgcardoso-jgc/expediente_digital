@@ -22,85 +22,12 @@ import ModalEdit from "../modal/modal";
 import docFunctions from "./getDocuments";
 import { v4 as uuidv4 } from "uuid";
 import Select from "react-select";
+import classes from "./editUser.module.scss";
 import { AiOutlineArrowRight } from "react-icons/ai";
 
 const globalTheme = createUseStyles(styles);
-const useStyles = createUseStyles(() => ({
-  container: {
-    backgroundColor: "#f5f5f5",
-    border: `1px solid #f1f1f1`,
-    borderRadius: 10,
-    padding: "24px 32px 0px 32px",
-    height: "100%",
-    maxWidth: 600,
-    display: "block",
-    marginBottom: 16,
-    marginLeft: "auto",
-    marginRight: "auto",
-    paddingBottom: 20,
-  },
-  inputStyle: {
-    width: "100%",
-    border: "0",
-    borderBottom: "1px solid rgb(194, 194, 194)",
-    fontSize: "16px",
-    background: "transparent",
-  },
-  containerPendiente: {
-    backgroundColor: "#f2bd85",
-    border: `1px solid #f5f5f5`,
-    borderRadius: 10,
-    padding: "24px 32px 0px 32px",
-    height: "100%",
-  },
-  center: {
-    textAlign: "center",
-  },
-  label: {
-    display: "flex",
-    marginRight: 8,
-  },
-  checkbox: {
-    marginRight: 8,
-  },
-  rowDocs: {
-    marginTop: "20px",
-  },
-  pointer: {
-    cursor: "pointer",
-  },
-  btDisabled: {
-    opacity: 0.5,
-  },
-  mt20: { marginTop: "20px" },
-  mb20: {
-    marginBottom: "20px",
-  },
-  col: {
-    maxWidth: "33.3333%",
-    minWidth: "33.3333%",
-    padding: 10,
-  },
-  max3: {
-    maxWidth: "33.3333%",
-    minWidth: "33.3333%",
-  },
-  plantillas: {
-    display: "block",
-  },
-  plantillasTitle: {
-    marginTop: 16,
-  },
-  "@media screen and (max-width:768px)": {
-    col: {
-      marginTop: "20px",
-      marginBottom: "20px",
-    },
-  },
-}));
 
 const EditUser = () => {
-  const classes = useStyles();
   const global = globalTheme();
   const history = useHistory();
   const location = useLocation();
@@ -465,9 +392,7 @@ const EditUser = () => {
             <Row>
               <Col>
                 <div className="formGroup">
-                  <label htmlFor="email" className="block pb10">
-                    Nombre del Documento
-                  </label>
+                  <label htmlFor="email">Nombre del Documento</label>
                   <input
                     type="email"
                     id="email"
