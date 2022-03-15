@@ -31,12 +31,6 @@ const Templates = () => {
     setNumberInputs(erasedArray);
   };
 
-  const [newDoc, setDoc] = useState({
-    name: '',
-    label: '',
-    items: [{ name: '', label: '' }]
-  });
-
   const location = useLocation();
   const locData = location.state;
   const userEmail = locData ? locData.email : '';
@@ -44,10 +38,6 @@ const Templates = () => {
   const soapController = new SoapController();
   const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState([]);
-
-  const upload = () => {
-    console.log(newDoc);
-  };
 
   const addInput = () => {
     setNumberInputs((prevState) =>
@@ -68,7 +58,7 @@ const Templates = () => {
       toast('No estás loggeado en Sign');
     }
     getDocuments();
-    setDoc((prevState) => ({ prevState, name: '' }));
+    // setDoc((prevState) => ({ prevState, name: '' }));
     setNumberInputs([createInput({ name: nanoid(), isFirst: true })]);
   }, []);
 
@@ -118,7 +108,7 @@ const Templates = () => {
           <button type="button" className={styles.addBt} onClick={addInput}>
             + Agregar Campo
           </button>
-          <button type="submit" className={styles.submitBt} onSubmit={upload}>
+          <button type="submit" className={styles.submitBt}>
             Subir Documento
           </button>
         </form>
