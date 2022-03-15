@@ -2,53 +2,53 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
-import React, { useState, useEffect } from "react";
-import { createUseStyles } from "react-jss";
-import { FaEdit } from "react-icons/fa";
-import { Row, Col } from "react-bootstrap";
-import { useFirebaseApp } from "reactfire";
-import styles from "../../../../resources/theme";
+import React, { useState, useEffect } from 'react';
+import { createUseStyles } from 'react-jss';
+import { FaEdit } from 'react-icons/fa';
+import { Row, Col } from 'react-bootstrap';
+import { useFirebaseApp } from 'reactfire';
+import styles from '../../../../resources/theme';
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   cardDashboard: {
-    background: "#f1f1f1",
-    borderRadius: "10px",
-    padding: "16px",
+    background: '#f1f1f1',
+    borderRadius: '10px',
+    padding: '16px'
   },
   min80: {
-    minWidth: "80%",
+    minWidth: '80%'
   },
   cambiarBt: {
-    border: "1px solid black",
-    background: "black",
-    color: "white",
+    border: '1px solid black',
+    background: 'black',
+    color: 'white',
     borderRadius: 4,
-    marginLeft: 20,
+    marginLeft: 20
   },
   container: {
-    maxWidth: "400px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "left",
-    paddingLeft: "20px",
-    paddingRight: "20px",
+    maxWidth: '400px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    textAlign: 'left',
+    paddingLeft: '20px',
+    paddingRight: '20px'
   },
   mb0: {
-    marginBottom: 0,
+    marginBottom: 0
   },
   ayudaText: {
-    textAlign: "center",
-    marginTop: 30,
+    textAlign: 'center',
+    marginTop: 30
   },
   linkMail: {
-    textAlign: "center",
+    textAlign: 'center'
   },
   editBt: {
-    border: "1px solid whitesmoke",
-    background: "whitesmoke",
+    border: '1px solid whitesmoke',
+    background: 'whitesmoke'
   },
-  mr: { marginRight: "auto" },
+  mr: { marginRight: 'auto' }
 }));
 
 const AjustesUser = () => {
@@ -56,8 +56,8 @@ const AjustesUser = () => {
   const classes = useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [newCurp, setCurp] = useState("");
+  const user = JSON.parse(localStorage.getItem('user'));
+  const [newCurp, setCurp] = useState('');
   const [hidden, setHidden] = useState(true);
   const [reload, setReload] = useState(false);
   const { uid } = firebase.auth().currentUser;
@@ -70,10 +70,10 @@ const AjustesUser = () => {
     setHidden((prev) => !prev);
   }
   function updateCURP() {
-    const collection = db.collection("users");
-    const query = collection.where("uid", "==", uid);
+    const collection = db.collection('users');
+    const query = collection.where('uid', '==', uid);
     query.get().then((querySnapshot) => {
-      let id = "";
+      let id = '';
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
           id = doc.id;
@@ -83,8 +83,8 @@ const AjustesUser = () => {
           .update({ curp: newCurp })
           .then(() => {
             user.curp = newCurp;
-            localStorage.setItem("user", JSON.stringify(user));
-            setCurp("");
+            localStorage.setItem('user', JSON.stringify(user));
+            setCurp('');
             setHidden((prev) => !prev);
             setReload((prev) => !prev);
           })
@@ -124,7 +124,7 @@ const AjustesUser = () => {
                 <p className={classes.mb0}>
                   <b>CURP</b>
                 </p>
-                <p>{curp != null ? curp : "Pendiente"}</p>
+                <p>{curp != null ? curp : 'Pendiente'}</p>
               </Col>
               <Col>
                 <button
@@ -161,7 +161,7 @@ const AjustesUser = () => {
         </div>
         <div className={classes.ayudaText}>¿Necesitas ayuda?</div>
         <div className={classes.linkMail}>
-          Envía un correo a{" "}
+          Envía un correo a{' '}
           <a href="admin@hotmail.com">
             <b>admin@hotmail.com</b>
           </a>

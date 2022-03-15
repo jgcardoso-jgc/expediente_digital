@@ -3,13 +3,13 @@ class FormController {
   apiUrl = "https://smtp.seguridata.com:5002/docs";
 
   header = {
-    "Content-Type": "application/json",
+    "Content-Type": "application/json"
   };
 
   async getDocumentList() {
     const requestOptions = {
       method: "GET",
-      headers: this.header,
+      headers: this.header
     };
     const response = await fetch(`${this.apiUrl}`, requestOptions);
 
@@ -30,7 +30,7 @@ class FormController {
     const requestOptions = {
       method: "POST",
       headers: this.header,
-      body: JSON.stringify(bodyList),
+      body: JSON.stringify(bodyList)
     };
     const response = await fetch(`${this.apiUrl}/${docType}`, requestOptions);
     console.log(docType);

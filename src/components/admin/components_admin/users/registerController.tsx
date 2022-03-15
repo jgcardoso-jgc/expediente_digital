@@ -23,7 +23,7 @@ function rfcValido(rfcPassed) {
 
 function passwordValida(pass): Boolean {
   const regexPass = new RegExp(
-    '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$',
+    '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$'
   );
   if (regexPass.test(pass)) {
     return true;
@@ -50,7 +50,7 @@ async function uploadData(user, firebaseHandle) {
       onboarding: false,
       cargo: '',
       docsAdmin: [],
-      documents: [],
+      documents: []
     };
 
     try {
@@ -84,5 +84,5 @@ const createUserExpediente = async (firebaseHandle, user) => {
 };
 
 export {
-  rfcValido, passwordValida, createUserExpediente,
+  rfcValido, passwordValida, createUserExpediente
 };

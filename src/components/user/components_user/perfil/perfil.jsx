@@ -1,69 +1,69 @@
 /* eslint-disable no-use-before-define */
 
 /* eslint-disable quotes */
-import React, { useEffect, useState } from "react";
-import { useFirebaseApp } from "reactfire";
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { createUseStyles } from "react-jss";
-import facematch from "../../../../assets/facematch.png";
-import onBoardingConfig from "../documents/onBoardingConfig";
-import styles from "../../../../resources/theme";
+import React, { useEffect, useState } from 'react';
+import { useFirebaseApp } from 'reactfire';
+import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { createUseStyles } from 'react-jss';
+import facematch from '../../../../assets/facematch.png';
+import onBoardingConfig from '../documents/onBoardingConfig';
+import styles from '../../../../resources/theme';
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
   center: {
-    textAlign: "center",
+    textAlign: 'center'
   },
   toMatch: {
-    display: "block",
-    marginRight: "auto",
-    marginBottom: 24,
+    display: 'block',
+    marginRight: 'auto',
+    marginBottom: 24
   },
   editLink: {
-    display: "block",
-    textAlign: "right",
+    display: 'block',
+    textAlign: 'right',
     paddingTop: 16,
-    fontSize: 14,
+    fontSize: 14
   },
   cardDashboard: {
-    background: "#f1f1f1",
-    borderRadius: "10px",
-    padding: "16px",
+    background: '#f1f1f1',
+    borderRadius: '10px',
+    padding: '16px'
   },
   container: {
-    maxWidth: "400px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "left",
+    maxWidth: '400px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    textAlign: 'left'
   },
   inputStyle: {
-    width: "100%",
-    border: "0",
-    borderBottom: "1px solid rgb(194, 194, 194)",
-    fontSize: "16px",
+    width: '100%',
+    border: '0',
+    borderBottom: '1px solid rgb(194, 194, 194)',
+    fontSize: '16px'
   },
   mt20: {
-    marginTop: 20,
+    marginTop: 20
   },
   cardTitle: {
     marginTop: 0,
     marginBottom: 0,
-    fontWeight: "bold",
+    fontWeight: 'bold'
   },
   textCard: {
-    marginBottom: 4,
+    marginBottom: 4
   },
   mb0: {
-    marginBottom: 0,
+    marginBottom: 0
   },
   img: {
-    borderRadius: 10,
+    borderRadius: 10
   },
   title: {
-    paddingBottom: 4,
-  },
+    paddingBottom: 4
+  }
 }));
 
 let incode = null;
@@ -77,8 +77,8 @@ const MyProfile = () => {
   const db = firebase.storage();
   const global = globalTheme();
   const classes = useStyles();
-  const [urlProfile, setUrlProfile] = useState("");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [urlProfile, setUrlProfile] = useState('');
+  const user = JSON.parse(localStorage.getItem('user'));
   const name = user.fullName;
   const { email } = user;
   const { rfc } = user;
@@ -88,38 +88,38 @@ const MyProfile = () => {
   const [reload, setReload] = useState(false);
   const [toFaceMatch, setFaceMatch] = useState(false);
   const metadata = {
-    contentType: "image/jpeg",
+    contentType: 'image/jpeg'
   };
 
   function exists(response) {
     setLoading(false);
     setUrlProfile(response);
-    localStorage.setItem("profilepic", response);
+    localStorage.setItem('profilepic', response);
   }
 
   function notExists() {
-    if (user.token === "") {
+    if (user.token === '') {
       setFaceMatch(true);
       return;
     }
-    const script = document.createElement("script");
-    script.src = "https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js";
+    const script = document.createElement('script');
+    script.src = 'https://sdk-js.s3.amazonaws.com/sdk/onBoarding-1.30.1.js';
     document.body.appendChild(script);
     script.onload = () => {
       start();
       incode
-        .createSession("ALL", null, {
-          configurationId: "60f0969272a9270015196d70",
+        .createSession('ALL', null, {
+          configurationId: '60f0969272a9270015196d70'
         })
         .then(async () => {
           try {
             const imgs = await incode.getImages({
               token: user.token,
-              body: { images: ["croppedFace"] },
+              body: { images: ['croppedFace'] }
             });
-            db.ref("users")
+            db.ref('users')
               .child(`/${user.email}/croppedFace`)
-              .putString(imgs.croppedFace, "base64", metadata)
+              .putString(imgs.croppedFace, 'base64', metadata)
               .then(() => {
                 setReload(true);
               });
@@ -131,7 +131,7 @@ const MyProfile = () => {
   }
 
   function getState() {
-    if (localStorage.getItem("profilepic") === null) {
+    if (localStorage.getItem('profilepic') === null) {
       const route = `users/${user.email}/croppedFace`;
       db.ref(route)
         .getDownloadURL()
@@ -142,7 +142,7 @@ const MyProfile = () => {
           notExists();
         });
     } else {
-      const url = localStorage.getItem("profilepic");
+      const url = localStorage.getItem('profilepic');
       exists(url);
     }
   }
@@ -159,7 +159,7 @@ const MyProfile = () => {
       <div className={classes.container}>
         {loading ? (
           <div className={classes.center}>
-            {" "}
+            {' '}
             {toFaceMatch ? (
               <div>
                 <p>Debes hacer Facematch para descargar tu información</p>
@@ -174,7 +174,7 @@ const MyProfile = () => {
                 <img src={facematch} alt="facematch" />
               </div>
             ) : (
-              "Cargando tu perfil..."
+              'Cargando tu perfil...'
             )}
           </div>
         ) : (
@@ -185,14 +185,14 @@ const MyProfile = () => {
                   <h5 className={classes.title}>
                     <b>{name}</b>
                   </h5>
-                  {urlProfile !== "" ? (
+                  {urlProfile !== '' ? (
                     <img
                       src={urlProfile}
                       className={classes.img}
                       alt="profile"
                     />
                   ) : (
-                    ""
+                    ''
                   )}
                 </div>
                 <div className="col">
@@ -206,7 +206,7 @@ const MyProfile = () => {
                   <p className={classes.textCard}>{rfc}</p>
                   <p className={classes.cardTitle}>CURP</p>
                   <p className={classes.textCard}>
-                    {curp != null ? curp : "Pendiente"}
+                    {curp != null ? curp : 'Pendiente'}
                   </p>
                 </div>
               </div>

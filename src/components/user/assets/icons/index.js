@@ -34,5 +34,5 @@ export {
   IconSearch,
   IconSettings,
   IconSubscription,
-  IconTickets,
+  IconTickets
 };

@@ -15,10 +15,10 @@ const useStyles = createUseStyles(() => ({
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
     boxShadow: "0px 8px 15px 3px #D1D1D1",
     padding: "24px 32px 0px 32px",
-    height: "100%",
+    height: "100%"
   },
   containerMobile: {
-    padding: "12px 16px 6px 16px !important",
+    padding: "12px 16px 6px 16px !important"
   },
   itemContainer: {
     marginLeft: -32,
@@ -29,26 +29,26 @@ const useStyles = createUseStyles(() => ({
     paddingTop: 18,
     borderBottom: "1px solid #DFE0EB",
     "&:last-child": {
-      borderBottom: "none",
-    },
+      borderBottom: "none"
+    }
   },
   itemContainerMobile: {
     marginLeft: -16,
     marginRight: -16,
     paddingLeft: 16,
-    paddingRight: 16,
+    paddingRight: 16
   },
   link: {},
   subtitle: {
-    color: "#9fa2b4",
+    color: "#9fa2b4"
   },
   subtitle2: {
     color: "#373a47",
-    marginLeft: 2,
+    marginLeft: 2
   },
   title: {
-    color: "#373a47",
-  },
+    color: "#373a47"
+  }
 }));
 
 function CardComponent(props) {

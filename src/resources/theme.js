@@ -12,7 +12,7 @@ const styles = {
     paddingBottom: "10px",
     marginRight: "auto",
     fontSize: "15px",
-    borderRadius: "10px",
+    borderRadius: "10px"
   },
   initBtDisabled: {
     backgroundColor: "rgb(75, 75, 75)",
@@ -26,11 +26,11 @@ const styles = {
     marginTop: "20px",
     paddingBottom: "10px",
     fontSize: "15px",
-    borderRadius: "10px",
+    borderRadius: "10px"
   },
   center: {
-    textAlign: "center",
-  },
+    textAlign: "center"
+  }
 };
 
 export default styles;

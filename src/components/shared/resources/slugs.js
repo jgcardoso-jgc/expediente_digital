@@ -9,5 +9,5 @@ export default {
   sign: "/segurisign",
   alertas: "/alertas",
   perfil: "/perfil",
-  documentos: "/documentos",
+  documentos: "/documentos"
 };

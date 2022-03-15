@@ -82,7 +82,7 @@ const CancelPopup = ({ seguriSignController, toaster, multilateralId }) => {
 CancelPopup.propTypes = {
   seguriSignController: PropTypes.any.isRequired,
   toaster: PropTypes.any.isRequired,
-  multilateralId: PropTypes.any.isRequired,
+  multilateralId: PropTypes.any.isRequired
 };
 
 export default CancelPopup;

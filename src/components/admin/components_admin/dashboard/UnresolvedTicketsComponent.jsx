@@ -7,11 +7,11 @@ import CardComponent from "../../../shared/cards/CardComponent";
 
 const useStyles = createUseStyles(() => ({
   itemTitle: {
-    color: "#373a47",
+    color: "#373a47"
   },
   itemValue: {
-    color: "#9fa2b4",
-  },
+    color: "#9fa2b4"
+  }
 }));
 
 function UnresolvedTicketsComponent({ containerStyles }) {
@@ -40,7 +40,7 @@ function UnresolvedTicketsComponent({ containerStyles }) {
         renderStat("Waiting on Feature Request", 4238),
         renderStat("Awaiting Customer Response", 1005),
         renderStat("Awaiting Developer Fix", 914),
-        renderStat("Pending", 281),
+        renderStat("Pending", 281)
       ]}
     />
   );

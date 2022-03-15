@@ -23,7 +23,7 @@ function checkUser(uid, db) {
                 curp: data.curp,
                 onboarding: data.onboarding,
                 cargo,
-                token: "",
+                token: ""
               };
               localStorage.setItem("user", JSON.stringify(userData));
               resolve("user");

@@ -16,8 +16,8 @@ const settings = {
       marginLeft: "auto",
       marginRight: "auto",
       display: "block",
-      marginTop: "20px",
-    },
+      marginTop: "20px"
+    }
   },
   translations: {
     tutorial: {
@@ -30,9 +30,9 @@ const settings = {
       selfie2: "Keep a neutral expression, find balanced",
       selfie3: "light and remove any glasses and hats",
       passport1: "Align your passport to the frame and take a photo",
-      passport2: "Position just the page with the photo",
-    },
-  },
+      passport2: "Position just the page with the photo"
+    }
+  }
 };
 
 export default settings;

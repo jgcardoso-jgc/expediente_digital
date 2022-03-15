@@ -5,16 +5,16 @@ import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 
 const useStyles = createUseStyles(() => ({
   mainDiv: {
-    marginTop: 80,
+    marginTop: 80
   },
   center: {
-    textAlign: "center",
+    textAlign: "center"
   },
   container: {
     maxWidth: 600,
     marginLeft: "auto",
-    marginRight: "auto",
-  },
+    marginRight: "auto"
+  }
 }));
 
 const TerminosView = () => {

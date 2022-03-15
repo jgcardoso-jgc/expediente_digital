@@ -15,7 +15,7 @@ const HelloInitSign = ({ toaster, setFaceMatched }) => {
 
   HelloInitSign.propTypes = {
     setFaceMatched: PropTypes.func.isRequired,
-    toaster: PropTypes.instanceOf(CustomToasts).isRequired,
+    toaster: PropTypes.instanceOf(CustomToasts).isRequired
   };
   useEffect(() => {
     const script = document.createElement("script");
@@ -26,7 +26,7 @@ const HelloInitSign = ({ toaster, setFaceMatched }) => {
       helloRef.current = Hello.create({
         apiKey,
         apiURL,
-        language: "es",
+        language: "es"
       });
       const instance = helloRef.current;
       instance.renderLogin(containerRef.current, {
@@ -45,7 +45,7 @@ const HelloInitSign = ({ toaster, setFaceMatched }) => {
         },
         onError: () => {
           setFaceMatched(false);
-        },
+        }
       });
     };
   });

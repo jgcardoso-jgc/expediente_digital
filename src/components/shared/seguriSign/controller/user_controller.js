@@ -4,19 +4,23 @@
 
 /* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
-import { auth, db, functions } from "./firebase_controller";
+import { auth, db, functions } from './firebase_controller';
 
 class UserController {
   constructor(email) {
     this.email = email;
   }
 
-  userCollection = db.collection("users");
+  userCollection = db.collection('users');
 
-  signDocCollection = db.collection("sign-docs");
+  signDocCollection = db.collection('sign-docs');
 
-  addNewDocToFirebase = async (emailList, document, requiresFaceMatch) => {
-    const docRef = db.collection("sign-docs").doc();
+  static addNewDocToFirebase = async (
+    emailList,
+    document,
+    requiresFaceMatch
+  ) => {
+    const docRef = db.collection('sign-docs').doc();
     const body = {
       multilateralId: document.multilateralId,
       fileName: document.fileName,
@@ -24,8 +28,8 @@ class UserController {
       numeroFirmas: emailList.length,
       docType: document.docType,
       usuarios: emailList,
-      requiresFaceMatch: requiresFaceMatch === "on",
-      status: "PENDIENTE",
+      requiresFaceMatch: requiresFaceMatch === 'on',
+      status: 'PENDIENTE'
     };
     docRef
       .set(body)
@@ -35,17 +39,17 @@ class UserController {
 
   async getSignDocData(multilateralId) {
     const snapshot = await this.signDocCollection
-      .where("multilateralId", "==", multilateralId)
+      .where('multilateralId', '==', multilateralId)
       .get();
     if (snapshot.size > 0) {
       return snapshot.docs[0].data();
     }
-    return "404";
+    return '404';
   }
 
   async compareCustomerId(customerId) {
     const { uid } = auth.currentUser;
-    const snapshot = await this.userCollection.where("uid", "==", uid).get();
+    const snapshot = await this.userCollection.where('uid', '==', uid).get();
     if (snapshot.size > 0) {
       const data = snapshot.docs[0].data();
       return data.customerId === customerId;
@@ -56,16 +60,16 @@ class UserController {
   static async addNewDocAlert(users, multilateralID) {
     users.forEach(async (user) => {
       await db
-        .collection("users")
-        .where("uid", "==", user.uid)
+        .collection('users')
+        .where('uid', '==', user.uid)
         .get()
         .then((snapshot) => {
           snapshot.forEach(async (doc) => {
             await doc.ref
-              .collection("por-firmar")
+              .collection('por-firmar')
               .doc(multilateralID.toString())
               .set({
-                multilateralID,
+                multilateralID
               });
           });
         })
@@ -76,9 +80,9 @@ class UserController {
   async getUserDocs(status) {
     return new Promise((resolve, reject) => {
       const docs = [];
-      db.collection("sign-docs")
-        .where("usuarios", "array-contains", this.email)
-        .where("status", "==", status)
+      db.collection('sign-docs')
+        .where('usuarios', 'array-contains', this.email)
+        .where('status', '==', status)
         .get()
         .then((snapshot) => {
           snapshot.forEach((doc) => {
@@ -93,20 +97,20 @@ class UserController {
 
   async updateDocSigned(multilateralId, location) {
     const snapshot = await this.signDocCollection
-      .where("multilateralId", "==", multilateralId)
+      .where('multilateralId', '==', multilateralId)
       .get();
     if (snapshot.size > 0) {
       const { uid } = auth.currentUser;
       const doc = snapshot.docs[0];
       const docData = doc.data();
-      const time = new Date().toLocaleString("es").split(" ");
+      const time = new Date().toLocaleString('es').split(' ');
 
       docData.firmados.push(uid);
       // eslint-disable-next-line operator-linebreak
       docData.status =
         docData.firmados.length === docData.numeroFirmas
-          ? "CONCLUIDO"
-          : "PENDIENTE";
+          ? 'CONCLUIDO'
+          : 'PENDIENTE';
       docData.usuarios.forEach((u) => {
         if (u.uid === uid) {
           u.firmo = true;
@@ -115,9 +119,9 @@ class UserController {
             horaFirma: time[1],
             ubicacion: {
               lat: location.lat,
-              long: location.long,
+              long: location.long
             },
-            agente: navigator.userAgent,
+            agente: navigator.userAgent
           };
         }
       });
@@ -128,12 +132,12 @@ class UserController {
 
   async updateDocCancelled(multilateralId) {
     const snapshot = await this.signDocCollection
-      .where("multilateralId", "==", multilateralId)
+      .where('multilateralId', '==', multilateralId)
       .get();
     if (snapshot.size > 0) {
       const doc = snapshot.docs[0];
       const docData = doc.data();
-      docData.status = "CANCELADO";
+      docData.status = 'CANCELADO';
       await doc.ref.update(docData);
     }
   }

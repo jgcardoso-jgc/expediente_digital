@@ -14,18 +14,18 @@ const useStyles = createUseStyles(() => ({
     width: "100%",
     border: "0",
     borderBottom: "1px solid rgb(194, 194, 194)",
-    fontSize: "16px",
+    fontSize: "16px"
   },
   title: {
     textAlign: "left",
-    marginTop: 40,
+    marginTop: 40
   },
   correoTxt: {
-    textAlign: "left",
+    textAlign: "left"
   },
   link: {
     textAlign: "right",
-    marginTop: 10,
+    marginTop: 10
   },
   container: {
     maxWidth: "400px",
@@ -34,8 +34,8 @@ const useStyles = createUseStyles(() => ({
     textAlign: "left",
     paddingLeft: "20px",
     paddingRight: "20px",
-    marginTop: 100,
-  },
+    marginTop: 100
+  }
 }));
 
 const RecoverPassword = () => {

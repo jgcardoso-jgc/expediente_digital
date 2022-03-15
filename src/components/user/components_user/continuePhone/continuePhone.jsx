@@ -11,7 +11,7 @@ const useStyles = createUseStyles(() => ({
   textContainer: {
     maxWidth: "400px",
     marginLeft: "auto",
-    marginRight: "auto",
+    marginRight: "auto"
   },
   inicioBt: {
     border: "1px solid black",
@@ -24,7 +24,7 @@ const useStyles = createUseStyles(() => ({
     display: "block",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: "30px",
+    marginTop: "30px"
   },
   card: {
     maxWidth: "550px",
@@ -32,9 +32,9 @@ const useStyles = createUseStyles(() => ({
     boxShadow: "0px 8px 22px 9px #c7c7c7",
     marginLeft: "auto",
     marginRight: "auto",
-    borderRadius: "20px",
+    borderRadius: "20px"
   },
-  qrStyle: { width: "100%", borderRadius: "40px" },
+  qrStyle: { width: "100%", borderRadius: "40px" }
 }));
 
 function ContinuePhone() {

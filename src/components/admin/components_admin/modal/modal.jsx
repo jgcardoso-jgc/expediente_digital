@@ -9,13 +9,13 @@ import { useFirebaseApp } from "reactfire";
 const useStyles = createUseStyles({
   aprobarBt: {
     background: "green",
-    border: 0,
+    border: 0
   },
   rechazarBt: {
     background: "red",
     marginLeft: "10px",
-    border: 0,
-  },
+    border: 0
+  }
 });
 
 const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {

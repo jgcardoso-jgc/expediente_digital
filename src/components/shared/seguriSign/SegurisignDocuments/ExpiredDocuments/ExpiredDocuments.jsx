@@ -62,7 +62,7 @@ const ExpiredDocuments = (props) => {
 
 ExpiredDocuments.propTypes = {
   expiredDoc: PropTypes.any.isRequired,
-  seguriSignController: PropTypes.any.isRequired,
+  seguriSignController: PropTypes.any.isRequired
 };
 
 export default ExpiredDocuments;

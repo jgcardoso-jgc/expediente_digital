@@ -1,45 +1,45 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
-import React from "react";
-import { createUseStyles, useTheme } from "react-jss";
-import { Column } from "simple-flexbox";
+import React from 'react';
+import { createUseStyles, useTheme } from 'react-jss';
+import { Column } from 'simple-flexbox';
 
 const useStyles = createUseStyles({
-  "@keyframes loadingSpin": {
-    from: { transform: "rotate(0deg)" },
-    to: { transform: "rotate(360deg)" },
+  '@keyframes loadingSpin': {
+    from: { transform: 'rotate(0deg)' },
+    to: { transform: 'rotate(360deg)' }
   },
   container: {
     backgroundColor: ({ noTransparency, backgroundColor }) => {
       if (backgroundColor) {
         return noTransparency ? backgroundColor : `${backgroundColor}A0`;
       }
-      return noTransparency ? "#373a47" : "#373a47";
+      return noTransparency ? '#373a47' : '#373a47';
     },
-    height: "100%",
-    minHeight: ({ fullScreen }) => (fullScreen ? "100vh" : "100%"),
-    width: ({ fullScreen }) => (fullScreen ? "100vw" : "100%"),
-    position: ({ fullScreen }) => (fullScreen ? "fixed" : "relative"),
+    height: '100%',
+    minHeight: ({ fullScreen }) => (fullScreen ? '100vh' : '100%'),
+    width: ({ fullScreen }) => (fullScreen ? '100vw' : '100%'),
+    position: ({ fullScreen }) => (fullScreen ? 'fixed' : 'relative'),
     top: 0,
     left: 0,
-    zIndex: ({ zIndex }) => zIndex,
+    zIndex: ({ zIndex }) => zIndex
   },
   loading: {
-    border: "16px solid #F7F8FC",
-    borderRadius: "50%",
-    borderTop: "16px solid #3498db",
+    border: '16px solid #F7F8FC',
+    borderRadius: '50%',
+    borderTop: '16px solid #3498db',
     width: 120,
     height: 120,
-    animationName: "$loadingSpin",
-    animationTimingFunction: "linear",
-    animationDuration: "2s",
-    animationIterationCount: "infinite",
+    animationName: '$loadingSpin',
+    animationTimingFunction: 'linear',
+    animationDuration: '2s',
+    animationIterationCount: 'infinite'
   },
   loadingSpan: {
-    color: "white",
+    color: 'white',
     marginTop: 10,
-    fontSize: 18,
-  },
+    fontSize: 18
+  }
 });
 
 function LoadingComponent({
@@ -51,7 +51,7 @@ function LoadingComponent({
   loading,
   noTransparency,
   width,
-  zIndex,
+  zIndex
 }) {
   const theme = useTheme();
   const classes = useStyles({
@@ -59,10 +59,10 @@ function LoadingComponent({
     fullScreen,
     noTransparency,
     backgroundColor,
-    zIndex,
+    zIndex
   });
   return (
-    <div style={{ position: "relative", height, width }}>
+    <div style={{ position: 'relative', height, width }}>
       {loading && (
         <Column
           className={classes.container}
@@ -80,7 +80,7 @@ function LoadingComponent({
 
 LoadingComponent.defaultProps = {
   fullScreen: true,
-  zIndex: 10,
+  zIndex: 10
 };
 
 export default LoadingComponent;

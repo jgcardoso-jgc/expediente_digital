@@ -62,7 +62,7 @@ const CancelledThirdsDocuments = (props) => {
 
 CancelledThirdsDocuments.propTypes = {
   cancelledByThirds: PropTypes.any.isRequired,
-  seguriSignController: PropTypes.any.isRequired,
+  seguriSignController: PropTypes.any.isRequired
 };
 
 export default CancelledThirdsDocuments;

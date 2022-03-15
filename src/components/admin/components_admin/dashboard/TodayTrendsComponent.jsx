@@ -17,46 +17,46 @@ const useStyles = createUseStyles(() => ({
     borderRadius: 4,
     cursor: "pointer",
     WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    boxShadow: "0px 8px 15px 3px #D1D1D1"
   },
   graphContainer: {
     marginTop: 24,
     marginLeft: 0,
     marginRight: 0,
-    width: "100%",
+    width: "100%"
   },
   graphSection: {
-    padding: 24,
+    padding: 24
   },
   graphSubtitle: {
     color: "#9fa2b4",
     marginTop: 4,
-    marginRight: 8,
+    marginRight: 8
   },
   graphTitle: {
-    color: "#373a47",
+    color: "#373a47"
   },
   legendTitle: {
     fontWeight: "600",
     color: "#9fa2b4",
-    marginLeft: 8,
+    marginLeft: 8
   },
   separator: {
     backgroundColor: "#DFE0EB",
     width: 1,
-    minWidth: 1,
+    minWidth: 1
   },
   statContainer: {
     borderBottom: "1px solid #9fa2b4",
     padding: "24px 32px 24px 32px",
     height: "calc(114px - 48px)",
     "&:last-child": {
-      border: "none",
-    },
+      border: "none"
+    }
   },
   stats: {
     borderTop: "1px solid #DFE0EB",
-    width: "100%",
+    width: "100%"
   },
   statTitle: {
     fontWeight: "600",
@@ -66,12 +66,12 @@ const useStyles = createUseStyles(() => ({
     textAlign: "center",
     color: "#9fa2b4",
     whiteSpace: "nowrap",
-    marginBottom: 6,
+    marginBottom: 6
   },
   statValue: {
     textAlign: "center",
-    color: "black",
-  },
+    color: "black"
+  }
 }));
 
 function TodayTrendsComponent() {
@@ -114,7 +114,7 @@ function TodayTrendsComponent() {
         flexBasis="735px"
         className={classes.graphSection}
         breakpoints={{
-          1024: { width: "calc(100% - 48px)", flexBasis: "auto" },
+          1024: { width: "calc(100% - 48px)", flexBasis: "auto" }
         }}
       >
         <Row wrap horizontal="space-between">

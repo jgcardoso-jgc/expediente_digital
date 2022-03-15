@@ -4,7 +4,7 @@ import { useFirebaseApp } from "reactfire";
 
 const VerificationSended = () => {
   const actionCodeSettings = {
-    url: "https://expediente-digital.vercel.app/",
+    url: "https://expediente-digital.vercel.app/"
   };
   const firebase = useFirebaseApp();
   const auth = firebase.auth();

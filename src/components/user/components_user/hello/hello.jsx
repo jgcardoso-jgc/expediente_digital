@@ -11,8 +11,8 @@ const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles({
   mrAuto: {
-    marginRight: "auto",
-  },
+    marginRight: "auto"
+  }
 });
 
 function HelloInit() {
@@ -28,7 +28,7 @@ function HelloInit() {
     helloRef.current = Hello.create({
       apiKey,
       apiURL,
-      language: "es",
+      language: "es"
     });
     const instance = helloRef.current;
     instance.renderLogin(containerRef.current, {
@@ -40,7 +40,7 @@ function HelloInit() {
       },
       onError: () => {
         history.push({ pathname: "/toOnboarding", state: { reload: true } });
-      },
+      }
     });
   }
 
