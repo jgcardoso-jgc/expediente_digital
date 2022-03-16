@@ -23,6 +23,7 @@ const Templates = () => {
   const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState([]);
   const [docName, setDocName] = useState('');
+  const [errors, setErrors] = useState([]);
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
     hasSelected: false
@@ -65,26 +66,65 @@ const Templates = () => {
       reader.onerror = (error) => reject(error);
     });
 
+  const checkErrors = () => {
+    setErrors([]);
+    const thisErrors = [];
+    if (docName.length < 4) {
+      thisErrors.push(
+        'El nombre de el documento debe tener 4 carácteres como mínimo'
+      );
+    }
+    if (selectedFile.selectedFile == null) {
+      thisErrors.push('No has elegido archivo.');
+    }
+
+    let errorFlag1 = false;
+    let errorFlag2 = false;
+
+    const prevInputs = [...numberInputs];
+    prevInputs.forEach((nu) => {
+      if (nu.value.length < 4) {
+        if (!errorFlag1) {
+          thisErrors.push('Los campos deben tener 4 carácteres como mínimo');
+          errorFlag1 = true;
+        }
+      }
+      if (nu.value.length === 0) {
+        if (!errorFlag2) {
+          thisErrors.push('No puede haber campos vacíos');
+          errorFlag2 = true;
+        }
+      }
+    });
+
+    if (thisErrors.length > 0) {
+      setErrors(thisErrors);
+      return true;
+    }
+    return false;
+  };
+
   const upload = async (e) => {
     e.preventDefault();
+    if (!checkErrors()) {
+      const prev = [...numberInputs];
+      const inputs = prev.map((p) => p.value);
+      const items = inputs.map((i) => ({
+        name: removeWhitespace(i),
+        label: i,
+        type: 'text'
+      }));
 
-    const prev = [...numberInputs];
-    const inputs = prev.map((p) => p.value);
-    const items = inputs.map((i) => ({
-      name: removeWhitespace(i),
-      label: i,
-      type: 'text'
-    }));
+      const base64File = await toBase64(selectedFile.selectedFile);
+      const jsonUpload = {
+        name: removeWhitespace(docName),
+        label: docName,
+        file: base64File,
+        items: [items]
+      };
 
-    const base64File = await toBase64(selectedFile.selectedFile);
-    const jsonUpload = {
-      name: removeWhitespace(docName),
-      label: docName,
-      file: base64File,
-      items: [items]
-    };
-
-    console.log(jsonUpload);
+      console.log(jsonUpload);
+    }
   };
 
   const handleNameChange = (e) => {
@@ -162,13 +202,15 @@ const Templates = () => {
                       onChange={(e) => handleInputChange(e, item.name)}
                       placeholder="Ingresa el nombre de el campo"
                     />
-                    <button
-                      type="button"
-                      className={styles.delButton}
-                      onClick={() => eraseInput({ name: item.name })}
-                    >
-                      <AiFillDelete />
-                    </button>
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        className={styles.delButton}
+                        onClick={() => eraseInput({ name: item.name })}
+                      >
+                        <AiFillDelete />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))
@@ -179,6 +221,15 @@ const Templates = () => {
           <button type="submit" className={styles.submitBt}>
             Subir Documento
           </button>
+          {errors.length > 0 ? (
+            <div className={styles.errorsDiv}>
+              {errors.map((er) => (
+                <p className={styles.errorMsg}>{er}</p>
+              ))}
+            </div>
+          ) : (
+            ''
+          )}
         </form>
       </div>
     </div>
