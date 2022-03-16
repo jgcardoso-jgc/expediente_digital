@@ -179,6 +179,7 @@ const TableView = ({
                   seguriSignController={controller}
                   long={long}
                   lat={lat}
+                  doctType={cellObj.data.docType}
                   requiresFaceMatch={cellObj.data.requiresFaceMatch}
                   key={cellObj.data.multilateralId}
                   multilateralId={cellObj.data.multilateralId}

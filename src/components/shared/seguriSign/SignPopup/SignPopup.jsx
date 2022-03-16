@@ -67,6 +67,7 @@ const SignPopUP = (props) => {
   const { lat } = props;
   const { long } = props;
   const { toaster } = props;
+  const { docType } = props;
   const { requiresFaceMatch } = props;
   const userController = new UserController(
     seguriSignController.segurisignUser.email
@@ -98,6 +99,7 @@ const SignPopUP = (props) => {
       passwordRef.current.value
     );
     if (signedSuccessfully) {
+      
       console.log(signedSuccessfully);
     } else {
       console.log("Error al firmar");
@@ -388,6 +390,7 @@ SignPopUP.propTypes = {
   long: PropTypes.any.isRequired,
   requiresFaceMatch: PropTypes.any.isRequired,
   multilateralId: PropTypes.any.isRequired,
+  docType: PropTypes.String.isRequired,
   toaster: PropTypes.any.isRequired,
 };
 export default SignPopUP;
