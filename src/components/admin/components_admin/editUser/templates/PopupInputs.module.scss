@@ -1,7 +1,13 @@
 .popup {
-  min-width: calc(100vh - 80px);
+  min-width: 300px;
   max-height: calc(100vh - 180px);
+  padding-top: 24px;
   overflow: auto;
+}
+
+.label {
+  margin-bottom: 8px;
+  margin-top: 16px;
 }
 
 .bt {
