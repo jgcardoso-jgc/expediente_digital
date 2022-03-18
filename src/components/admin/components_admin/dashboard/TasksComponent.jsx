@@ -12,16 +12,16 @@ const useStyles = createUseStyles(() => ({
     backgroundColor: "#F7F8FC",
     color: "#9fa2b4",
     fontSize: "20px !important",
-    padding: "7px !important",
+    padding: "7px !important"
   },
   itemTitle: {
-    color: "#373a47",
+    color: "#373a47"
   },
   itemValue: {
-    color: "#9fa2b4",
+    color: "#9fa2b4"
   },
   greyTitle: {
-    color: "#bdc3c7",
+    color: "#bdc3c7"
   },
   tagStyles: {
     borderRadius: 5,
@@ -30,18 +30,18 @@ const useStyles = createUseStyles(() => ({
     fontSize: 11,
     letterSpacing: "0.5px",
     lineHeight: "14px",
-    padding: "5px 12px 5px 12px",
+    padding: "5px 12px 5px 12px"
   },
   checkboxWrapper: {
     cursor: "pointer",
-    marginRight: 16,
-  },
+    marginRight: 16
+  }
 }));
 
 const TAGS = {
   URGENT: { text: "URGENT", backgroundColor: "#FEC400", color: "#FFFFFF" },
   NEW: { text: "NEW", backgroundColor: "#29CC97", color: "#FFFFFF" },
-  DEFAULT: { text: "DEFAULT", backgroundColor: "#F0F1F7", color: "#9FA2B4" },
+  DEFAULT: { text: "DEFAULT", backgroundColor: "#F0F1F7", color: "#9FA2B4" }
 };
 
 function TasksComponent(props) {
@@ -52,9 +52,9 @@ function TasksComponent(props) {
     {
       title: "Create new ticket example",
       checked: false,
-      tag: TAGS.NEW,
+      tag: TAGS.NEW
     },
-    { title: "Update ticket report", checked: true, tag: TAGS.DEFAULT },
+    { title: "Update ticket report", checked: true, tag: TAGS.DEFAULT }
   ]);
 
   function onCheckboxClick(index) {
@@ -84,7 +84,7 @@ function TasksComponent(props) {
       newItems.push({
         title: `Task ${newItems.length + 1}`,
         checked: false,
-        tag: getNextTag(),
+        tag: getNextTag()
       });
       return newItems;
     });
@@ -124,7 +124,7 @@ function TasksComponent(props) {
             onCheckboxClick={onCheckboxClick}
             onTagClick={onTagClick}
           />
-        )),
+        ))
       ]}
     />
   );
@@ -135,7 +135,7 @@ function TaskComponent({
   index,
   item = {},
   onCheckboxClick,
-  onTagClick,
+  onTagClick
 }) {
   const { tag = {} } = item;
   return (
@@ -170,7 +170,7 @@ function TagComponent({
   color,
   index,
   onClick,
-  text,
+  text
 }) {
   return (
     <Row

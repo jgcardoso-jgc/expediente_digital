@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useRef, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -12,8 +11,8 @@ const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles({
   mrAuto: {
-    marginRight: "auto",
-  },
+    marginRight: "auto"
+  }
 });
 
 function HelloInit() {
@@ -29,21 +28,19 @@ function HelloInit() {
     helloRef.current = Hello.create({
       apiKey,
       apiURL,
-      language: "es",
+      language: "es"
     });
     const instance = helloRef.current;
     instance.renderLogin(containerRef.current, {
       onSuccess: (r) => {
-        console.log("onSuccess", r);
         const saved = JSON.parse(localStorage.getItem("user"));
         saved.token = r.token;
         localStorage.setItem("user", JSON.stringify(saved));
         history.push("/documentos");
       },
-      onError: (r) => {
-        console.log("on error", r);
+      onError: () => {
         history.push({ pathname: "/toOnboarding", state: { reload: true } });
-      },
+      }
     });
   }
 
@@ -75,24 +72,3 @@ function HelloInit() {
 }
 
 export default HelloInit;
-
-/*
-function RenderLogin({ onSuccess, onError }) {
-  const containerRef = useRef();
-
-  useEffect(() => {
-    incode.renderLogin(containerRef.current, {
-      // token: session,
-      onSuccess,
-      onError,
-    });
-  }, [onSuccess, onError]);
-
-  return <div ref={containerRef} />;
-}
-
-      <RenderLogin
-        session={session}
-        onSuccess={goNext}
-        onError={(e) => console.log(e)}
-      /> */

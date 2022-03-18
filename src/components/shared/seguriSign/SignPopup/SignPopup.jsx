@@ -3,7 +3,7 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 import React, { useRef, useState } from "react";
 import Popup from "reactjs-popup";
@@ -24,9 +24,9 @@ import SoapController from "../controller/soap_controller";
 const useStyles = createUseStyles(() => ({
   border: { border: "3px solid black", marginBottom: 14 },
   firmarBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
-    border: "1px solid black",
+    backgroundColor: "#cccccc",
+    color: "black",
+    border: "0px solid black",
     display: "block",
     marginLeft: "auto",
     marginRight: 0,
@@ -58,17 +58,17 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-const SignPopUP = (props) => {
+const SignPopUP = ({
+  seguriSignController,
+  multilateralId,
+  requiresFaceMatch,
+  lat,
+  long,
+  toaster,
+}) => {
   const sigCanvas = useRef({});
   const passwordRef = useRef("");
-  const { seguriSignController } = props;
   const classes = useStyles();
-  const { multilateralId } = props;
-  const { lat } = props;
-  const { long } = props;
-  const { toaster } = props;
-  const { docType } = props;
-  const { requiresFaceMatch } = props;
   const userController = new UserController(
     seguriSignController.segurisignUser.email
   );
@@ -86,9 +86,9 @@ const SignPopUP = (props) => {
       long
     );
     if (signedSuccessfully) {
-      console.log(signedSuccessfully);
+      // console.log(signedSuccessfully);
     } else {
-      console.log("Error al firmar");
+      // console.log("Error al firmar");
     }
     return signedSuccessfully;
   };
@@ -99,10 +99,9 @@ const SignPopUP = (props) => {
       passwordRef.current.value
     );
     if (signedSuccessfully) {
-      
-      console.log(signedSuccessfully);
+      // console.log(signedSuccessfully);
     } else {
-      console.log("Error al firmar");
+      // console.log("Error al firmar");
     }
     return signedSuccessfully;
   };
@@ -158,7 +157,7 @@ const SignPopUP = (props) => {
                       </Button>
                       <Button
                         variant="outline-dark"
-                        style={{ "margin-left": "2rem" }}
+                        style={{ marginLeft: "2rem" }}
                         onClick={clear}
                       >
                         Borrar
@@ -171,14 +170,12 @@ const SignPopUP = (props) => {
                           const status = await sign();
                           if (status) {
                             await userController.updateDocSigned(
-                              props.multilateralId,
-                              { lat: props.lat, long: props.long }
+                              multilateralId,
+                              { lat, long }
                             );
                             toaster.successToast("Documento firmado con éxito");
                           } else {
-                            props.toaster.errorToast(
-                              "Error al firmar documento"
-                            );
+                            toaster.errorToast("Error al firmar documento");
                           }
                           setLoading(false);
                           close();
@@ -254,14 +251,12 @@ const SignPopUP = (props) => {
                           const status = await signPkcs7();
                           if (status) {
                             await userController.updateDocSigned(
-                              props.multilateralId,
-                              { lat: props.lat, long: props.long }
+                              multilateralId,
+                              { lat, long }
                             );
                             toaster.successToast("Documento firmado con éxito");
                           } else {
-                            props.toaster.errorToast(
-                              "Error al firmar documento"
-                            );
+                            toaster.errorToast("Error al firmar documento");
                           }
                           setLoading(false);
                           close();
@@ -355,7 +350,7 @@ const SignPopUP = (props) => {
             style={{ width: "100%" }}
             className={classes.firmarBt}
           >
-            Firmar
+            <FaPencilAlt />
           </button>
         }
       >
@@ -366,7 +361,7 @@ const SignPopUP = (props) => {
                 <Card.Title>Firmar documento</Card.Title>
                 <div>
                   <HelloInitSign
-                    toaster={props.toaster}
+                    toaster={toaster}
                     setFaceMatched={setFaceMatched}
                   />
                 </div>
@@ -390,7 +385,6 @@ SignPopUP.propTypes = {
   long: PropTypes.any.isRequired,
   requiresFaceMatch: PropTypes.any.isRequired,
   multilateralId: PropTypes.any.isRequired,
-  docType: PropTypes.String.isRequired,
   toaster: PropTypes.any.isRequired,
 };
 export default SignPopUP;

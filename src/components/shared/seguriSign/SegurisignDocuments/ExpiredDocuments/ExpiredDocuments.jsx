@@ -3,7 +3,7 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
-import { Accordion } from "react-bootstrap";
+import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
 import PropTypes from "prop-types";
 
@@ -17,7 +17,12 @@ const ExpiredDocuments = (props) => {
 
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
-      <Accordion.Header>Expirados</Accordion.Header>
+      <Accordion.Header>
+        <Badge style={{ marginRight: 16 }} pill bg="dark">
+          {expiredDoc.length}
+        </Badge>
+        Expirados
+      </Accordion.Header>
       <Accordion.Body bsPrefix="seguridata-btn">
         <Accordion flush>
           {expiredDoc.map((item, index) => (
@@ -25,7 +30,7 @@ const ExpiredDocuments = (props) => {
               <Accordion.Header>{item.fileName}</Accordion.Header>
               <Accordion.Body>
                 <div align="center">
-                  <div style={{ "margin-left": "2rem" }} align="left">
+                  <div style={{ marginLeft: "2rem" }} align="left">
                     <li>Tipo de documento: {item.docType}</li>
                     <li>Fecha de cancelación: {item.dateCancel}</li>
                     <li>Cancelado por: {item.dateCancel}</li>
@@ -57,7 +62,7 @@ const ExpiredDocuments = (props) => {
 
 ExpiredDocuments.propTypes = {
   expiredDoc: PropTypes.any.isRequired,
-  seguriSignController: PropTypes.any.isRequired,
+  seguriSignController: PropTypes.any.isRequired
 };
 
 export default ExpiredDocuments;

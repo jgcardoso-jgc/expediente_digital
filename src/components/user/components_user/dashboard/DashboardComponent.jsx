@@ -1,135 +1,134 @@
-/* eslint-disable no-console */
 /* eslint-disable quotes */
-import React, { useEffect, useState } from "react";
-import { Column, Row } from "simple-flexbox";
-import { createUseStyles } from "react-jss";
-import { useFirebaseApp } from "reactfire";
+import React, { useEffect, useState } from 'react';
+import { Column, Row } from 'simple-flexbox';
+import { createUseStyles } from 'react-jss';
+import { useFirebaseApp } from 'reactfire';
 import {
   IoIosCheckmarkCircleOutline,
-  IoIosCloseCircleOutline,
-} from "react-icons/io";
-import Donut from "./donutComponent";
-import MiniCardComponent from "./MiniCardComponent";
+  IoIosCloseCircleOutline
+} from 'react-icons/io';
+import Donut from './donutComponent';
+import MiniCardComponent from './MiniCardComponent';
 
 const useStyles = createUseStyles({
   cardsContainer: {
     marginRight: -30,
-    marginTop: -30,
+    marginTop: -30
   },
   cardRow: {
     marginTop: 30,
-    "@media (max-width: 768px)": {
-      marginTop: 0,
-    },
+    '@media (max-width: 768px)': {
+      marginTop: 0
+    }
   },
   todayTrends: {
-    marginTop: 30,
+    marginTop: 30
   },
   lastRow: {
-    marginTop: 30,
+    marginTop: 30
   },
   unresolvedTickets: {
     marginRight: 30,
-    "@media (max-width: 1024px)": {
-      marginRight: 0,
-    },
+    '@media (max-width: 1024px)': {
+      marginRight: 0
+    }
   },
   mt40: {
-    marginTop: 40,
+    marginTop: 40
   },
   mt30: {
-    marginTop: 30,
+    marginTop: 30
   },
   miniCardContainer: {
     flexGrow: 1,
     marginRight: 30,
-    "@media (max-width: 768px)": {
+    '@media (max-width: 768px)': {
       marginTop: 30,
-      maxWidth: "none",
-    },
+      maxWidth: 'none'
+    }
   },
   card: {
-    background: "#f1f1f1",
-    padding: "10px",
-    borderRadius: "10px",
+    background: '#f1f1f1',
+    padding: '10px',
+    borderRadius: '10px'
   },
   col3: {
-    maxWidth: "33.333%",
-    "@media (max-width: 768px)": {
-      maxWidth: "100%",
-    },
+    maxWidth: '33.333%',
+    '@media (max-width: 768px)': {
+      maxWidth: '100%'
+    }
   },
   title: {
-    color: "#9fa2b4",
+    color: '#9fa2b4',
     marginBottom: 12,
     minWidth: 102,
-    textAlign: "center",
+    textAlign: 'center'
   },
   value: {
-    color: "#373a47",
-    fontWeight: "bold",
+    color: '#373a47',
+    fontWeight: 'bold',
     fontSize: 40,
-    letterSpacing: "1px",
-    lineHeight: "50px",
-    textAlign: "center",
+    letterSpacing: '1px',
+    lineHeight: '50px',
+    textAlign: 'center'
   },
   max75: {
-    "@media (min-width: 768px)": {
-      maxWidth: "75%",
-    },
+    '@media (min-width: 768px)': {
+      maxWidth: '75%'
+    }
   },
   container: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: '#f5f5f5',
     border: `1px solid #f5f5f5`,
     borderRadius: 4,
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
-    cursor: "pointer",
+    WebkitBoxShadow: '0px 8px 15px 3px #D1D1D1',
+    boxShadow: '0px 8px 15px 3px #D1D1D1',
+    cursor: 'pointer',
     maxWidth: 350,
-    padding: "16px 32px 16px 32px",
+    padding: '16px 32px 16px 32px',
     marginLeft: 30,
-    maxHeight: "50%",
-    "@media (max-width: 768px)": {
+    maxHeight: '50%',
+    '@media (max-width: 768px)': {
       marginTop: 30,
       marginLeft: 0,
-      minWidth: "100%",
-      maxWidth: "none",
+      minWidth: '100%',
+      maxWidth: 'none'
     },
-    "&:hover": {
-      borderColor: "#3751FF",
-      "&:nth-child(n) > span": {
-        color: "#3751FF",
-      },
-    },
+    '&:hover': {
+      borderColor: '#3751FF',
+      '&:nth-child(n) > span': {
+        color: '#3751FF'
+      }
+    }
   },
   statusContainer: {
-    backgroundColor: "#f1f1f1",
+    backgroundColor: '#f1f1f1',
     border: `1px solid #f5f5f5`,
     borderRadius: 4,
     flexGrow: 1,
-    maxHeight: "50%",
+    maxHeight: '50%',
     marginLeft: 10,
-    "@media (max-width: 768px)": {
+    '@media (max-width: 768px)': {
       marginTop: 30,
       marginLeft: 0,
       paddingTop: 10,
       paddingBottom: 10,
-      minWidth: "100%",
-      maxWidth: "none",
-    },
+      minWidth: '100%',
+      maxWidth: 'none'
+    }
   },
   tasks: {
     marginTop: 0,
-    "@media (max-width: 1024px)": {
-      marginTop: 30,
-    },
-  },
+    '@media (max-width: 1024px)': {
+      marginTop: 30
+    }
+  }
 });
 
 function DashboardComponent() {
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem('user'));
   const [completados, setCompletados] = useState(0);
   const [revision, setRevision] = useState(0);
   const [faltantes, setFaltantes] = useState(0);
@@ -176,7 +175,7 @@ function DashboardComponent() {
   }
 
   function getStatusDocuments() {
-    const query = db.collection("users").where("email", "==", user.email);
+    const query = db.collection('users').where('email', '==', user.email);
     query.get().then((querySnapshot) => setDocs(querySnapshot));
   }
 
@@ -202,14 +201,14 @@ function DashboardComponent() {
           wrap
           flexGrow={1}
           horizontal="space-between"
-          breakpoints={{ 768: "column" }}
+          breakpoints={{ 768: 'column' }}
         >
           <Row
             className={classes.cardRow}
             wrap
             flexGrow={1}
             horizontal="space-between"
-            breakpoints={{ 384: "column" }}
+            breakpoints={{ 384: 'column' }}
           >
             <MiniCardComponent
               className={classes.miniCardContainer}
@@ -237,7 +236,7 @@ function DashboardComponent() {
         wrap
         flexGrow={1}
         horizontal="space-between"
-        breakpoints={{ 768: "column" }}
+        breakpoints={{ 768: 'column' }}
       >
         {data.length > 0 && (
           <Column className={classes.col3}>
@@ -251,7 +250,7 @@ function DashboardComponent() {
             wrap
             flexGrow={1}
             horizontal="space-between"
-            breakpoints={{ 384: "column" }}
+            breakpoints={{ 384: 'column' }}
           >
             <Column
               flexGrow={1}

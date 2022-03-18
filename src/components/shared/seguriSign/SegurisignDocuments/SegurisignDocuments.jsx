@@ -1,6 +1,6 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable no-console */
+
 /* eslint-disable comma-dangle */
 /* eslint-disable react/no-typos */
 /* eslint-disable react/forbid-prop-types */
@@ -44,8 +44,7 @@ const useStyles = createUseStyles(() => ({
   },
 }));
 
-const SegurisignDocuments = (props) => {
-  const { seguriSignController } = props;
+const SegurisignDocuments = ({ seguriSignController }) => {
   const userController = new UserController(
     seguriSignController.segurisignUser.email
   );
@@ -125,15 +124,14 @@ const SegurisignDocuments = (props) => {
             localStorage.setItem("date", new Date());
             getPosition();
           } else {
-            const position = localStorage.getItem("position");
+            const position = JSON.parse(localStorage.getItem("position"));
             if (position) {
               setLocation({
                 loading: false,
                 isEnabled: true,
-                lat: position.lat,
-                lng: position.lng,
+                lat: position.latitude,
+                lng: position.longitude,
               });
-              console.log("false");
             }
           }
         }
@@ -151,11 +149,11 @@ const SegurisignDocuments = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(loaded.unsignedDocuments);
+    // console.log(loaded.unsignedDocuments);
   }, [loaded]);
 
   const getDocuments = async () => {
-    console.log("getting...");
+    // console.log("getting...");
     const [
       signedDoc,
       unsignedDoc,
@@ -166,10 +164,10 @@ const SegurisignDocuments = (props) => {
       userController.getUserDocs("CONCLUIDO"),
       userController.getUserDocs("PENDIENTE"),
       userController.getUserDocs("CANCELADO"),
-      props.seguriSignController.getStatus("EXPIRADOS"),
-      props.seguriSignController.getStatus("CANCELADOS_TERCEROS"),
+      seguriSignController.getStatus("EXPIRADOS"),
+      seguriSignController.getStatus("CANCELADOS_TERCEROS"),
     ]);
-    console.log(unsignedDoc);
+    // console.log(unsignedDoc);
     setLoaded({
       signedDocuments: signedDoc,
       hasLoaded: true,
@@ -192,7 +190,7 @@ const SegurisignDocuments = (props) => {
     return (
       <div className={classes.center}>
         <img className={classes.imgLoading} alt="load" src={loading} />
-        <p className={classes.center}>Cargando tu ubicación...</p>
+        <p className={classes.center}>Cargando tu ubicación</p>
       </div>
     );
   }
@@ -205,37 +203,39 @@ const SegurisignDocuments = (props) => {
             <h5 className={classes.title}>
               <b>Mis Documentos</b>
             </h5>
-            <UnsignedDocuments
-              lat={location.lat}
-              long={location.long}
-              toaster={toaster}
-              unsignedDocuments={loaded.unsignedDocuments}
-              seguriSignController={props.seguriSignController}
-            />
+            {location.lat && (
+              <UnsignedDocuments
+                lat={location.lat}
+                long={location.long}
+                toaster={toaster}
+                unsignedDocuments={loaded.unsignedDocuments}
+                seguriSignController={seguriSignController}
+              />
+            )}
 
             <SignedDocuments
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
               signedDocuments={loaded.signedDocuments}
             />
 
             <CancelledDocuments
               cancelledDoc={loaded.cancelledDoc}
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
             />
 
             <CancelledThirdsDocuments
               cancelledByThirds={loaded.cancelledByThirds}
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
             />
 
             <ExpiredDocuments
               expiredDoc={loaded.expiredDoc}
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
             />
           </div>
           <div className={classes.card}>
             <UploadPopup
-              seguriSignController={props.seguriSignController}
+              seguriSignController={seguriSignController}
               toaster={toaster}
             />
           </div>

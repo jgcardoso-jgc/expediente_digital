@@ -17,7 +17,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS");
   next();
 });
-app.listen(port, () => console.log(`Listening on port ${port}`)); // Line 6
+app.listen(port, () => {}); // Line 6
 
 // create a GET route
 app.post("/express_backend", (req, res) => {

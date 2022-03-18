@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-/* eslint-disable no-console */
+
 /* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -16,8 +16,6 @@ const useStyles = createUseStyles({
     background: "#f5f5f5",
     padding: "10px",
     borderRadius: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
   },
   table: {
     minWidth: "100%",
@@ -32,8 +30,6 @@ const useStyles = createUseStyles({
     display: "flex",
     background: "#cccccc",
     maxWidth: "50%",
-    WebkitBoxShadow: "0px 8px 15px 1px #D1D1D1",
-    boxShadow: "0px 8px 15px 1px #D1D1D1",
     borderRadius: "10px",
     padding: "4px",
     paddingTop: "10px",
@@ -92,7 +88,6 @@ const Table = ({ columns, data, docNumber }) => {
   useEffect(() => {}, [globalFilter]);
 
   useEffect(() => {
-    console.log(docNumber);
     if (docNumber && docNumber > 0) {
       setGlobalFilter(docNumber);
     }

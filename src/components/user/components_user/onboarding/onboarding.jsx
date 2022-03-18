@@ -3,7 +3,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -33,12 +33,6 @@ function TutorialFrontId({ onSuccess }) {
   const [horizontal, setOrientation] = useState(false);
 
   useEffect(() => {
-    if (screenOrientation.matches) {
-      console.log("isLandscape");
-    } else {
-      console.log("isPortrait");
-    }
-    console.log(screenOrientation);
     if (screenOrientation.matches) {
       setOrientation(true);
     } else {
@@ -153,7 +147,7 @@ function Onboarding() {
       .then(async (sessionRes) => {
         await incode.warmup();
         setSession(sessionRes);
-        console.log(`session:${Object.keys(sessionRes)}`);
+        // console.log(`session:${Object.keys(sessionRes)}`);
       });
   }, []);
 
@@ -242,8 +236,8 @@ function Onboarding() {
   }
 
   const toFinal = () => {
-    // console.log(`interviewId:${session.interviewId}`);
-    // console.log(`token:${session.token}`);
+    // //console.log(`interviewId:${session.interviewId}`);
+    // //console.log(`token:${session.token}`);
     const { interviewId } = session;
     incode
       .getFinishStatus(configID, { token: session.token })

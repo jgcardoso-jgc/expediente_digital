@@ -1,7 +1,6 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable comma-dangle */
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 async function getAllDocs(db, locData) {
   return new Promise((resolve) => {
@@ -45,7 +44,6 @@ async function getDownloadURLS(storage, docArray, locData) {
                 imageName: doc.imageName,
                 email,
               };
-              console.log("pushed to pendientes");
               pendientes.push(pendientesFormat);
             } else {
               const completedFormat = {
@@ -57,7 +55,6 @@ async function getDownloadURLS(storage, docArray, locData) {
             }
           })
           .catch(() => {
-            console.log("error");
             const missingFormat = {
               url: "404",
               title: doc.name,
@@ -138,7 +135,6 @@ async function setPendientes(db, docsToUpdate, locData) {
           .doc(doc.id)
           .update({ documents: docs })
           .then(() => {
-            console.log(docs);
             resolve("listo");
           });
       });

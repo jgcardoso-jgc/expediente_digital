@@ -7,7 +7,7 @@ import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
 // import UserController from "../../controller/user_controller";
 import PropTypes from "prop-types";
-import TableView from "../../../table/tableView";
+import TableView from "../Table/tableView";
 import styles from "./UnsignedDocuments.module.scss";
 
 const UnsignedDocuments = (props) => {
@@ -20,10 +20,10 @@ const UnsignedDocuments = (props) => {
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
       <Accordion.Header>
-        Por Firmar
-        <Badge style={{ marginLeft: "3rem" }} pill bg="dark">
+        <Badge style={{ marginRight: 16 }} pill bg="dark">
           {unsignedDocuments.length > 0 ? unsignedDocuments.length : "0"}
         </Badge>
+        Por Firmar
       </Accordion.Header>
       <Accordion.Body>
         <Accordion flush>

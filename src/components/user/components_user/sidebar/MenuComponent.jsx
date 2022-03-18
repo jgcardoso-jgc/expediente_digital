@@ -1,52 +1,52 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
-import React, { useState } from "react";
-import { useTheme } from "react-jss";
-import { slide as Menu } from "react-burger-menu";
+import React, { useState } from 'react';
+import { useTheme } from 'react-jss';
+import { slide as Menu } from 'react-burger-menu';
 
 const getMenuStyles = () => ({
   bmBurgerButton: {
-    position: "absolute",
+    position: 'absolute',
     width: 26,
     height: 20,
     left: 30,
     top: 40,
-    zIndex: 19,
+    zIndex: 19
   },
   bmBurgerBars: {
-    background: "#373a47",
+    background: '#373a47'
   },
   bmBurgerBarsHover: {
-    background: "#a90000",
+    background: '#a90000'
   },
   bmCrossButton: {
-    display: "none",
+    display: 'none'
   },
   bmCross: {
-    background: "#bdc3c7",
+    background: '#bdc3c7'
   },
   bmMenuWrap: {
-    position: "fixed",
-    height: "100%",
+    position: 'fixed',
+    height: '100%',
     width: 255,
-    zIndex: 30,
+    zIndex: 30
   },
   bmMenu: {
-    background: "#373a47",
+    background: '#373a47'
   },
   bmItem: {
-    outline: "none",
-    "&:focus": {
-      outline: "none",
-    },
+    outline: 'none',
+    '&:focus': {
+      outline: 'none'
+    }
   },
   bmMorphShape: {
-    fill: "#373a47",
+    fill: '#373a47'
   },
   bmOverlay: {
-    background: "rgba(0, 0, 0, 0.3)",
-    zIndex: 20,
-  },
+    background: 'rgba(0, 0, 0, 0.3)',
+    zIndex: 20
+  }
 });
 
 function MenuComponent({ open, children, isMobile }) {

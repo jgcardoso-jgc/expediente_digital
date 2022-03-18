@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-console */
+
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable spaced-comment */
 /* eslint-disable comma-dangle */
@@ -10,10 +10,10 @@ import React, { useState, useEffect } from "react";
 //import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import { AiFillEye } from "react-icons/ai";
-import CancelPopup from "../seguriSign/CancelPopup/CancelPopup";
-import Table from "./table";
-import SignPopUP from "../seguriSign/SignPopup/SignPopup";
-import UnsignedPopUp from "../seguriSign/UnsignedPopUp/UnsignedPopup";
+import Table from "components/shared/table/table";
+import CancelPopup from "../../CancelPopup/CancelPopup";
+import SignPopUP from "../../SignPopup/SignPopup";
+import UnsignedPopUp from "../../UnsignedPopUp/UnsignedPopup";
 
 const useStyles = createUseStyles({
   editButton: {
@@ -25,10 +25,10 @@ const useStyles = createUseStyles({
     textAlign: "center",
   },
   firmarBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
+    backgroundColor: "#cccccc",
+    color: "black",
     width: "100%",
-    border: "1px solid black",
+    border: "0px solid black",
     display: "block",
     marginLeft: "auto",
     marginRight: 0,
@@ -94,7 +94,6 @@ const TableView = ({
   toaster,
 }: any) => {
   const classes = useStyles();
-  //const history = useHistory();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -107,14 +106,11 @@ const TableView = ({
     controller
       .getDocument(id)
       .then((docUrl) => {
-        console.log("url", docUrl);
         window.open(`data:application/pdf;base64,${docUrl}`);
         setLoading(false);
       })
-      .catch((e) => {
+      .catch(() => {
         setLoading(false);
-        console.log(e);
-        //toaster.errorToast(e);
       });
   };
 
@@ -179,9 +175,12 @@ const TableView = ({
                   seguriSignController={controller}
                   long={long}
                   lat={lat}
-                  requiresFaceMatch={cellObj.data.requiresFaceMatch}
+                  doctType={cellObj.data.docType}
+                  requiresFaceMatch={
+                    cellObj.cell.row.original.requiresFaceMatch
+                  }
                   key={cellObj.data.multilateralId}
-                  multilateralId={cellObj.data.multilateralId}
+                  multilateralId={cellObj.cell.row.original.multilateralId}
                   fileName={cellObj.data.fileName}
                 />
               </div>
@@ -206,7 +205,7 @@ const TableView = ({
                 <CancelPopup
                   toaster={toaster}
                   key={cellObj.data.multilateralId}
-                  multilateralId={cellObj.data.multilateralId}
+                  multilateralId={cellObj.cell.row.original.multilateralId}
                   seguriSignController={controller}
                 />
               </div>

@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 import React, { useContext, useEffect, useState } from "react";
 import { string } from "prop-types";
@@ -48,7 +48,7 @@ const useStyles = createUseStyles(() => ({
     },
   },
   title: {
-    "@media (max-width: 1080px)": {
+    "@media (max-width: 768px)": {
       marginLeft: 50,
     },
     "@media (max-width: 468px)": {
@@ -79,6 +79,7 @@ function HeaderComponent() {
     localStorage.removeItem("date");
     localStorage.removeItem("position");
     localStorage.removeItem("sign-user");
+    localStorage.removeItem("profilepic");
     auth.signOut();
   }
 

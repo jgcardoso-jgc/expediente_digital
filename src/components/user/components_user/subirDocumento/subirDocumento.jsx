@@ -1,5 +1,5 @@
 /* eslint-disable operator-linebreak */
-/* eslint-disable no-console */
+
 /* eslint-disable quotes */
 import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
@@ -20,7 +20,6 @@ function SubirDocumentos() {
   const db = firebase.firestore();
   let locData = "";
   if (location.state != null) {
-    console.log(`state:${location.state.doc}`);
     locData = location.state.doc;
   }
   const global = globalTheme();

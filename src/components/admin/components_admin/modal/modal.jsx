@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
@@ -10,13 +9,13 @@ import { useFirebaseApp } from "reactfire";
 const useStyles = createUseStyles({
   aprobarBt: {
     background: "green",
-    border: 0,
+    border: 0
   },
   rechazarBt: {
     background: "red",
     marginLeft: "10px",
-    border: 0,
-  },
+    border: 0
+  }
 });
 
 const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
@@ -46,7 +45,6 @@ const ModalEdit = ({ state, onClose, url, title, type, imageName, email }) => {
       querySnapshot.forEach((doc) => {
         const gotDoc = doc.data().documents;
         const newArray = [];
-        console.log(imageName);
         gotDoc.forEach((filter) => {
           if (filter.imageName !== imageName) {
             newArray.push(filter);

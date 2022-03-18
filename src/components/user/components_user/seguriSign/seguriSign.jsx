@@ -5,8 +5,8 @@ import Card from "react-bootstrap/Card";
 import { createUseStyles } from "react-jss";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import SegurisignController from "./controller/segurisign_controller";
-import SegurisignDocuments from "./SegurisignDocuments/SegurisignDocuments";
+import SegurisignController from "../../../shared/seguriSign/controller/segurisign_controller";
+import SegurisignDocuments from "../../../shared/seguriSign/SegurisignDocuments/SegurisignDocuments";
 import CustomToasts from "../Toasts/CustomToasts";
 import locked from "../../../../assets/locked.png";
 import styles from "../../../../resources/theme";
@@ -177,7 +177,6 @@ const Segurisign = () => {
         const responseJSON = JSON.stringify(
           seguriSignController.segurisignUser
         );
-        console.log(responseJSON);
         if (responseJSON.token === null) {
           toaster.errorToast("No estás registrado en Segurisign.");
           setLogged(false);

@@ -12,7 +12,7 @@ class CustomToasts {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
+      progress: undefined
     });
   }
 
@@ -24,7 +24,7 @@ class CustomToasts {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
+      progress: undefined
     });
   }
 
@@ -36,7 +36,7 @@ class CustomToasts {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
+      progress: undefined
     });
   }
 
@@ -48,7 +48,7 @@ class CustomToasts {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
+      progress: undefined
     });
   }
 }

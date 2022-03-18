@@ -1,50 +1,50 @@
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
-import React, { useState } from "react";
-import Div100vh from "react-div-100vh";
-import { Link, useHistory } from "react-router-dom";
-import waves from "../../../assets/waves.svg";
-import styles from "../../../resources/theme";
-import { ToastContainer, toast } from "react-toastify";
-import { createUseStyles } from "react-jss";
-import NavBarMainPage from "../navBarMainPage/navBarMainPage";
-import { useFirebaseApp } from "reactfire";
+import React, { useState } from 'react';
+import Div100vh from 'react-div-100vh';
+import { Link, useHistory } from 'react-router-dom';
+import waves from '../../../assets/waves.svg';
+import styles from '../../../resources/theme';
+import { ToastContainer, toast } from 'react-toastify';
+import { createUseStyles } from 'react-jss';
+import NavBarMainPage from '../navBarMainPage/navBarMainPage';
+import { useFirebaseApp } from 'reactfire';
 
 const globalTheme = createUseStyles(styles);
 const useStyles = createUseStyles(() => ({
-  navmain: { top: "0px", position: "absolute !important", width: "100%" },
+  navmain: { top: '0px', position: 'absolute !important', width: '100%' },
   inputStyle: {
-    width: "100%",
-    border: "1px solid #f1f1f1",
-    fontSize: "16px",
-    background: "#f1f1f1",
-    marginTop: 8,
+    width: '100%',
+    border: '1px solid #f1f1f1',
+    fontSize: '16px',
+    background: '#f1f1f1',
+    marginTop: 8
   },
   wave: {
-    position: "absolute",
-    bottom: 0,
+    position: 'absolute',
+    bottom: 0
   },
   title: {
-    textAlign: "left",
-    marginTop: 40,
+    textAlign: 'left',
+    marginTop: 40
   },
   correoTxt: {
-    textAlign: "left",
+    textAlign: 'left'
   },
   link: {
-    textAlign: "right",
-    marginTop: 10,
+    textAlign: 'right',
+    marginTop: 10
   },
   container: {
-    maxWidth: "400px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "left",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    marginTop: 100,
-  },
+    maxWidth: '400px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    textAlign: 'left',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+    marginTop: 100
+  }
 }));
 
 const RecoverPassword = () => {
@@ -53,12 +53,12 @@ const RecoverPassword = () => {
   const global = globalTheme();
   const auth = firebase.auth();
   const history = useHistory();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   function recover() {
     auth
       .sendPasswordResetEmail(email)
       .then(() => {
-        history.push("/login");
+        history.push('/login');
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -96,7 +96,7 @@ const RecoverPassword = () => {
             Recuperar
           </button>
           <div className={classes.link}>
-            <Link style={{ display: "inline-block" }} to="./loginNormal">
+            <Link style={{ display: 'inline-block' }} to="./loginNormal">
               ¿Ya tienes una cuenta?
             </Link>
           </div>

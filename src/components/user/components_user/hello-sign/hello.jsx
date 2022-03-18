@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useRef, useEffect } from "react";
 import "./hello.css";
@@ -9,14 +8,14 @@ import CustomToasts from "../Toasts/CustomToasts";
 const apiURL = "https://demo-api.incodesmile.com/";
 const apiKey = "570c70d1693636fdc200713415ebc3973afbdf19";
 
-const HelloInitSign = (props) => {
+const HelloInitSign = ({ toaster, setFaceMatched }) => {
   const containerRef = useRef();
   const userController = new UserController();
   const helloRef = useRef();
 
   HelloInitSign.propTypes = {
     setFaceMatched: PropTypes.func.isRequired,
-    toaster: PropTypes.instanceOf(CustomToasts).isRequired,
+    toaster: PropTypes.instanceOf(CustomToasts).isRequired
   };
   useEffect(() => {
     const script = document.createElement("script");
@@ -27,28 +26,26 @@ const HelloInitSign = (props) => {
       helloRef.current = Hello.create({
         apiKey,
         apiURL,
-        language: "es",
+        language: "es"
       });
       const instance = helloRef.current;
       instance.renderLogin(containerRef.current, {
         onSuccess: async (r) => {
-          console.log("onSuccess", r);
           const isUser = await userController.compareCustomerId(r.customerId);
           if (isUser) {
-            props.toaster.successToast(`Identidad confirmada: ${r.fullName}`);
+            toaster.successToast(`Identidad confirmada: ${r.fullName}`);
             const saved = JSON.parse(localStorage.getItem("user"));
             saved.token = r.token;
             localStorage.setItem("user", JSON.stringify(saved));
-            props.setFaceMatched(true);
+            setFaceMatched(true);
           } else {
-            props.toaster.errorToast("Error al confirmar identidad");
-            props.setFaceMatched(false);
+            toaster.errorToast("Error al confirmar identidad");
+            setFaceMatched(false);
           }
         },
-        onError: (r) => {
-          console.log("on error", r);
-          props.setFaceMatched(false);
-        },
+        onError: () => {
+          setFaceMatched(false);
+        }
       });
     };
   });

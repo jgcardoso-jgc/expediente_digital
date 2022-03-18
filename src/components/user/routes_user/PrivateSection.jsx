@@ -1,31 +1,31 @@
 /* eslint-disable quotes */
-import React from "react";
-import { createUseStyles, useTheme } from "react-jss";
-import { Column, Row } from "simple-flexbox";
-import { SidebarComponent, SidebarContext } from "../components_user/sidebar";
-import HeaderComponent from "../../shared/header/HeaderComponent";
-import PrivateRoutes from "./PrivateRoutes";
+import React from 'react';
+import { createUseStyles, useTheme } from 'react-jss';
+import { Column, Row } from 'simple-flexbox';
+import { SidebarComponent, SidebarContext } from '../components_user/sidebar';
+import HeaderComponent from '../../shared/header/HeaderComponent';
+import PrivateRoutes from './PrivateRoutes';
 
 const useStyles = createUseStyles({
   container: {
-    height: "100%",
+    height: '100%'
   },
   mainBlock: {
     marginLeft: 255,
     padding: 30,
-    "@media (max-width: 768px)": {
-      marginLeft: 0,
-    },
+    '@media (max-width: 768px)': {
+      marginLeft: 0
+    }
   },
   contentBlock: {
-    marginTop: 54,
+    marginTop: 54
   },
   footer: {
-    position: "relative",
+    position: 'relative',
     paddingTop: 20,
     bottom: 0,
-    textAlign: "right",
-  },
+    textAlign: 'right'
+  }
 });
 
 function PrivateSection() {
@@ -42,7 +42,7 @@ function PrivateSection() {
             <PrivateRoutes />
           </div>
           <div className={classes.footer}>
-            <p>Seguridata 2021</p>
+            <p>Seguridata S.A de C.V 2022</p>
           </div>
         </Column>
       </Row>

@@ -9,5 +9,5 @@ export default {
   subirDocumentos: "/subir",
   sign: "/segurisign",
   verificar: "/verificar",
-  registerSign: "/registerSign",
+  registerSign: "/registerSign"
 };

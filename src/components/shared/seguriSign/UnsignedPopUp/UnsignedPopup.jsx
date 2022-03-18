@@ -5,48 +5,44 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable quotes */
-import React from "react";
-import PropTypes from "prop-types";
-import Popup from "reactjs-popup";
-import { createUseStyles } from "react-jss";
-import { Table, Card, Button } from "react-bootstrap";
-import {
-  AiOutlineCheck,
-  AiOutlineMail,
-  TiDeleteOutline,
-} from "react-icons/all";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Popup from 'reactjs-popup';
+import { createUseStyles } from 'react-jss';
+import { Table, Card, Button } from 'react-bootstrap';
+import { AiOutlineCheck, AiOutlineDelete, AiOutlineMail } from 'react-icons/ai';
 
 const useStyles = createUseStyles(() => ({
-  border: { border: "3px solid black", marginBottom: 14 },
+  border: { border: '3px solid black', marginBottom: 14 },
   firmarBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
-    border: "1px solid black",
-    display: "block",
-    marginLeft: "auto",
+    backgroundColor: '#cccccc',
+    color: 'black',
+    border: '0px solid black',
+    display: 'block',
+    marginLeft: 'auto',
     marginRight: 0,
-    paddingTop: "10px",
-    paddingBottom: "10px",
-    fontSize: "15px",
-    borderRadius: "10px",
+    paddingTop: '10px',
+    paddingBottom: '10px',
+    fontSize: '15px',
+    borderRadius: '10px'
   },
   loadGif: {
-    maxWidth: 50,
+    maxWidth: 50
   },
   signImg: {
     maxWidth: 200,
-    marginBottom: 20,
+    marginBottom: 20
   },
   flex: {
-    display: "flex",
+    display: 'flex'
   },
   loadingBlock: {
-    display: "block",
+    display: 'block'
   },
   title: {
     marginTop: 5,
-    marginBottom: 14,
-  },
+    marginBottom: 14
+  }
 }));
 
 const UnsignedPopUp = ({ usuarios, firmados, noFirmas }) => {
@@ -57,7 +53,7 @@ const UnsignedPopUp = ({ usuarios, firmados, noFirmas }) => {
       <td>{index + 1}</td>
       <td>{user.name}</td>
       <td>{user.email}</td>
-      <td>{user.firmo ? <AiOutlineCheck /> : <TiDeleteOutline />}</td>
+      <td>{user.firmo ? <AiOutlineCheck /> : <AiOutlineDelete />}</td>
       <td>
         <button className={classes.recordarMiniBt} type="button">
           <AiOutlineMail />
@@ -73,7 +69,7 @@ const UnsignedPopUp = ({ usuarios, firmados, noFirmas }) => {
         trigger={
           <button
             type="button"
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             className={classes.firmarBt}
           >
             {getFirmadosLength(firmados)} / {noFirmas}
@@ -97,7 +93,7 @@ const UnsignedPopUp = ({ usuarios, firmados, noFirmas }) => {
                       <th>Recordar</th>
                     </tr>
                   </thead>
-                  <tbody>{usuarios ? usuarios.map(renderTableCell) : ""}</tbody>
+                  <tbody>{usuarios ? usuarios.map(renderTableCell) : ''}</tbody>
                 </Table>
                 <Button variant="outline-dark" onClick={close}>
                   Cerrar
@@ -115,6 +111,6 @@ const UnsignedPopUp = ({ usuarios, firmados, noFirmas }) => {
 UnsignedPopUp.propTypes = {
   usuarios: PropTypes.any.isRequired,
   firmados: PropTypes.any.isRequired,
-  noFirmas: PropTypes.any.isRequired,
+  noFirmas: PropTypes.any.isRequired
 };
 export default UnsignedPopUp;

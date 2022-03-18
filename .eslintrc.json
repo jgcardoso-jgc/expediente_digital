@@ -23,6 +23,13 @@
     "rules": {
         "no-use-before-define": "off",
         "linebreak-style": 0,
+        "comma-dangle": ["error", {
+            "arrays": "never",
+            "objects": "never",
+            "imports": "never",
+            "exports": "never",
+            "functions": "never"
+        }],
   "@typescript-eslint/no-use-before-define": ["error"],
   "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
   "import/extensions": [

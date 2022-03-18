@@ -1,9 +1,10 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
-import { Accordion } from "react-bootstrap";
+import { Accordion, Badge } from "react-bootstrap";
 import React from "react";
 import PropTypes from "prop-types";
 import { createUseStyles } from "react-jss";
@@ -20,15 +21,20 @@ const CancelledDocuments = (props) => {
   }
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
-      <Accordion.Header>Cancelados</Accordion.Header>
+      <Accordion.Header>
+        <Badge style={{ marginRight: 16 }} pill bg="dark">
+          {cancelledDoc.length}
+        </Badge>
+        Cancelados
+      </Accordion.Header>
       <Accordion.Body bsPrefix="seguridata-btn">
         <Accordion flush>
           {cancelledDoc.map((item, index) => (
-            <Accordion.Item eventKey={index + 1}>
+            <Accordion.Item eventKey={index + 1} key={`${index}i`}>
               <Accordion.Header>{item.fileName}</Accordion.Header>
               <Accordion.Body>
                 <div align="center">
-                  <div style={{ "margin-left": "2rem" }} align="left">
+                  <div style={{ marginLeft: "2rem" }} align="left">
                     <li>Tipo de documento: {item.docType}</li>
                     <li>Fecha de cancelación: {item.dateCancel}</li>
                     <li>Motivo de cancelación: {item.reasonCancelDocument}</li>
@@ -59,6 +65,6 @@ const CancelledDocuments = (props) => {
 
 CancelledDocuments.propTypes = {
   cancelledDoc: PropTypes.any.isRequired,
-  seguriSignController: PropTypes.any.isRequired,
+  seguriSignController: PropTypes.any.isRequired
 };
 export default CancelledDocuments;

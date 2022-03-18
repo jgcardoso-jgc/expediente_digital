@@ -12,7 +12,7 @@ import { fetchCargos, sendWelcomeEmail, sendWelcomeEmailSign } from "./usersCont
 import TableView from "../table/tableView";
 import { docs, cargosLista } from "./usersModel";
 import {
-  rfcValido, createUserExpediente,
+  rfcValido, createUserExpediente
 } from "./registerController";
 import useStyles from "./usersStyles";
 
@@ -58,7 +58,6 @@ const UserView = () => {
         setDisabled(true);
         setLoading(true);
         const json: any = await createUserExpediente({ db, auth }, { email, name, rfc, password });
-        console.log('createUserExpediente: \n', json);
         if (json) {
           if (json.registradoSign) {
             sendWelcomeEmailSign(email).then(() => {
@@ -105,9 +104,9 @@ const UserView = () => {
             <b>Agregar Usuario</b>
           </h5>
           <Row>
-            <Col>
+            <Col md={6}>
               <div className="formGroup">
-                <label htmlFor="email" className="block pb10">
+                <label htmlFor="email" className={classes.pb10}>
                   Correo electrónico
                 </label>
                 <input
@@ -118,10 +117,10 @@ const UserView = () => {
                 />
               </div>
             </Col>
-            <Col>
+            <Col md={6}>
               {" "}
               <div className="formGroup">
-                <label className="block pb10">Nombre Completo</label>
+                <label className={classes.pb10}>Nombre Completo</label>
                 <input
                   type="text"
                   id="name"
@@ -130,25 +129,29 @@ const UserView = () => {
                 />
               </div>
             </Col>
+            <Col md={6}>
+              <label className={`${classes.mt10} ${classes.pb10}`}>Cargo</label>
+              <Select
+                value={selectedOption}
+                onChange={handleChange}
+                options={cargos}
+              />
+            </Col>
+            <Col>
+              <div className={`${classes.left} ${classes.pt10}`}>
+                <label htmlFor="email" className={classes.pb10}>
+                  RFC
+                </label>
+                <input
+                  type="text"
+                  id="rfc"
+                  className={classes.inputStyle}
+                  onChange={(event) => testRFC(event.target.value)}
+                />
+                <p className={classes.rfcText} ref={rfcText as React.RefObject<HTMLDivElement>} />
+              </div>
+            </Col>
           </Row>
-          <label className={`${classes.mt20} ${classes.pb10}`}>Cargo</label>
-          <Select
-            value={selectedOption}
-            onChange={handleChange}
-            options={cargos}
-          />
-          <div className={`${classes.left} ${classes.pt10}`}>
-            <label htmlFor="email" className="block pb4">
-              RFC
-            </label>
-            <input
-              type="text"
-              id="rfc"
-              className={classes.inputStyle}
-              onChange={(event) => testRFC(event.target.value)}
-            />
-            <p className={classes.rfcText} ref={rfcText as React.RefObject<HTMLDivElement>} />
-          </div>
           <Row>
             <Col>
               <p className={classes.textDefecto}>Contraseña por defecto: OneSeguridata2021!</p>
@@ -172,12 +175,3 @@ const UserView = () => {
 };
 
 export default UserView;
-
-/* const response = await fetch('http//localhost:5000/express_backend');
-    const body = await response;
-
-    if (response.status !== 200) {
-      console.log("error");
-    } else {
-      console.log(`ok:${body}`);
-    } */

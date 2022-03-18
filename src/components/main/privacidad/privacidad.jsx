@@ -1,20 +1,20 @@
 /* eslint-disable quotes */
-import React from "react";
-import { createUseStyles } from "react-jss";
-import NavBarMainPage from "../navBarMainPage/navBarMainPage";
+import React from 'react';
+import { createUseStyles } from 'react-jss';
+import NavBarMainPage from '../navBarMainPage/navBarMainPage';
 
 const useStyles = createUseStyles(() => ({
   mainDiv: {
-    marginTop: 80,
+    marginTop: 80
   },
   center: {
-    textAlign: "center",
+    textAlign: 'center'
   },
   container: {
     maxWidth: 600,
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  }
 }));
 
 const PrivacidadView = () => {

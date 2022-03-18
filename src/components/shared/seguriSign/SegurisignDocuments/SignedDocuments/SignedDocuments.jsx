@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/forbid-prop-types */
@@ -32,10 +31,10 @@ const SignedDocuments = (props) => {
   return (
     <Accordion bsPrefix="seguridata" flush style={{ position: "inherit" }}>
       <Accordion.Header>
-        Firmados
-        <Badge style={{ marginLeft: "3rem" }} pill bg="secondary">
+        <Badge style={{ marginRight: 16 }} pill bg="dark">
           {signedDocuments.length}
         </Badge>
+        Firmados
       </Accordion.Header>
       <Accordion.Body>
         <Accordion flush>
@@ -46,7 +45,7 @@ const SignedDocuments = (props) => {
                   <Accordion.Header>{item.fileName}</Accordion.Header>
                   <Accordion.Body>
                     <div align="center">
-                      <div style={{ "margin-left": "2rem" }} align="left">
+                      <div style={{ marginLeft: "2rem" }} align="left">
                         <li>Tipo de documento: {item.docType}</li>
                         <li>Número de firmas: {item.numberSignatures}</li>
                         <li>Fecha de firmado: {item.signDate}</li>

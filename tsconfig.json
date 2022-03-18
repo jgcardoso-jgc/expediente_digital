@@ -5,6 +5,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "baseUrl": "src",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "noImplicitAny": false,
@@ -21,7 +22,5 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

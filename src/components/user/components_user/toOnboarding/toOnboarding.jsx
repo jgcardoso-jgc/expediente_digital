@@ -1,30 +1,29 @@
-/* eslint-disable no-console */
 /* eslint-disable quotes */
-import React, { useEffect } from "react";
-import { useLocation, Link, useHistory } from "react-router-dom";
-import { createUseStyles } from "react-jss";
-import "./toOnboarding.css";
+import React, { useEffect } from 'react';
+import { useLocation, Link, useHistory } from 'react-router-dom';
+import { createUseStyles } from 'react-jss';
+import './toOnboarding.css';
 
 const useStyles = createUseStyles({
   mrAuto: {
-    marginRight: "auto",
+    marginRight: 'auto'
   },
   title: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   button: {
-    color: "white",
-    border: "1px solid black",
+    color: 'white',
+    border: '1px solid black',
     fontSize: 15,
     minWidth: 150,
     marginTop: 0,
-    marginLeft: "auto",
+    marginLeft: 'auto',
     paddingTop: 10,
     borderRadius: 10,
     paddingBottom: 10,
-    backgroundColor: "rgb(75, 75, 75)",
-    marginBottom: 20,
-  },
+    backgroundColor: 'rgb(75, 75, 75)',
+    marginBottom: 20
+  }
 });
 
 const ToOnBoarding = () => {
@@ -35,11 +34,8 @@ const ToOnBoarding = () => {
   useEffect(() => {
     const { state } = location;
     if (state.reload === true) {
-      console.log("toReload");
-      history.replace({ pathname: "/toOnboarding", state: {} });
+      history.replace({ pathname: '/toOnboarding', state: {} });
       window.location.reload();
-    } else {
-      console.log("not reload");
     }
   }, [history, location]);
 
@@ -54,7 +50,7 @@ const ToOnBoarding = () => {
       </p>
       <Link to="/onboard">
         <button
-          style={{ display: "inline-block" }}
+          style={{ display: 'inline-block' }}
           className={classes.button}
           type="button"
         >
@@ -64,7 +60,7 @@ const ToOnBoarding = () => {
       <p>también puedes intentarlo de nuevo</p>
       <button
         onClick={() => history.goBack()}
-        style={{ display: "inline-block" }}
+        style={{ display: 'inline-block' }}
         className={classes.button}
         type="button"
       >

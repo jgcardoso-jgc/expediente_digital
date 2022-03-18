@@ -9,7 +9,7 @@ const firebaseConfig = {
   storageBucket: "seguridata-in-a-box.appspot.com",
   messagingSenderId: "1038660139301",
   appId: "1:1038660139301:web:b9d817e672a526e31dc2cc",
-  measurementId: "G-B0WBRV1VZF",
+  measurementId: "G-B0WBRV1VZF"
 };
 
 if (!firebase.apps.length) {

@@ -1,27 +1,27 @@
 /* eslint-disable quotes */
-import React, { useState } from "react";
-import { createUseStyles, useTheme } from "react-jss";
-import { useHistory } from "react-router-dom";
-import { BiUserCircle } from "react-icons/bi";
-import { FaBell, FaSignature } from "react-icons/fa";
-import convertSlugToUrl from "../../resources/utilities";
-import SLUGS from "../../resources/slugs";
+import React, { useState } from 'react';
+import { createUseStyles, useTheme } from 'react-jss';
+import { useHistory } from 'react-router-dom';
+import { BiUserCircle } from 'react-icons/bi';
+import { FaBell, FaSignature } from 'react-icons/fa';
+import convertSlugToUrl from '../../resources/utilities';
+import SLUGS from '../../resources/slugs';
 import {
   IconContacts,
   IconSettings,
-  IconSubscription,
-} from "../../assets/icons";
-import LogoComponent from "./LogoComponent";
-import Menu from "./MenuComponent";
-import MenuItem from "./MenuItemComponent";
+  IconSubscription
+} from '../../assets/icons';
+import LogoComponent from './LogoComponent';
+import Menu from './MenuComponent';
+import MenuItem from './MenuItemComponent';
 
 const useStyles = createUseStyles({
   separator: {
-    borderTop: "1px solid #F7F8FC",
+    borderTop: '1px solid #F7F8FC',
     marginTop: 16,
     marginBottom: 16,
-    opacity: 0.06,
-  },
+    opacity: 0.06
+  }
 });
 
 function SidebarComponent() {

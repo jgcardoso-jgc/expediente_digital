@@ -1,9 +1,9 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 /* eslint-disable indent */
-import { toast } from "react-toastify";
-import { useFirebaseApp } from "reactfire";
-import SoapController from "../seguriSign/controller/soap_controller";
+import { toast } from 'react-toastify';
+import { useFirebaseApp } from 'reactfire';
+import SoapController from '../seguriSign/controller/soap_controller';
 
 class UpdatePasswordController {
   constructor() {
@@ -12,7 +12,7 @@ class UpdatePasswordController {
     this.auth = this.firebase.auth();
   }
 
-  updateFirebasePassword = async (user, newPassword) => {
+  static updateFirebasePassword = async (user, newPassword) => {
     try {
       await user.updatePassword(newPassword);
       return true;
@@ -58,7 +58,7 @@ class UpdatePasswordController {
         );
         return this.updateFirebasePassword(fUser.user, newPassword);
       }
-      toast("Error");
+      toast('Error');
       return false;
     } catch (error) {
       if (error instanceof Error) {

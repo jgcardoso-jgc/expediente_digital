@@ -1,56 +1,66 @@
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable quotes */
-import React, { useEffect, useState } from "react";
-import { useFirebaseApp } from "reactfire";
-import { createUseStyles } from "react-jss";
-import { ToastContainer, toast } from "react-toastify";
-import { Row, Col } from "react-bootstrap";
-import { FaEdit } from "react-icons/fa";
-import Table from "../table/table";
+import React, { useEffect, useState } from 'react';
+import { useFirebaseApp } from 'reactfire';
+import { createUseStyles } from 'react-jss';
+import { ToastContainer, toast } from 'react-toastify';
+import { Row, Col } from 'react-bootstrap';
+import { FaEdit } from 'react-icons/fa';
+import Table from '../table/table';
 
 const useStyles = createUseStyles({
   text: {
-    padding: 0,
+    padding: 0
   },
   card: {
-    background: "#f5f5f5",
-    padding: "10px",
-    borderRadius: "10px",
-    WebkitBoxShadow: "0px 8px 15px 3px #D1D1D1",
-    boxShadow: "0px 8px 15px 3px #D1D1D1",
+    background: '#f5f5f5',
+    padding: '10px',
+    borderRadius: '10px',
+    WebkitBoxShadow: '0px 8px 15px 3px #D1D1D1',
+    boxShadow: '0px 8px 15px 3px #D1D1D1'
   },
   mt20: {
-    marginTop: 20,
+    marginTop: 20
   },
   addBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
-    border: "1px solid black",
-    display: "block",
-    marginLeft: "auto",
-    minWidth: "150px",
-    paddingTop: "10px",
-    marginTop: "20px",
-    paddingBottom: "10px",
-    fontSize: "15px",
-    borderRadius: "10px",
+    backgroundColor: 'rgb(75, 75, 75)',
+    color: 'white',
+    border: '1px solid black',
+    display: 'block',
+    marginLeft: 'auto',
+    minWidth: '150px',
+    paddingTop: '10px',
+    marginTop: '20px',
+    paddingBottom: '10px',
+    fontSize: '15px',
+    borderRadius: '10px'
   },
   mt30: {
-    marginTop: 30,
+    marginTop: 30
   },
   inputStyle: {
-    width: "100%",
-    border: "0",
-    borderBottom: "1px solid rgb(194, 194, 194)",
-    fontSize: "16px",
-    background: "transparent",
+    width: '100%',
+    border: '0',
+    borderBottom: '1px solid rgb(194, 194, 194)',
+    fontSize: '16px',
+    background: 'transparent'
   },
   title: {
     marginBottom: 30,
-    marginTop: 10,
+    marginTop: 10
   },
+  editButton: {
+    backgroundColor: '#cccccc',
+    color: 'black',
+    border: '0px solid black',
+    display: 'block',
+    marginRight: 0,
+    minWidth: 40,
+    padding: 8,
+    fontSize: '15px',
+    borderRadius: '10px'
+  }
 });
 
 const AjustesAdmin = () => {
@@ -59,18 +69,16 @@ const AjustesAdmin = () => {
   const [data, setData] = useState([]);
   const [cargos, setCargos] = useState([]);
   const [disable, setDisable] = useState(false);
-  const [name, setName] = useState("");
-  const [cargo, setCargo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
+  const [name, setName] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [descripcion, setDescripcion] = useState('');
   const classes = useStyles();
   const [reload, setReload] = useState(false);
 
-  function handleClickEditRow() {
-    console.log("e");
-  }
+  function handleClickEditRow() {}
 
   async function getData() {
-    const query = db.collection("documentos");
+    const query = db.collection('documentos');
     await query.get().then((querySnapshot) => {
       let dataGet = [];
       if (querySnapshot.size > 0) {
@@ -80,7 +88,7 @@ const AjustesAdmin = () => {
         setData(dataGet);
       }
     });
-    const cargosquery = db.collection("cargos");
+    const cargosquery = db.collection('cargos');
     await cargosquery.get().then((querySnapshot) => {
       let cargosGet = [];
       if (querySnapshot.size > 0) {
@@ -94,33 +102,31 @@ const AjustesAdmin = () => {
 
   function submit() {
     setDisable(true);
-    const collection = db.collection("documentos");
+    const collection = db.collection('documentos');
     collection.get().then((querySnapshot) => {
       let dataGet = [];
-      let id = "";
+      let id = '';
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
           dataGet = doc.data().lista;
           id = doc.id;
         });
-        const transformed = descripcion.toLowerCase().replace(/\s/g, "");
+        const transformed = descripcion.toLowerCase().replace(/\s/g, '');
         dataGet.push({
           nombre: name,
           descripcion: transformed,
-          nombreImagen: "test",
+          nombreImagen: 'test'
         });
         collection
           .doc(id)
           .update({ lista: dataGet })
           .then(() => {
-            setName("");
-            setDescripcion("");
+            setName('');
+            setDescripcion('');
             setDisable(false);
             setReload((prev) => !prev);
           })
-          .catch((e) => {
-            console.log(e.message);
-          });
+          .catch(() => {});
       }
     });
   }
@@ -128,22 +134,21 @@ const AjustesAdmin = () => {
   function addCargo() {
     setDisable(true);
     let dataGet = [];
-    const query = db.collection("cargos");
+    const query = db.collection('cargos');
     query.get().then((querySnapshot) => {
-      let id = "";
+      let id = '';
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
           dataGet = doc.data().lista;
           id = doc.id;
         });
-        console.log(dataGet);
         dataGet.push({ nombre: cargo });
-        db.collection("cargos")
+        db.collection('cargos')
           .doc(id)
           .update({ lista: dataGet })
           .then(() => {
             setDisable(false);
-            setCargo("");
+            setCargo('');
             setReload((prev) => !prev);
           })
           .catch((e) => {
@@ -173,20 +178,20 @@ const AjustesAdmin = () => {
                   <Table
                     columns={[
                       {
-                        Header: "Nombre",
-                        accessor: "nombre",
+                        Header: 'Nombre',
+                        accessor: 'nombre'
                       },
                       {
-                        Header: "Nombre en BD",
-                        accessor: "nombreImagen",
+                        Header: 'Nombre en BD',
+                        accessor: 'nombreImagen'
                       },
                       {
-                        Header: "Descripcion",
-                        accessor: "descripcion",
+                        Header: 'Descripcion',
+                        accessor: 'descripcion'
                       },
                       {
-                        Header: "Editar",
-                        accessor: "fullName",
+                        Header: 'Editar',
+                        accessor: 'fullName',
                         Cell: (cellObj) => (
                           <div>
                             <button
@@ -197,8 +202,8 @@ const AjustesAdmin = () => {
                               <FaEdit />
                             </button>
                           </div>
-                        ),
-                      },
+                        )
+                      }
                     ]}
                     data={data}
                   />
@@ -218,12 +223,12 @@ const AjustesAdmin = () => {
                   <Table
                     columns={[
                       {
-                        Header: "Nombre",
-                        accessor: "nombre",
+                        Header: 'Nombre',
+                        accessor: 'nombre'
                       },
                       {
-                        Header: "Editar",
-                        accessor: "fullName",
+                        Header: 'Editar',
+                        accessor: 'fullName',
                         Cell: (cellObj) => (
                           <div>
                             <button
@@ -234,8 +239,8 @@ const AjustesAdmin = () => {
                               <FaEdit />
                             </button>
                           </div>
-                        ),
-                      },
+                        )
+                      }
                     ]}
                     data={cargos}
                   />
@@ -265,7 +270,7 @@ const AjustesAdmin = () => {
                 </div>
               </Col>
               <Col>
-                {" "}
+                {' '}
                 <div className="formGroup">
                   <label htmlFor="email" className="block pb10">
                     Descripción
