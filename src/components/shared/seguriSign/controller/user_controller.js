@@ -15,11 +15,11 @@ class UserController {
 
   signDocCollection = db.collection('sign-docs');
 
-  static addNewDocToFirebase = async (
+  async addNewDocToFirebase(
     emailList,
     document,
     requiresFaceMatch
-  ) => {
+  ){
     const docRef = db.collection('sign-docs').doc();
     const body = {
       multilateralId: document.multilateralId,
@@ -35,7 +35,7 @@ class UserController {
       .set(body)
       .then((docReference) => {})
       .catch((error) => {});
-  };
+  }
 
   async getSignDocData(multilateralId) {
     const snapshot = await this.signDocCollection
