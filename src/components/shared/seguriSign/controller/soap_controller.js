@@ -10,21 +10,21 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-param-reassign */
 /* eslint-disable object-shorthand */
-import "jquery";
-import "jquery.soap";
-import { toast } from "react-toastify";
-import SegurisignUser from "../segurisign_user";
+import 'jquery';
+import 'jquery.soap';
+import { toast } from 'react-toastify';
+import SegurisignUser from '../segurisign_user';
 
-const $ = require("jquery");
-require("jquery.soap");
+const $ = require('jquery');
+require('jquery.soap');
 
 class SoapController {
   constructor() {
-    this.passwordDomain = "HZAOT0hG50ZFkji3vTb47RjK3WOxHUExxIwII3zp6TY=";
-    this.userDomain = "ws_test";
-    this.idDomain = "1";
+    this.passwordDomain = 'HZAOT0hG50ZFkji3vTb47RjK3WOxHUExxIwII3zp6TY=';
+    this.userDomain = 'ws_test';
+    this.idDomain = '1';
     this.url =
-      "https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV";
+      'https://feb.seguridata.com/WS_HRVertical_Operations/WSOperationsHRV';
     this.segurisignUser = new SegurisignUser();
   }
 
@@ -37,13 +37,13 @@ class SoapController {
     });
 
   async addDocument(signer, file) {
-    const docType = "CONTRATOS";
+    const docType = 'CONTRATOS';
     const settings = {
       url: this.url,
-      method: "POST",
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
    <soapenv:Header/>
@@ -70,35 +70,35 @@ class SoapController {
          </docListParticipantsRequest>
       </ser:addDocumentConfigurationParticipantsHRV>
    </soapenv:Body>
-</soapenv:Envelope>`,
+</soapenv:Envelope>`
     };
-    // console.log(settings);
+    console.log(settings);
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
-      "application/xhtml+xml"
+      'application/xhtml+xml'
     );
-    // console.log(docResponse);
+    console.log(docResponse);
     const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0]
-        .nodeValue === "1";
+      docResponse.getElementsByTagName('resultado')[0].childNodes[0]
+        .nodeValue === '1';
 
     const multilateralId = resultado
-      ? docResponse.getElementsByTagName("multilateralId")[0].childNodes[0]
+      ? docResponse.getElementsByTagName('multilateralId')[0].childNodes[0]
           .nodeValue
       : 0;
     return [
       resultado,
-      { multilateralId, docType, fileName: file.nameDocument },
+      { multilateralId, docType, fileName: file.nameDocument }
     ];
   }
 
   async addDocumentString(signers, file) {
     const b64 = await this.toBase64(file);
-    const b64Str = b64.substr(b64.indexOf(",") + 1);
-    let signersJSON = "";
-    const docType = "CONTRATOS";
+    const b64Str = b64.substr(b64.indexOf(',') + 1);
+    let signersJSON = '';
+    const docType = 'CONTRATOS';
     signers.forEach((signer) => {
       signersJSON = signersJSON.concat(
         `<lstParticipant>
@@ -111,10 +111,10 @@ class SoapController {
     });
     const settings = {
       url: this.url,
-      method: "POST",
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
    <soapenv:Header/>
@@ -136,31 +136,31 @@ class SoapController {
          </docListParticipantsRequest>
       </ser:addDocumentConfigurationParticipantsHRV>
    </soapenv:Body>
-</soapenv:Envelope>`,
+</soapenv:Envelope>`
     };
 
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
-      "application/xhtml+xml"
+      'application/xhtml+xml'
     );
     // console.log(docResponse);
     const multilateralId =
-      docResponse.getElementsByTagName("multilateralId")[0].childNodes[0]
+      docResponse.getElementsByTagName('multilateralId')[0].childNodes[0]
         .nodeValue;
     const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+      docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
     return [resultado, { multilateralId, docType, fileName: file.name }];
   }
 
   async getHashToSign(multilateralId) {
     const settings = {
       url: this.url,
-      method: "POST",
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
    <soapenv:Header/>
@@ -175,27 +175,27 @@ class SoapController {
          </documentRequest> 
 	  </ser:getHashToSign>
    </soapenv:Body>
-</soapenv:Envelope>`,
+</soapenv:Envelope>`
     };
 
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
-      "application/xhtml+xml"
+      'application/xhtml+xml'
     );
     const hashHex =
-      docResponse.getElementsByTagName("hashHex")[0].childNodes[0].nodeValue;
+      docResponse.getElementsByTagName('hashHex')[0].childNodes[0].nodeValue;
     return hashHex;
   }
 
   async establishHashAndPkcs7(multilateralId, hashHex, password) {
     const settings = {
       url: this.url,
-      method: "POST",
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
    <soapenv:Header/>
@@ -212,19 +212,19 @@ class SoapController {
          <passPrivateKey>${password}</passPrivateKey>
 	  </ser:establishHashAndPkcs7>
    </soapenv:Body>
-</soapenv:Envelope>`,
+</soapenv:Envelope>`
     };
 
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
-      "application/xhtml+xml"
+      'application/xhtml+xml'
     );
     // console.log(docResponse);
     const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === "1";
+      docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+    return resultado === '1';
   }
 
   async sign(multilateralId, password) {
@@ -235,10 +235,10 @@ class SoapController {
   async verifyLogin(email) {
     const settings = {
       url: this.url,
-      method: "POST",
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
        <soapenv:Header/>
@@ -247,24 +247,24 @@ class SoapController {
                 <login>${email}</login>
             </ser:verifyLogin>
        </soapenv:Body>
-    </soapenv:Envelope>`,
+    </soapenv:Envelope>`
     };
 
     const data = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       data.documentElement.innerHTML,
-      "application/xhtml+xml"
+      'application/xhtml+xml'
     );
     // console.log(docResponse);
     const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    if (resultado !== "1") {
+      docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+    if (resultado !== '1') {
       // console.log("Error, correo no válido o no registrado");
       return false;
     }
     const idPerson =
-      docResponse.getElementsByTagName("idPerson")[0].childNodes[0].nodeValue;
+      docResponse.getElementsByTagName('idPerson')[0].childNodes[0].nodeValue;
     this.segurisignUser.idPerson = idPerson;
     return idPerson;
   }
@@ -272,11 +272,11 @@ class SoapController {
   verifyLoginAdmin = async () =>
     new Promise((resolve, reject) => {
       const settings = {
-        url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
-        method: "POST",
+        url: 'https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV',
+        method: 'POST',
         timeout: 0,
         headers: {
-          "Content-Type": "text/xml",
+          'Content-Type': 'text/xml'
         },
         data: `
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
@@ -286,32 +286,32 @@ class SoapController {
               <login>agente@seguridata.com</login>
           </ser:verifyLogin>
       </soapenv:Body>
-  </soapenv:Envelope>`,
+  </soapenv:Envelope>`
       };
       $.ajax(settings)
         .then((data) => {
           const parser = new DOMParser();
           const docResponse = parser.parseFromString(
             data.documentElement.innerHTML,
-            "application/xhtml+xml"
+            'application/xhtml+xml'
           );
           const resultado =
-            docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+            docResponse.getElementsByTagName('resultado')[0].childNodes[0]
               .nodeValue;
           resolve(resultado === 1);
         })
         .fail(() => {
-          reject("error");
+          reject('error');
         });
     });
 
   async authenticateUser(idPerson, password) {
     const settings = {
       url: this.url,
-      method: "POST",
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
    <soapenv:Header/>
@@ -323,24 +323,24 @@ class SoapController {
             <password>${password}</password>
            </ser:authenticateUser>
    </soapenv:Body>
-</soapenv:Envelope>`,
+</soapenv:Envelope>`
     };
 
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
-      "application/xhtml+xml"
+      'application/xhtml+xml'
     );
     const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
+      docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
     // console.log(docResponse);
-    return resultado === "1";
+    return resultado === '1';
   }
 
   async loginUser(email, password) {
     const idPerson = await this.verifyLogin(email);
-    if (idPerson === "Error, correo no válido o no registrado") {
+    if (idPerson === 'Error, correo no válido o no registrado') {
       return false;
     }
     const result = await this.authenticateUser(idPerson, password);
@@ -350,10 +350,10 @@ class SoapController {
   async updateUserPassword(user, newPassword) {
     const settings = {
       url: this.url,
-      method: "POST",
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.operations.seguridata/">
@@ -374,29 +374,29 @@ class SoapController {
          </request>
       </ser:doUpdateUserPasswords>
    </soapenv:Body>
-</soapenv:Envelope>`,
+</soapenv:Envelope>`
     };
 
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
-      "application/xhtml+xml"
+      'application/xhtml+xml'
     );
     // console.log(docResponse);
     const resultado =
-      docResponse.getElementsByTagName("resultado")[0].childNodes[0].nodeValue;
-    return resultado === "1";
+      docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+    return resultado === '1';
   }
 
   async createUser(user) {
     await this.verifyLoginAdmin();
     const settings = {
-      url: "https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV",
-      method: "POST",
+      url: 'https://feb.seguridata.com/WS_HRVertical_Admin_Reports/WSAdminReportsHRV',
+      method: 'POST',
       timeout: 0,
       headers: {
-        "Content-Type": "text/xml",
+        'Content-Type': 'text/xml'
       },
       data: `
           <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.rne.adminreportes.seguridata/">
@@ -452,24 +452,24 @@ class SoapController {
             </ser:addEmployee>
         </soapenv:Body>
     </soapenv:Envelope>
-          `,
+          `
     };
     try {
       const response = await $.ajax(settings).done();
       const parser = new DOMParser();
       const docResponse = parser.parseFromString(
         response.documentElement.innerHTML,
-        "application/xhtml+xml"
+        'application/xhtml+xml'
       );
       const resultado =
-        docResponse.getElementsByTagName("resultado")[0].childNodes[0]
+        docResponse.getElementsByTagName('resultado')[0].childNodes[0]
           .nodeValue;
       // console.log(docResponse);
-      return resultado === "1" ? 1 : false;
+      return resultado === '1' ? 1 : false;
     } catch (e) {
       // console.log(e);
       // console.log(e.responseText.includes("[E0550]"));
-      if (e.responseText.includes("[E0550]")) {
+      if (e.responseText.includes('[E0550]')) {
         return 2;
       }
       return false;
@@ -484,7 +484,7 @@ class SoapController {
       // console.log(resultado, newPassword, user);
       return this.updateUserPassword(user, newPassword);
     }
-    toast("Contraseña de Sign inválida");
+    toast('Contraseña de Sign inválida');
     return false;
   }
 }
