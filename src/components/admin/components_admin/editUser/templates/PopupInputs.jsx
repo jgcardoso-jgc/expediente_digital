@@ -60,9 +60,9 @@ const PopupInputs = ({
     const requiresFM = false;
     if (doc) {
       // soapController.segurisignUser = JSON.parse(cookie);
-      console.log(userEmail, doc);
+      // console.log(userEmail, doc);
       const response = await soapController.addDocument(userEmail, doc);
-      console.log(response);
+      // console.log(response);
       if (response[0]) {
         const userController = new UserController(
           soapController.segurisignUser.email

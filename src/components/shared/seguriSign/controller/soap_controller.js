@@ -72,14 +72,14 @@ class SoapController {
    </soapenv:Body>
 </soapenv:Envelope>`
     };
-    console.log(settings);
+    // console.log(settings);
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
       'application/xhtml+xml'
     );
-    console.log(docResponse);
+    // console.log(docResponse);
     const resultado =
       docResponse.getElementsByTagName('resultado')[0].childNodes[0]
         .nodeValue === '1';
