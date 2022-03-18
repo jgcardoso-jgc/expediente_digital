@@ -6,32 +6,32 @@
 /* eslint-disable spaced-comment */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { createUseStyles } from "react-jss";
-import Table from "components/shared/table/table";
-import styles from "resources/theme";
-import PopupInputs from "./PopupInputs";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { createUseStyles } from 'react-jss';
+import Table from 'components/shared/table/table';
+import styles from 'resources/theme';
+import PopupInputs from './PopupInputs';
 
 const useStyles = createUseStyles({
   editButton: {
-    border: "1px solid transparent",
-    borderRadius: "4px",
-    background: "transparent",
+    border: '1px solid transparent',
+    borderRadius: '4px',
+    background: 'transparent'
   },
   mt: {
-    marginTop: 32,
-  },
+    marginTop: 32
+  }
 });
 
-const TableView = ({ data, docsNumber, form, soapController }) => {
+const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
   const classes = useStyles();
   const history = useHistory();
 
   function handleClickEditRow(obj) {
     history.push({
-      pathname: "/usuarios/editar",
-      state: { objUser: obj.row.original },
+      pathname: '/usuarios/editar',
+      state: { objUser: obj.row.original }
     });
   }
 
@@ -40,8 +40,8 @@ const TableView = ({ data, docsNumber, form, soapController }) => {
       <Table
         columns={[
           {
-            Header: "Nombre",
-            accessor: "document",
+            Header: 'Nombre',
+            accessor: 'document',
             Cell: (cellObj) => (
               <div>
                 <div
@@ -55,11 +55,12 @@ const TableView = ({ data, docsNumber, form, soapController }) => {
                     items={cellObj.cell.row.original.items}
                     form={form}
                     soapController={soapController}
+                    userEmail={userEmail}
                   />
                 </div>
               </div>
-            ),
-          },
+            )
+          }
         ]}
         data={data}
         docNumber={docsNumber}

@@ -10,6 +10,10 @@
   margin-top: 16px;
 }
 
+.inputField {
+  min-width: 100%;
+}
+
 .bt {
   background-color: rgb(75, 75, 75);
   color: white;
@@ -23,4 +27,8 @@
   padding-bottom: 10px;
   font-size: 15px;
   border-radius: 10px;
+}
+
+.divInputs {
+  text-align: left;
 }

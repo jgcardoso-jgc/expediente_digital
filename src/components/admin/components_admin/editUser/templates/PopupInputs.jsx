@@ -59,8 +59,9 @@ const PopupInputs = ({
     const requiresFM = false;
     if (doc) {
       // soapController.segurisignUser = JSON.parse(cookie);
+      console.log(userEmail, doc);
       const response = await soapController.addDocument(userEmail, doc);
-      // console.log(response);
+      console.log(response);
       if (response[0]) {
         const userController = new UserController(
           soapController.segurisignUser.email
@@ -120,7 +121,7 @@ const PopupInputs = ({
                 </Card.Title>
                 <form onSubmit={handleSubmit}>
                   {items.map((input, index) => (
-                    <div key={`i${index}`}>
+                    <div key={`i${index}`} className={styles.divInputs}>
                       <p className={styles.label}>{input.label}</p>
                       <input
                         style={{ display: 'none' }}
@@ -131,6 +132,7 @@ const PopupInputs = ({
                         placeholder=""
                         type={input.type}
                         id={input.name}
+                        className={styles.inputField}
                         onChange={(e) => handleFormValueChange(input.name, e)}
                       />
                     </div>

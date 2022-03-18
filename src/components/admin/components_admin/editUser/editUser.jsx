@@ -245,10 +245,8 @@ const EditUser = () => {
   }, []);
 
   const handleNavigation = () => {
-    history.push({
-      pathname: '/usuarios/editar/plantillas',
-      state: { email: 'test@hotmail.com' }
-    });
+    localStorage.setItem('locationData', JSON.stringify(locData));
+    history.push('/usuarios/editar/plantillas');
   };
 
   useEffect(() => {}, [reload]);
