@@ -5,6 +5,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable quotes */
+/* eslint-disable no-param-reassign */
 import Popup from 'reactjs-popup';
 import Card from 'react-bootstrap/Card';
 import { Col } from 'react-bootstrap';
@@ -97,6 +98,11 @@ const PopupInputs = ({
   };
 
   useEffect(() => {
+    if (cookie) {
+      soapController.segurisignUser = JSON.parse(cookie);
+    } else {
+      toast('No estás loggeado en Sign');
+    }
     createFormValues(items);
   }, []);
 
