@@ -15,11 +15,7 @@ class UserController {
 
   signDocCollection = db.collection('sign-docs');
 
-  static addNewDocToFirebase = async (
-    emailList,
-    document,
-    requiresFaceMatch
-  ) => {
+  addNewDocToFirebase = async (emailList, document, requiresFaceMatch) => {
     const docRef = db.collection('sign-docs').doc();
     const body = {
       multilateralId: document.multilateralId,
@@ -57,7 +53,7 @@ class UserController {
     return false;
   }
 
-  static async addNewDocAlert(users, multilateralID) {
+  addNewDocAlert = async (users, multilateralID) => {
     users.forEach(async (user) => {
       await db
         .collection('users')
@@ -75,7 +71,7 @@ class UserController {
         })
         .catch((err) => {});
     });
-  }
+  };
 
   async getUserDocs(status) {
     return new Promise((resolve, reject) => {
