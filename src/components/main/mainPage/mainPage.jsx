@@ -19,11 +19,12 @@ const useStyles = createUseStyles(() => ({
   },
   logo: { marginTop: '10%', width: '100px' },
   first: { marginBottom: '24px' },
-  second: { marginBottom: '20px', minHeight: '100%' },
+  second: { marginBottom: '20px', minHeight: '90%' },
   mainDiv: { textAlign: 'center' },
   dBlock: { display: 'block' },
   wave: {
-    position: 'absolute',
+    position: 'relative',
+    height: '10%',
     bottom: 0
   },
   logBt: {

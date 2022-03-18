@@ -5,15 +5,15 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable quotes */
-import Popup from "reactjs-popup";
-import Card from "react-bootstrap/Card";
-import { Col } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import { useFirebaseApp } from "reactfire";
-import styles from "./PopupInputs.module.scss";
-import UserController from "../../../../shared/seguriSign/controller/user_controller";
+import Popup from 'reactjs-popup';
+import Card from 'react-bootstrap/Card';
+import { Col } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import { useFirebaseApp } from 'reactfire';
+import styles from './PopupInputs.module.scss';
+import UserController from '../../../../shared/seguriSign/controller/user_controller';
 
 const PopupInputs = ({
   label,
@@ -21,9 +21,9 @@ const PopupInputs = ({
   items,
   soapController,
   userEmail,
-  form,
+  form
 }) => {
-  const cookie = localStorage.getItem("sign-user");
+  const cookie = localStorage.getItem('sign-user');
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const [loading, setLoading] = useState(false);
@@ -33,13 +33,13 @@ const PopupInputs = ({
     setFormValues([]);
     const temp = [];
     itemsForm.forEach((item) => {
-      temp.push({ name: item.name, label: item.label, value: "" });
+      temp.push({ name: item.name, label: item.label, value: '' });
     });
     setFormValues(temp);
   };
 
   const getDocByID = async (id) => {
-    const docRef = db.collection("generatedDocs").doc(id);
+    const docRef = db.collection('generatedDocs').doc(id);
     const doc = await docRef.get();
     if (doc.exists) {
       return doc.data();
@@ -50,7 +50,7 @@ const PopupInputs = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!cookie) {
-      toast("No estás loggeado");
+      toast('No estás loggeado');
       return;
     }
     setLoading(true);
@@ -59,8 +59,9 @@ const PopupInputs = ({
     const requiresFM = false;
     if (doc) {
       // soapController.segurisignUser = JSON.parse(cookie);
+      console.log(userEmail, doc);
       const response = await soapController.addDocument(userEmail, doc);
-      // console.log(response);
+      console.log(response);
       if (response[0]) {
         const userController = new UserController(
           soapController.segurisignUser.email
@@ -72,14 +73,14 @@ const PopupInputs = ({
           requiresFM
         );
         setLoading(false);
-        toast("Éxito");
+        toast('Éxito');
       } else {
         setLoading(false);
-        toast("Error al subir documento");
+        toast('Error al subir documento');
       }
     } else {
       setLoading(false);
-      toast("Error al generar documento");
+      toast('Error al generar documento');
     }
   };
 
@@ -106,7 +107,7 @@ const PopupInputs = ({
         modal
         trigger={
           <Button
-            style={{ background: "transparent", color: "black", border: 0 }}
+            style={{ background: 'transparent', color: 'black', border: 0 }}
           >
             {label}
           </Button>
@@ -116,13 +117,15 @@ const PopupInputs = ({
           <div align="center">
             <Card>
               <Card.Body className={styles.popup}>
-                <Card.Title>{label}</Card.Title>
+                <Card.Title>
+                  <b>{label}</b>
+                </Card.Title>
                 <form onSubmit={handleSubmit}>
                   {items.map((input, index) => (
-                    <div key={`i${index}`}>
-                      <p>{input.label}</p>
+                    <div key={`i${index}`} className={styles.divInputs}>
+                      <p className={styles.label}>{input.label}</p>
                       <input
-                        style={{ display: "none" }}
+                        style={{ display: 'none' }}
                         value={input.label}
                         readOnly
                       />
@@ -130,6 +133,7 @@ const PopupInputs = ({
                         placeholder=""
                         type={input.type}
                         id={input.name}
+                        className={styles.inputField}
                         onChange={(e) => handleFormValueChange(input.name, e)}
                       />
                     </div>
@@ -141,7 +145,7 @@ const PopupInputs = ({
                   >
                     Enviar
                   </button>
-                  <p>{loading ? "Subiendo documento..." : ""}</p>
+                  <p>{loading ? 'Subiendo documento...' : ''}</p>
                 </form>
                 <Col>
                   <Button variant="outline-dark" onClick={close}>

@@ -245,10 +245,8 @@ const EditUser = () => {
   }, []);
 
   const handleNavigation = () => {
-    history.push({
-      pathname: '/usuarios/editar/plantillas',
-      state: { email: 'test@hotmail.com' }
-    });
+    localStorage.setItem('locationData', JSON.stringify(locData));
+    history.push('/usuarios/editar/plantillas');
   };
 
   useEffect(() => {}, [reload]);
@@ -392,11 +390,11 @@ const EditUser = () => {
             <Row>
               <Col>
                 <div className="formGroup">
-                  <label htmlFor="email">Nombre del Documento</label>
+                  <p>Nombre del Documento</p>
                   <input
                     type="email"
                     id="email"
-                    className={classes.inputStyle}
+                    className={classes.inputstyle}
                     onChange={(event) => setName(event.target.value)}
                   />
                 </div>
@@ -404,13 +402,11 @@ const EditUser = () => {
               <Col>
                 {' '}
                 <div className="formGroup">
-                  <label htmlFor="email" className="block pb10">
-                    Descripción
-                  </label>
+                  <p className="block pb10">Descripción</p>
                   <input
                     type="text"
                     id="name"
-                    className={classes.inputStyle}
+                    className={classes.inputstyle}
                     onChange={(event) => setDescripcion(event.target.value)}
                   />
                 </div>

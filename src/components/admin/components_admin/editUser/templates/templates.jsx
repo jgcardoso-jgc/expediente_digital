@@ -1,9 +1,9 @@
+/* eslint-disable no-console */
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable indent */
 /* eslint-disable react/jsx-indent */
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
 import { AiFillDelete } from 'react-icons/ai';
@@ -13,11 +13,16 @@ import FormController from './form_controller';
 import SoapController from '../../../../shared/seguriSign/controller/soap_controller';
 
 const Templates = () => {
+  function getLocationData() {
+    if (localStorage.getItem('locationData')) {
+      return JSON.parse(localStorage.getItem('locationData'));
+    }
+    return '';
+  }
+
   const cookie = localStorage.getItem('sign-user');
   const [numberInputs, setNumberInputs] = useState([]);
-  const location = useLocation();
-  const locData = location.state;
-  const userEmail = locData ? locData.email : '';
+  const userEmail = getLocationData();
   const form = new FormController();
   const soapController = new SoapController();
   const [loading, setLoading] = useState(true);
@@ -160,13 +165,14 @@ const Templates = () => {
       <div className={`${styles.container} ${styles.mb}`}>
         <ToastContainer />
         <h4 className={styles.titleCard}>Selecciona Tipo de Documento</h4>
-        <p>{userEmail}</p>
+        <p>{userEmail.email}</p>
         {loading ? 'Cargando...' : ''}
         <div className={styles.mt}>
           {docs.length > 0 ? (
             <TableView
               data={docs}
               docsNumber={0}
+              userEmail={userEmail.email}
               form={form}
               soapController={soapController}
             />
