@@ -12,9 +12,11 @@ class UpdatePasswordController {
     this.auth = this.firebase.auth();
   }
 
-  static updateFirebasePassword = async (user, newPassword) => {
+  updateFirebasePassword = async (user, newPassword) => {
     try {
-      await user.updatePassword(newPassword);
+      console.log(user, newPassword);
+      const bug = await user.updatePassword(newPassword);
+      console.log(bug);
       return true;
     } catch (error) {
       toast(error);
@@ -33,6 +35,7 @@ class UpdatePasswordController {
           user.email,
           user.password
         );
+        console.log(fUser);
         return this.updateFirebasePassword(fUser.user, newPassword);
       }
       return false;

@@ -93,6 +93,8 @@ const UpdatePassword = () => {
 
       if (success) {
         toast('Cambio de contraseña exitoso');
+      } else {
+        toast('Error, intentar de nuevo');
       }
     } catch (error) {
       toast(error);
