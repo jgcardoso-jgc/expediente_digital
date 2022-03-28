@@ -60,21 +60,20 @@ class UpdatePasswordController {
     }
   };
 
-  updatePasswordSign = async (user, newPassword, signPassword) => {
+  updatePasswordSign = async (user, signPassword) => {
     try {
       const signUser = { email: user.email, password: signPassword };
-      const resultSign = await this.soapController.loginAndUpdatePassword(
-        signUser,
+      const fUser = await this.auth.signInWithEmailAndPassword(
+        user.email,
+        user.password
+      );
+      const success = await this.updateFirebasePassword(
+        fUser.user,
         newPassword
       );
-      if (resultSign) {
-        const fUser = await this.auth.signInWithEmailAndPassword(
-          user.email,
-          user.password
-        );
-        console.log('begin updtd');
-        await this.updateFirebasePassword(fUser.user, newPassword);
-        console.log('finish updtd');
+      if (success) {
+        toast('Éxito');
+        return false;
       }
       toast('Error');
       return false;
