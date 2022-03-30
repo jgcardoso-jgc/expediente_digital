@@ -1,8 +1,11 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import styles from './playground.module.scss';
 
 const Playground = () => {
+  const [input, setInput] = useState('Hola mundo');
+
   function hex(buffer) {
     const hexCodes = [];
     const view = new DataView(buffer);
@@ -34,14 +37,31 @@ const Playground = () => {
     <div>
       <h1>Playground</h1>
       <p>Plain Text: </p>
-      <input type="text" id="plainTextGCM" value="Hola mundo" />
-      <button type="button" onClick={() => getHash('SHA-256')}>
+      <input
+        type="text"
+        id="plainTextGCM"
+        onChange={(e) => setInput(e.target.value)}
+        value={input}
+      />
+      <button
+        className={styles.addBt}
+        type="button"
+        onClick={() => getHash('SHA-256')}
+      >
         SHA 256
       </button>
-      <button type="button" onClick={() => getHash('SHA-512')}>
+      <button
+        className={styles.addBt}
+        type="button"
+        onClick={() => getHash('SHA-512')}
+      >
         SHA 512
       </button>
-      <button type="button" onClick={() => getHash('SHA-1')}>
+      <button
+        className={styles.addBt}
+        type="button"
+        onClick={() => getHash('SHA-1')}
+      >
         SHA 1
       </button>
       <div>
