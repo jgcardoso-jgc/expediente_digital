@@ -13,7 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import waves from "../../../assets/waves.svg";
 import UpdatePasswordController from "../../shared/updatePassword/updatePasswordController";
-import { networkInterfaces } from "os";
 
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },

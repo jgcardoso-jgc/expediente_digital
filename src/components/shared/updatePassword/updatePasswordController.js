@@ -63,17 +63,20 @@ class UpdatePasswordController {
   updatePasswordSign = async (user, signPassword) => {
     try {
       const signUser = { email: user.email, password: signPassword };
-      const fUser = await this.auth.signInWithEmailAndPassword(
-        user.email,
-        user.password
-      );
-      const success = await this.updateFirebasePassword(
-        fUser.user,
-        newPassword
-      );
-      if (success) {
-        toast('Éxito');
-        return false;
+      if (signUser) {
+        const fUser = await this.auth.signInWithEmailAndPassword(
+          user.email,
+          user.password
+        );
+        const success = await this.updateFirebasePassword(
+          fUser.user,
+          signPassword
+        );
+
+        if (success) {
+          toast('Éxito');
+          return false;
+        }
       }
       toast('Error');
       return false;
