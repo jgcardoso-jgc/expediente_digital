@@ -1,5 +1,6 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable indent */
 import { toast } from 'react-toastify';
 import { useFirebaseApp } from 'reactfire';
@@ -13,10 +14,20 @@ class UpdatePasswordController {
   }
 
   updateFirebasePassword = async (user, newPassword) => {
+    console.log('entrada a firebase');
     try {
       console.log(user, newPassword);
-      const bug = await user.updatePassword(newPassword);
-      console.log(bug);
+      await user
+        .updatePassword(newPassword)
+        .then(() => {
+          alert('succes');
+          // Update successful.
+        })
+        .catch((error) => {
+          alert(error);
+          // An error ocurred
+          // ...
+        });
       return true;
     } catch (error) {
       toast(error);
@@ -36,7 +47,9 @@ class UpdatePasswordController {
           user.password
         );
         console.log(fUser);
-        return this.updateFirebasePassword(fUser.user, newPassword);
+        console.log('begin updtd');
+        await this.updateFirebasePassword(fUser.user, newPassword);
+        console.log('finish updtd');
       }
       return false;
     } catch (error) {
@@ -47,19 +60,20 @@ class UpdatePasswordController {
     }
   };
 
-  updatePasswordSign = async (user, newPassword, signPassword) => {
+  updatePasswordSign = async (user, signPassword) => {
     try {
       const signUser = { email: user.email, password: signPassword };
-      const resultSign = await this.soapController.loginAndUpdatePassword(
-        signUser,
+      const fUser = await this.auth.signInWithEmailAndPassword(
+        user.email,
+        user.password
+      );
+      const success = await this.updateFirebasePassword(
+        fUser.user,
         newPassword
       );
-      if (resultSign) {
-        const fUser = await this.auth.signInWithEmailAndPassword(
-          user.email,
-          user.password
-        );
-        return this.updateFirebasePassword(fUser.user, newPassword);
+      if (success) {
+        toast('Éxito');
+        return false;
       }
       toast('Error');
       return false;

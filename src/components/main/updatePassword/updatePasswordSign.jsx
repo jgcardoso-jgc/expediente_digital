@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import NavBarMainPage from "../navBarMainPage/navBarMainPage";
 import waves from "../../../assets/waves.svg";
 import UpdatePasswordController from "../../shared/updatePassword/updatePasswordController";
+import { networkInterfaces } from "os";
 
 const useStyles = createUseStyles(() => ({
   logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
@@ -84,7 +85,7 @@ const UpdatePasswordSign = () => {
       email,
       password: passwordOld,
     };
-    const success = await updateController.updatePassword(user, passwordSign);
+    const success = await updateController.updatePasswordSign(user, passwordSign);
 
     if (success) {
       toast("Cambio de contraseña exitoso ");
