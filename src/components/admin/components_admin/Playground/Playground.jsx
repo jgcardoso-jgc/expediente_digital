@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
@@ -5,6 +6,7 @@ import styles from './playground.module.scss';
 
 const Playground = () => {
   const [input, setInput] = useState('Hola mundo');
+  const crypts = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'];
 
   function hex(buffer) {
     const hexCodes = [];
@@ -20,7 +22,6 @@ const Playground = () => {
       hexCodes.push(paddedValue);
     }
     // Join all the hex strings into one
-
     return hexCodes.join('');
   }
 
@@ -33,40 +34,61 @@ const Playground = () => {
     });
   }
 
+  const generateKey = () => {
+    window.crypto.subtle
+      .generateKey(
+        {
+          name: 'RSA-PSS',
+          modulusLength: 2048, // can be 1024, 2048, or 4096
+          publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+          hash: { name: 'SHA-256' } // can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+        },
+        false, // whether the key is extractable (i.e. can be used in exportKey)
+        ['sign', 'verify'] // can be any combination of "sign" and "verify"
+      )
+      .then((key) => {
+        // returns a keypair object
+        console.log(key);
+        console.log(key.publicKey);
+        console.log(key.privateKey);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const rsapss = () => {
+    generateKey();
+  };
+
   return (
     <div>
-      <h1>Playground</h1>
-      <p>Plain Text: </p>
+      <h1>Hash</h1>
+      <p>Ingresa el texto:</p>
       <input
         type="text"
         id="plainTextGCM"
         onChange={(e) => setInput(e.target.value)}
         value={input}
       />
-      <button
-        className={styles.addBt}
-        type="button"
-        onClick={() => getHash('SHA-256')}
-      >
-        SHA 256
-      </button>
-      <button
-        className={styles.addBt}
-        type="button"
-        onClick={() => getHash('SHA-512')}
-      >
-        SHA 512
-      </button>
-      <button
-        className={styles.addBt}
-        type="button"
-        onClick={() => getHash('SHA-1')}
-      >
-        SHA 1
-      </button>
-      <div>
-        <p> Hashed Text:</p> <input type="text" id="hashtext" size="120" />
+      <div className={styles.flex}>
+        {crypts.map((c) => (
+          <button
+            className={styles.addBt}
+            type="button"
+            onClick={() => getHash(c)}
+          >
+            {c}
+          </button>
+        ))}
       </div>
+      <div>
+        <p>Texto hasheado:</p>{' '}
+        <textarea type="text" cols="50" rows={5} id="hashtext" size="124" />
+      </div>
+      <button onClick={rsapss} type="button">
+        RSA PSS
+      </button>
     </div>
   );
 };
