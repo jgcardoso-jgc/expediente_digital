@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable object-curly-newline */
 /* eslint-disable comma-dangle */
 /* eslint-disable react/no-array-index-key */
@@ -18,11 +19,11 @@ import UserController from '../../../../shared/seguriSign/controller/user_contro
 
 const PopupInputs = ({
   label,
-  docType,
   items,
   soapController,
   userEmail,
-  form
+  form,
+  uuid
 }) => {
   const cookie = localStorage.getItem('sign-user');
   const firebase = useFirebaseApp();
@@ -40,6 +41,7 @@ const PopupInputs = ({
   };
 
   const getDocByID = async (id) => {
+    console.log(`id:${id}`);
     const docRef = db.collection('generatedDocs').doc(id);
     const doc = await docRef.get();
     if (doc.exists) {
@@ -55,7 +57,8 @@ const PopupInputs = ({
       return;
     }
     setLoading(true);
-    const docID = await form.submit(formValues, docType);
+    const docID = await form.submit(formValues, uuid);
+    console.log(`docID:${docID}`);
     const doc = await getDocByID(docID);
     const requiresFM = false;
     if (doc) {
@@ -67,7 +70,9 @@ const PopupInputs = ({
         const userController = new UserController(
           soapController.segurisignUser.email
         );
-        response[1].docType = docType;
+        response[1].docType = uuid;
+        console.log(response[1]);
+        console.log(Object.keys(response[1]));
         await userController.addNewDocToFirebase(
           [userEmail],
           response[1],

@@ -60,7 +60,7 @@ class SoapController {
             <document>${file.layoutDocument}</document>
             <userDomain>${this.userDomain}</userDomain>
             <passwordDomain>${this.passwordDomain}</passwordDomain>
-            <docNameWithExtension>${file.nameDocument}</docNameWithExtension>
+            <docNameWithExtension>${file.typeDocument}</docNameWithExtension>
             <automaticSignatureDomain>false</automaticSignatureDomain>
             <idDomain>${this.idDomain}</idDomain>
             <initiatorEmail>${this.segurisignUser.email}</initiatorEmail>
@@ -90,7 +90,7 @@ class SoapController {
       : 0;
     return [
       resultado,
-      { multilateralId, docType, fileName: file.nameDocument }
+      { multilateralId, docType, fileName: file.typeDocument }
     ];
   }
 

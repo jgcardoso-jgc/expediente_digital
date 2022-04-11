@@ -22,6 +22,7 @@ class FormController {
   }
 
   async submit(values, docType) {
+    console.log('to submit');
     const bodyList = [];
     values.forEach((formValue) => {
       const { name, value, label } = formValue;
@@ -32,7 +33,10 @@ class FormController {
       headers: this.header,
       body: JSON.stringify(bodyList)
     };
+    console.log(`${this.apiUrl}/${docType}`);
+    console.log(requestOptions);
     const response = await fetch(`${this.apiUrl}/${docType}`, requestOptions);
+    console.log(response);
     if (response.status === 200) {
       const data = await response.json();
       return data.id;

@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-param-reassign */
@@ -15,11 +16,7 @@ class UserController {
 
   signDocCollection = db.collection('sign-docs');
 
-  static addNewDocToFirebase = async (
-    emailList,
-    document,
-    requiresFaceMatch
-  ) => {
+  async addNewDocToFirebase(emailList, document, requiresFaceMatch) {
     const docRef = db.collection('sign-docs').doc();
     const body = {
       multilateralId: document.multilateralId,
@@ -35,7 +32,7 @@ class UserController {
       .set(body)
       .then((docReference) => {})
       .catch((error) => {});
-  };
+  }
 
   async getSignDocData(multilateralId) {
     const snapshot = await this.signDocCollection
