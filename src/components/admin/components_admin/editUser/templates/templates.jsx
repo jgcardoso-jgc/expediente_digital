@@ -9,6 +9,8 @@ import { nanoid } from 'nanoid';
 import { AiFillDelete } from 'react-icons/ai';
 import styles from './templates.module.scss';
 import TableView from './tableView';
+import PopupInputs from './PopupInputs';
+import TableViewPagare from './tableViewPagare';
 import FormController from './form_controller';
 import SoapController from '../../../../shared/seguriSign/controller/soap_controller';
 
@@ -33,6 +35,7 @@ const Templates = () => {
     selectedFile: null,
     hasSelected: false
   });
+  const [pagare, setPagare] = useState([]);
 
   const eraseInput = ({ name }) => {
     const prev = [...numberInputs];
@@ -56,8 +59,13 @@ const Templates = () => {
   };
 
   const getDocuments = async () => {
+    console.log('getting...');
+    const ignoredLabels = ['PAGARE', 'ENDOSO', 'PAGO PARCIAL', 'CANCELACION'];
     const res = await form.getDocumentList();
-    setDocs(res);
+    const filterDocs = res.filter((doc) => !ignoredLabels.includes(doc.label));
+    const pagareDoc = res.filter((doc) => doc.label === 'PAGARE');
+    setPagare(pagareDoc);
+    setDocs(filterDocs);
     setLoading(false);
   };
 
@@ -170,6 +178,39 @@ const Templates = () => {
         <div className={styles.mt}>
           {docs.length > 0 ? (
             <TableView
+              data={docs}
+              docsNumber={0}
+              userEmail={userEmail.email}
+              form={form}
+              soapController={soapController}
+            />
+          ) : (
+            ''
+          )}
+        </div>
+      </div>
+      <div className={`${styles.container} ${styles.mb}`}>
+        <ToastContainer />
+        <h4 className={styles.titleCard}>Pagarés</h4>
+        <p>Panel de Pagaré</p>
+        {pagare.length > 0 ? (
+          <PopupInputs
+            label="Agregar Pagaré"
+            docType={pagare[0].name}
+            items={pagare[0].items}
+            form={form}
+            soapController={soapController}
+            userEmail={userEmail}
+            uuid={pagare[0].uuid}
+            isAddButton
+          />
+        ) : (
+          ''
+        )}
+        {loading ? 'Cargando...' : ''}
+        <div className={styles.mt}>
+          {docs.length > 0 ? (
+            <TableViewPagare
               data={docs}
               docsNumber={0}
               userEmail={userEmail.email}
