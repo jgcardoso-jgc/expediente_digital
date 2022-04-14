@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import Row from 'react-bootstrap/Row';
 import NavBarMainPage from '../navBarMainPage/navBarMainPage';
-import waves from '../../../assets/waves.svg';
+// import waves from '../../../assets/waves.svg';
 import easy_logo from '../../../assets/easy_logo.svg';
 
 const useStyles = createUseStyles(() => ({
@@ -96,8 +96,8 @@ function Login() {
           <div className={classes.second}>
             <h4 className={classes.title}>Bienvenido</h4>
             <p className={classes.text}>
-              Si ya te has recibido el correo de bienvenida, puedes acceder con
-              tus credenciales.
+              Si has recibido el correo de bienvenida, puedes acceder con tus
+              credenciales.
             </p>
             <Link to="/loginNormal" role="button" className={classes.dBlock}>
               <button
@@ -109,9 +109,6 @@ function Login() {
             </Link>
           </div>
         </Row>
-      </div>
-      <div className={classes.wave}>
-        <img src={waves} alt="waves" />
       </div>
     </Div100vh>
   );

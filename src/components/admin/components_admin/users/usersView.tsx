@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import { fetchCargos, sendWelcomeEmail, sendWelcomeEmailSign } from "./usersController";
-import TableView from "../table/tableView";
+import TableView from "./table/tableView";
 import { docs, cargosLista } from "./usersModel";
 import {
   rfcValido, createUserExpediente

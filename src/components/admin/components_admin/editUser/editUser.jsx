@@ -258,13 +258,15 @@ const EditUser = () => {
           <ToastContainer />
           <div className={classes.container}>
             <div className="row" />
-            <p>
+            <h5 className={classes.titles}>
               <b>Información General</b>
-            </p>
+            </h5>
             <b>Nombre</b>
             <p>{locData.fullname}</p>
             <b>RFC</b>
             <p>{locData.rfc}</p>
+            <b>Curp</b>
+            <p>{locData.curp ? locData.curp : 'Onboarding necesario'}</p>
             <b>Email</b>
             <p>{locData.email}</p>
             <b>Cargo</b>
@@ -274,9 +276,9 @@ const EditUser = () => {
             <p />
           </div>
           <div className={classes.container}>
-            <p>
+            <h5>
               <b>Documentos Completados</b>
-            </p>
+            </h5>
             {urlsCompleted.length > 0 ? (
               <Completados
                 urlsCompleted={urlsCompleted}
@@ -315,9 +317,9 @@ const EditUser = () => {
             )}
           </div>
           <div className={classes.container}>
-            <p>
+            <h5 className={classes.titles}>
               <b>Solicitar Documentos</b>
-            </p>
+            </h5>
             <p>Selecciona los documentos requeridos para el usuario</p>
             {cboxes.length > 0 ? (
               <div>
@@ -368,9 +370,9 @@ const EditUser = () => {
             />
           </div>
           <div className={classes.container}>
-            <p className={classes.mt20}>
+            <h5 className={classes.titles}>
               <b>Documentos Administrativos</b>
-            </p>
+            </h5>
             <div>
               <Row className={classes.rowDocs}>
                 {administrativos.map((url) => (
