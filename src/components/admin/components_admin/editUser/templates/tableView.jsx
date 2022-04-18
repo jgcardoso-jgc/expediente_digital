@@ -56,6 +56,7 @@ const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
                     form={form}
                     soapController={soapController}
                     userEmail={userEmail}
+                    uuid={cellObj.cell.row.original.uuid}
                   />
                 </div>
               </div>

@@ -1,16 +1,17 @@
 /* eslint-disable quotes */
-import React, { Suspense, lazy } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import SLUGS from "../../shared/resources/slugs";
-import LoadingComponent from "../../shared/loading/LoadingComponent";
-import UserView from "../components_admin/users/usersView";
-import AjustesAdmin from "../components_admin/ajustes/ajustes";
-import EditUser from "../components_admin/editUser/editUser";
-import AlertasPagina from "../components_admin/alertasPagina/alertasPagina";
-import Segurisign from "../../shared/seguriSign/seguriSign";
-import Templates from "../components_admin/editUser/templates/templates";
+import React, { Suspense, lazy } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import SLUGS from '../../shared/resources/slugs';
+import LoadingComponent from '../../shared/loading/LoadingComponent';
+import UserView from '../components_admin/users/usersView';
+import AjustesAdmin from '../components_admin/ajustes/ajustes';
+import EditUser from '../components_admin/editUser/editUser';
+import AlertasPagina from '../components_admin/alertasPagina/alertasPagina';
+import Segurisign from '../../shared/seguriSign/seguriSign';
+import Templates from '../components_admin/editUser/templates/templates';
+import Playground from '../components_admin/Playground/Playground';
 
-const DashboardComponent = lazy(() => import("../components_admin/dashboard"));
+const DashboardComponent = lazy(() => import('../components_admin/dashboard'));
 
 function PrivateRoutes() {
   return (
@@ -19,6 +20,11 @@ function PrivateRoutes() {
         <Route exact path={SLUGS.dashboard} component={DashboardComponent} />
         <Route exact path={SLUGS.usuarios} render={() => <UserView />} />
         <Route exact path={SLUGS.editUser} render={() => <EditUser />} />
+        <Route
+          exact
+          path="/dashboard/playground"
+          render={() => <Playground />}
+        />
         <Route exact path={SLUGS.templates} render={() => <Templates />} />
         <Route exact path={SLUGS.settings} render={() => <AjustesAdmin />} />
         <Route exact path={SLUGS.alertas} render={() => <AlertasPagina />} />

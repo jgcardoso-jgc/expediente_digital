@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 class FormController {
-  apiUrl = 'https://smtp.seguridata.com:5002/docs';
+  apiUrl = 'https://smtp.seguridata.com:5002/';
 
   header = {
     'Content-Type': 'application/json'
@@ -11,7 +11,7 @@ class FormController {
       method: 'GET',
       headers: this.header
     };
-    const response = await fetch(`${this.apiUrl}`, requestOptions);
+    const response = await fetch(`${this.apiUrl}/docs`, requestOptions);
 
     if (response.status === 200) {
       const data = await response.json();
@@ -21,7 +21,28 @@ class FormController {
     return false;
   }
 
-  async submit(values, docType) {
+  async getDocInheritance(uuid) {
+    const requestOptions = {
+      method: 'GET',
+      headers: this.header
+    };
+    const response = await fetch(
+      `${this.apiUrl}/inherit/${uuid}`,
+      requestOptions
+    );
+
+    if (response.status === 200) {
+      const data = await response.json();
+      const { documents } = data;
+      if (documents.length === 0) {
+        return false;
+      }
+      return documents;
+    }
+    return false;
+  }
+
+  async submit(values, uuid) {
     const bodyList = [];
     values.forEach((formValue) => {
       const { name, value, label } = formValue;
@@ -32,7 +53,7 @@ class FormController {
       headers: this.header,
       body: JSON.stringify(bodyList)
     };
-    const response = await fetch(`${this.apiUrl}/${docType}`, requestOptions);
+    const response = await fetch(`${this.apiUrl}/docs/${uuid}`, requestOptions);
     if (response.status === 200) {
       const data = await response.json();
       return data.id;
