@@ -16,19 +16,13 @@ class UpdatePasswordController {
   }
 
   updateFirebasePassword = async (user, newPassword) => {
-    console.log('entrada a firebase');
     try {
-      console.log(user, newPassword);
+      // console.log(user, newPassword);
       await user
         .updatePassword(newPassword)
-        .then(() => {
-          alert('succes');
-          // Update successful.
-        })
+        .then(() => 200)
         .catch((error) => {
-          alert(error);
-          // An error ocurred
-          // ...
+          throw error;
         });
       return true;
     } catch (error) {
@@ -48,10 +42,12 @@ class UpdatePasswordController {
           user.email,
           user.password
         );
-        console.log(fUser);
-        console.log('begin updtd');
-        await this.updateFirebasePassword(fUser.user, newPassword);
-        console.log('finish updtd');
+        // console.log('begin updtd', fUser);
+        const update = await this.updateFirebasePassword(
+          fUser.user,
+          newPassword
+        );
+        toast(update);
       }
       return false;
     } catch (error) {

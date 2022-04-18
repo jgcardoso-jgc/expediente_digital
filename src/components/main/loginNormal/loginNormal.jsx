@@ -2,82 +2,82 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable quotes */
-import React, { useState, useEffect } from "react";
-import "firebase/auth";
-import { Link } from "react-router-dom";
-import { useFirebaseApp } from "reactfire";
-import { ToastContainer, toast } from "react-toastify";
-import { createUseStyles, useTheme } from "react-jss";
-import Container from "react-bootstrap/Container";
-import loadingGif from "../../../assets/loading.gif";
-import "react-toastify/dist/ReactToastify.css";
-import NavBarMainPage from "../navBarMainPage/navBarMainPage";
-import SoapController from "../../shared/seguriSign/controller/soap_controller";
-import waves from "../../../assets/waves.svg";
-import SegurisignController from "../../shared/seguriSign/controller/segurisign_controller";
-import checkUser from "./authController";
+import React, { useState, useEffect } from 'react';
+import 'firebase/auth';
+import { Link } from 'react-router-dom';
+import { useFirebaseApp } from 'reactfire';
+import { ToastContainer, toast } from 'react-toastify';
+import { createUseStyles, useTheme } from 'react-jss';
+import Container from 'react-bootstrap/Container';
+import loadingGif from '../../../assets/loading.gif';
+import 'react-toastify/dist/ReactToastify.css';
+import NavBarMainPage from '../navBarMainPage/navBarMainPage';
+import SoapController from '../../shared/seguriSign/controller/soap_controller';
+// import waves from '../../../assets/waves.svg';
+import SegurisignController from '../../shared/seguriSign/controller/segurisign_controller';
+import checkUser from './authController';
 
 const useStyles = createUseStyles(() => ({
-  logoNav: { width: "45px", height: "45px", paddingTop: "10px" },
+  logoNav: { width: '45px', height: '45px', paddingTop: '10px' },
   containerLogin: {
-    maxWidth: "400px",
-    paddingTop: "60px",
-    textAlign: "left",
+    maxWidth: '400px',
+    paddingTop: '60px',
+    textAlign: 'left'
   },
   loginBt: {
-    backgroundColor: "rgb(75, 75, 75)",
-    color: "white",
-    border: "1px solid black",
-    display: "block",
-    marginLeft: "auto",
-    minWidth: "150px",
-    paddingTop: "10px",
-    marginTop: "20px",
-    paddingBottom: "10px",
-    fontSize: "15px",
-    borderRadius: "10px",
+    backgroundColor: 'rgb(75, 75, 75)',
+    color: 'white',
+    border: '1px solid black',
+    display: 'block',
+    marginLeft: 'auto',
+    minWidth: '150px',
+    paddingTop: '10px',
+    marginTop: '20px',
+    paddingBottom: '10px',
+    fontSize: '15px',
+    borderRadius: '10px'
   },
   inputStyle: {
-    width: "100%",
-    border: "1px solid #f1f1f1",
-    fontSize: "16px",
-    background: "#f1f1f1",
-    marginTop: 8,
+    width: '100%',
+    border: '1px solid #f1f1f1',
+    fontSize: '16px',
+    background: '#f1f1f1',
+    marginTop: 8
   },
   tright: {
-    textAlign: "right",
-    marginTop: 16,
+    textAlign: 'right',
+    marginTop: 16
   },
   loadgif: {
-    marginTop: "30vh",
-    display: "block",
-    marginLeft: "auto",
-    marginRight: "auto",
+    marginTop: '30vh',
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   gif: {
-    display: "block",
-    marginLeft: "auto",
-    marginRight: "auto",
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   mb20: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   wave: {
-    position: "absolute",
-    bottom: 0,
+    position: 'absolute',
+    bottom: 0
   },
-  expText: { marginTop: "4px" },
-  pt20: { paddingTop: "20px" },
-  pb10: { paddingBottom: "10px" },
-  mb4: { marginBottom: "4px" },
-  pt14: { paddingTop: "14px" },
-  qa: { marginTop: "0", marginBottom: "4px", fontSize: "15px" },
-  right: { textAlign: "right" },
-  pt10: { paddingTop: "10px" },
-  dBlock: { display: "block" },
-  center: { textAlign: "center" },
-  "@media (max-width: 420px)": { w50: { minWidth: "100%" } },
-  "@media (min-width: 768px)": { segTitle: { paddingTop: "30vh" } },
+  expText: { marginTop: '4px' },
+  pt20: { paddingTop: '20px' },
+  pb10: { paddingBottom: '10px' },
+  mb4: { marginBottom: '4px' },
+  pt14: { paddingTop: '14px' },
+  qa: { marginTop: '0', marginBottom: '4px', fontSize: '15px' },
+  right: { textAlign: 'right' },
+  pt10: { paddingTop: '10px' },
+  dBlock: { display: 'block' },
+  center: { textAlign: 'center' },
+  '@media (max-width: 420px)': { w50: { minWidth: '100%' } },
+  '@media (min-width: 768px)': { segTitle: { paddingTop: '30vh' } }
 }));
 
 const LoginNormal = ({ setLog }) => {
@@ -86,8 +86,8 @@ const LoginNormal = ({ setLog }) => {
   const theme = useTheme();
   const classes = useStyles({ theme });
   const [disable, setDisable] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const seguriSignController = new SegurisignController();
   const soapController = new SoapController();
@@ -99,7 +99,7 @@ const LoginNormal = ({ setLog }) => {
         .signInWithEmailAndPassword(email, password);
       const { uid } = credential.user;
       localStorage.setItem(
-        "sign-user",
+        'sign-user',
         JSON.stringify(seguriSignController.segurisignUser)
       );
       checkUser(uid, db)
@@ -121,7 +121,7 @@ const LoginNormal = ({ setLog }) => {
   async function submit() {
     try {
       setLoading(true);
-      if (email !== "" && password !== "") {
+      if (email !== '' && password !== '') {
         setDisable(true);
         const resultado = await soapController.loginUser(email, password);
         if (resultado instanceof Error) {
@@ -135,7 +135,7 @@ const LoginNormal = ({ setLog }) => {
             );
             // console.log(responseJSON);
             if (responseJSON.token === null) {
-              toast("No estás registrado en Segurisign.");
+              toast('No estás registrado en Segurisign.');
             } else {
               login();
             }
@@ -155,14 +155,14 @@ const LoginNormal = ({ setLog }) => {
 
   useEffect(() => {
     const listener = (event) => {
-      if (event.code === "Enter" || event.code === "NumpadEnter") {
+      if (event.code === 'Enter' || event.code === 'NumpadEnter') {
         event.preventDefault();
         submit();
       }
     };
-    document.addEventListener("keydown", listener);
+    document.addEventListener('keydown', listener);
     return () => {
-      document.removeEventListener("keydown", listener);
+      document.removeEventListener('keydown', listener);
     };
   }, [email, password]);
 
@@ -215,7 +215,7 @@ const LoginNormal = ({ setLog }) => {
               </button>
               <div className={classes.tright}>
                 <Link
-                  style={{ display: "inline-block" }}
+                  style={{ display: 'inline-block' }}
                   to="./recoverPassword"
                 >
                   <p className={(classes.qa, classes.right)}>
@@ -224,7 +224,6 @@ const LoginNormal = ({ setLog }) => {
                 </Link>
               </div>
             </Container>
-            <img src={waves} className={classes.wave} alt="waves" />
           </div>
         )}
       </div>

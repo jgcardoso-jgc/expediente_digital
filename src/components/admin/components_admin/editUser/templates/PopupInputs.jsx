@@ -23,7 +23,8 @@ const PopupInputs = ({
   soapController,
   userEmail,
   form,
-  uuid
+  uuid,
+  isAddButton
 }) => {
   const cookie = localStorage.getItem('sign-user');
   const firebase = useFirebaseApp();
@@ -58,7 +59,7 @@ const PopupInputs = ({
     }
     setLoading(true);
     const docID = await form.submit(formValues, uuid);
-    console.log(`docID:${docID}`);
+    // console.log(`docID:${docID}`);
     const doc = await getDocByID(docID);
     const requiresFM = false;
     if (doc) {
@@ -71,8 +72,8 @@ const PopupInputs = ({
           soapController.segurisignUser.email
         );
         response[1].docType = uuid;
-        console.log(response[1]);
-        console.log(Object.keys(response[1]));
+        // console.log(response[1]);
+        // console.log(Object.keys(response[1]));
         await userController.addNewDocToFirebase(
           [userEmail],
           response[1],
@@ -117,11 +118,12 @@ const PopupInputs = ({
       <Popup
         modal
         trigger={
-          <Button
-            style={{ background: 'transparent', color: 'black', border: 0 }}
+          <button
+            type="button"
+            className={isAddButton ? styles.bt : styles.btTable}
           >
             {label}
-          </Button>
+          </button>
         }
       >
         {(close) => (

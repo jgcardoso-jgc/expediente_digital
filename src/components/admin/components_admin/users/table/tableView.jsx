@@ -2,19 +2,19 @@
 /* eslint-disable spaced-comment */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
-import React, { useState, useEffect } from "react";
-import { useFirebaseApp } from "reactfire";
-import { useHistory } from "react-router-dom";
-import { createUseStyles } from "react-jss";
-import { FaEdit } from "react-icons/fa";
-import Table from "./table";
+import React, { useState, useEffect } from 'react';
+import { useFirebaseApp } from 'reactfire';
+import { useHistory } from 'react-router-dom';
+import { createUseStyles } from 'react-jss';
+import { FaEdit } from 'react-icons/fa';
+import Table from './table';
 
 const useStyles = createUseStyles({
   editButton: {
-    border: "1px solid transparent",
-    background: "#d0d0d0",
-    borderRadius: "4px",
-  },
+    border: '1px solid transparent',
+    background: '#d0d0d0',
+    borderRadius: '4px'
+  }
 });
 
 const TableView = (docsNumber) => {
@@ -28,12 +28,13 @@ const TableView = (docsNumber) => {
   async function getData() {
     setLoading(true);
     return new Promise((resolve) => {
-      const query = db.collection("users").where("fullname", "!=", "");
+      const query = db.collection('users').where('fullname', '!=', '');
       query.get().then((querySnapshot) => {
         const dataGet = [];
         if (querySnapshot.size > 0) {
           querySnapshot.forEach((doc) => {
             const generalData = doc.data();
+            console.log(generalData);
             const docData = generalData.documents;
             let sizeDocs = 0;
             let revDocs = 0;
@@ -80,8 +81,8 @@ const TableView = (docsNumber) => {
 
   function handleClickEditRow(obj) {
     history.push({
-      pathname: "/usuarios/editar",
-      state: { objUser: obj.row.original },
+      pathname: '/usuarios/editar',
+      state: { objUser: obj.row.original }
     });
   }
 
@@ -94,43 +95,47 @@ const TableView = (docsNumber) => {
       <Table
         columns={[
           {
-            Header: "Nombre",
-            accessor: "fullname",
+            Header: 'Nombre',
+            accessor: 'fullname'
           },
           {
-            Header: "Cargo",
-            accessor: "cargo",
+            Header: 'Cargo',
+            accessor: 'cargo'
           },
           {
-            Header: "Email",
-            accessor: "email",
+            Header: 'Email',
+            accessor: 'email',
             Cell: (cellObj) => (
               <div>
                 <a href={`mailto:${cellObj.row.original.email}`} target="blank">
                   {cellObj.row.original.email}
                 </a>
               </div>
-            ),
+            )
           },
           {
-            Header: "🟢",
-            accessor: "sizeDocuments",
+            Header: '🟢',
+            accessor: 'sizeDocuments'
           },
           {
-            Header: "🟡",
-            accessor: "revisionDocs",
+            Header: '🟡',
+            accessor: 'revisionDocs'
           },
           {
-            Header: "🔴",
-            accessor: "pendientesDocs",
+            Header: '🔴',
+            accessor: 'pendientesDocs'
           },
           {
-            Header: "RFC",
-            accessor: "rfc",
+            Header: 'RFC',
+            accessor: 'rfc'
           },
           {
-            Header: "Editar",
-            accessor: "fullName",
+            Header: 'CURP',
+            accessor: 'curp'
+          },
+          {
+            Header: 'Editar',
+            accessor: 'fullName',
             Cell: (cellObj) => (
               <div>
                 <button
@@ -141,8 +146,8 @@ const TableView = (docsNumber) => {
                   <FaEdit />
                 </button>
               </div>
-            ),
-          },
+            )
+          }
         ]}
         data={data}
         docNumber={docsNumber.docsNumber}

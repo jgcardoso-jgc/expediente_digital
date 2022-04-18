@@ -1,3 +1,5 @@
+@use "/src/theme/mixins.module" as *;
+
 .popup {
   min-width: 300px;
   max-height: calc(100vh - 180px);
@@ -14,8 +16,19 @@
   min-width: 100%;
 }
 
+.btTable {
+  background: 'transparent';
+  color: 'black';
+  border: 0;
+}
+
 .bt {
-  background-color: rgb(75, 75, 75);
+  @include globalButton;
+}
+
+
+.btDisabled {
+  background-color: grey;
   color: white;
   border: 1px solid black;
   display: block;
