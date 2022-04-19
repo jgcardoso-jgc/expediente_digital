@@ -24,6 +24,7 @@ const PopupInputs = ({
   userEmail,
   form,
   uuid,
+  curp,
   isAddButton
 }) => {
   const cookie = localStorage.getItem('sign-user');
@@ -42,7 +43,7 @@ const PopupInputs = ({
   };
 
   const getDocByID = async (id) => {
-    console.log(`id:${id}`);
+    // console.log(`id:${id}`);
     const docRef = db.collection('generatedDocs').doc(id);
     const doc = await docRef.get();
     if (doc.exists) {
@@ -103,6 +104,44 @@ const PopupInputs = ({
     setFormValues(formValuesTemp);
   };
 
+  const curpInput = (input) => {
+    if (input.name === 'acreedor') {
+      return (
+        <input
+          placeholder=""
+          type={input.type}
+          id={input.name}
+          value={userEmail.fullname}
+          readOnly
+          className={styles.inputField}
+          onChange={(e) => handleFormValueChange(input.name, e)}
+        />
+      );
+    }
+    if (input.name === 'curpAcreedor') {
+      return (
+        <input
+          placeholder=""
+          type={input.type}
+          id={input.name}
+          value={curp}
+          className={styles.inputField}
+          readOnly
+          onChange={(e) => handleFormValueChange(input.name, e)}
+        />
+      );
+    }
+    return (
+      <input
+        placeholder=""
+        type={input.type}
+        id={input.name}
+        className={styles.inputField}
+        onChange={(e) => handleFormValueChange(input.name, e)}
+      />
+    );
+  };
+
   useEffect(() => {
     if (cookie) {
       soapController.segurisignUser = JSON.parse(cookie);
@@ -142,13 +181,7 @@ const PopupInputs = ({
                         value={input.label}
                         readOnly
                       />
-                      <input
-                        placeholder=""
-                        type={input.type}
-                        id={input.name}
-                        className={styles.inputField}
-                        onChange={(e) => handleFormValueChange(input.name, e)}
-                      />
+                      {curpInput(input)}
                     </div>
                   ))}
                   <button

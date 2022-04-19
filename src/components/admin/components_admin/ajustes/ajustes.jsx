@@ -7,7 +7,7 @@ import { createUseStyles } from 'react-jss';
 import { ToastContainer, toast } from 'react-toastify';
 import { Row, Col } from 'react-bootstrap';
 import { FaEdit } from 'react-icons/fa';
-import Table from '../table/table';
+import Table from '../users/table/table';
 
 const useStyles = createUseStyles({
   text: {

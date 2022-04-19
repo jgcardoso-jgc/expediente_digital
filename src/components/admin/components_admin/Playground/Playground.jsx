@@ -49,8 +49,8 @@ const Playground = () => {
     );
     (async () => {
       const { privateKey, publicKey } = await keyPair;
-      console.log(privateKey);
-      console.log(publicKey);
+      // console.log(privateKey);
+      // console.log(publicKey);
       const signature = await window.crypto.subtle.sign(
         'RSASSA-PKCS1-v1_5',
         privateKey,

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-console */
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
@@ -8,9 +9,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
 import { AiFillDelete } from 'react-icons/ai';
 import styles from './templates.module.scss';
-import TableView from './tableView';
+import TableView from './tables/tableView';
 import PopupInputs from './PopupInputs';
-import TableViewPagare from './tableViewPagare';
+import TableViewPagare from './tables/tableViewPagare';
+import TableViewUsers from './tables/tableViewUsers';
 import FormController from './form_controller';
 import SoapController from '../../../../shared/seguriSign/controller/soap_controller';
 
@@ -25,12 +27,16 @@ const Templates = () => {
   const cookie = localStorage.getItem('sign-user');
   const [numberInputs, setNumberInputs] = useState([]);
   const userEmail = getLocationData();
+  console.log(userEmail);
   const form = new FormController();
   const soapController = new SoapController();
   const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState([]);
   const [docName, setDocName] = useState('');
   const [errors, setErrors] = useState([]);
+  const [userSelected, setUserSelected] = useState(
+    'Por favor selecciona un usuario'
+  );
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
     hasSelected: false
@@ -172,7 +178,9 @@ const Templates = () => {
     <div>
       <div className={`${styles.container} ${styles.mb}`}>
         <ToastContainer />
-        <h4 className={styles.titleCard}>Selecciona Tipo de Documento</h4>
+        <h4 className={styles.titleCard}>
+          <b>Selecciona Tipo de Documento</b>
+        </h4>
         <p>{userEmail.email}</p>
         {loading ? 'Cargando...' : ''}
         <div className={styles.mt}>
@@ -191,8 +199,19 @@ const Templates = () => {
       </div>
       <div className={`${styles.container} ${styles.mb}`}>
         <ToastContainer />
-        <h4 className={styles.titleCard}>Pagarés</h4>
-        <p>Panel de Pagaré</p>
+        <h4 className={styles.titleCard}>
+          <b>Pagarés</b>
+        </h4>
+        <p>
+          El Pagaré se asociara a el CURP de el usuario. Favor de verificar la
+          información.
+        </p>
+        <p>Curp de el usuario:</p>
+        <p>{userEmail.curp}</p>
+        <p className={styles.mbSubtitle}>Seleccione curp del acreedor</p>
+        <TableViewUsers setSelected={setUserSelected} docsNumber={0} />
+        <p>Curp de el acreedor:</p>
+        <p>{userSelected}</p>
         {pagare.length > 0 ? (
           <PopupInputs
             label="Agregar Pagaré"
@@ -202,6 +221,7 @@ const Templates = () => {
             soapController={soapController}
             userEmail={userEmail}
             uuid={pagare[0].uuid}
+            curp={userEmail.curp}
             isAddButton
           />
         ) : (
@@ -224,7 +244,9 @@ const Templates = () => {
       </div>
       <div className={styles.container}>
         <ToastContainer />
-        <h4 className={styles.titleCard}>Subir nuevo documento</h4>
+        <h4 className={styles.titleCard}>
+          <b>Subir nuevo documento</b>
+        </h4>
         <form onSubmit={upload}>
           <p className={styles.nameTxt}>Ingresa nombre del Documento</p>
           <input
