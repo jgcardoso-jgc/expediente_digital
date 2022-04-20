@@ -108,11 +108,9 @@ const PopupInputs = ({
     if (input.name === 'acreedor') {
       return (
         <input
-          placeholder=""
+          placeholder={userEmail.fullname}
           type={input.type}
           id={input.name}
-          value={userEmail.fullname}
-          readOnly
           className={styles.inputField}
           onChange={(e) => handleFormValueChange(input.name, e)}
         />

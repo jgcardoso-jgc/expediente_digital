@@ -34,9 +34,10 @@ const Templates = () => {
   const [docs, setDocs] = useState([]);
   const [docName, setDocName] = useState('');
   const [errors, setErrors] = useState([]);
-  const [userSelected, setUserSelected] = useState(
-    'Por favor selecciona un usuario'
-  );
+  const [userSelected, setUserSelected] = useState({
+    curp: '',
+    acreedor: 'Por favor selecciona un CURP'
+  });
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
     hasSelected: false
@@ -203,16 +204,24 @@ const Templates = () => {
           <b>Pagarés</b>
         </h4>
         <p>
-          El Pagaré se asociara a el CURP de el usuario. Favor de verificar la
-          información.
+          El Pagaré se asociara a el CURP de el usuario. <br /> Favor de
+          verificar la información.
         </p>
-        <p>Curp de el usuario:</p>
-        <p>{userEmail.curp}</p>
-        <p className={styles.mbSubtitle}>Seleccione curp del acreedor</p>
-        <TableViewUsers setSelected={setUserSelected} docsNumber={0} />
         <p>Curp de el acreedor:</p>
-        <p>{userSelected}</p>
-        {pagare.length > 0 ? (
+        <p>
+          <b>{userEmail.curp}</b>
+        </p>
+        <p className={styles.mbSubtitle}>Selecciona curp del deudor</p>
+        <TableViewUsers setSelected={setUserSelected} docsNumber={0} />
+        <p>Información de el deudor:</p>
+        <p>
+          <b>
+            {userSelected.acreedor}
+            <br />
+            {userSelected.curp}
+          </b>
+        </p>
+        {pagare.length > 0 && userSelected.curp !== '' ? (
           <PopupInputs
             label="Agregar Pagaré"
             docType={pagare[0].name}
@@ -225,7 +234,9 @@ const Templates = () => {
             isAddButton
           />
         ) : (
-          ''
+          <button type="button" className={styles.btDisabled}>
+            Agregar Pagaré
+          </button>
         )}
         {loading ? 'Cargando...' : ''}
         <div className={styles.mt}>

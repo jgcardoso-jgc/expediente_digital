@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable spaced-comment */
@@ -116,7 +118,12 @@ const TableViewUsers = ({ setSelected, docsNumber }) => {
                 <button
                   type="button"
                   className={classes.editButton}
-                  onClick={() => setSelected(cellObj.row.original.curp)}
+                  onClick={() =>
+                    setSelected({
+                      curp: cellObj.row.original.curp,
+                      acreedor: cellObj.row.original.fullname
+                    })
+                  }
                 >
                   Seleccionar
                 </button>
