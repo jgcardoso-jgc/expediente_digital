@@ -239,6 +239,9 @@ const Templates = () => {
           </button>
         )}
         {loading ? 'Cargando...' : ''}
+        <h5 className={styles.listTitle}>
+          <b>Lista de Pagarés de el Usuario</b>
+        </h5>
         <div className={styles.mt}>
           {docs.length > 0 ? (
             <TableViewPagare
