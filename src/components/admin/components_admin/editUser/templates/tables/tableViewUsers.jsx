@@ -121,7 +121,7 @@ const TableViewUsers = ({ setSelected, docsNumber }) => {
                   onClick={() =>
                     setSelected({
                       curp: cellObj.row.original.curp,
-                      acreedor: cellObj.row.original.fullname
+                      deudor: cellObj.row.original.fullname
                     })
                   }
                 >

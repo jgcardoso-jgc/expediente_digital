@@ -27,7 +27,6 @@ const Templates = () => {
   const cookie = localStorage.getItem('sign-user');
   const [numberInputs, setNumberInputs] = useState([]);
   const userEmail = getLocationData();
-  console.log(userEmail);
   const form = new FormController();
   const soapController = new SoapController();
   const [loading, setLoading] = useState(true);
@@ -36,7 +35,7 @@ const Templates = () => {
   const [errors, setErrors] = useState([]);
   const [userSelected, setUserSelected] = useState({
     curp: '',
-    acreedor: 'Por favor selecciona un CURP'
+    deudor: 'Por favor selecciona un CURP'
   });
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
@@ -66,7 +65,6 @@ const Templates = () => {
   };
 
   const getDocuments = async () => {
-    console.log('getting...');
     const ignoredLabels = ['PAGARE', 'ENDOSO', 'PAGO PARCIAL', 'CANCELACION'];
     const res = await form.getDocumentList();
     const filterDocs = res.filter((doc) => !ignoredLabels.includes(doc.label));
@@ -216,7 +214,7 @@ const Templates = () => {
         <p>Información de el deudor:</p>
         <p>
           <b>
-            {userSelected.acreedor}
+            {userSelected.deudor}
             <br />
             {userSelected.curp}
           </b>
@@ -231,6 +229,8 @@ const Templates = () => {
             userEmail={userEmail}
             uuid={pagare[0].uuid}
             curp={userEmail.curp}
+            deudor={userSelected.deudor}
+            curpDeudor={userSelected.curp}
             isAddButton
           />
         ) : (
