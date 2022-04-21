@@ -24,6 +24,9 @@ const PopupInputs = ({
   userEmail,
   form,
   uuid,
+  curp,
+  deudor,
+  curpDeudor,
   isAddButton
 }) => {
   const cookie = localStorage.getItem('sign-user');
@@ -36,13 +39,21 @@ const PopupInputs = ({
     setFormValues([]);
     const temp = [];
     itemsForm.forEach((item) => {
+      if (item.name === 'curpAcreedor') {
+        temp.push({ name: item.name, label: item.label, value: curp });
+        return;
+      }
+      if (item.name === 'curpDeudor') {
+        temp.push({ name: item.name, label: item.label, value: curpDeudor });
+        return;
+      }
       temp.push({ name: item.name, label: item.label, value: '' });
     });
     setFormValues(temp);
   };
 
   const getDocByID = async (id) => {
-    console.log(`id:${id}`);
+    // console.log(`id:${id}`);
     const docRef = db.collection('generatedDocs').doc(id);
     const doc = await docRef.get();
     if (doc.exists) {
@@ -59,14 +70,14 @@ const PopupInputs = ({
     }
     setLoading(true);
     const docID = await form.submit(formValues, uuid);
-    // console.log(`docID:${docID}`);
+    console.log(`docID:${docID}`);
     const doc = await getDocByID(docID);
     const requiresFM = false;
     if (doc) {
       // soapController.segurisignUser = JSON.parse(cookie);
-      // console.log(userEmail, doc);
+      console.log(userEmail, doc);
       const response = await soapController.addDocument(userEmail, doc);
-      // console.log(response);
+      console.log(response);
       if (response[0]) {
         const userController = new UserController(
           soapController.segurisignUser.email
@@ -101,6 +112,64 @@ const PopupInputs = ({
     updatedValue.value = value;
     formValuesTemp[foundIndex] = updatedValue;
     setFormValues(formValuesTemp);
+  };
+
+  const curpInput = (input) => {
+    if (input.name === 'acreedor') {
+      return (
+        <input
+          placeholder={userEmail.fullname}
+          type={input.type}
+          id={input.name}
+          className={styles.inputField}
+          onChange={(e) => handleFormValueChange(input.name, e)}
+        />
+      );
+    }
+    if (input.name === 'deudor') {
+      return (
+        <input
+          placeholder={deudor}
+          type={input.type}
+          id={input.name}
+          className={styles.inputField}
+          onChange={(e) => handleFormValueChange(input.name, e)}
+        />
+      );
+    }
+    if (input.name === 'curpDeudor') {
+      return (
+        <input
+          placeholder=""
+          type={input.type}
+          id={input.name}
+          value={curpDeudor}
+          className={styles.inputField}
+          readOnly
+        />
+      );
+    }
+    if (input.name === 'curpAcreedor') {
+      return (
+        <input
+          placeholder=""
+          type={input.type}
+          id={input.name}
+          value={curp}
+          className={styles.inputField}
+          readOnly
+        />
+      );
+    }
+    return (
+      <input
+        placeholder=""
+        type={input.type}
+        id={input.name}
+        className={styles.inputField}
+        onChange={(e) => handleFormValueChange(input.name, e)}
+      />
+    );
   };
 
   useEffect(() => {
@@ -142,13 +211,7 @@ const PopupInputs = ({
                         value={input.label}
                         readOnly
                       />
-                      <input
-                        placeholder=""
-                        type={input.type}
-                        id={input.name}
-                        className={styles.inputField}
-                        onChange={(e) => handleFormValueChange(input.name, e)}
-                      />
+                      {curpInput(input)}
                     </div>
                   ))}
                   <button

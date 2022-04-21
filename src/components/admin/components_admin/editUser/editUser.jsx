@@ -323,9 +323,9 @@ const EditUser = () => {
             <p>Selecciona los documentos requeridos para el usuario</p>
             {cboxes.length > 0 ? (
               <div>
-                <Row>
+                <Row xs={4}>
                   {cboxes.map((cbox) => (
-                    <Col className={classes.max3}>
+                    <Col className={classes.max3} key={uuidv4()}>
                       <label className={classes.label}>
                         <input
                           type="checkbox"

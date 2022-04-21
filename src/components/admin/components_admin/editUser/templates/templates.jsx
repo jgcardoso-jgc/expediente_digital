@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-console */
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
@@ -8,9 +9,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
 import { AiFillDelete } from 'react-icons/ai';
 import styles from './templates.module.scss';
-import TableView from './tableView';
+import TableView from './tables/tableView';
 import PopupInputs from './PopupInputs';
-import TableViewPagare from './tableViewPagare';
+import TableViewPagare from './tables/tableViewPagare';
+import TableViewUsers from './tables/tableViewUsers';
 import FormController from './form_controller';
 import SoapController from '../../../../shared/seguriSign/controller/soap_controller';
 
@@ -31,6 +33,10 @@ const Templates = () => {
   const [docs, setDocs] = useState([]);
   const [docName, setDocName] = useState('');
   const [errors, setErrors] = useState([]);
+  const [userSelected, setUserSelected] = useState({
+    curp: '',
+    deudor: 'Por favor selecciona un CURP'
+  });
   const [selectedFile, setSelectedFile] = useState({
     selectedFile: null,
     hasSelected: false
@@ -59,7 +65,6 @@ const Templates = () => {
   };
 
   const getDocuments = async () => {
-    console.log('getting...');
     const ignoredLabels = ['PAGARE', 'ENDOSO', 'PAGO PARCIAL', 'CANCELACION'];
     const res = await form.getDocumentList();
     const filterDocs = res.filter((doc) => !ignoredLabels.includes(doc.label));
@@ -172,7 +177,9 @@ const Templates = () => {
     <div>
       <div className={`${styles.container} ${styles.mb}`}>
         <ToastContainer />
-        <h4 className={styles.titleCard}>Selecciona Tipo de Documento</h4>
+        <h4 className={styles.titleCard}>
+          <b>Selecciona Tipo de Documento</b>
+        </h4>
         <p>{userEmail.email}</p>
         {loading ? 'Cargando...' : ''}
         <div className={styles.mt}>
@@ -191,9 +198,28 @@ const Templates = () => {
       </div>
       <div className={`${styles.container} ${styles.mb}`}>
         <ToastContainer />
-        <h4 className={styles.titleCard}>Pagarés</h4>
-        <p>Panel de Pagaré</p>
-        {pagare.length > 0 ? (
+        <h4 className={styles.titleCard}>
+          <b>Pagarés</b>
+        </h4>
+        <p>
+          El Pagaré se asociara a el CURP de el usuario. <br /> Favor de
+          verificar la información.
+        </p>
+        <p>Curp de el acreedor:</p>
+        <p>
+          <b>{userEmail.curp}</b>
+        </p>
+        <p className={styles.mbSubtitle}>Selecciona curp del deudor</p>
+        <TableViewUsers setSelected={setUserSelected} docsNumber={0} />
+        <p>Información de el deudor:</p>
+        <p>
+          <b>
+            {userSelected.deudor}
+            <br />
+            {userSelected.curp}
+          </b>
+        </p>
+        {pagare.length > 0 && userSelected.curp !== '' ? (
           <PopupInputs
             label="Agregar Pagaré"
             docType={pagare[0].name}
@@ -202,12 +228,20 @@ const Templates = () => {
             soapController={soapController}
             userEmail={userEmail}
             uuid={pagare[0].uuid}
+            curp={userEmail.curp}
+            deudor={userSelected.deudor}
+            curpDeudor={userSelected.curp}
             isAddButton
           />
         ) : (
-          ''
+          <button type="button" className={styles.btDisabled}>
+            Agregar Pagaré
+          </button>
         )}
         {loading ? 'Cargando...' : ''}
+        <h5 className={styles.listTitle}>
+          <b>Lista de Pagarés de el Usuario</b>
+        </h5>
         <div className={styles.mt}>
           {docs.length > 0 ? (
             <TableViewPagare
@@ -224,7 +258,9 @@ const Templates = () => {
       </div>
       <div className={styles.container}>
         <ToastContainer />
-        <h4 className={styles.titleCard}>Subir nuevo documento</h4>
+        <h4 className={styles.titleCard}>
+          <b>Subir nuevo documento</b>
+        </h4>
         <form onSubmit={upload}>
           <p className={styles.nameTxt}>Ingresa nombre del Documento</p>
           <input

@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import Table from 'components/shared/table/table';
 import styles from 'resources/theme';
-import PopupInputs from './PopupInputs';
+import PopupInputs from '../PopupInputs';
 
 const useStyles = createUseStyles({
   editButton: {
@@ -24,7 +24,13 @@ const useStyles = createUseStyles({
   }
 });
 
-const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
+const TableViewPagare = ({
+  data,
+  docsNumber,
+  userEmail,
+  form,
+  soapController
+}) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -70,4 +76,4 @@ const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
   );
 };
 
-export default TableView;
+export default TableViewPagare;
