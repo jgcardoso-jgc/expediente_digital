@@ -58,6 +58,10 @@ const UserView = () => {
         setDisabled(true);
         setLoading(true);
         const json: any = await createUserExpediente({ db, auth }, { email, name, rfc, password });
+        if (json === 0) {
+          toast('Usuario ya registrado');
+          return;
+        }
         if (json) {
           if (json.registradoSign) {
             sendWelcomeEmailSign(email).then(() => {

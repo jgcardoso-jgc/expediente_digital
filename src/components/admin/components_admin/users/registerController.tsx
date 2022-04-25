@@ -69,6 +69,11 @@ const createUserExpediente = async (firebaseHandle, user) => {
   try {
     const soapResponse = await soapController.createUser(user);
     if (soapResponse) {
+      const existingSignin = firebaseHandle.auth().fetchSignInMethodsForEmail(user.email);
+      console.log(existingSignin);
+      if (existingSignin) {
+        return 0;
+      }
       const fbResponse = await firebaseHandle.auth
         .createUserWithEmailAndPassword(user.email, user.password);
       if (fbResponse) {

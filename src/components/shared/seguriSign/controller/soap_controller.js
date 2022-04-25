@@ -51,6 +51,8 @@ class SoapController {
       <ser:addDocumentConfigurationParticipantsHRV>
          <docListParticipantsRequest>
         <lstParticipant>
+                       <nameEmployee>Firmante 1 Expediente</nameEmployee>
+               <requiredSign>true</requiredSign>
 			<infoEmployee>${signer.email}</infoEmployee>
 			<inputDataType>EMAIL</inputDataType>
 			<participantType>EMPLOYEE</participantType>
@@ -476,7 +478,7 @@ class SoapController {
       return resultado === '1' ? 1 : false;
     } catch (e) {
       // console.log(e);
-      // console.log(e.responseText.includes("[E0550]"));
+      console.log(e.responseText.includes('[E0550]'));
       if (e.responseText.includes('[E0550]')) {
         return 2;
       }
