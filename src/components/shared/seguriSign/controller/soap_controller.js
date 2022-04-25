@@ -185,7 +185,7 @@ class SoapController {
       response.documentElement.innerHTML,
       'application/xhtml+xml'
     );
-    console.log(docResponse);
+    console.log(settings.data);
     const resultado =
       docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
     if (resultado === '1') {

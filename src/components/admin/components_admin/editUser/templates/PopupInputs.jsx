@@ -71,6 +71,7 @@ const PopupInputs = ({
     setLoading(true);
     const docID = await form.submit(formValues, uuid);
     console.log(`docID:${docID}`);
+    console.log(formValues);
     const doc = await getDocByID(docID);
     const requiresFM = false;
     if (doc) {
