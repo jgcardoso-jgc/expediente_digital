@@ -122,7 +122,6 @@ class UserController {
           };
         }
       });
-      this.testEmail();
       await doc.ref.update(docData);
     }
   }

@@ -184,9 +184,15 @@ class SoapController {
       response.documentElement.innerHTML,
       'application/xhtml+xml'
     );
-    const hashHex =
-      docResponse.getElementsByTagName('hashHex')[0].childNodes[0].nodeValue;
-    return hashHex;
+    console.log(docResponse);
+    const resultado =
+      docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
+    if (resultado === '1') {
+      const hashHex =
+        docResponse.getElementsByTagName('hashHex')[0].childNodes[0].nodeValue;
+      return hashHex;
+    }
+    return false;
   }
 
   async establishHashAndPkcs7(multilateralId, hashHex, password) {
@@ -229,7 +235,8 @@ class SoapController {
 
   async sign(multilateralId, password) {
     const hash = await this.getHashToSign(multilateralId);
-    return this.establishHashAndPkcs7(multilateralId, hash, password);
+    if (hash) return this.establishHashAndPkcs7(multilateralId, hash, password);
+    return false;
   }
 
   async verifyLogin(email) {
