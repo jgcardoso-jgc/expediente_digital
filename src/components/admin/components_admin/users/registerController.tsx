@@ -84,7 +84,7 @@ const createUserExpediente = async (firebaseHandle, user) => {
     }
     return 0;
   } catch (error) {
-    return error;
+    return 0;
   }
 };
 
