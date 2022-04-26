@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-console */
 /* eslint-disable function-paren-newline */
@@ -7,6 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
+import { useFirebaseApp } from 'reactfire';
 import { AiFillDelete } from 'react-icons/ai';
 import styles from './templates.module.scss';
 import TableView from './tables/tableView';
@@ -28,6 +30,9 @@ const Templates = () => {
   const [numberInputs, setNumberInputs] = useState([]);
   const userEmail = getLocationData();
   const form = new FormController();
+  const firebase = useFirebaseApp();
+  const db = firebase.firestore();
+  console.log(db);
   const soapController = new SoapController();
   const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState([]);
@@ -73,6 +78,13 @@ const Templates = () => {
     setDocs(filterDocs);
     setLoading(false);
   };
+
+  /* const getUserPagares = async () => {
+    const query = db
+      .collection('generatedDocs')
+      .where('fullname', '==', locData.fullname);
+    query.get().then((querySnapshot) => updateCargo(querySnapshot));
+  }; */
 
   const removeWhitespace = (str) => str.split(/\s/).join('');
 
@@ -201,13 +213,16 @@ const Templates = () => {
         <h4 className={styles.titleCard}>
           <b>Pagarés</b>
         </h4>
+        <h5 className={styles.titleCard}>
+          <b>Agregar Pagaré</b>
+        </h5>
         <p>
           El Pagaré se asociara a el CURP de el usuario. <br /> Favor de
           verificar la información.
         </p>
         <p>Curp de el acreedor:</p>
         <p>
-          <b>{userEmail.curp}</b>
+          <b>{userEmail.curp ? userEmail.curp : 'Pendiente'}</b>
         </p>
         <p className={styles.mbSubtitle}>Selecciona curp del deudor</p>
         <TableViewUsers setSelected={setUserSelected} docsNumber={0} />
@@ -219,7 +234,7 @@ const Templates = () => {
             {userSelected.curp}
           </b>
         </p>
-        {pagare.length > 0 && userSelected.curp !== '' ? (
+        {pagare.length > 0 && userSelected.curp !== '' && userEmail.curp ? (
           <PopupInputs
             label="Agregar Pagaré"
             docType={pagare[0].name}
