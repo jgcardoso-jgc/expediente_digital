@@ -47,7 +47,11 @@ const TableViewPagare = ({
         columns={[
           {
             Header: 'Nombre',
-            accessor: 'document',
+            accessor: 'acreedor'
+          },
+          {
+            Header: 'Endoso',
+            accesor: 'items',
             Cell: (cellObj) => (
               <div>
                 <div

@@ -32,7 +32,6 @@ const Templates = () => {
   const form = new FormController();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
-  console.log(db);
   const soapController = new SoapController();
   const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState([]);
@@ -47,6 +46,8 @@ const Templates = () => {
     hasSelected: false
   });
   const [pagare, setPagare] = useState([]);
+  const [endoso, setEndoso] = useState([]);
+  const [userPagares, setUserPagares] = useState([]);
 
   const eraseInput = ({ name }) => {
     const prev = [...numberInputs];
@@ -74,17 +75,29 @@ const Templates = () => {
     const res = await form.getDocumentList();
     const filterDocs = res.filter((doc) => !ignoredLabels.includes(doc.label));
     const pagareDoc = res.filter((doc) => doc.label === 'PAGARE');
+    const endosoDoc = res.filter((doc) => doc.label === 'ENDOSO');
     setPagare(pagareDoc);
+    setEndoso(endosoDoc);
     setDocs(filterDocs);
     setLoading(false);
   };
 
-  /* const getUserPagares = async () => {
+  const getUserPagares = async () => {
     const query = db
       .collection('generatedDocs')
-      .where('fullname', '==', locData.fullname);
-    query.get().then((querySnapshot) => updateCargo(querySnapshot));
-  }; */
+      .where('curpUsuario', '==', userEmail.curp);
+    query.get().then((querySnapshot) => {
+      const getPagares = [];
+      if (querySnapshot.size > 0) {
+        querySnapshot.forEach((doc) => {
+          const pagareData = doc.data().json;
+          pagareData.items = [{ label: 'folio', name: 'folio', type: 'text' }];
+          getPagares.push(pagareData);
+        });
+      }
+      setUserPagares(getPagares);
+    });
+  };
 
   const removeWhitespace = (str) => str.split(/\s/).join('');
 
@@ -183,6 +196,10 @@ const Templates = () => {
     setNumberInputs([createInput({ name: nanoid(), isFirst: true })]);
   }, []);
 
+  useEffect(() => {
+    getUserPagares();
+  }, [endoso]);
+
   useEffect(() => {}, [numberInputs]);
 
   return (
@@ -258,16 +275,16 @@ const Templates = () => {
           <b>Lista de Pagarés de el Usuario</b>
         </h5>
         <div className={styles.mt}>
-          {docs.length > 0 ? (
+          {userPagares.length > 0 ? (
             <TableViewPagare
-              data={docs}
+              data={userPagares}
               docsNumber={0}
               userEmail={userEmail.email}
               form={form}
               soapController={soapController}
             />
           ) : (
-            ''
+            'El usuario no tiene pagarés'
           )}
         </div>
       </div>
