@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import firebase from 'firebase';
 import SoapController from '../../../shared/seguriSign/controller/soap_controller';
 import { User } from '../../../../types/user';
 
@@ -67,13 +68,17 @@ async function uploadData(user, firebaseHandle) {
 
 const createUserExpediente = async (firebaseHandle, user) => {
   try {
+    console.log('enteer create');
     const soapResponse = await soapController.createUser(user);
     if (soapResponse) {
-      const existingSignin = firebaseHandle.auth().fetchSignInMethodsForEmail(user.email);
+      const existingSignin = await firebaseHandle.auth.fetchSignInMethodsForEmail(user.email);
       console.log(existingSignin);
-      if (existingSignin) {
+      if (existingSignin.indexOf(
+        firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD
+      ) !== -1) {
         return 0;
       }
+      console.log('pass');
       const fbResponse = await firebaseHandle.auth
         .createUserWithEmailAndPassword(user.email, user.password);
       if (fbResponse) {
@@ -84,6 +89,7 @@ const createUserExpediente = async (firebaseHandle, user) => {
     }
     return 0;
   } catch (error) {
+    console.log(error);
     return 0;
   }
 };

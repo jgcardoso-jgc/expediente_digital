@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { fetchCargos, sendWelcomeEmail, sendWelcomeEmailSign } from "./usersController";
+import { fetchCargos } from "./usersController";
 import TableView from "./table/tableView";
 import { docs, cargosLista } from "./usersModel";
 import {
@@ -64,17 +64,13 @@ const UserView = () => {
         }
         if (json) {
           if (json.registradoSign) {
-            sendWelcomeEmailSign(email).then(() => {
-              toast("Usuario registrado");
-              localStorage.setItem("user", JSON.stringify(json));
-              // history.push("/dashboard");
-            });
+            toast("Usuario registrado");
+            localStorage.setItem("user", JSON.stringify(json));
+            // history.push("/dashboard");
           } else {
-            sendWelcomeEmail(email).then(() => {
-              toast("Usuario registrado");
-              localStorage.setItem("user", JSON.stringify(json));
-              // history.push("/dashboard");
-            });
+            toast("Usuario registrado");
+            localStorage.setItem("user", JSON.stringify(json));
+            // history.push("/dashboard");
           }
         }
         setLoading(false);
