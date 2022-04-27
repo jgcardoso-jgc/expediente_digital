@@ -42,17 +42,20 @@ class UpdatePasswordController {
           user.email,
           user.password
         );
-        // console.log('begin updtd', fUser);
+        console.log('begin updtd', fUser);
         const update = await this.updateFirebasePassword(
           fUser.user,
           newPassword
         );
+        console.log(update);
         toast(update);
+        return true;
       }
       return false;
     } catch (error) {
       if (error instanceof Error) {
         toast(error);
+        console.log(error);
       }
       return false;
     }
