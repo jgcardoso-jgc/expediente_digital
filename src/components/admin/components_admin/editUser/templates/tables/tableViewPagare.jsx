@@ -59,8 +59,9 @@ const TableViewPagare = ({
                   className={classes.editButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
+                  {console.log(cellObj.cell.row.original)}
                   <PopupInputs
-                    label={cellObj.cell.row.original.label}
+                    label={cellObj.cell.row.original.curpAcreedor}
                     docType={cellObj.cell.row.original.name}
                     items={cellObj.cell.row.original.items}
                     form={form}
