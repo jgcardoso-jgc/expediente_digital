@@ -54,11 +54,9 @@ class FormController {
       body: JSON.stringify(bodyList)
     };
     const response = await fetch(`${this.apiUrl}/docs/${uuid}`, requestOptions);
-    console.log(response);
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data, bodyList);
-      return data.id;
+      return data.response;
     }
     return false;
   }

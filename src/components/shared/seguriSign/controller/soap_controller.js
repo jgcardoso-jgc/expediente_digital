@@ -37,6 +37,7 @@ class SoapController {
     });
 
   async addDocument(signer, file) {
+    console.log(signer);
     const docType = 'CONTRATOS';
     const settings = {
       url: this.url,
@@ -51,7 +52,7 @@ class SoapController {
       <ser:addDocumentConfigurationParticipantsHRV>
          <docListParticipantsRequest>
         <lstParticipant>
-                       <nameEmployee>Firmante 1 Expediente</nameEmployee>
+                       <nameEmployee>${signer.fullname}</nameEmployee>
                <requiredSign>true</requiredSign>
 			<infoEmployee>${signer.email}</infoEmployee>
 			<inputDataType>EMAIL</inputDataType>

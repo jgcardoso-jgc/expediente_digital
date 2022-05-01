@@ -16,18 +16,46 @@ class UserController {
 
   signDocCollection = db.collection('sign-docs');
 
-  async addNewDocToFirebase(emailList, document, requiresFaceMatch) {
+  async addNewDocToFirebase(curpList, document, requiresFaceMatch) {
     const docRef = db.collection('sign-docs').doc();
     const body = {
       multilateralId: document.multilateralId,
       fileName: document.fileName,
       firmados: [],
-      numeroFirmas: emailList.length,
+      numeroFirmas: curpList.length,
       docType: document.docType,
-      usuarios: emailList,
+      usuarios: curpList,
       requiresFaceMatch: requiresFaceMatch === 'on',
       status: 'PENDIENTE'
     };
+    docRef
+      .set(body)
+      .then((docReference) => {})
+      .catch((error) => {});
+  }
+
+  async addNewCreatedDocToFirebase(
+    curpList,
+    document,
+    requiresFaceMatch,
+    docValues
+  ) {
+    const docRef = db.collection('sign-docs').doc();
+    const docValuesObj = {};
+    docValues.forEach((obj) => {
+      docValuesObj[obj.name] = obj.value;
+    });
+    const bodyTemp = {
+      multilateralId: document.multilateralId,
+      fileName: document.fileName,
+      firmados: [],
+      numeroFirmas: curpList.length,
+      docType: document.docType,
+      usuarios: curpList,
+      requiresFaceMatch: requiresFaceMatch === 'on',
+      status: 'PENDIENTE'
+    };
+    const body = { ...docValuesObj, ...bodyTemp };
     docRef
       .set(body)
       .then((docReference) => {})
@@ -54,6 +82,17 @@ class UserController {
     return false;
   }
 
+  async getUserCurp() {
+    const { uid } = auth.currentUser;
+    const snapshot = await this.userCollection.where('uid', '==', uid).get();
+    if (snapshot.size > 0) {
+      const data = snapshot.docs[0].data();
+      this.curp = data.curp;
+    } else {
+      this.curp = '';
+    }
+  }
+
   static async addNewDocAlert(users, multilateralID) {
     users.forEach(async (user) => {
       await db
@@ -75,21 +114,48 @@ class UserController {
   }
 
   async getUserDocs(status) {
-    return new Promise((resolve, reject) => {
-      const docs = [];
-      db.collection('sign-docs')
-        .where('usuarios', 'array-contains', this.email)
-        .where('status', '==', status)
-        .get()
-        .then((snapshot) => {
-          snapshot.forEach((doc) => {
-            const docData = doc.data();
-            docs.push(docData);
-          });
-          resolve(docs);
-        })
-        .catch((err) => reject(err));
+    const docs = [];
+
+    const emailIndexDocs = await db
+      .collection('sign-docs')
+      .where('usuarios', 'array-contains', this.email)
+      .where('status', '==', status)
+      .get();
+
+    const curpIndexDocs = await db
+      .collection('sign-docs')
+      .where('usuarios', 'array-contains', this.curp)
+      .where('status', '==', status)
+      .get();
+
+    const curpDeudorDocs = await db
+      .collection('sign-docs')
+      .where('usuarios', 'array-contains', this.curp)
+      .where('status', '==', status)
+      .get();
+
+    const curpAcreedorDocs = await db
+      .collection('sign-docs')
+      .where('usuarios', 'array-contains', this.curp)
+      .where('status', '==', status)
+      .get();
+    emailIndexDocs.forEach((doc) => {
+      const docData = doc.data();
+      docs.push(docData);
     });
+    curpAcreedorDocs.forEach((doc) => {
+      const docData = doc.data();
+      docs.push(docData);
+    });
+    curpDeudorDocs.forEach((doc) => {
+      const docData = doc.data();
+      docs.push(docData);
+    });
+    curpIndexDocs.forEach((doc) => {
+      const docData = doc.data();
+      docs.push(docData);
+    });
+    return docs;
   }
 
   async updateDocSigned(multilateralId, location) {

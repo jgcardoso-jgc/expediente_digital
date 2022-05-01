@@ -153,6 +153,7 @@ const SegurisignDocuments = ({ seguriSignController }) => {
   }, [loaded]);
 
   const getDocuments = async () => {
+    await userController.getUserCurp();
     // console.log("getting...");
     const [
       signedDoc,

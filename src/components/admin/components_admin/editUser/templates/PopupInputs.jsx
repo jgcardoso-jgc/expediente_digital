@@ -13,7 +13,6 @@ import { Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { useFirebaseApp } from 'reactfire';
 import styles from './PopupInputs.module.scss';
 import UserController from '../../../../shared/seguriSign/controller/user_controller';
 
@@ -30,8 +29,7 @@ const PopupInputs = ({
   isAddButton
 }) => {
   const cookie = localStorage.getItem('sign-user');
-  const firebase = useFirebaseApp();
-  const db = firebase.firestore();
+  const signerUser = JSON.parse(localStorage.getItem('locationData'));
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState([]);
 
@@ -52,16 +50,6 @@ const PopupInputs = ({
     setFormValues(temp);
   };
 
-  const getDocByID = async (id) => {
-    // console.log(`id:${id}`);
-    const docRef = db.collection('generatedDocs').doc(id);
-    const doc = await docRef.get();
-    if (doc.exists) {
-      return doc.data();
-    }
-    return false;
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!cookie) {
@@ -69,26 +57,27 @@ const PopupInputs = ({
       return;
     }
     setLoading(true);
-    const docID = await form.submit(formValues, uuid);
-    console.log(`docID:${docID}`);
-    const doc = await getDocByID(docID);
-    const requiresFM = false;
-    if (doc) {
-      // soapController.segurisignUser = JSON.parse(cookie);
-      console.log(userEmail, doc);
-      const response = await soapController.addDocument(userEmail, doc);
-      console.log(response);
+
+    const createdDocRespone = await form.submit(formValues, uuid);
+    if (createdDocRespone) {
+      const docID = createdDocRespone[0];
+      const requiresFM = false;
+      const layoutDocument = createdDocRespone[1];
+      const response = await soapController.addDocument(signerUser, {
+        layoutDocument,
+        typeDocument: `${docID}.pdf`
+      });
+      console.log(formValues);
       if (response[0]) {
         const userController = new UserController(
           soapController.segurisignUser.email
         );
         response[1].docType = uuid;
-        // console.log(response[1]);
-        // console.log(Object.keys(response[1]));
-        await userController.addNewDocToFirebase(
-          [userEmail],
+        await userController.addNewCreatedDocToFirebase(
+          [signerUser.curp],
           response[1],
-          requiresFM
+          requiresFM,
+          formValues
         );
         setLoading(false);
         toast('Éxito');
@@ -96,9 +85,6 @@ const PopupInputs = ({
         setLoading(false);
         toast('Error al subir documento');
       }
-    } else {
-      setLoading(false);
-      toast('Error al generar documento');
     }
   };
 
