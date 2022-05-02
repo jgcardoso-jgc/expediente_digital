@@ -130,31 +130,44 @@ class UserController {
 
     const curpDeudorDocs = await db
       .collection('sign-docs')
-      .where('usuarios', 'array-contains', this.curp)
+      .where('curpDeudor', '==', this.curp)
       .where('status', '==', status)
       .get();
 
     const curpAcreedorDocs = await db
       .collection('sign-docs')
-      .where('usuarios', 'array-contains', this.curp)
+      .where('curpAcreedor', '==', this.curp)
       .where('status', '==', status)
       .get();
     emailIndexDocs.forEach((doc) => {
       const docData = doc.data();
-      docs.push(docData);
+      const found = docs.some(
+        (el) => el.multilateralId === docData.multilateralId
+      );
+      if (!found) docs.push(docData);
     });
     curpAcreedorDocs.forEach((doc) => {
       const docData = doc.data();
-      docs.push(docData);
+      const found = docs.some(
+        (el) => el.multilateralId === docData.multilateralId
+      );
+      if (!found) docs.push(docData);
     });
     curpDeudorDocs.forEach((doc) => {
       const docData = doc.data();
-      docs.push(docData);
+      const found = docs.some(
+        (el) => el.multilateralId === docData.multilateralId
+      );
+      if (!found) docs.push(docData);
     });
     curpIndexDocs.forEach((doc) => {
       const docData = doc.data();
-      docs.push(docData);
+      const found = docs.some(
+        (el) => el.multilateralId === docData.multilateralId
+      );
+      if (!found) docs.push(docData);
     });
+    console.log(docs);
     return docs;
   }
 
