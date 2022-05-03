@@ -30,7 +30,8 @@ function checkUser(uid, db) {
             }
           });
         } else {
-          reject(new Error("404"));
+          console.log(uid);
+          reject(new Error("4044"));
         }
       })
       .catch((e) => {
