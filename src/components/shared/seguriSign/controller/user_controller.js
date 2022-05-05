@@ -12,7 +12,14 @@ class UserController {
     this.email = email;
   }
 
-  userCollection = db.collection('users');
+  userCollection = this.checkIfAdmin();
+
+  checkIfAdmin() {
+    if (localStorage.getItem('admin')) {
+      return db.collection('admin');
+    }
+    return db.collection('users');
+  }
 
   signDocCollection = db.collection('sign-docs');
 
@@ -114,6 +121,9 @@ class UserController {
   }
 
   async getUserDocs(status) {
+    if (!this.curp) {
+      return false;
+    }
     const docs = [];
 
     const emailIndexDocs = await db

@@ -80,7 +80,7 @@ const PopupInputs = ({
           formValues
         );
         setLoading(false);
-        toast('Éxito');
+        toast('Documento enviado correctamente');
       } else {
         setLoading(false);
         toast('Error al subir documento');

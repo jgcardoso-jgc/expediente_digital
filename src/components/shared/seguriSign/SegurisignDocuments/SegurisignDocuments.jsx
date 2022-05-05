@@ -5,43 +5,43 @@
 /* eslint-disable react/no-typos */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable quotes */
-import React, { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import PropTypes from "prop-types";
-import { createUseStyles } from "react-jss";
-import CustomToasts from "../../../user/components_user/Toasts/CustomToasts";
-import UploadPopup from "../UploadPopup/UploadPopup";
-import SignedDocuments from "./SignedDocuments/SignedDocuments";
-import UnsignedDocuments from "./UnsignedDocuments/UnsignedDocuments";
-import CancelledDocuments from "./CancelledDocuments/CancelledDocuments";
-import CancelledThirdsDocuments from "./CancelledThirdsDocuments/CancelledThirdsDocuments";
-import ExpiredDocuments from "./ExpiredDocuments/ExpiredDocuments";
-import UserController from "../controller/user_controller";
-import loading from "../../../../assets/loading.gif";
+import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import PropTypes from 'prop-types';
+import { createUseStyles } from 'react-jss';
+import CustomToasts from '../../../user/components_user/Toasts/CustomToasts';
+import UploadPopup from '../UploadPopup/UploadPopup';
+import SignedDocuments from './SignedDocuments/SignedDocuments';
+import UnsignedDocuments from './UnsignedDocuments/UnsignedDocuments';
+import CancelledDocuments from './CancelledDocuments/CancelledDocuments';
+import CancelledThirdsDocuments from './CancelledThirdsDocuments/CancelledThirdsDocuments';
+import ExpiredDocuments from './ExpiredDocuments/ExpiredDocuments';
+import UserController from '../controller/user_controller';
+import loading from '../../../../assets/loading.gif';
 
 const useStyles = createUseStyles(() => ({
   card: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: '#f5f5f5',
     border: `1px solid #f5f5f5`,
     borderRadius: 10,
     marginBottom: 24,
-    height: "100%",
-    padding: 20,
+    height: '100%',
+    padding: 20
   },
   imgLoading: {
-    display: "block",
-    marginLeft: "auto",
-    marginRight: "auto",
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   center: {
-    textAlign: "center",
+    textAlign: 'center'
   },
   title: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   mr: {
-    marginRight: "auto",
-  },
+    marginRight: 'auto'
+  }
 }));
 
 const SegurisignDocuments = ({ seguriSignController }) => {
@@ -52,17 +52,18 @@ const SegurisignDocuments = ({ seguriSignController }) => {
     loading: true,
     isEnabled: false,
     lat: 0,
-    long: 0,
+    long: 0
   });
   const classes = useStyles();
   const toaster = new CustomToasts();
   const [loaded, setLoaded] = useState({
     hasLoaded: false,
+    curp: '',
     signedDocuments: [],
     unsignedDocuments: [],
     cancelledDoc: [],
     expiredDoc: [],
-    cancelledByThirds: [],
+    cancelledByThirds: []
   });
   const timeOut = 15;
 
@@ -70,14 +71,14 @@ const SegurisignDocuments = ({ seguriSignController }) => {
     return new Promise((resolve, reject) => {
       navigator.permissions &&
         navigator.permissions
-          .query({ name: "geolocation" })
+          .query({ name: 'geolocation' })
           .then((PermissionStatus) => {
-            if (PermissionStatus.state === "granted") {
-              resolve("granted");
-            } else if (PermissionStatus.state === "prompt") {
-              reject(new Error("Permiso denegado"));
+            if (PermissionStatus.state === 'granted') {
+              resolve('granted');
+            } else if (PermissionStatus.state === 'prompt') {
+              reject(new Error('Permiso denegado'));
             } else {
-              reject(new Error("Permiso denegado"));
+              reject(new Error('Permiso denegado'));
             }
           });
     });
@@ -92,17 +93,17 @@ const SegurisignDocuments = ({ seguriSignController }) => {
           loading: false,
           isEnabled: true,
           lat: latitude,
-          lng: longitude,
+          lng: longitude
         });
         const pos = { latitude, longitude };
-        localStorage.setItem("position", JSON.stringify(pos));
+        localStorage.setItem('position', JSON.stringify(pos));
       },
       () => {
         setLocation({
           loading: false,
           isEnabled: true,
           lat: 0,
-          long: 0,
+          long: 0
         });
       }
     );
@@ -111,26 +112,26 @@ const SegurisignDocuments = ({ seguriSignController }) => {
   const setTime = async () => {
     try {
       const permission = await getPermissions();
-      if (permission === "granted") {
-        const savedDate = localStorage.getItem("date");
+      if (permission === 'granted') {
+        const savedDate = localStorage.getItem('date');
         if (savedDate == null) {
-          localStorage.setItem("date", new Date());
+          localStorage.setItem('date', new Date());
           getPosition();
         } else {
           const now = new Date();
-          const past = new Date(localStorage.getItem("date"));
+          const past = new Date(localStorage.getItem('date'));
           const minutes = Math.floor((now - past) / 1000 / 60);
           if (minutes > timeOut) {
-            localStorage.setItem("date", new Date());
+            localStorage.setItem('date', new Date());
             getPosition();
           } else {
-            const position = JSON.parse(localStorage.getItem("position"));
+            const position = JSON.parse(localStorage.getItem('position'));
             if (position) {
               setLocation({
                 loading: false,
                 isEnabled: true,
                 lat: position.latitude,
-                lng: position.longitude,
+                lng: position.longitude
               });
             }
           }
@@ -139,7 +140,7 @@ const SegurisignDocuments = ({ seguriSignController }) => {
     } catch (e) {
       setLocation({
         loading: false,
-        isEnabled: false,
+        isEnabled: false
       });
     }
   };
@@ -154,29 +155,40 @@ const SegurisignDocuments = ({ seguriSignController }) => {
 
   const getDocuments = async () => {
     await userController.getUserCurp();
-    // console.log("getting...");
-    const [
-      signedDoc,
-      unsignedDoc,
-      cancelledDoc,
-      expiredDoc,
-      cancelledByThirdsDoc,
-    ] = await Promise.all([
-      userController.getUserDocs("CONCLUIDO"),
-      userController.getUserDocs("PENDIENTE"),
-      userController.getUserDocs("CANCELADO"),
-      seguriSignController.getStatus("EXPIRADOS"),
-      seguriSignController.getStatus("CANCELADOS_TERCEROS"),
-    ]);
-    // console.log(unsignedDoc);
-    setLoaded({
-      signedDocuments: signedDoc,
-      hasLoaded: true,
-      unsignedDocuments: unsignedDoc,
-      cancelledDoc,
-      expiredDoc,
-      cancelledByThirds: cancelledByThirdsDoc,
-    });
+    if (userController.curp) {
+      const [
+        signedDoc,
+        unsignedDoc,
+        cancelledDoc,
+        expiredDoc,
+        cancelledByThirdsDoc
+      ] = await Promise.all([
+        userController.getUserDocs('CONCLUIDO'),
+        userController.getUserDocs('PENDIENTE'),
+        userController.getUserDocs('CANCELADO'),
+        seguriSignController.getStatus('EXPIRADOS'),
+        seguriSignController.getStatus('CANCELADOS_TERCEROS')
+      ]);
+      // console.log(unsignedDoc);
+      setLoaded({
+        signedDocuments: signedDoc,
+        hasLoaded: true,
+        unsignedDocuments: unsignedDoc,
+        cancelledDoc,
+        expiredDoc,
+        cancelledByThirds: cancelledByThirdsDoc
+      });
+    } else {
+      setLoaded({
+        hasLoaded: false,
+        curp: 404,
+        signedDocuments: [],
+        unsignedDocuments: [],
+        cancelledDoc: [],
+        expiredDoc: [],
+        cancelledByThirds: []
+      });
+    }
   };
 
   useEffect(() => {
@@ -184,7 +196,7 @@ const SegurisignDocuments = ({ seguriSignController }) => {
   }, []);
 
   SegurisignDocuments.propTypes = {
-    seguriSignController: PropTypes.any.isRequired,
+    seguriSignController: PropTypes.any.isRequired
   };
 
   if (location.loading) {
@@ -257,6 +269,9 @@ const SegurisignDocuments = ({ seguriSignController }) => {
         <h2>Necesitas activar tu ubicación</h2>
       </div>
     );
+  }
+  if (loaded.curp === 404) {
+    return <div>Falta el curp de el usuario</div>;
   }
   return <div />;
 };

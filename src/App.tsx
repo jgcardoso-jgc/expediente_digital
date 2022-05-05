@@ -117,7 +117,7 @@ function App() {
         />
         {/* Registro & Login */}
         <Route
-          path="/loginNormal"
+          path="/login"
           render={() => {
             if (user) {
               return <UserInit />;
