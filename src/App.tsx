@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useFirebaseApp } from "reactfire";
 import { createUseStyles } from "react-jss";
 import Login from "./components/main/mainPage/mainPage";
-import LoginNormal from "./components/main/loginNormal/loginNormal";
+import LoginNormal from "./components/main/login/loginNormal";
 import RecoverPassword from "./components/main/recoverPassword/recoverPassword";
 import AdminInit from "./components/admin/admin_init";
 import PrivacidadView from "./components/main/privacidad/privacidad";

@@ -92,33 +92,34 @@ const LoginNormal = ({ setLog }) => {
   const seguriSignController = new SegurisignController();
   const soapController = new SoapController();
 
-  const login = async () => {
+  const loginFirebase = async () => {
     try {
       const credential = await firebase
         .auth()
-        .signInWithEmailAndPassword(email, password);
+        .signInWithEmailAndPassword(email, password)
+        .catch((error) => {
+          throw error;
+        });
       const { uid } = credential.user;
       localStorage.setItem(
         'sign-user',
         JSON.stringify(seguriSignController.segurisignUser)
       );
-      checkUser(uid, db)
-        .then((response) => {
-          setLoading(false);
-          setLog(response, true);
-        })
-        .catch((e) => {
-          setLoading(false);
-          toast(e.message);
-          setLog(e.message, false);
-        });
+      const checkUserFB = await checkUser(uid, db);
+      setLoading(false);
+      if (checkUserFB === 'error') {
+        toast('error');
+      } else {
+        setLog(checkUserFB);
+      }
     } catch (e) {
       setLoading(false);
+      setDisable(false);
       toast(e.message);
     }
   };
 
-  async function submit() {
+  async function loginSoap() {
     try {
       setLoading(true);
       if (email !== '' && password !== '') {
@@ -137,7 +138,7 @@ const LoginNormal = ({ setLog }) => {
             if (responseJSON.token === null) {
               toast('No estás registrado en Segurisign.');
             } else {
-              login();
+              loginFirebase();
             }
           })
           .catch((error) => {
@@ -157,7 +158,7 @@ const LoginNormal = ({ setLog }) => {
     const listener = (event) => {
       if (event.code === 'Enter' || event.code === 'NumpadEnter') {
         event.preventDefault();
-        submit();
+        loginSoap();
       }
     };
     document.addEventListener('keydown', listener);
@@ -209,7 +210,7 @@ const LoginNormal = ({ setLog }) => {
                 type="button"
                 className={classes.loginBt}
                 disabled={disable}
-                onClick={() => submit()}
+                onClick={() => loginSoap()}
               >
                 Iniciar Sesión
               </button>
