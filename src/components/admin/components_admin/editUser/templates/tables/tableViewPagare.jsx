@@ -46,8 +46,16 @@ const TableViewPagare = ({
       <Table
         columns={[
           {
-            Header: 'Nombre',
+            Header: 'Acreedor',
             accessor: 'acreedor'
+          },
+          {
+            Header: 'Deudor',
+            accessor: 'deudor'
+          },
+          {
+            Header: 'Fecha',
+            accessor: 'fecha'
           },
           {
             Header: 'Endoso',
@@ -60,7 +68,7 @@ const TableViewPagare = ({
                   onClick={() => handleClickEditRow(cellObj)}
                 >
                   <PopupInputs
-                    label={cellObj.cell.row.original.curpAcreedor}
+                    label="Generar"
                     docType={cellObj.cell.row.original.name}
                     items={cellObj.cell.row.original.items}
                     form={form}

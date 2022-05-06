@@ -83,20 +83,22 @@ const Templates = () => {
   };
 
   const getUserPagares = async () => {
-    const query = db
-      .collection('generatedDocs')
-      .where('curpUsuario', '==', userEmail.curp);
-    query.get().then((querySnapshot) => {
-      const getPagares = [];
-      if (querySnapshot.size > 0) {
-        querySnapshot.forEach((doc) => {
-          const pagareData = doc.data().json;
-          pagareData.items = [{ label: 'folio', name: 'folio', type: 'text' }];
-          getPagares.push(pagareData);
-        });
-      }
-      setUserPagares(getPagares);
-    });
+    if (endoso.length > 0) {
+      const query = db
+        .collection('generatedDocs')
+        .where('curpUsuario', '==', userEmail.curp);
+      query.get().then((querySnapshot) => {
+        const getPagares = [];
+        if (querySnapshot.size > 0) {
+          querySnapshot.forEach((doc) => {
+            const pagareData = doc.data().json;
+            pagareData.items = endoso[0].items;
+            getPagares.push(pagareData);
+          });
+        }
+        setUserPagares(getPagares);
+      });
+    }
   };
 
   const removeWhitespace = (str) => str.split(/\s/).join('');
@@ -281,6 +283,10 @@ const Templates = () => {
         <h5 className={styles.listTitle}>
           <b>Lista de Pagarés de el Usuario</b>
         </h5>
+        <p>
+          Da click en Generar en el documento que quieras crear a partir del
+          Pagaré seleccionado
+        </p>
         <div className={styles.mt}>
           {userPagares.length > 0 ? (
             <TableViewPagare
