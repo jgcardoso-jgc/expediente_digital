@@ -209,7 +209,14 @@ const Templates = () => {
         <h4 className={styles.titleCard}>
           <b>Selecciona Tipo de Documento</b>
         </h4>
+        <p className={styles.nameTxt}>
+          <b>Email</b>
+        </p>
         <p>{userEmail.email}</p>
+        <p className={styles.nameTxt}>
+          <b>Curp de el Usuario</b>
+        </p>
+        <p>{userEmail.curp ? userEmail.curp : 'Pendiente'}</p>
         {loading ? 'Cargando...' : ''}
         <div className={styles.mt}>
           {docs.length > 0 ? (

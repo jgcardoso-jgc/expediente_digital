@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
-class FormController {
-  apiUrl = 'https://smtp.seguridata.com:5002/';
+import apiUrl from 'utilities/constants';
 
+class FormController {
   header = {
     'Content-Type': 'application/json'
   };
@@ -11,7 +11,7 @@ class FormController {
       method: 'GET',
       headers: this.header
     };
-    const response = await fetch(`${this.apiUrl}/docs`, requestOptions);
+    const response = await fetch(`${apiUrl}/docs`, requestOptions);
 
     if (response.status === 200) {
       const data = await response.json();
@@ -26,10 +26,7 @@ class FormController {
       method: 'GET',
       headers: this.header
     };
-    const response = await fetch(
-      `${this.apiUrl}/inherit/${uuid}`,
-      requestOptions
-    );
+    const response = await fetch(`${apiUrl}/inherit/${uuid}`, requestOptions);
 
     if (response.status === 200) {
       const data = await response.json();

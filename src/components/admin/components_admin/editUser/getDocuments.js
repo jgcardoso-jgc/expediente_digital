@@ -5,7 +5,7 @@
 async function getAllDocs(db, locData) {
   return new Promise((resolve) => {
     const { email } = locData;
-    const query = db.collection("users").where("email", "==", email);
+    const query = db.collection('users').where('email', '==', email);
     query.get().then((querySnapshot) => {
       if (querySnapshot.size > 0) {
         querySnapshot.forEach((doc) => {
@@ -42,24 +42,24 @@ async function getDownloadURLS(storage, docArray, locData) {
                 title: doc.name,
                 uploaded: doc.uploaded,
                 imageName: doc.imageName,
-                email,
+                email
               };
               pendientes.push(pendientesFormat);
             } else {
               const completedFormat = {
                 url: response,
                 title: doc.name,
-                imageName: doc.imageName,
+                imageName: doc.imageName
               };
               completed.push(completedFormat);
             }
           })
           .catch(() => {
             const missingFormat = {
-              url: "404",
+              url: '404',
               title: doc.name,
               email,
-              imageName: doc.imageName,
+              imageName: doc.imageName
             };
             pendientes.push(missingFormat);
           })
@@ -86,30 +86,28 @@ async function getDownloadURLS(storage, docArray, locData) {
 async function setCheckboxes(db, urls) {
   return new Promise((resolve) => {
     const checkboxes = [];
-    const query = db.collection("documentos");
+    const query = db.collection('documentos').doc('docs');
     query.get().then((querySnapshot) => {
-      querySnapshot.forEach((docs) => {
-        const { lista } = docs.data();
-        const keysComp = Object.keys(urls[0]);
-        const keysPend = Object.keys(urls[1]);
-        const completados = urls[0];
-        const pendientes = urls[1];
-        lista.forEach((docElement) => {
-          const found = keysComp.some(
-            (key) => completados[key].title === docElement.nombre
-          );
-          const pendiente = keysPend.some(
-            (key) => pendientes[key].title === docElement.nombre
-          );
-          if (!found && !pendiente) {
-            checkboxes.push({
-              nombre: docElement.nombre,
-              nombreImagen: docElement.nombreImagen,
-            });
-          }
-        });
-        resolve(checkboxes);
+      const { lista } = querySnapshot.data();
+      const keysComp = Object.keys(urls[0]);
+      const keysPend = Object.keys(urls[1]);
+      const completados = urls[0];
+      const pendientes = urls[1];
+      lista.forEach((docElement) => {
+        const found = keysComp.some(
+          (key) => completados[key].title === docElement.nombre
+        );
+        const pendiente = keysPend.some(
+          (key) => pendientes[key].title === docElement.nombre
+        );
+        if (!found && !pendiente) {
+          checkboxes.push({
+            nombre: docElement.nombre,
+            nombreImagen: docElement.nombreImagen
+          });
+        }
       });
+      resolve(checkboxes);
     });
   });
 }
@@ -117,7 +115,7 @@ async function setCheckboxes(db, urls) {
 async function setPendientes(db, docsToUpdate, locData) {
   return new Promise((resolve) => {
     const { email } = locData;
-    const query = db.collection("users").where("email", "==", email);
+    const query = db.collection('users').where('email', '==', email);
     query.get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const docs = doc.data().documents;
@@ -127,15 +125,15 @@ async function setPendientes(db, docsToUpdate, locData) {
             name: newDoc.nombre,
             imageName: newDoc.nombreImagen,
             uploaded: false,
-            state: false,
+            state: false
           };
           docs.push(newDocFormat);
         });
-        db.collection("users")
+        db.collection('users')
           .doc(doc.id)
           .update({ documents: docs })
           .then(() => {
-            resolve("listo");
+            resolve('listo');
           });
       });
     });
@@ -147,9 +145,9 @@ function updateAdminDocs(db, locData, nameDoc, descDoc) {
     const format = {
       name: nameDoc,
       fileName: nameDoc,
-      descripcion: descDoc,
+      descripcion: descDoc
     };
-    const query = db.collection("users").where("email", "==", locData.email);
+    const query = db.collection('users').where('email', '==', locData.email);
     query
       .get()
       .then((querySnapshot) =>
@@ -159,7 +157,7 @@ function updateAdminDocs(db, locData, nameDoc, descDoc) {
             gotDoc = [];
           }
           gotDoc.push(format);
-          db.collection("users")
+          db.collection('users')
             .doc(doc.id)
             .update({ docsAdmin: gotDoc })
             .then(() => {
@@ -176,11 +174,11 @@ function updateAdminDocs(db, locData, nameDoc, descDoc) {
 function uploadFile(storage, file, locData, nameDoc) {
   return new Promise((resolve) => {
     storage
-      .ref("users")
+      .ref('users')
       .child(`/${locData.email}/administrativos/${nameDoc}`)
       .put(file)
       .then(() => {
-        resolve("searchEmail");
+        resolve('searchEmail');
       })
       .catch((e) => {
         throw e;
@@ -194,7 +192,7 @@ const docFunctions = {
   setCheckboxes,
   setPendientes,
   uploadFile,
-  updateAdminDocs,
+  updateAdminDocs
 };
 
 export default docFunctions;
