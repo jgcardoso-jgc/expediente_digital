@@ -38,14 +38,15 @@ const PopupInputs = ({
     setFormValues([]);
     const temp = [];
     const valuesToInherit = [];
-    console.log('inherit', inherit);
     if (inherit) {
-      Object.keys(inherit[0].items).forEach((key) => {
-        const value = inherit[key];
-        valuesToInherit.push(value);
+      const itemsInherit = inherit[0].items;
+      itemsInherit.forEach((obj) => {
+        Object.keys(obj).forEach((key) => {
+          const value = obj[key];
+          valuesToInherit.push(value);
+        });
       });
     }
-    console.log(valuesToInherit);
     itemsForm.forEach((item) => {
       if (item.name === 'curpAcreedor') {
         temp.push({ name: item.name, label: item.label, value: curp });
