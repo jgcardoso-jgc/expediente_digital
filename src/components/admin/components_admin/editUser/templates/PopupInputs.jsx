@@ -26,7 +26,8 @@ const PopupInputs = ({
   curp,
   deudor,
   curpDeudor,
-  isAddButton
+  isAddButton,
+  inherit
 }) => {
   const cookie = localStorage.getItem('sign-user');
   const signerUser = JSON.parse(localStorage.getItem('locationData'));
@@ -36,6 +37,15 @@ const PopupInputs = ({
   const createFormValues = (itemsForm) => {
     setFormValues([]);
     const temp = [];
+    const valuesToInherit = [];
+    console.log('inherit', inherit);
+    if (inherit) {
+      Object.keys(inherit[0].items).forEach((key) => {
+        const value = inherit[key];
+        valuesToInherit.push(value);
+      });
+    }
+    console.log(valuesToInherit);
     itemsForm.forEach((item) => {
       if (item.name === 'curpAcreedor') {
         temp.push({ name: item.name, label: item.label, value: curp });

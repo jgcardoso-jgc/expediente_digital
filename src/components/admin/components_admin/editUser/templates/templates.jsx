@@ -82,6 +82,13 @@ const Templates = () => {
     setLoading(false);
   };
 
+  const inheritPagare = (inheritArray) => {
+    const pagareArray = inheritArray.filter(
+      (inherit) => inherit.document === pagare[0].uuid
+    );
+    return pagareArray;
+  };
+
   const getUserPagares = async () => {
     if (endoso.length > 0) {
       const query = db
@@ -93,6 +100,7 @@ const Templates = () => {
           querySnapshot.forEach((doc) => {
             const pagareData = doc.data().json;
             pagareData.items = endoso[0].items;
+            pagareData.inherit = inheritPagare(endoso[0].inherit);
             getPagares.push(pagareData);
           });
         }
