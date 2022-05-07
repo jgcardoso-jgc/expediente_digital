@@ -76,6 +76,7 @@ const TableViewPagare = ({
                     userEmail={userEmail}
                     uuid={cellObj.cell.row.original.uuid}
                     inherit={cellObj.cell.row.original.inherit}
+                    data={cellObj.cell.row.original}
                   />
                 </div>
               </div>

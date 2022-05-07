@@ -27,7 +27,8 @@ const PopupInputs = ({
   deudor,
   curpDeudor,
   isAddButton,
-  inherit
+  inherit,
+  data
 }) => {
   const cookie = localStorage.getItem('sign-user');
   const signerUser = JSON.parse(localStorage.getItem('locationData'));
@@ -48,6 +49,14 @@ const PopupInputs = ({
       });
     }
     itemsForm.forEach((item) => {
+      if (valuesToInherit.includes(item.name)) {
+        temp.push({
+          name: item.name,
+          label: item.label,
+          value: data[item.name]
+        });
+        return;
+      }
       if (item.name === 'curpAcreedor') {
         temp.push({ name: item.name, label: item.label, value: curp });
         return;
@@ -78,7 +87,6 @@ const PopupInputs = ({
         layoutDocument,
         typeDocument: `${docID}.pdf`
       });
-      console.log(formValues);
       if (response[0]) {
         const userController = new UserController(
           soapController.segurisignUser.email
@@ -108,10 +116,33 @@ const PopupInputs = ({
     const updatedValue = { ...formValuesTemp[foundIndex] };
     updatedValue.value = value;
     formValuesTemp[foundIndex] = updatedValue;
+    console.log(formValuesTemp);
     setFormValues(formValuesTemp);
   };
 
   const curpInput = (input) => {
+    const valuesToInherit = [];
+    if (inherit) {
+      const itemsInherit = inherit[0].items;
+      itemsInherit.forEach((obj) => {
+        Object.keys(obj).forEach((key) => {
+          const value = obj[key];
+          valuesToInherit.push(value);
+        });
+      });
+    }
+    if (valuesToInherit.includes(input.name)) {
+      return (
+        <input
+          placeholder={userEmail.fullname}
+          type={input.type}
+          id={input.name}
+          value={data[input.name]}
+          className={styles.inputField}
+          onChange={(e) => handleFormValueChange(input.name, e)}
+        />
+      );
+    }
     if (input.name === 'acreedor') {
       return (
         <input
