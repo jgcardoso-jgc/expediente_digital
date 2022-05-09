@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable object-curly-newline */
 /* eslint-disable comma-dangle */
@@ -30,7 +31,6 @@ const PopupInputs = ({
   inherit,
   data
 }) => {
-  const cookie = localStorage.getItem('sign-user');
   const signerUser = JSON.parse(localStorage.getItem('locationData'));
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState([]);
@@ -72,6 +72,7 @@ const PopupInputs = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const cookie = localStorage.getItem('sign-user');
     if (!cookie) {
       toast('No estás loggeado');
       return;
@@ -92,12 +93,18 @@ const PopupInputs = ({
           soapController.segurisignUser.email
         );
         response[1].docType = uuid;
-        await userController.addNewCreatedDocToFirebase(
-          [signerUser.curp],
-          response[1],
-          requiresFM,
-          formValues
-        );
+        try {
+          const uploadFirebase =
+            await userController.addNewCreatedDocToFirebase(
+              [signerUser.curp],
+              response[1],
+              requiresFM,
+              formValues
+            );
+          console.log('docReference:', uploadFirebase);
+        } catch (e) {
+          toast(e);
+        }
         setLoading(false);
         toast('Documento enviado correctamente');
       } else {
@@ -116,6 +123,7 @@ const PopupInputs = ({
     const updatedValue = { ...formValuesTemp[foundIndex] };
     updatedValue.value = value;
     formValuesTemp[foundIndex] = updatedValue;
+    console.log(formValuesTemp);
     setFormValues(formValuesTemp);
   };
 
@@ -200,6 +208,7 @@ const PopupInputs = ({
   };
 
   useEffect(() => {
+    const cookie = localStorage.getItem('sign-user');
     if (cookie) {
       soapController.segurisignUser = JSON.parse(cookie);
     } else {

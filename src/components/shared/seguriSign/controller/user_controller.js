@@ -65,8 +65,10 @@ class UserController {
     const body = { ...docValuesObj, ...bodyTemp };
     docRef
       .set(body)
-      .then((docReference) => {})
-      .catch((error) => {});
+      .then((docReference) => docReference)
+      .catch((error) => {
+        throw error;
+      });
   }
 
   async getSignDocData(multilateralId) {

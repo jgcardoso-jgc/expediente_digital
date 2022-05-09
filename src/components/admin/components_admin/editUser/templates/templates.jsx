@@ -26,7 +26,6 @@ const Templates = () => {
     return '';
   }
 
-  const cookie = localStorage.getItem('sign-user');
   const [numberInputs, setNumberInputs] = useState([]);
   const userEmail = getLocationData();
   const form = new FormController();
@@ -92,13 +91,19 @@ const Templates = () => {
   const getUserPagares = async () => {
     if (endoso.length > 0) {
       const query = db
-        .collection('generatedDocs')
-        .where('curpUsuario', '==', userEmail.curp);
+        .collection('sign-docs')
+        .where('curpAcreedor', '==', userEmail.curp);
       query.get().then((querySnapshot) => {
         const getPagares = [];
         if (querySnapshot.size > 0) {
           querySnapshot.forEach((doc) => {
-            const pagareData = doc.data().json;
+            const docData = doc.data();
+            const pagareData = {
+              acreedor: docData.acreedor,
+              deudor: docData.deudor,
+              curpAcreedor: docData.curpAcreedor,
+              fecha: docData.fecha
+            };
             pagareData.items = endoso[0].items;
             pagareData.inherit = inheritPagare(endoso[0].inherit);
             getPagares.push(pagareData);
@@ -197,6 +202,7 @@ const Templates = () => {
   };
 
   useEffect(() => {
+    const cookie = localStorage.getItem('sign-user');
     if (cookie) {
       soapController.segurisignUser = JSON.parse(cookie);
     } else {
