@@ -50,7 +50,7 @@ class FormController {
       headers: this.header,
       body: JSON.stringify(bodyList)
     };
-    const response = await fetch(`${this.apiUrl}/docs/${uuid}`, requestOptions);
+    const response = await fetch(`${apiUrl}/docs/${uuid}`, requestOptions);
     if (response.status === 200) {
       const data = await response.json();
       return data.response;

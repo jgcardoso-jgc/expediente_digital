@@ -116,7 +116,6 @@ const PopupInputs = ({
     const updatedValue = { ...formValuesTemp[foundIndex] };
     updatedValue.value = value;
     formValuesTemp[foundIndex] = updatedValue;
-    console.log(formValuesTemp);
     setFormValues(formValuesTemp);
   };
 
