@@ -102,6 +102,8 @@ const Templates = () => {
               acreedor: docData.acreedor,
               deudor: docData.deudor,
               curpAcreedor: docData.curpAcreedor,
+              curpDeudor: docData.curpDeudor,
+              folio: docData.folio,
               fecha: docData.fecha
             };
             pagareData.items = endoso[0].items;

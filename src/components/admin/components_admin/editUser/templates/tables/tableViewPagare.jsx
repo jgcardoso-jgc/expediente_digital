@@ -50,8 +50,16 @@ const TableViewPagare = ({
             accessor: 'acreedor'
           },
           {
+            Header: 'CURP Acreedor',
+            accessor: 'curpAcreedor'
+          },
+          {
             Header: 'Deudor',
             accessor: 'deudor'
+          },
+          {
+            Header: 'CURP Deudor',
+            accessor: 'curpDeudor'
           },
           {
             Header: 'Fecha',
