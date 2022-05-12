@@ -47,7 +47,9 @@ const PopupInputs = ({
           valuesToInherit.push(value);
         });
       });
+      console.log(itemsInherit);
     }
+    console.log('items', itemsForm);
     itemsForm.forEach((item) => {
       if (valuesToInherit.includes(item.name)) {
         temp.push({
