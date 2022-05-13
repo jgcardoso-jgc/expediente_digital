@@ -69,6 +69,7 @@ class SoapController {
             <initiatorEmail>${this.segurisignUser.email}</initiatorEmail>
             <initiatorIdRh>${this.segurisignUser.idRh}</initiatorIdRh>
             <domainSignatureAtTheEnd>false</domainSignatureAtTheEnd>
+            <validityDays>100</validityDays>
             <concurrentSignature>true</concurrentSignature>
          </docListParticipantsRequest>
       </ser:addDocumentConfigurationParticipantsHRV>
@@ -137,6 +138,7 @@ class SoapController {
             <initiatorIdRh>${this.segurisignUser.idRh}</initiatorIdRh>
             <domainSignatureAtTheEnd>false</domainSignatureAtTheEnd>
             <concurrentSignature>true</concurrentSignature>
+            <validityDays>100</validityDays>
          </docListParticipantsRequest>
       </ser:addDocumentConfigurationParticipantsHRV>
    </soapenv:Body>
@@ -189,6 +191,7 @@ class SoapController {
       'application/xhtml+xml'
     );
     console.log(settings.data);
+    console.log(docResponse);
     const resultado =
       docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
     if (resultado === '1') {
@@ -225,13 +228,14 @@ class SoapController {
 </soapenv:Envelope>`
     };
 
+    console.log(settings.data);
     const response = await $.ajax(settings).done();
     const parser = new DOMParser();
     const docResponse = parser.parseFromString(
       response.documentElement.innerHTML,
       'application/xhtml+xml'
     );
-    // console.log(docResponse);
+    console.log(docResponse);
     const resultado =
       docResponse.getElementsByTagName('resultado')[0].childNodes[0].nodeValue;
     return resultado === '1';
