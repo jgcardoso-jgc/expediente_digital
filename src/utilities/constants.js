@@ -1,3 +1,3 @@
-const apiUrl = 'https://smtp.seguridata.com:5002/';
+const apiUrl = 'https://smtp.seguridata.com:5002';
 
 export default apiUrl;

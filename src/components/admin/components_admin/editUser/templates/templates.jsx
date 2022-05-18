@@ -38,6 +38,7 @@ const Templates = () => {
   const [errors, setErrors] = useState([]);
   const [userSelected, setUserSelected] = useState({
     curp: '',
+    email: '',
     deudor: 'Por favor selecciona un CURP'
   });
   const [selectedFile, setSelectedFile] = useState({
@@ -268,10 +269,12 @@ const Templates = () => {
         </p>
         <p className={styles.mbSubtitle}>Selecciona curp del deudor</p>
         <TableViewUsers setSelected={setUserSelected} docsNumber={0} />
-        <p>Información de el deudor:</p>
+        <p>Información del deudor:</p>
         <p>
           <b>
             {userSelected.deudor}
+            <br />
+            {userSelected.email}
             <br />
             {userSelected.curp}
           </b>
@@ -286,8 +289,9 @@ const Templates = () => {
             userEmail={userEmail}
             uuid={pagare[0].uuid}
             curp={userEmail.curp}
-            deudor={userSelected.deudor}
-            curpDeudor={userSelected.curp}
+            deudorEmail={userSelected.email}
+            deudorName={userSelected.deudor}
+            deudorCurp={userSelected.curp}
             isAddButton
           />
         ) : (
