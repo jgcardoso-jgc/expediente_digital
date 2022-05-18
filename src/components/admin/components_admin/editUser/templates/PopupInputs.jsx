@@ -25,13 +25,13 @@ const PopupInputs = ({
   form,
   uuid,
   curp,
-  deudor,
-  curpDeudor,
+  deudorEmail,
+  deudorName,
+  deudorCurp,
   isAddButton,
   inherit,
   data
 }) => {
-  const signerUser = JSON.parse(localStorage.getItem('locationData'));
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState([]);
 
@@ -47,9 +47,9 @@ const PopupInputs = ({
           valuesToInherit.push(value);
         });
       });
-      console.log(itemsInherit);
+      // console.log(itemsInherit);
     }
-    console.log('items', itemsForm);
+    // console.log('items', itemsForm);
     itemsForm.forEach((item) => {
       if (valuesToInherit.includes(item.name)) {
         temp.push({
@@ -64,7 +64,7 @@ const PopupInputs = ({
         return;
       }
       if (item.name === 'curpDeudor') {
-        temp.push({ name: item.name, label: item.label, value: curpDeudor });
+        temp.push({ name: item.name, label: item.label, value: deudorCurp });
         return;
       }
       temp.push({ name: item.name, label: item.label, value: '' });
@@ -79,6 +79,7 @@ const PopupInputs = ({
       toast('No estás loggeado');
       return;
     }
+    const signerUser = JSON.parse(localStorage.getItem('locationData'));
     setLoading(true);
 
     const createdDocRespone = await form.submit(formValues, uuid);
@@ -86,7 +87,8 @@ const PopupInputs = ({
       const docID = createdDocRespone[0];
       const requiresFM = false;
       const layoutDocument = createdDocRespone[1];
-      const response = await soapController.addDocument(signerUser, {
+      const deudorInfo = { email: deudorEmail, fullname: deudorName };
+      const response = await soapController.addDocument(deudorInfo, {
         layoutDocument,
         typeDocument: `${docID}.pdf`
       });
@@ -125,7 +127,7 @@ const PopupInputs = ({
     const updatedValue = { ...formValuesTemp[foundIndex] };
     updatedValue.value = value;
     formValuesTemp[foundIndex] = updatedValue;
-    console.log(formValuesTemp);
+    // console.log(formValuesTemp);
     setFormValues(formValuesTemp);
   };
 
@@ -166,7 +168,7 @@ const PopupInputs = ({
     if (input.name === 'deudor') {
       return (
         <input
-          placeholder={deudor}
+          placeholder={deudorName}
           type={input.type}
           id={input.name}
           className={styles.inputField}
@@ -180,7 +182,7 @@ const PopupInputs = ({
           placeholder=""
           type={input.type}
           id={input.name}
-          value={curpDeudor}
+          value={deudorCurp}
           className={styles.inputField}
           readOnly
         />
