@@ -8,7 +8,7 @@ import AjustesAdmin from '../components_admin/ajustes/ajustes';
 import EditUser from '../components_admin/editUser/editUser';
 import AlertasPagina from '../components_admin/alertasPagina/alertasPagina';
 import Segurisign from '../../shared/seguriSign/seguriSign';
-import Templates from '../components_admin/editUser/templates/templates';
+import Templates from '../components_admin/editUser/templates/Templates';
 import Playground from '../components_admin/Playground/Playground';
 
 const DashboardComponent = lazy(() => import('../components_admin/dashboard'));

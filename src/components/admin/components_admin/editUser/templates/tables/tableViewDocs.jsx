@@ -8,24 +8,18 @@
 /* eslint-disable quotes */
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { createUseStyles } from 'react-jss';
 import Table from 'components/shared/table/table';
-import styles from 'resources/theme';
+import styles from './tableView.module.scss';
 import PopupInputs from '../PopupInputs';
 
-const useStyles = createUseStyles({
-  editButton: {
-    border: '1px solid transparent',
-    borderRadius: '4px',
-    background: 'transparent'
-  },
-  mt: {
-    marginTop: 32
-  }
-});
-
-const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
-  const classes = useStyles();
+const TableViewDocs = ({
+  data,
+  docsNumber,
+  userEmail,
+  name,
+  form,
+  soapController
+}) => {
   const history = useHistory();
 
   function handleClickEditRow(obj) {
@@ -46,7 +40,7 @@ const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
               <div>
                 <div
                   role="button"
-                  className={classes.editButton}
+                  className={styles.editButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
                   <PopupInputs
@@ -55,6 +49,8 @@ const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
                     items={cellObj.cell.row.original.items}
                     form={form}
                     soapController={soapController}
+                    deudorEmail={userEmail}
+                    deudorName={name}
                     userEmail={userEmail}
                     uuid={cellObj.cell.row.original.uuid}
                   />
@@ -70,4 +66,4 @@ const TableView = ({ data, docsNumber, userEmail, form, soapController }) => {
   );
 };
 
-export default TableView;
+export default TableViewDocs;

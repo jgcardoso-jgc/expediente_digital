@@ -121,7 +121,9 @@ const TableView = ({
     if (docNames[0]) {
       const asArray = Object.entries(docNames[0]);
       const filtered = asArray.find((doc) => doc[1].uuid === uuid);
-      return filtered[1].label;
+      if (filtered) {
+        return filtered[1].label;
+      }
     }
     return uuid;
   };

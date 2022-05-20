@@ -7,19 +7,10 @@
 /* eslint-disable quotes */
 import React, { useState, useEffect } from 'react';
 import { useFirebaseApp } from 'reactfire';
-import { createUseStyles } from 'react-jss';
 import Table from 'components/shared/table/table';
-
-const useStyles = createUseStyles({
-  editButton: {
-    border: '1px solid transparent',
-    background: '#d0d0d0',
-    borderRadius: '4px'
-  }
-});
+import styles from './tableView.module.scss';
 
 const TableViewUsers = ({ setSelected, docsNumber }) => {
-  const classes = useStyles();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
   const [loading, setLoading] = useState(true);
@@ -117,7 +108,7 @@ const TableViewUsers = ({ setSelected, docsNumber }) => {
               <div>
                 <button
                   type="button"
-                  className={classes.editButton}
+                  className={styles.editButton}
                   onClick={() =>
                     setSelected({
                       curp: cellObj.row.original.curp,

@@ -37,7 +37,6 @@ class SoapController {
     });
 
   async addDocument(signer, file) {
-    console.log(signer);
     const docType = 'CONTRATOS';
     const settings = {
       url: this.url,
@@ -475,7 +474,7 @@ class SoapController {
       const resultado =
         docResponse.getElementsByTagName('resultado')[0].childNodes[0]
           .nodeValue;
-       console.log(docResponse);
+      console.log(docResponse);
       return resultado === '1' ? 1 : false;
     } catch (e) {
       // console.log(e);
