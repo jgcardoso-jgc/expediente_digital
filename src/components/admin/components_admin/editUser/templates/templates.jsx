@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
 import { useFirebaseApp } from 'reactfire';
 import { AiFillDelete } from 'react-icons/ai';
 import styles from './templates.module.scss';
-import TableView from './tables/tableView';
+import TableViewDocs from './tables/tableViewDocs';
 import PopupInputs from './PopupInputs';
 import TableViewPagare from './tables/tableViewPagare';
 import TableViewUsers from './tables/tableViewUsers';
@@ -27,7 +27,7 @@ const Templates = () => {
   }
 
   const [numberInputs, setNumberInputs] = useState([]);
-  const userEmail = getLocationData();
+  const userData = getLocationData();
   const form = new FormController();
   const firebase = useFirebaseApp();
   const db = firebase.firestore();
@@ -93,7 +93,7 @@ const Templates = () => {
     if (endoso.length > 0) {
       const query = db
         .collection('sign-docs')
-        .where('curpAcreedor', '==', userEmail.curp);
+        .where('curpAcreedor', '==', userData.curp);
       query.get().then((querySnapshot) => {
         const getPagares = [];
         if (querySnapshot.size > 0) {
@@ -229,20 +229,25 @@ const Templates = () => {
           <b>Selecciona Tipo de Documento</b>
         </h4>
         <p className={styles.nameTxt}>
+          <b>Nombre</b>
+        </p>
+        <p>{userData.fullname}</p>
+        <p className={styles.nameTxt}>
           <b>Email</b>
         </p>
-        <p>{userEmail.email}</p>
+        <p>{userData.email}</p>
         <p className={styles.nameTxt}>
           <b>Curp de el Usuario</b>
         </p>
-        <p>{userEmail.curp ? userEmail.curp : 'Pendiente'}</p>
+        <p>{userData.curp ? userData.curp : 'Pendiente'}</p>
         {loading ? 'Cargando...' : ''}
         <div className={styles.mt}>
           {docs.length > 0 ? (
-            <TableView
+            <TableViewDocs
               data={docs}
               docsNumber={0}
-              userEmail={userEmail.email}
+              name={userData.fullname}
+              userEmail={userData.email}
               form={form}
               soapController={soapController}
             />
@@ -265,7 +270,7 @@ const Templates = () => {
         </p>
         <p>Curp de el acreedor:</p>
         <p>
-          <b>{userEmail.curp ? userEmail.curp : 'Pendiente'}</b>
+          <b>{userData.curp ? userData.curp : 'Pendiente'}</b>
         </p>
         <p className={styles.mbSubtitle}>Selecciona curp del deudor</p>
         <TableViewUsers setSelected={setUserSelected} docsNumber={0} />
@@ -279,16 +284,16 @@ const Templates = () => {
             {userSelected.curp}
           </b>
         </p>
-        {pagare.length > 0 && userSelected.curp !== '' && userEmail.curp ? (
+        {pagare.length > 0 && userSelected.curp !== '' && userData.curp ? (
           <PopupInputs
             label="Agregar Pagaré"
             docType={pagare[0].name}
             items={pagare[0].items}
             form={form}
             soapController={soapController}
-            userEmail={userEmail}
+            userEmail={userData}
             uuid={pagare[0].uuid}
-            curp={userEmail.curp}
+            curp={userData.curp}
             deudorEmail={userSelected.email}
             deudorName={userSelected.deudor}
             deudorCurp={userSelected.curp}
@@ -312,7 +317,7 @@ const Templates = () => {
             <TableViewPagare
               data={userPagares}
               docsNumber={0}
-              userEmail={userEmail.email}
+              userEmail={userData.email}
               form={form}
               soapController={soapController}
             />

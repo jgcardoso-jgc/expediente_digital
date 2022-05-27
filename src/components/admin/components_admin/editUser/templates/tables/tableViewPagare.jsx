@@ -8,21 +8,9 @@
 /* eslint-disable quotes */
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { createUseStyles } from 'react-jss';
 import Table from 'components/shared/table/table';
 import styles from 'resources/theme';
 import PopupInputs from '../PopupInputs';
-
-const useStyles = createUseStyles({
-  editButton: {
-    border: '1px solid transparent',
-    borderRadius: '4px',
-    background: 'transparent'
-  },
-  mt: {
-    marginTop: 32
-  }
-});
 
 const TableViewPagare = ({
   data,
@@ -31,7 +19,6 @@ const TableViewPagare = ({
   form,
   soapController
 }) => {
-  const classes = useStyles();
   const history = useHistory();
 
   function handleClickEditRow(obj) {
@@ -72,7 +59,7 @@ const TableViewPagare = ({
               <div>
                 <div
                   role="button"
-                  className={classes.editButton}
+                  className={styles.editButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
                   <PopupInputs
