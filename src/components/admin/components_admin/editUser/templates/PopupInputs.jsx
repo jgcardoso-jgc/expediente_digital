@@ -34,6 +34,7 @@ const PopupInputs = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState([]);
+  const [isEndoso, setEndoso] = useState(false);
 
   const createFormValues = (itemsForm) => {
     setFormValues([]);
@@ -77,6 +78,7 @@ const PopupInputs = ({
           label: item.label,
           value: data.acreedor
         });
+        setEndoso(true);
         return;
       }
       if (item.name === 'curpDeudor') {
@@ -111,8 +113,15 @@ const PopupInputs = ({
       const requiresFM = false;
       const layoutDocument = createdDocRespone[1];
       // ¿busqueda para encontrar el email de el deudor usando el curp?
-      console.log(deudorEmail, deudorName);
-      const deudorInfo = { email: deudorEmail, fullname: deudorName };
+      let deudorInfo = {};
+      if (!isEndoso) {
+        console.log('here');
+        deudorInfo = { email: deudorEmail, fullname: deudorName };
+      } else if (isEndoso) {
+        console.log('endoso');
+        deudorInfo = { email: userEmail, fullname: deudorName };
+      }
+      console.log(deudorInfo);
       const response = await soapController.addDocument(deudorInfo, {
         layoutDocument,
         typeDocument: `${docID}.pdf`
