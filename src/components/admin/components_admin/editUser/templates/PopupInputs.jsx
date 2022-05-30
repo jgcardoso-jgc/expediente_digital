@@ -63,6 +63,22 @@ const PopupInputs = ({
         temp.push({ name: item.name, label: item.label, value: curp });
         return;
       }
+      if (item.name === 'curpEndosante') {
+        temp.push({
+          name: item.name,
+          label: item.label,
+          value: data.curpAcreedor
+        });
+        return;
+      }
+      if (item.name === 'endosante') {
+        temp.push({
+          name: item.name,
+          label: item.label,
+          value: data.acreedor
+        });
+        return;
+      }
       if (item.name === 'curpDeudor') {
         temp.push({ name: item.name, label: item.label, value: deudorCurp });
         return;
@@ -83,10 +99,19 @@ const PopupInputs = ({
     setLoading(true);
 
     const createdDocRespone = await form.submit(formValues, uuid);
+    if (!uuid) {
+      toast('UUID no encontrado');
+      setLoading(false);
+      return;
+    }
+    console.log('submitting...');
     if (createdDocRespone) {
+      console.log('createdDocRespone', createdDocRespone);
       const docID = createdDocRespone[0];
       const requiresFM = false;
       const layoutDocument = createdDocRespone[1];
+      // ¿busqueda para encontrar el email de el deudor usando el curp?
+      console.log(deudorEmail, deudorName);
       const deudorInfo = { email: deudorEmail, fullname: deudorName };
       const response = await soapController.addDocument(deudorInfo, {
         layoutDocument,
@@ -115,6 +140,9 @@ const PopupInputs = ({
         setLoading(false);
         toast('Error al subir documento');
       }
+    } else {
+      setLoading(false);
+      toast('Error al subir documento');
     }
   };
 
@@ -173,6 +201,30 @@ const PopupInputs = ({
           id={input.name}
           className={styles.inputField}
           onChange={(e) => handleFormValueChange(input.name, e)}
+        />
+      );
+    }
+    if (input.name === 'endosante') {
+      return (
+        <input
+          placeholder=""
+          type={input.type}
+          id={input.name}
+          value={data.acreedor}
+          className={styles.inputField}
+          readOnly
+        />
+      );
+    }
+    if (input.name === 'curpEndosante') {
+      return (
+        <input
+          placeholder=""
+          type={input.type}
+          id={input.name}
+          value={data.curpAcreedor}
+          className={styles.inputField}
+          readOnly
         />
       );
     }

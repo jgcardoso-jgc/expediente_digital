@@ -17,6 +17,7 @@ const TableViewPagare = ({
   docsNumber,
   userEmail,
   form,
+  uuid,
   soapController
 }) => {
   const history = useHistory();
@@ -62,6 +63,7 @@ const TableViewPagare = ({
                   className={styles.editButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
+                  {console.log('cell', cellObj.cell.row.original)}
                   <PopupInputs
                     label="Generar"
                     docType={cellObj.cell.row.original.name}
@@ -69,7 +71,9 @@ const TableViewPagare = ({
                     form={form}
                     soapController={soapController}
                     userEmail={userEmail}
-                    uuid={cellObj.cell.row.original.uuid}
+                    uuid={uuid}
+                    deudorEmail={cellObj.cell.row.original.deudor}
+                    deudorName={cellObj.cell.row.original.deudor}
                     inherit={cellObj.cell.row.original.inherit}
                     data={cellObj.cell.row.original}
                   />
@@ -84,5 +88,5 @@ const TableViewPagare = ({
     </div>
   );
 };
-
+//¿como obtener el email de el deudor?
 export default TableViewPagare;

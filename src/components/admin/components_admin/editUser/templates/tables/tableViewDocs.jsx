@@ -40,7 +40,7 @@ const TableViewDocs = ({
               <div>
                 <div
                   role="button"
-                  className={styles.editButton}
+                  className={styles.docButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
                   <PopupInputs

@@ -316,6 +316,7 @@ const Templates = () => {
           {userPagares.length > 0 ? (
             <TableViewPagare
               data={userPagares}
+              uuid={endoso[0].uuid}
               docsNumber={0}
               userEmail={userData.email}
               form={form}

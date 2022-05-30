@@ -40,6 +40,7 @@ class FormController {
   }
 
   async submit(values, uuid) {
+    console.log('form submitting');
     const bodyList = [];
     values.forEach((formValue) => {
       const { name, value, label } = formValue;
@@ -52,9 +53,12 @@ class FormController {
     };
     const response = await fetch(`${apiUrl}/docs/${uuid}`, requestOptions);
     if (response.status === 200) {
+      console.log(response, apiUrl, uuid);
       const data = await response.json();
+      console.log(data.response);
       return data.response;
     }
+    console.log(response);
     return false;
   }
 }
