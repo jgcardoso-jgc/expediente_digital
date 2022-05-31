@@ -46,6 +46,7 @@ class FormController {
       const { name, value, label } = formValue;
       bodyList.push({ name, value, label });
     });
+    console.log(bodyList);
     const requestOptions = {
       method: 'POST',
       headers: this.header,

@@ -63,7 +63,6 @@ const TableViewPagare = ({
                   className={styles.editButton}
                   onClick={() => handleClickEditRow(cellObj)}
                 >
-                  {console.log('cell', cellObj.cell.row.original)}
                   <PopupInputs
                     label="Generar"
                     docType={cellObj.cell.row.original.name}
