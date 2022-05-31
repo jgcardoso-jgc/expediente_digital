@@ -40,13 +40,13 @@ class FormController {
   }
 
   async submit(values, uuid) {
-    console.log('form submitting');
+    // console.log('form submitting');
     const bodyList = [];
     values.forEach((formValue) => {
       const { name, value, label } = formValue;
       bodyList.push({ name, value, label });
     });
-    console.log(bodyList);
+    // console.log(bodyList);
     const requestOptions = {
       method: 'POST',
       headers: this.header,
@@ -54,12 +54,12 @@ class FormController {
     };
     const response = await fetch(`${apiUrl}/docs/${uuid}`, requestOptions);
     if (response.status === 200) {
-      console.log(response, apiUrl, uuid);
+      // console.log(response, apiUrl, uuid);
       const data = await response.json();
-      console.log(data.response);
+      // console.log(data.response);
       return data.response;
     }
-    console.log(response);
+    // console.log(response);
     return false;
   }
 }

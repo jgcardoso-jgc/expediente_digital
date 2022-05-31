@@ -29,6 +29,7 @@ const PopupInputs = ({
   deudorName,
   deudorCurp,
   isAddButton,
+  idInherit,
   inherit,
   data
 }) => {
@@ -58,6 +59,10 @@ const PopupInputs = ({
           label: item.label,
           value: data[item.name]
         });
+        return;
+      }
+      if (item.name === 'idinherit') {
+        temp.push({ name: item.name, label: item.label, value: idInherit });
         return;
       }
       if (item.name === 'curpAcreedor') {
@@ -106,22 +111,19 @@ const PopupInputs = ({
       setLoading(false);
       return;
     }
-    console.log('submitting...');
     if (createdDocRespone) {
-      console.log('createdDocRespone', createdDocRespone);
+      // console.log('createdDocRespone', createdDocRespone);
       const docID = createdDocRespone[0];
       const requiresFM = false;
       const layoutDocument = createdDocRespone[1];
       // ¿busqueda para encontrar el email de el deudor usando el curp?
       let deudorInfo = {};
       if (!isEndoso) {
-        console.log('here');
         deudorInfo = { email: deudorEmail, fullname: deudorName };
       } else if (isEndoso) {
-        console.log('endoso');
         deudorInfo = { email: userEmail, fullname: deudorName };
       }
-      console.log(deudorInfo);
+      // console.log(deudorInfo);
       const response = await soapController.addDocument(deudorInfo, {
         layoutDocument,
         typeDocument: `${docID}.pdf`
@@ -164,7 +166,7 @@ const PopupInputs = ({
     const updatedValue = { ...formValuesTemp[foundIndex] };
     updatedValue.value = value;
     formValuesTemp[foundIndex] = updatedValue;
-    console.log('form values', formValuesTemp);
+    // console.log('form values', formValuesTemp);
     setFormValues(formValuesTemp);
   };
 

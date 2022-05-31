@@ -18,6 +18,7 @@ const TableViewPagare = ({
   userEmail,
   form,
   uuid,
+  idInherit,
   soapController
 }) => {
   const history = useHistory();
@@ -74,6 +75,7 @@ const TableViewPagare = ({
                     deudorEmail={cellObj.cell.row.original.deudor}
                     deudorName={cellObj.cell.row.original.deudor}
                     inherit={cellObj.cell.row.original.inherit}
+                    idInherit={idInherit}
                     data={cellObj.cell.row.original}
                   />
                 </div>

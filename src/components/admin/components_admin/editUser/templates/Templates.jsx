@@ -318,6 +318,7 @@ const Templates = () => {
               data={userPagares}
               uuid={endoso[0].uuid}
               docsNumber={0}
+              idInherit={pagare[0].uuid}
               userEmail={userData.email}
               form={form}
               soapController={soapController}
